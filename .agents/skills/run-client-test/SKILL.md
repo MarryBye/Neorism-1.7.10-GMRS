@@ -7,31 +7,16 @@ description: Procedures for compiling Neorism, syncing jars to run/client/mods, 
 
 Follow this procedure whenever code is compiled, testing takes place, and runtime logs are analyzed.
 
-## 1. Build & Sync Procedure (Mandatory after code changes)
+## 1. Build & Dependency Verification
 Whenever code or assets are added or modified:
 1. **Compile and Package:**
    ```powershell
    .\gradlew assemble
    ```
    Verify that `assemble` finishes with `BUILD SUCCESSFUL`.
-2. **Synchronize Mod Jar to `run/client/mods/`:**
-   Copy the newly produced dev jar from `build/libs/neorism-*-dev.jar` to `run/client/mods/`.
-   ```powershell
-   $latest = Get-ChildItem -Path "build/libs" -Filter "neorism-*-dev.jar" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-   Remove-Item -Path "run/client/mods/neorism*.jar" -Force -ErrorAction SilentlyContinue
-   Copy-Item -Path $latest.FullName -Destination "run/client/mods" -Force
-   ```
-3. **Verify Supported Dependencies in `run/client/mods/`:**
-   Ensure all 9 required GTNH / user mods are present:
-   - `Angelica-*.jar`
-   - `GTNHLib-*.jar`
-   - `Hodgepodge-*.jar`
-   - `VillageNames-*.jar`
-   - `Et-Futurum-Requiem-*.jar`
-   - `lwjgl3ify-*.jar`
-   - `unimixins-*.jar`
-   - `combatbackport-*.jar`
-   - `villagertradesbackport-*.jar`
+2. **Classpath Management (No manual copying needed):**
+   In RetroFuturaGradle (RFG), all 9 integrated GTNH and user mods (`Angelica`, `GTNHLib`, `Hodgepodge`, `VillageNames`, `Et-Futurum-Requiem`, `lwjgl3ify`, `unimixins`, `combatbackport`, `villagertradesbackport`) as well as the active `Neorism` build are mounted **directly on the Java classpath** by Gradle.
+   **DO NOT** copy any dependency jars or `neorism-*-dev.jar` into `run/client/mods/`, otherwise FML will detect duplicate mods and halt with a fatal duplicate error. Keep `run/client/mods/` clean.
 
 ---
 
