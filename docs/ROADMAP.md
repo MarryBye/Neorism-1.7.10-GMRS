@@ -220,6 +220,14 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 8: Blocks, Tile Entities & Multiblock Altars
 *Custom 3D TESR models, animations, and ritual state machines.*
 
+- [ ] **8.0. Global Model & Texture System Normalization (Forge 1.7.10 / GTNHLib)**
+  - [x] Create root `pack.mcmeta` (`pack_format: 4`) in `src/main/resources` enabling GTNHLib modern model bakery parser.
+  - [x] Configure fallback variants (`""`, `"normal"`, `"inventory"`) for modeled blocks lacking property variants (e.g. `altar_pillar.json`).
+  - [x] Mirror vanilla fallback textures (candles, concrete, stone, wood, metals) into `assets/minecraft/textures/block/` and `neorism/textures/block/`.
+  - [ ] Global audit & normalization across all remaining blocks and models:
+    - Every blockstate in `assets/neorism/blockstates/` contains valid default/fallback variants (`""`, `"normal"`) matching empty property states.
+    - Every texture referenced in models exists in both singular `textures/block/` and legacy `textures/blocks/`.
+    - Every 3D modeled block registers `ModelISBRH` as `IItemRenderer` for inventory / hand rendering.
 - [ ] **8.1. Altar of Inspiration**
   - [ ] Block, TileEntity, and multiblock blood basin.
   - [ ] TESR fluid rendering (smooth blood level rising/falling).

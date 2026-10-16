@@ -1,5 +1,14 @@
-﻿{
+{
   "variants": {
+    "": {
+      "model": "neorism:block/altar_pillar"
+    },
+    "normal": {
+      "model": "neorism:block/altar_pillar"
+    },
+    "inventory": {
+      "model": "neorism:block/altar_pillar"
+    },
     "type=bone": {
       "model": "neorism:block/altar_pillar_bone"
     },
