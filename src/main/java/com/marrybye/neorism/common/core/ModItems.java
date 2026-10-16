@@ -22,7 +22,7 @@ public class ModItems {
     public static void init() {
         vampireFang = register("vampire_fang", new ItemNeorism("vampire_fang"));
         humanHeart = register("human_heart", new ItemNeorism("human_heart"));
-        garlic = register("garlic", new ItemNeorism("garlic"));
+        garlic = register("garlic", new com.marrybye.neorism.common.items.ItemGarlic());
         pureBlood = register("pure_blood", new ItemNeorism("pure_blood_0"));
         vampireBook = register("vampire_book", new ItemNeorism("vampire_book"));
         bloodBottle = register("blood_bottle", new com.marrybye.neorism.common.items.ItemBloodBottle());

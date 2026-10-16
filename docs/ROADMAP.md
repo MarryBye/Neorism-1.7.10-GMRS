@@ -110,30 +110,30 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 4: Vampire Progression, Sun Weakness & Garlic System
 *Progression from Fledgling to Master Vampire, balanced by deadly daylight and pungent garlic.*
 
-- [ ] **4.1. Vampire Player Subsystem (`VampirePlayer`)**
-  - [ ] Implement `VampirePlayer` property class managing vampire level (1 to 14), active buffs, and transformation states.
-  - [ ] Attribute scaling per level: Max Health boost (up to +20 HP), Attack Damage boost, Movement Speed boost.
-- [ ] **4.2. Vampire Leveling Engine (`VampireLeveling`)**
-  - [ ] Port exact leveling requirements from `VampireLeveling.java`:
+- [x] **4.1. Vampire Player Subsystem (`VampirePlayer`)**
+  - [x] Implement `VampirePlayer` property class managing vampire level (1 to 14), active buffs, and transformation states.
+  - [x] Attribute scaling per level: Max Health boost (up to +20 HP), Attack Damage boost, Movement Speed boost.
+- [x] **4.2. Vampire Leveling Engine (`VampireLeveling`)**
+  - [x] Port exact leveling requirements from `VampireLeveling.java`:
     - Level 1: Infection via `Sanguinare Vampiris` bite.
     - Levels 2-4: Passive blood consumption (100 / 175 blood) OR Altar of Inspiration (40 / 70 / 100 blood).
     - Levels 5-14: Altar of Infusion multiblock rituals (Pure Blood tiers 1-4, Human Hearts, Vampire Books, Structure Points `8 + (54-8)*((lvl-4)/2)/5`).
-- [ ] **4.3. Sun Damage & Exposure Calculation (`SundamageRegistry`)**
-  - [ ] Implement exact sun check: `Helper.isDay(world, pos)` (sun angle > 0.78 or < 0.24) + sky visibility check (`canBlockSeeTheSky`).
-  - [ ] Exceptions: Rain, water immersion, Vampire Forest biome canopy, Umbrella item in hand, `ModEffects.SUNSCREEN`.
-  - [ ] Safe tick buffer: 20 safe ticks before ignition/damage starts.
-  - [ ] Damage ticks: fire damage + direct sun damage based on vampire level and sun resistance skills.
-- [ ] **4.4. Sunscreen & Buff Effects**
-  - [ ] Implement `ModEffects.SUNSCREEN` (duration-based daylight protection potion).
-  - [ ] Implement `ModEffects.AURA_OF_DARKNESS` (vampire biome / Dracula protection aura).
-- [ ] **4.5. Garlic Aura System**
-  - [ ] Implement garlic grid cache per chunk (`GarlicHandler`).
-  - [ ] Garlic strength tiers: `WEAK`, `MEDIUM`, `STRONG`, `EXTREME`.
-  - [ ] Debuffs inside garlic zone: weakness, slowness, inability to use vampire skills, continuous damage on contact with garlic blocks/items.
-- [ ] **4.6. Infection Mechanic (`Sanguinare Vampiris`)**
-  - [ ] Inflicted by vampire mob/player bites.
-  - [ ] Incubation period (1-2 in-game days). Can be cured before expiry using Holy Water / Milk.
-  - [ ] Transformation sequence on completion: screen pulse, sound, sets faction to Vampire Level 1.
+- [x] **4.3. Sun Damage & Exposure Calculation (`SundamageRegistry`)**
+  - [x] Implement exact sun check: `Helper.isDay(world, pos)` (sun angle > 0.78 or < 0.24) + sky visibility check (`canBlockSeeTheSky`).
+  - [x] Exceptions: Rain, water immersion, Vampire Forest biome canopy, Umbrella item in hand, `ModEffects.SUNSCREEN`.
+  - [x] Safe tick buffer: 20 safe ticks before ignition/damage starts.
+  - [x] Damage ticks: fire damage + direct sun damage based on vampire level and sun resistance skills.
+- [x] **4.4. Sunscreen & Buff Effects**
+  - [x] Implement `ModEffects.SUNSCREEN` (duration-based daylight protection potion).
+  - [x] Implement `ModEffects.AURA_OF_DARKNESS` (vampire biome / Dracula protection aura).
+- [x] **4.5. Garlic Aura System**
+  - [x] Implement garlic grid cache per chunk (`GarlicHandler`).
+  - [x] Garlic strength tiers: `WEAK`, `MEDIUM`, `STRONG`, `EXTREME`.
+  - [x] Debuffs inside garlic zone: weakness, slowness, inability to use vampire skills, continuous damage on contact with garlic blocks/items.
+- [x] **4.6. Infection Mechanic (`Sanguinare Vampiris`)**
+  - [x] Inflicted by vampire mob/player bites.
+  - [x] Incubation period (1-2 in-game days). Can be cured before expiry using Holy Water / Milk.
+  - [x] Transformation sequence on completion: screen pulse, sound, sets faction to Vampire Level 1.
 
 ---
 

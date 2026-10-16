@@ -28,11 +28,13 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
 
     public static final String PROPERTY_ID = "neorism:vampire_player";
     public static final int FEED_TIMER = 20;
+    public static final int SAFE_SUN_TICKS = 100;
 
     private final EntityPlayer player;
     private final BloodStats bloodStats;
     private int feed_victim = -1;
     private int feedBiteTickCounter = 0;
+    private int ticksInSun = 0;
 
     public VampirePlayer(EntityPlayer player) {
         this.player = player;
@@ -59,6 +61,7 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
         NBTTagCompound tag = new NBTTagCompound();
         bloodStats.writeToNBT(tag);
         tag.setInteger("feedVictim", feed_victim);
+        tag.setInteger("ticksInSun", ticksInSun);
         compound.setTag("NeorismVampirePlayer", tag);
     }
 
@@ -67,6 +70,7 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
         if (compound.hasKey("NeorismVampirePlayer")) {
             NBTTagCompound tag = compound.getCompoundTag("NeorismVampirePlayer");
             bloodStats.readFromNBT(tag);
+            this.ticksInSun = tag.getInteger("ticksInSun");
             this.feed_victim = -1;
         }
     }
@@ -74,6 +78,7 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
     public void copyFrom(VampirePlayer old) {
         if (old != null) {
             this.bloodStats.copyFrom(old.bloodStats);
+            this.ticksInSun = old.ticksInSun;
         }
     }
 
@@ -98,7 +103,7 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
     @Override
     public boolean isGettingSundamage() {
         if (player.worldObj == null || !Helper.isVampire(player)) return false;
-        return Helper.canSunBurn(player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
+        return SundamageRegistry.instance().isGettingSundamage(player);
     }
 
     @Override
@@ -129,6 +134,9 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
         }
         bloodStats.setMaxBlood(maxBlood);
         syncBlood();
+        LevelAttributeModifier.applyVampireModifiers(player, newLevel, VampireLeveling.MAX_LEVEL);
+        ModLogger.leveling("Applied vampire level %d attribute modifiers to %s (maxBlood: %d)",
+            newLevel, player.getCommandSenderName(), maxBlood);
     }
 
     public boolean startFeeding(EntityLivingBase target) {
@@ -207,6 +215,8 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
         if (!Helper.isVampire(player)) return;
 
         bloodStats.onUpdate();
+        handleSunDamage();
+        handleGarlic();
 
         if (!player.worldObj.isRemote) {
             if (feed_victim != -1) {
@@ -228,6 +238,91 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
                 }
             }
         }
+    }
+
+    private void handleSunDamage() {
+        boolean inSun = SundamageRegistry.instance().isGettingSundamage(player);
+        if (inSun) {
+            if (ticksInSun < SAFE_SUN_TICKS) {
+                ticksInSun++;
+            }
+            if (player.isPotionActive(ModPotions.sunscreen)) {
+                if (ticksInSun > 50) {
+                    ticksInSun = 50;
+                }
+            }
+            if (!player.worldObj.isRemote) {
+                int level = Helper.getLevel(player);
+                if (level >= 1 && ticksInSun > 50 && !player.isPotionActive(ModPotions.sunscreen)) {
+                    if (player.ticksExisted % 300 == 1) {
+                        player.addPotionEffect(new PotionEffect(Potion.confusion.id, 180));
+                    }
+                    if (player.ticksExisted % 150 == 3) {
+                        player.addPotionEffect(new PotionEffect(Potion.weakness.id, 152, 0));
+                    }
+                }
+                if (level >= 1 && ticksInSun >= SAFE_SUN_TICKS) {
+                    if (player.ticksExisted % 40 == 5) {
+                        float baseDmg = 3.0F + (level * 0.5F);
+                        player.attackEntityFrom(com.marrybye.neorism.common.core.ModDamageSource.SUN_DAMAGE, baseDmg);
+                        player.setFire(3);
+                        ModSounds.playAtEntity(player, ModSounds.SCREECH, 0.6F, 1.2F);
+                        ModLogger.combat("Player %s took %.1f sun damage (level: %d, ticksInSun: %d)",
+                            player.getCommandSenderName(), baseDmg, level, ticksInSun);
+                    }
+                }
+            }
+        } else {
+            if (ticksInSun > 0) {
+                ticksInSun--;
+            }
+        }
+    }
+
+    private void handleGarlic() {
+        if (player.worldObj.isRemote) return;
+        com.marrybye.neorism.common.world.garlic.EnumStrength strength =
+            com.marrybye.neorism.common.world.garlic.GarlicHandler.instance().getGarlicStrength(
+                player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ
+            );
+        if (strength != com.marrybye.neorism.common.world.garlic.EnumStrength.NONE) {
+            endFeeding();
+            int amp = Math.max(0, strength.getStrength() - 1);
+            player.addPotionEffect(new PotionEffect(ModPotions.garlic.id, 60, amp));
+            if (strength == com.marrybye.neorism.common.world.garlic.EnumStrength.STRONG && player.ticksExisted % 40 == 0) {
+                player.attackEntityFrom(com.marrybye.neorism.common.core.ModDamageSource.GARLIC, 2.0F);
+                ModSounds.playAtEntity(player, ModSounds.SCREECH, 0.5F, 1.1F);
+                ModLogger.combat("Player %s taking garlic damage from strong garlic zone", player.getCommandSenderName());
+            }
+        }
+        if (com.marrybye.neorism.common.world.garlic.GarlicHandler.instance().isHoldingGarlic(player) && player.ticksExisted % 20 == 0) {
+            player.attackEntityFrom(com.marrybye.neorism.common.core.ModDamageSource.GARLIC, 1.0F);
+            ModSounds.playAtEntity(player, ModSounds.VAMPIRE_BITE, 0.5F, 1.5F);
+            ModLogger.combat("Player %s burned by holding garlic item", player.getCommandSenderName());
+        }
+    }
+
+    public void onSanguinareFinished() {
+        if (player.worldObj.isRemote) return;
+        com.marrybye.neorism.common.faction.FactionPlayerHandler fHandler =
+            com.marrybye.neorism.common.faction.FactionPlayerHandler.get(player);
+        if (fHandler != null && fHandler.canJoin(ModFactions.VAMPIRE)) {
+            fHandler.setFaction(ModFactions.VAMPIRE, 1);
+            player.removePotionEffect(ModPotions.sanguinare.id);
+            ModSounds.playAtEntity(player, ModSounds.SCREECH, 1.0F, 1.0F);
+            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("chat.neorism.became_vampire"));
+            player.triggerAchievement(com.marrybye.neorism.common.achievement.ModAchievements.becomeVampire);
+            ModLogger.leveling("Player %s transformed into Vampire Level 1 through Sanguinare Vampiris",
+                player.getCommandSenderName());
+        }
+    }
+
+    public int getTicksInSun() {
+        return ticksInSun;
+    }
+
+    public void setTicksInSun(int ticksInSun) {
+        this.ticksInSun = ticksInSun;
     }
 
     public void syncBlood() {

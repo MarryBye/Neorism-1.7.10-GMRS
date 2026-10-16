@@ -126,6 +126,8 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
             com.marrybye.neorism.common.vampire.VampirePlayer.get(player);
         if (vp != null && isVampire()) {
             vp.onLevelChanged(this.currentLevel);
+        } else if (!isVampire()) {
+            com.marrybye.neorism.common.vampire.LevelAttributeModifier.removeVampireModifiers(player);
         }
         sync();
     }

@@ -5410,3 +5410,6 @@ item.neorism.blood_bottle.2.name=Blood Bottle (2/5)
 item.neorism.blood_bottle.3.name=Blood Bottle (3/5)
 item.neorism.blood_bottle.4.name=Blood Bottle (4/5)
 item.neorism.blood_bottle.5.name=Blood Bottle (5/5)
+
+chat.neorism.became_vampire=You have succumbed to Sanguinare Vampiris and become a Vampire!
+chat.neorism.contracted_sanguinare=You feel a strange burning in your veins... You have contracted Sanguinare Vampiris!

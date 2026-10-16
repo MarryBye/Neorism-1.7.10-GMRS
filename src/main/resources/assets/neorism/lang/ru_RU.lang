@@ -5328,3 +5328,6 @@ item.neorism.blood_bottle.2.name=Флакон с кровью (2/5)
 item.neorism.blood_bottle.3.name=Флакон с кровью (3/5)
 item.neorism.blood_bottle.4.name=Флакон с кровью (4/5)
 item.neorism.blood_bottle.5.name=Флакон с кровью (5/5)
+
+chat.neorism.became_vampire=Вы пали жертвой Sanguinare Vampiris и обратились в вампира!
+chat.neorism.contracted_sanguinare=Вы чувствуете странное жжение в венах... Вы заразились Sanguinare Vampiris!

@@ -30,6 +30,10 @@ public class ModRegistries {
             new com.marrybye.neorism.common.events.PlayerCapabilityEventHandler();
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(playerCapHandler);
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(playerCapHandler);
+
+        com.marrybye.neorism.common.events.VampireCombatEventHandler combatHandler =
+            new com.marrybye.neorism.common.events.VampireCombatEventHandler();
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(combatHandler);
     }
 
     public static void postInit(FMLPostInitializationEvent event) {

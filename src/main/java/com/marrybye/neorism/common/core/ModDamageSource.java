@@ -42,6 +42,10 @@ public class ModDamageSource extends DamageSource {
     public static final DamageSource STAKE = new ModDamageSource("neorism.stake")
         .setDamageBypassesArmor();
 
+    public static final DamageSource GARLIC = new ModDamageSource("neorism.garlic")
+        .setDamageBypassesArmor()
+        .setMagicDamage();
+
     public ModDamageSource(String damageType) {
         super(damageType);
     }

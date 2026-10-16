@@ -10,6 +10,7 @@ This directory stores standardized completion reports generated after every task
 | [`phase-02-faction-ieep.md`](phase-02-faction-ieep.md) | Phase 2: Faction Architecture & Player Capability Storage (IEEP) | 2026-10-16 | COMPLETED |
 | [`phase-03-blood-feeding.md`](phase-03-blood-feeding.md) | Phase 3: Blood Subsystem & Vampire Feeding Mechanics | 2026-10-16 | COMPLETED |
 | [`fix-block-models-and-achievements.md`](fix-block-models-and-achievements.md) | Fix 3D JSON block models, GTNHLib loader, and achievement localization | 2026-10-16 | COMPLETED |
+| [`phase-04-vampire-progression-sundamage.md`](phase-04-vampire-progression-sundamage.md) | Phase 4: Vampire Progression, Sun Weakness & Garlic System | 2026-10-16 | COMPLETED |
 
 ---
 

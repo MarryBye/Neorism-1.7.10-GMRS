@@ -100,5 +100,24 @@ public class PlayerCapabilityEventHandler {
                 creature.updateLiving();
             }
         }
+
+        if (!event.entityLiving.worldObj.isRemote && event.entityLiving.isPotionActive(com.marrybye.neorism.common.core.ModPotions.sanguinare)) {
+            net.minecraft.potion.PotionEffect effect = event.entityLiving.getActivePotionEffect(com.marrybye.neorism.common.core.ModPotions.sanguinare);
+            if (effect != null && effect.getDuration() <= 2) {
+                if (event.entityLiving instanceof EntityPlayer) {
+                    VampirePlayer vp = VampirePlayer.get((EntityPlayer) event.entityLiving);
+                    if (vp != null) {
+                        vp.onSanguinareFinished();
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onWorldUnload(net.minecraftforge.event.world.WorldEvent.Unload event) {
+        if (!event.world.isRemote && event.world.provider.dimensionId == 0) {
+            com.marrybye.neorism.common.world.garlic.GarlicHandler.instance().clearCache();
+        }
     }
 }
