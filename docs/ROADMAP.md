@@ -39,24 +39,25 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 1: Foundation, Core Registries, Damage Sources & Network Pipeline
 *Prerequisite for all item, entity, and block logic.*
 
-- [ ] **1.1. Core Registries Infrastructure (`ModRegistries`)**
-  - [ ] Implement `ModItems`, `ModBlocks`, `ModEntities`, `ModPotions`, `ModAttributes` with type-safe registration helpers.
-  - [ ] Implement `CreativeTabs` for Neorism: `tabVampirism` (main) and `tabVampirismBooks`.
-  - [ ] Add preInit/init/postInit registration dispatchers in `CommonProxy`.
-- [ ] **1.2. Custom Damage Sources (`ModDamageSource`)**
-  - [ ] Implement `VampirismDamageSource`: `sunDamage` (bypasses regular armor, fire-based), `vampireBite`, `holyWater`, `garlic`, `bloodExhaustion`, `stake` (instant-kill condition).
-  - [ ] Register custom death messages in `.lang` files (`death.attack.sunDamage`, `death.attack.holyWater`, etc.).
-- [ ] **1.3. Sound Events Registry (`ModSounds`)**
-  - [ ] Map all sound definitions from `sounds.json` (`neorism:vampire_bite`, `neorism:blood_gargle`, `neorism:heartbeat`, `neorism:bat_flutter`, `neorism:altar_hum`, `neorism:screech`, `neorism:rage`).
-  - [ ] Implement helper methods: `ModSounds.playAtEntity(entity, soundName, volume, pitch)`.
-- [ ] **1.4. Network Pipeline (`PacketHandler`)**
-  - [ ] Implement `PacketHandler` using Forge `SimpleNetworkWrapper` under channel `"neorism"`.
-  - [ ] Setup packet ID registry with automatic bi-directional packet registration.
-- [ ] **1.5. Custom Entity Attributes (`ModAttributes`)**
-  - [ ] Implement `BLOOD_EXHAUSTION` attribute (affects hunger/blood burn rate).
-  - [ ] Implement `SUNDAMAGE` resistance attribute.
-  - [ ] Implement `NEONATAL_DURATION` attribute.
-  - [ ] Implement `BITE_DAMAGE` and `BITE_SPEED` attributes.
+- [x] **1.1. Core Registries Infrastructure (`ModRegistries`)**
+  - [x] Implement `ModItems`, `ModBlocks`, `ModEntities`, `ModPotions`, `ModAttributes` with type-safe registration helpers.
+  - [x] Implement `CreativeTabs` for Neorism: `tabVampirism` (main) and `tabVampirismBooks`.
+  - [x] Add preInit/init/postInit registration dispatchers in `CommonProxy`.
+- [x] **1.2. Custom Damage Sources (`ModDamageSource`)**
+  - [x] Implement `VampirismDamageSource`: `sunDamage` (bypasses regular armor, fire-based), `vampireBite`, `holyWater`, `garlic`, `bloodExhaustion`, `stake` (instant-kill condition).
+  - [x] Register custom death messages in `.lang` files (`death.attack.sunDamage`, `death.attack.holyWater`, etc.).
+- [x] **1.3. Sound Events Registry (`ModSounds`)**
+  - [x] Map all sound definitions from `sounds.json` (`neorism:vampire_bite`, `neorism:blood_gargle`, `neorism:heartbeat`, `neorism:bat_flutter`, `neorism:altar_hum`, `neorism:screech`, `neorism:rage`).
+  - [x] Implement helper methods: `ModSounds.playAtEntity(entity, soundName, volume, pitch)`.
+- [x] **1.4. Network Pipeline (`PacketHandler`)**
+  - [x] Implement `PacketHandler` using Forge `SimpleNetworkWrapper` under channel `"neorism"`.
+  - [x] Setup packet ID registry with automatic bi-directional packet registration.
+- [x] **1.5. Custom Entity Attributes (`ModAttributes`)**
+  - [x] Implement `BLOOD_EXHAUSTION` attribute (affects hunger/blood burn rate).
+  - [x] Implement `SUNDAMAGE` resistance attribute.
+  - [x] Implement `NEONATAL_DURATION` attribute.
+  - [x] Implement `BITE_DAMAGE` and `BITE_SPEED` attributes.
+
 
 ---
 

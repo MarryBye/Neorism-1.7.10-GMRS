@@ -6,7 +6,7 @@ This directory stores standardized completion reports generated after every task
 
 | Report ID | Subsystem / Task | Date | Status |
 | :--- | :--- | :--- | :--- |
-| *Pending execution of Phase 1...* | | | |
+| [`phase-01-foundation-registries.md`](phase-01-foundation-registries.md) | Phase 1: Foundation, Registries, Damage Sources & Network Pipeline | 2026-10-16 | COMPLETED |
 
 ---
 
