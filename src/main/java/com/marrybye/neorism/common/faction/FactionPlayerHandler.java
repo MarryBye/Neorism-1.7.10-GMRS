@@ -19,8 +19,11 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 
 /**
  * Extended entity property managing player faction membership, levels, lord ranks, and disguise state.
+ * Implements both Neorism and TeamLapen FactionAPI interfaces.
  */
-public class FactionPlayerHandler implements IExtendedEntityProperties, IFactionPlayer {
+public class FactionPlayerHandler implements IExtendedEntityProperties, IFactionPlayer,
+        de.teamlapen.faction.api.factions.IFactionPlayerHandler,
+        de.teamlapen.faction.api.factions.IFactionPlayer {
 
     public static final String PROPERTY_ID = "neorism:faction_player";
 
@@ -87,6 +90,11 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
         return currentLevel;
     }
 
+    @Override
+    public de.teamlapen.faction.api.factions.IFactionPlayer getFactionPlayer() {
+        return this;
+    }
+
     public int getLordLevel() {
         return lordLevel;
     }
@@ -107,6 +115,14 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
         return currentFaction == null || currentFaction.isNeutral();
     }
 
+    @Override
+    public boolean canJoin(de.teamlapen.faction.api.factions.IPlayableFaction faction) {
+        if (faction instanceof IPlayableFaction) {
+            return canJoin((IPlayableFaction) faction);
+        }
+        return isNeutral();
+    }
+
     public boolean canJoin(IPlayableFaction faction) {
         if (faction == null || faction.isNeutral()) return true;
         // Players can only join a faction if currently neutral
@@ -115,6 +131,15 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
 
     public boolean canLeaveFaction() {
         return !currentFaction.isNeutral();
+    }
+
+    @Override
+    public void setFaction(de.teamlapen.faction.api.factions.IPlayableFaction faction, int level) {
+        if (faction instanceof IPlayableFaction) {
+            setFaction((IPlayableFaction) faction, level);
+        } else {
+            setFaction(ModFactions.NEUTRAL, level);
+        }
     }
 
     public void setFaction(IPlayableFaction faction, int level) {

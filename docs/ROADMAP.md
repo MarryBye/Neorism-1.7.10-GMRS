@@ -78,6 +78,10 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 - [x] **2.4. Faction Disguise Subsystem**
   - [x] Implement `IDisguise` mechanics (Vampire disguise skill, Hunter disguise skill).
   - [x] Visibility check: `Helper.appearsAsVampire(player, viewer)`.
+- [x] **2.5. TeamLapen FactionAPI Integration (Vampirism 2.0+ Alignment)**
+  - [x] Integrate canonical `de.teamlapen.faction.api` packages (`factions`, `skills`, `actions`, `villages`, `minions`, `refinement`, `services`).
+  - [x] Bridge `FactionPlayerHandler` to `IFactionPlayerHandler` and configure `FactionsApi` entry point.
+  - [x] Document migration roadmap to author's official architecture (`docs/reports/factionapi-integration-analysis.md`).
 
 ---
 
@@ -189,6 +193,11 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
   - [x] Skill points awarded per level-up.
   - [x] Skill unlocking validation (parent skills required, mutually exclusive branches).
   - [x] Persistent NBT save/load in player properties.
+- [ ] **6.5. FactionAPI Skill Tree & Radial Action Rose Migration (TeamLapen Alignment)**
+  - [x] Connect canonical `de.teamlapen.faction.api` interfaces (`ISkill`, `ISkillSegment`, `ISkillTree`, `IAction`, `FactionsApi`).
+  - [ ] Migrate skill definitions to `ISkillSegment` DAG with `(x, y)` coordinates, parent prerequisites, and exclusive choices.
+  - [ ] Build pannable/scrollable `GuiSkillTree` canvas with node connector lines matching TeamLapen's `SkillsScreen`.
+  - [ ] Implement `GuiActionRadial` (`SkillRoseScreen` / Action Ring on hold `[R]`): radial circular ability selector with cooldown sweeps.
 
 ---
 

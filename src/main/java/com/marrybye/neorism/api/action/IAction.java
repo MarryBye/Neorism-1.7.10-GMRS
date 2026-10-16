@@ -3,9 +3,9 @@ package com.marrybye.neorism.api.action;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * Interface representing active abilities and skills for Vampires and Hunters.
+ * Interface representing active abilities and skills for Vampires and Hunters, bridged to FactionAPI.
  */
-public interface IAction {
+public interface IAction extends de.teamlapen.faction.api.factions.actions.IAction {
 
     /**
      * Unique identifier for the action (e.g. "bat_form", "vampire_rage", "freeze").
@@ -61,4 +61,30 @@ public interface IAction {
      * Checks if the player has unlocked this action via their skill tree.
      */
     boolean isUnlocked(EntityPlayer player);
+
+    @Override
+    default String getActionId() {
+        return getId();
+    }
+
+    @Override
+    default String getTranslationKey() {
+        return getUnlocalizedName();
+    }
+
+    @Override
+    default net.minecraft.util.ResourceLocation getIcon() {
+        return null;
+    }
+
+    @Override
+    default int getCooldown() {
+        return getCooldown(null);
+    }
+
+    @Override
+    default boolean canBeUsed(EntityPlayer player) {
+        return canUse(player);
+    }
 }
+
