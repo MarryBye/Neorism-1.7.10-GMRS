@@ -11,6 +11,14 @@ import net.minecraft.tileentity.TileEntity;
  */
 public abstract class TileEntityNeorism extends TileEntity {
 
+    public int ticksExisted = 0;
+
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        ticksExisted++;
+    }
+
     @Override
     public Packet getDescriptionPacket() {
         NBTTagCompound tag = new NBTTagCompound();

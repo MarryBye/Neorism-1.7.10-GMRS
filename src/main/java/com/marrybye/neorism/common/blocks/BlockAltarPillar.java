@@ -1,6 +1,12 @@
 package com.marrybye.neorism.common.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class BlockAltarPillar extends BlockModeled {
 
@@ -9,5 +15,90 @@ public class BlockAltarPillar extends BlockModeled {
         setHardness(2.0F);
         setStepSound(soundTypeStone);
         setBlockBounds(0.125F, 0.0F, 0.125F, 0.875F, 1.0F, 0.875F);
+    }
+
+    public static float getPillarValue(int meta) {
+        switch (meta) {
+            case 1: return 1.0F; // Stone
+            case 2: return 1.5F; // Bone / Quartz
+            case 3: return 2.0F; // Iron
+            case 4: return 3.0F; // Gold
+            default: return 0.0F;
+        }
+    }
+
+    public static ItemStack getFillerItem(int meta) {
+        switch (meta) {
+            case 1: return new ItemStack(Blocks.stonebrick);
+            case 2: return new ItemStack(Blocks.quartz_block);
+            case 3: return new ItemStack(Blocks.iron_block);
+            case 4: return new ItemStack(Blocks.gold_block);
+            default: return null;
+        }
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        int meta = world.getBlockMetadata(x, y, z);
+        ItemStack held = player.getHeldItem();
+
+        if (meta == 0 && held != null) {
+            int newMeta = 0;
+            Block heldBlock = Block.getBlockFromItem(held.getItem());
+            if (heldBlock == Blocks.stonebrick) {
+                newMeta = 1;
+            } else if (heldBlock == Blocks.quartz_block || (heldBlock != null && heldBlock.getUnlocalizedName().contains("bone"))) {
+                newMeta = 2;
+            } else if (heldBlock == Blocks.iron_block) {
+                newMeta = 3;
+            } else if (heldBlock == Blocks.gold_block) {
+                newMeta = 4;
+            }
+
+            if (newMeta > 0) {
+                if (!world.isRemote) {
+                    world.setBlockMetadataWithNotify(x, y, z, newMeta, 3);
+                    if (!player.capabilities.isCreativeMode) {
+                        held.stackSize--;
+                        if (held.stackSize <= 0) {
+                            player.setCurrentItemOrArmor(0, null);
+                        }
+                    }
+                    world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 1.0F, 1.0F);
+                }
+                return true;
+            }
+        } else if (meta > 0 && held == null) {
+            if (!world.isRemote) {
+                ItemStack filler = getFillerItem(meta);
+                world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+                if (filler != null) {
+                    if (!player.inventory.addItemStackToInventory(filler)) {
+                        player.dropPlayerItemWithRandomChoice(filler, false);
+                    }
+                }
+                world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "dig.stone", 1.0F, 0.8F);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+        if (!world.isRemote && meta > 0) {
+            ItemStack filler = getFillerItem(meta);
+            if (filler != null) {
+                EntityItem entity = new EntityItem(world, x + 0.5D, y + 0.5D, z + 0.5D, filler);
+                world.spawnEntityInWorld(entity);
+            }
+        }
+        super.breakBlock(world, x, y, z, block, meta);
+    }
+
+    @Override
+    public int damageDropped(int meta) {
+        return 0;
     }
 }

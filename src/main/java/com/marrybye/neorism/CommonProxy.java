@@ -20,6 +20,10 @@ public class CommonProxy {
 
     public void init(FMLInitializationEvent event) {
         ModRegistries.init(event);
+        cpw.mods.fml.common.network.NetworkRegistry.INSTANCE.registerGuiHandler(
+            Neorism.instance,
+            new com.marrybye.neorism.common.network.ModGuiHandler()
+        );
     }
 
     public void postInit(FMLPostInitializationEvent event) {

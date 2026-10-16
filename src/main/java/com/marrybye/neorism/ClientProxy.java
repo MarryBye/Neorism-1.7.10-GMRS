@@ -127,6 +127,15 @@ public class ClientProxy extends CommonProxy {
         }
 
         registerItemRenderers();
+
+        cpw.mods.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(
+            com.marrybye.neorism.common.tileentity.TileEntityAltarInfusion.class,
+            new com.marrybye.neorism.client.render.tileentity.TileEntityAltarInfusionRenderer()
+        );
+        cpw.mods.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(
+            com.marrybye.neorism.common.tileentity.TileEntityBloodPedestal.class,
+            new com.marrybye.neorism.client.render.tileentity.TileEntityBloodPedestalRenderer()
+        );
     }
 
     private void registerItemRenderers() {

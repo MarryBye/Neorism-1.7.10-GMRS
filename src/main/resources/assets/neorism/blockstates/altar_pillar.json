@@ -6,6 +6,21 @@
     "normal": {
       "model": "neorism:block/altar_pillar"
     },
+    "meta=0": {
+      "model": "neorism:block/altar_pillar"
+    },
+    "meta=1": {
+      "model": "neorism:block/altar_pillar_stone"
+    },
+    "meta=2": {
+      "model": "neorism:block/altar_pillar_bone"
+    },
+    "meta=3": {
+      "model": "neorism:block/altar_pillar_iron"
+    },
+    "meta=4": {
+      "model": "neorism:block/altar_pillar_gold"
+    },
     "type=bone": {
       "model": "neorism:block/altar_pillar_bone"
     },

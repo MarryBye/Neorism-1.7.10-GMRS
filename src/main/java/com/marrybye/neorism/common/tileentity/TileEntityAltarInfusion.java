@@ -1,8 +1,12 @@
 package com.marrybye.neorism.common.tileentity;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
+import com.marrybye.neorism.common.blocks.BlockAltarPillar;
 import com.marrybye.neorism.common.core.ModBlocks;
 import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.core.ModItems;
@@ -10,250 +14,615 @@ import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.faction.FactionPlayerHandler;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
+import com.marrybye.neorism.common.vampire.VampireLeveling;
+import com.marrybye.neorism.common.vampire.VampireLeveling.AltarInfusionRequirement;
+import com.marrybye.neorism.common.vampire.VampirePlayer;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
 
 /**
- * TileEntity for the Altar of Infusion.
- * Central node of the complex multiblock infusion ritual for vampire levels 5 through 14.
+ * Canonical TileEntity for the Altar of Infusion.
+ * Ported 1:1 from TeamLapen's AltarInfusionBlockEntity.java.
  */
-public class TileEntityAltarInfusion extends TileEntityNeorism {
+public class TileEntityAltarInfusion extends TileEntityNeorism implements IInventory {
 
-    public static final int RITUAL_DURATION = 100; // 5 seconds (100 ticks)
+    public static final int DURATION_TICK = 450;
+    public static final int MAX_PILLARS = 9;
+    public static final int RISING_TICKS = 60;
+    public static final float MAX_SPHERE_RITUAL_HEIGHT = 2.25F;
+    public static final double MAX_PLAYER_DISTANCE_SQ = 30.0D * 30.0D;
+    public static final UUID ID_MOVEMENT_SLOWDOWN = UUID.fromString("e5730a44-a09b-4654-8c43-ff12f2048994");
 
-    private int state = 0; // 0 = IDLE, 1 = RUNNING
-    private int ritualTicks = 0;
-    private String activatingPlayerName = "";
+    private final ItemStack[] items = new ItemStack[3];
+    private final List<ChunkCoordinates> tips = new ArrayList<ChunkCoordinates>();
+
+    private int runTime = 0;
     private int targetLevel = 0;
+    private String activatingPlayerName = "";
+    private UUID playerUUID = null;
 
-    private final List<TileEntityBloodPedestal> activePedestals = new ArrayList<TileEntityBloodPedestal>();
+    // Client-side animation variables
+    public int animationTime = 0;
+    public float rotation = 0.0F;
+    public float prevRotation = 0.0F;
+    public float targetRotation = 0.0F;
+    public float verticalOffset = 0.05F;
+    public int runningTicks = 0;
+    public int stoppingTicks = 0;
+    public float startHeight = 0.05F;
 
     public boolean isRunning() {
-        return state == 1;
+        return this.runTime > 0;
     }
 
-    public int getRitualTicks() {
-        return ritualTicks;
+    public int getRunTime() {
+        return this.runTime;
     }
 
-    public boolean startRitual(EntityPlayer player) {
-        if (worldObj.isRemote || state != 0 || player == null) return false;
+    public List<ChunkCoordinates> getTips() {
+        return this.tips;
+    }
+
+    public EntityPlayer getPlayer() {
+        if (worldObj == null) return null;
+        if (activatingPlayerName != null && !activatingPlayerName.isEmpty()) {
+            return worldObj.getPlayerEntityByName(activatingPlayerName);
+        }
+        return null;
+    }
+
+    public Phase getCurrentPhase() {
+        if (this.runTime < 1) return Phase.NOT_RUNNING;
+        if (this.runTime == 1) return Phase.CLEAN_UP;
+        if (this.runTime > DURATION_TICK - 100) return Phase.PARTICLE_SPREAD;
+        if (this.runTime >= DURATION_TICK - 200 && this.runTime < DURATION_TICK - 160) return Phase.BEAM_CONNECT;
+        if (this.runTime <= DURATION_TICK - 200 && this.runTime > 50) return Phase.BEAM_PLAYER;
+        if (this.runTime == 50) return Phase.LEVELUP;
+        if (this.runTime < 50) return Phase.ENDING;
+        return Phase.WAITING;
+    }
+
+    public Result tryActivate(EntityPlayer player) {
+        if (isRunning()) return Result.STILL_RUNNING;
 
         FactionPlayerHandler fph = FactionPlayerHandler.get(player);
-        if (fph == null || !Helper.isVampire(player)) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.not_a_vampire"));
-            return false;
+        if (fph == null) return Result.LEVEL_WRONG;
+
+        this.targetLevel = fph.getCurrentLevel() + 1;
+        AltarInfusionRequirement req = VampireLeveling.getInfusionRequirement(this.targetLevel);
+        if (req == null) return Result.LEVEL_WRONG;
+
+        if (worldObj.isDaytime()) return Result.NIGHT_ONLY;
+        if (!checkStructureLevel(req.getRequiredStructurePoints())) return Result.MISSING_PILLARS;
+        if (!checkItemRequirements(this.targetLevel)) return Result.MISSING_ITEMS;
+
+        return Result.SUCCESS;
+    }
+
+    public boolean checkStructureLevel(int required) {
+        if (this.worldObj == null) return false;
+
+        List<ValuedTip> valuedTips = new ArrayList<ValuedTip>();
+        List<ChunkCoordinates> foundTips = findTips();
+
+        for (ChunkCoordinates tip : foundTips) {
+            int height = 0;
+            double totalValue = 0.0D;
+
+            while (height < 3) {
+                int checkY = tip.posY - (height + 1);
+                Block blockBelow = this.worldObj.getBlock(tip.posX, checkY, tip.posZ);
+                if (blockBelow != ModBlocks.altarPillar) break;
+
+                int meta = this.worldObj.getBlockMetadata(tip.posX, checkY, tip.posZ);
+                totalValue += BlockAltarPillar.getPillarValue(meta);
+                height++;
+            }
+
+            int val = (int) (10 * totalValue);
+            valuedTips.add(new ValuedTip(tip, val));
         }
 
-        int curLevel = fph.getCurrentLevel();
-        if (curLevel < 4) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.altar_infusion_too_low"));
-            return false;
-        }
-        if (curLevel >= 14) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.vampire_max_level"));
-            return false;
-        }
+        Collections.sort(valuedTips, new Comparator<ValuedTip>() {
+            @Override
+            public int compare(ValuedTip o1, ValuedTip o2) {
+                return Integer.compare(o2.value, o1.value);
+            }
+        });
 
-        int next = curLevel + 1;
-        int points = calculateStructurePoints();
-        int reqPoints = getRequiredStructurePoints(next);
-
-        if (points < reqPoints) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.altar_infusion_need_points",
-                reqPoints, points));
-            return false;
+        int sum = 0;
+        this.tips.clear();
+        int count = Math.min(MAX_PILLARS, valuedTips.size());
+        for (int i = 0; i < count; i++) {
+            ValuedTip vt = valuedTips.get(i);
+            sum += vt.value;
+            this.tips.add(vt.pos);
         }
 
-        List<TileEntityBloodPedestal> pedestals = findPedestals();
-        if (!validateAndReserveCatalysts(next, pedestals)) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.altar_infusion_missing_items", next));
-            return false;
+        return sum >= required * 10;
+    }
+
+    private List<ChunkCoordinates> findTips() {
+        List<ChunkCoordinates> result = new ArrayList<ChunkCoordinates>();
+        if (this.worldObj == null) return result;
+
+        for (int dx = -5; dx <= 5; dx++) {
+            for (int dy = 1; dy <= 3; dy++) {
+                for (int dz = -5; dz <= 5; dz++) {
+                    int x = xCoord + dx;
+                    int y = yCoord + dy;
+                    int z = zCoord + dz;
+                    if (this.worldObj.getBlock(x, y, z) == ModBlocks.altarTip) {
+                        result.add(new ChunkCoordinates(x, y, z));
+                    }
+                }
+            }
         }
 
-        // Start ritual
-        this.state = 1;
-        this.ritualTicks = 0;
+        return result;
+    }
+
+    public boolean checkItemRequirements(int targetLvl) {
+        AltarInfusionRequirement req = VampireLeveling.getInfusionRequirement(targetLvl);
+        if (req == null) return false;
+
+        // Slot 0: Pure Blood
+        if (req.getPureBloodQuantity() > 0) {
+            ItemStack blood = items[0];
+            if (blood == null || blood.getItem() != ModItems.pureBlood ||
+                blood.getItemDamage() < req.getPureBloodLevel() ||
+                blood.stackSize < req.getPureBloodQuantity()) {
+                return false;
+            }
+        }
+
+        // Slot 1: Human Hearts
+        if (req.getHumanHeartQuantity() > 0) {
+            ItemStack hearts = items[1];
+            if (hearts == null || hearts.getItem() != ModItems.humanHeart ||
+                hearts.stackSize < req.getHumanHeartQuantity()) {
+                return false;
+            }
+        }
+
+        // Slot 2: Vampire Books
+        if (req.getVampireBookQuantity() > 0) {
+            ItemStack books = items[2];
+            if (books == null || books.getItem() != ModItems.vampireBook ||
+                books.stackSize < req.getVampireBookQuantity()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void consumeItems(int targetLvl) {
+        AltarInfusionRequirement req = VampireLeveling.getInfusionRequirement(targetLvl);
+        if (req == null) return;
+
+        if (req.getPureBloodQuantity() > 0 && items[0] != null) {
+            items[0].stackSize -= req.getPureBloodQuantity();
+            if (items[0].stackSize <= 0) items[0] = null;
+        }
+
+        if (req.getHumanHeartQuantity() > 0 && items[1] != null) {
+            items[1].stackSize -= req.getHumanHeartQuantity();
+            if (items[1].stackSize <= 0) items[1] = null;
+        }
+
+        if (req.getVampireBookQuantity() > 0 && items[2] != null) {
+            items[2].stackSize -= req.getVampireBookQuantity();
+            if (items[2].stackSize <= 0) items[2] = null;
+        }
+
+        markDirty();
+    }
+
+    public void startRitual(EntityPlayer player) {
+        if (worldObj == null || worldObj.isRemote || isRunning() || player == null) return;
+
+        this.runTime = DURATION_TICK;
         this.activatingPlayerName = player.getCommandSenderName();
-        this.targetLevel = next;
-        this.activePedestals.clear();
-        this.activePedestals.addAll(pedestals);
+        this.playerUUID = player.getUniqueID();
+        this.targetLevel = FactionPlayerHandler.get(player).getCurrentLevel() + 1;
+
+        // Apply resistance and 100% movement slowdown
+        player.addPotionEffect(new PotionEffect(Potion.resistance.id, DURATION_TICK, 4, false));
+
+        IAttributeInstance speedAttr = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+        if (speedAttr != null && speedAttr.getModifier(ID_MOVEMENT_SLOWDOWN) == null) {
+            speedAttr.applyModifier(new AttributeModifier(ID_MOVEMENT_SLOWDOWN, "Altar Infusion Slowdown", -1.0D, 2));
+        }
 
         ModSounds.playAtEntity(player, ModSounds.BEAM_ENTER, 1.0F, 0.8F);
-        player.addChatMessage(new ChatComponentTranslation("chat.neorism.altar_infusion_started", next));
-        ModLogger.rituals("Infusion ritual started at [%d,%d,%d] for player %s (target lvl: %d, structure points: %d)",
-            xCoord, yCoord, zCoord, activatingPlayerName, next, points);
+        ModLogger.rituals("Infusion ritual started at [%d,%d,%d] for %s (target lvl: %d)",
+            xCoord, yCoord, zCoord, activatingPlayerName, targetLevel);
 
         markForUpdate();
-        return true;
+        markDirty();
     }
 
     @Override
     public void updateEntity() {
         super.updateEntity();
 
-        if (state == 1) {
-            ritualTicks++;
+        if (isRunning()) {
+            if (!worldObj.isRemote) {
+                EntityPlayer player = getPlayer();
+                if (player == null || player.isDead ||
+                    player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) > MAX_PLAYER_DISTANCE_SQ) {
+                    endRitual();
+                    return;
+                }
+            }
 
-            if (worldObj.isRemote) {
-                // Client-side visual beams & particles
-                for (TileEntityBloodPedestal ped : activePedestals) {
-                    if (ped != null) {
-                        double px = ped.xCoord + 0.5D;
-                        double py = ped.yCoord + 0.8D;
-                        double pz = ped.zCoord + 0.5D;
-                        double dx = (xCoord + 0.5D) - px;
-                        double dy = (yCoord + 1.0D) - py;
-                        double dz = (zCoord + 0.5D) - pz;
-                        worldObj.spawnParticle("reddust", px + dx * 0.5D, py + dy * 0.5D, pz + dz * 0.5D, 0, 0, 0);
-                    }
-                }
-            } else {
-                if (ritualTicks % 20 == 0) {
-                    worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D,
-                        "mob.wither.idle", 0.7F, 1.2F);
-                }
+            this.runTime--;
+            tickRitual();
 
-                if (ritualTicks >= RITUAL_DURATION) {
-                    completeRitual();
-                }
+            if (!isRunning()) {
+                markForUpdate();
+                markDirty();
+            }
+        }
+
+        if (worldObj.isRemote) {
+            tickSphereAnimation();
+        }
+    }
+
+    private void tickRitual() {
+        Phase phase = getCurrentPhase();
+
+        if (worldObj.isRemote) {
+            handleClientEffects(phase);
+        } else {
+            if (phase == Phase.LEVELUP) {
+                handleLevelUp();
+            } else if (phase == Phase.CLEAN_UP) {
+                endRitual();
             }
         }
     }
 
-    private void completeRitual() {
-        state = 0;
-        ritualTicks = 0;
-
-        EntityPlayer player = worldObj.getPlayerEntityByName(activatingPlayerName);
-        if (player != null && Helper.isVampire(player)) {
-            // Consume catalysts
-            consumeCatalysts(targetLevel, activePedestals);
-
-            FactionPlayerHandler fph = FactionPlayerHandler.get(player);
-            if (fph != null) {
-                fph.setFaction(ModFactions.VAMPIRE, targetLevel);
+    private void handleClientEffects(Phase phase) {
+        if (phase == Phase.PARTICLE_SPREAD && this.runTime % 15 == 0) {
+            for (ChunkCoordinates tip : this.tips) {
+                double tx = tip.posX + 0.5D;
+                double ty = tip.posY + 0.5D;
+                double tz = tip.posZ + 0.5D;
+                double dx = (xCoord + 0.5D) - tx;
+                double dy = (yCoord + 1.0D) - ty;
+                double dz = (zCoord + 0.5D) - tz;
+                for (int i = 0; i < 4; i++) {
+                    worldObj.spawnParticle("reddust", tx + dx * 0.25D * i, ty + dy * 0.25D * i, tz + dz * 0.25D * i, 0, 0, 0);
+                }
             }
-
-            ModSounds.playAtEntity(player, ModSounds.BEAM_ENTER, 1.2F, 1.2F);
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.vampire_leveled_up", targetLevel));
-            ModLogger.rituals("Infusion ritual SUCCESS for player %s -> Level %d", activatingPlayerName, targetLevel);
-
-            // Cosmetic lightning
-            EntityLightningBolt bolt = new EntityLightningBolt(worldObj, xCoord + 0.5D, yCoord + 1.0D, zCoord + 0.5D);
-            worldObj.spawnEntityInWorld(bolt);
         }
 
-        activePedestals.clear();
+        if (this.runTime == DURATION_TICK - 200) {
+            EntityPlayer player = getPlayer();
+            if (player != null) {
+                worldObj.playSound(player.posX, player.posY, player.posZ, "neorism:beam_enter", 1.0F, 1.0F, false);
+            }
+        }
+    }
+
+    private void handleLevelUp() {
+        if (worldObj == null || worldObj.isRemote) return;
+
+        EntityPlayer player = getPlayer();
+        if (player == null) return;
+
+        FactionPlayerHandler fph = FactionPlayerHandler.get(player);
+        if (fph == null || fph.getCurrentLevel() != this.targetLevel - 1) return;
+
+        if (!checkItemRequirements(this.targetLevel)) {
+            endRitual();
+            return;
+        }
+
+        consumeItems(this.targetLevel);
+        fph.setFaction(ModFactions.VAMPIRE, this.targetLevel);
+
+        VampirePlayer vp = VampirePlayer.get(player);
+        if (vp != null) {
+            vp.drinkBlood(Integer.MAX_VALUE, 1.0F);
+        }
+
+        ModSounds.playAtEntity(player, ModSounds.BEAM_ENTER, 1.2F, 1.2F);
+        player.addChatMessage(new ChatComponentTranslation("chat.neorism.vampire_leveled_up", this.targetLevel));
+        ModLogger.rituals("Infusion ritual SUCCESS for %s -> Level %d", activatingPlayerName, targetLevel);
+
+        // Post ritual buffs: Saturation, Regeneration, Strength
+        player.addPotionEffect(new PotionEffect(Potion.regeneration.id, 400, 2));
+        player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 400, 2));
+        player.addPotionEffect(new PotionEffect(23, 400, 2)); // 23 = Saturation
+
+        // Cosmetic lightning bolt
+        EntityLightningBolt bolt = new EntityLightningBolt(worldObj, xCoord + 0.5D, yCoord + 1.0D, zCoord + 0.5D);
+        worldObj.spawnEntityInWorld(bolt);
+
         markForUpdate();
+        markDirty();
     }
 
-    public int calculateStructurePoints() {
-        int points = 0;
-        int r = 3;
-        for (int dx = -r; dx <= r; dx++) {
-            for (int dz = -r; dz <= r; dz++) {
-                for (int dy = 0; dy <= 2; dy++) {
-                    int x = xCoord + dx;
-                    int y = yCoord + dy;
-                    int z = zCoord + dz;
-                    Block b = worldObj.getBlock(x, y, z);
-                    if (b == ModBlocks.altarTip) {
-                        int meta = worldObj.getBlockMetadata(x, y, z);
-                        points += (meta + 1); // 1, 2, 3 points per tip tier
-                    }
-                }
-            }
-        }
-        return points;
-    }
-
-    private int getRequiredStructurePoints(int level) {
-        if (level <= 6) return 4;
-        if (level <= 8) return 8;
-        if (level <= 10) return 12;
-        return 16;
-    }
-
-    private List<TileEntityBloodPedestal> findPedestals() {
-        List<TileEntityBloodPedestal> list = new ArrayList<TileEntityBloodPedestal>();
-        int r = 4;
-        for (int dx = -r; dx <= r; dx++) {
-            for (int dz = -r; dz <= r; dz++) {
-                for (int dy = -1; dy <= 1; dy++) {
-                    net.minecraft.tileentity.TileEntity te = worldObj.getTileEntity(xCoord + dx, yCoord + dy, zCoord + dz);
-                    if (te instanceof TileEntityBloodPedestal) {
-                        list.add((TileEntityBloodPedestal) te);
-                    }
-                }
-            }
-        }
-        return list;
-    }
-
-    private boolean validateAndReserveCatalysts(int level, List<TileEntityBloodPedestal> pedestals) {
-        boolean hasPureBlood = false;
-        boolean hasSecondary = false;
-
-        int reqPureBloodTier = Math.min(4, Math.max(0, (level - 5) / 2)); // 0 to 4 (Tiers 1 to 5)
-        Item secondaryItem = level >= 9 ? ModItems.sovereignBlood : (level >= 7 ? ModItems.vampireBook : ModItems.humanHeart);
-
-        for (TileEntityBloodPedestal ped : pedestals) {
-            ItemStack item = ped.getStoredItem();
-            if (item != null) {
-                if (item.getItem() == ModItems.pureBlood && item.getItemDamage() >= reqPureBloodTier) {
-                    hasPureBlood = true;
-                } else if (item.getItem() == secondaryItem) {
-                    hasSecondary = true;
-                }
+    private void endRitual() {
+        EntityPlayer target = getPlayer();
+        if (target != null) {
+            IAttributeInstance speedAttr = target.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+            if (speedAttr != null && speedAttr.getModifier(ID_MOVEMENT_SLOWDOWN) != null) {
+                speedAttr.removeModifier(speedAttr.getModifier(ID_MOVEMENT_SLOWDOWN));
             }
         }
 
-        return hasPureBlood && hasSecondary;
+        this.activatingPlayerName = "";
+        this.playerUUID = null;
+        this.tips.clear();
+        this.runTime = 0;
+
+        markForUpdate();
+        markDirty();
     }
 
-    private void consumeCatalysts(int level, List<TileEntityBloodPedestal> pedestals) {
-        int reqPureBloodTier = Math.min(4, Math.max(0, (level - 5) / 2));
-        Item secondaryItem = level >= 9 ? ModItems.sovereignBlood : (level >= 7 ? ModItems.vampireBook : ModItems.humanHeart);
+    public void tickSphereAnimation() {
+        this.prevRotation = this.rotation;
 
-        boolean consumedBlood = false;
-        boolean consumedSecondary = false;
+        boolean running = isRunning();
+        float spinSpeed = (running || this.stoppingTicks < RISING_TICKS) ? 0.4F : 0.025F;
+        this.targetRotation += spinSpeed;
 
-        for (TileEntityBloodPedestal ped : pedestals) {
-            ItemStack item = ped.getStoredItem();
-            if (item != null) {
-                if (!consumedBlood && item.getItem() == ModItems.pureBlood && item.getItemDamage() >= reqPureBloodTier) {
-                    ped.takeStoredItem();
-                    consumedBlood = true;
-                } else if (!consumedSecondary && item.getItem() == secondaryItem) {
-                    ped.takeStoredItem();
-                    consumedSecondary = true;
-                }
+        while (this.rotation >= (float) Math.PI) {
+            this.rotation -= (float) (Math.PI * 2);
+        }
+        while (this.rotation < (float) -Math.PI) {
+            this.rotation += (float) (Math.PI * 2);
+        }
+        while (this.targetRotation >= (float) Math.PI) {
+            this.targetRotation -= (float) (Math.PI * 2);
+        }
+        while (this.targetRotation < (float) -Math.PI) {
+            this.targetRotation += (float) (Math.PI * 2);
+        }
+
+        float rotDiff = this.targetRotation - this.rotation;
+        while (rotDiff >= (float) Math.PI) {
+            rotDiff -= (float) (Math.PI * 2);
+        }
+        while (rotDiff < (float) -Math.PI) {
+            rotDiff += (float) (Math.PI * 2);
+        }
+        this.rotation += rotDiff * 0.4F;
+
+        this.animationTime++;
+        float bobbingHeight = (float) (Math.sin(this.animationTime * 0.1F) * 0.05F + 0.05F);
+
+        if (running) {
+            this.stoppingTicks = 0;
+            if (this.runningTicks == 0) {
+                this.startHeight = bobbingHeight;
             }
+            if (this.runningTicks < RISING_TICKS) {
+                this.runningTicks++;
+                float progress = (float) this.runningTicks / RISING_TICKS;
+                this.verticalOffset = this.startHeight + (MAX_SPHERE_RITUAL_HEIGHT - this.startHeight) * progress;
+            } else {
+                this.verticalOffset = MAX_SPHERE_RITUAL_HEIGHT;
+            }
+        } else {
+            this.runningTicks = 0;
+            if (this.stoppingTicks == 0) {
+                this.startHeight = this.verticalOffset;
+            }
+            if (this.stoppingTicks < RISING_TICKS) {
+                this.stoppingTicks++;
+                float progress = (float) this.stoppingTicks / RISING_TICKS;
+                this.verticalOffset = this.startHeight + (bobbingHeight - this.startHeight) * progress;
+            } else {
+                this.verticalOffset = bobbingHeight;
+            }
+        }
+    }
+
+    // --- IInventory Implementation ---
+
+    @Override
+    public int getSizeInventory() {
+        return items.length;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int slot) {
+        if (slot >= 0 && slot < items.length) {
+            return items[slot];
+        }
+        return null;
+    }
+
+    @Override
+    public ItemStack decrStackSize(int slot, int count) {
+        if (slot >= 0 && slot < items.length && items[slot] != null) {
+            if (items[slot].stackSize <= count) {
+                ItemStack stack = items[slot];
+                items[slot] = null;
+                markDirty();
+                return stack;
+            } else {
+                ItemStack stack = items[slot].splitStack(count);
+                if (items[slot].stackSize == 0) items[slot] = null;
+                markDirty();
+                return stack;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int slot) {
+        if (slot >= 0 && slot < items.length && items[slot] != null) {
+            ItemStack stack = items[slot];
+            items[slot] = null;
+            markDirty();
+            return stack;
+        }
+        return null;
+    }
+
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack stack) {
+        if (slot >= 0 && slot < items.length) {
+            items[slot] = stack;
+            markDirty();
         }
     }
 
     @Override
+    public String getInventoryName() {
+        return "container.neorism.altar_infusion";
+    }
+
+    @Override
+    public boolean hasCustomInventoryName() {
+        return false;
+    }
+
+    @Override
+    public int getInventoryStackLimit() {
+        return 64;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return worldObj != null && worldObj.getTileEntity(xCoord, yCoord, zCoord) == this &&
+               player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64.0D;
+    }
+
+    @Override
+    public void openInventory() {}
+
+    @Override
+    public void closeInventory() {}
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        if (stack == null) return false;
+        if (slot == 0) return stack.getItem() == ModItems.pureBlood;
+        if (slot == 1) return stack.getItem() == ModItems.humanHeart;
+        if (slot == 2) return stack.getItem() == ModItems.vampireBook;
+        return false;
+    }
+
+    // --- NBT Serialization ---
+
+    @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setInteger("state", state);
-        tag.setInteger("ritualTicks", ritualTicks);
-        tag.setString("activatingPlayer", activatingPlayerName);
-        tag.setInteger("targetLevel", targetLevel);
+        tag.setInteger("runTime", this.runTime);
+        tag.setInteger("targetLevel", this.targetLevel);
+        if (activatingPlayerName != null) {
+            tag.setString("activatingPlayerName", activatingPlayerName);
+        }
+        if (playerUUID != null) {
+            tag.setString("playerUUID", playerUUID.toString());
+        }
+
+        NBTTagList itemList = new NBTTagList();
+        for (int i = 0; i < items.length; i++) {
+            if (items[i] != null) {
+                NBTTagCompound itemTag = new NBTTagCompound();
+                itemTag.setByte("Slot", (byte) i);
+                items[i].writeToNBT(itemTag);
+                itemList.appendTag(itemTag);
+            }
+        }
+        tag.setTag("Items", itemList);
+
+        NBTTagList tipList = new NBTTagList();
+        for (ChunkCoordinates tip : this.tips) {
+            NBTTagCompound tipTag = new NBTTagCompound();
+            tipTag.setInteger("X", tip.posX);
+            tipTag.setInteger("Y", tip.posY);
+            tipTag.setInteger("Z", tip.posZ);
+            tipList.appendTag(tipTag);
+        }
+        tag.setTag("Tips", tipList);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        this.state = tag.getInteger("state");
-        this.ritualTicks = tag.getInteger("ritualTicks");
-        this.activatingPlayerName = tag.getString("activatingPlayer");
+        this.runTime = tag.getInteger("runTime");
         this.targetLevel = tag.getInteger("targetLevel");
+        this.activatingPlayerName = tag.getString("activatingPlayerName");
+        if (tag.hasKey("playerUUID")) {
+            try {
+                this.playerUUID = UUID.fromString(tag.getString("playerUUID"));
+            } catch (Exception ignored) {}
+        }
+
+        NBTTagList itemList = tag.getTagList("Items", 10);
+        for (int i = 0; i < items.length; i++) items[i] = null;
+        for (int i = 0; i < itemList.tagCount(); i++) {
+            NBTTagCompound itemTag = itemList.getCompoundTagAt(i);
+            int slot = itemTag.getByte("Slot") & 255;
+            if (slot >= 0 && slot < items.length) {
+                items[slot] = ItemStack.loadItemStackFromNBT(itemTag);
+            }
+        }
+
+        NBTTagList tipList = tag.getTagList("Tips", 10);
+        this.tips.clear();
+        for (int i = 0; i < tipList.tagCount(); i++) {
+            NBTTagCompound tipTag = tipList.getCompoundTagAt(i);
+            this.tips.add(new ChunkCoordinates(tipTag.getInteger("X"), tipTag.getInteger("Y"), tipTag.getInteger("Z")));
+        }
+    }
+
+    public enum Phase {
+        NOT_RUNNING, PARTICLE_SPREAD, BEAM_CONNECT, BEAM_PLAYER, WAITING, LEVELUP, ENDING, CLEAN_UP
+    }
+
+    public enum Result {
+        SUCCESS("success"),
+        STILL_RUNNING("still_running"),
+        LEVEL_WRONG("level_wrong"),
+        NIGHT_ONLY("night_only"),
+        MISSING_PILLARS("missing_pillars"),
+        MISSING_ITEMS("missing_items");
+
+        public final String name;
+
+        Result(String name) {
+            this.name = name;
+        }
+
+        public IChatComponent getMessage() {
+            return new ChatComponentTranslation("message.neorism.altar_infusion.ritual." + name);
+        }
+    }
+
+    private static class ValuedTip {
+        final ChunkCoordinates pos;
+        final int value;
+
+        ValuedTip(ChunkCoordinates pos, int value) {
+            this.pos = pos;
+            this.value = value;
+        }
     }
 }
