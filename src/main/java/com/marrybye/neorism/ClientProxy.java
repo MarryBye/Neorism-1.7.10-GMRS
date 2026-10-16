@@ -43,7 +43,11 @@ public class ClientProxy extends CommonProxy {
             com.marrybye.neorism.common.core.ModBlocks.altarInspiration,
             com.marrybye.neorism.common.core.ModBlocks.altarPillar,
             com.marrybye.neorism.common.core.ModBlocks.altarTip,
-            com.marrybye.neorism.common.core.ModBlocks.bloodContainer
+            com.marrybye.neorism.common.core.ModBlocks.bloodContainer,
+            com.marrybye.neorism.common.core.ModBlocks.coffin,
+            com.marrybye.neorism.common.core.ModBlocks.fogDiffuser,
+            com.marrybye.neorism.common.core.ModBlocks.garlicDiffuser,
+            com.marrybye.neorism.common.core.ModBlocks.totem
         };
         for (net.minecraft.block.Block block : modeledBlocks) {
             if (block != null) {

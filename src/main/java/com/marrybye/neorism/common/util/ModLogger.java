@@ -62,6 +62,10 @@ public class ModLogger {
         }
     }
 
+    public static void rituals(String format, Object... args) {
+        ritual(format, args);
+    }
+
     public static String formatEntity(Entity entity) {
         if (entity == null) return "null";
         return String.format("%s[id=%d, pos=(%.1f, %.1f, %.1f)]",

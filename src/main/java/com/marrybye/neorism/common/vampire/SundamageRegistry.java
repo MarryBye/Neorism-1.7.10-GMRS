@@ -69,6 +69,11 @@ public class SundamageRegistry {
             return false;
         }
 
+        // Fog Diffuser artificial mist protection
+        if (com.marrybye.neorism.common.tileentity.TileEntityFogDiffuser.isEntityProtected(entity)) {
+            return false;
+        }
+
         // Water and Rain protection
         if (entity.isInWater()) {
             return false;

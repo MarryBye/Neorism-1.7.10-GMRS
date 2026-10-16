@@ -231,32 +231,32 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
     - Every 3D modeled block registers `ModelISBRH` as `IItemRenderer` for inventory / hand rendering.
     - [x] Fix block break & hit particle textures: implement `BlockParticleHelper` and Forge `addDestroyEffects`/`addHitEffects` in `BlockNeorism` to resolve model/quad textures directly and bypass GTNHLib's air-block destruction query bug.
     - Full step-by-step methodology documented in `docs/MODEL_TEXTURE_PORTING_GUIDE.md` and `.agents/skills/port-vampirism-feature/SKILL.md`.
-- [ ] **8.1. Altar of Inspiration**
-  - [ ] Block, TileEntity, and multiblock blood basin.
-  - [ ] TESR fluid rendering (smooth blood level rising/falling).
-  - [ ] Right-click leveling interaction for levels 2-4.
-- [ ] **8.2. Altar of Infusion (Complex Multiblock)**
-  - [ ] Center Altar block (`BlockAltarInfusion`).
-  - [ ] Pillars (`BlockAltarPillar`) and Tips (`BlockAltarTip` gold/diamond/nether).
-  - [ ] Pedestals (`BlockBloodPedestal`) for Pure Blood and Catalyst items.
-  - [ ] Multiblock pattern recognition algorithm (calculates `StructurePoints` based on distance, height, and materials).
-  - [ ] Ritual state machine: starting, catalyst consumption, lightning/particle effects, level-up completion, ritual failure.
-- [ ] **8.3. Blood Container & Pedestals**
-  - [ ] `TileEntityBloodContainer`: Stores up to 16,000 mB of blood. Fluid capability / 1.7.10 FluidHandler.
-  - [ ] Visual blood fluid level rendering inside glass tank.
-- [ ] **8.4. Coffin System**
-  - [ ] `BlockCoffin` (2-block multiblock, head & foot).
-  - [ ] TileEntity & TESR model: lid open/close animation.
-  - [ ] Allows vampire players to sleep through the sunny day and wake at dusk.
-  - [ ] Sets vampire spawn point.
-- [ ] **8.5. Environmental & Utility Blocks**
-  - [ ] Fog Diffuser (generates dark fog field preventing sun damage).
-  - [ ] Garlic Diffuser (cleanses area from vampires).
-  - [ ] Faction Totem (Village capture center).
-  - [ ] Cursed Earth (spreads dark foliage, spawns vampires at night).
-  - [ ] Dark Spruce Wood, Planks, Leaves, Sapling.
-- [ ] **8.6. Remains & Block Sound Adaptation**
-  - [ ] Adapt modern sound events in `sounds.json` (`entity.remains.*`) with bundled 1.7.10 .ogg assets or valid vanilla sound fallbacks to eliminate startup warnings.
+- [x] **8.1. Altar of Inspiration**
+  - [x] Block, TileEntity, and multiblock blood basin.
+  - [x] TESR fluid rendering (smooth blood level rising/falling).
+  - [x] Right-click leveling interaction for levels 2-4.
+- [x] **8.2. Altar of Infusion (Complex Multiblock)**
+  - [x] Center Altar block (`BlockAltarInfusion`).
+  - [x] Pillars (`BlockAltarPillar`) and Tips (`BlockAltarTip` gold/diamond/nether).
+  - [x] Pedestals (`BlockBloodPedestal`) for Pure Blood and Catalyst items.
+  - [x] Multiblock pattern recognition algorithm (calculates `StructurePoints` based on distance, height, and materials).
+  - [x] Ritual state machine: starting, catalyst consumption, lightning/particle effects, level-up completion, ritual failure.
+- [x] **8.3. Blood Container & Pedestals**
+  - [x] `TileEntityBloodContainer`: Stores up to 16,000 mB of blood. Fluid capability / 1.7.10 FluidHandler.
+  - [x] Visual blood fluid level rendering inside glass tank.
+- [x] **8.4. Coffin System**
+  - [x] `BlockCoffin` (2-block multiblock, head & foot).
+  - [x] TileEntity & TESR model: lid open/close animation.
+  - [x] Allows vampire players to sleep through the sunny day and wake at dusk.
+  - [x] Sets vampire spawn point.
+- [x] **8.5. Environmental & Utility Blocks**
+  - [x] Fog Diffuser (generates dark fog field preventing sun damage).
+  - [x] Garlic Diffuser (cleanses area from vampires).
+  - [x] Faction Totem (Village capture center).
+  - [x] Cursed Earth (spreads dark foliage, spawns vampires at night).
+  - [x] Dark Spruce Wood, Planks, Leaves, Sapling.
+- [x] **8.6. Remains & Block Sound Adaptation**
+  - [x] Adapt modern sound events in `sounds.json` (`entity.remains.*`) with bundled 1.7.10 .ogg assets or valid vanilla sound fallbacks to eliminate startup warnings.
 
 ---
 

@@ -16,6 +16,7 @@ public class ModRegistries {
     public static void preInit(FMLPreInitializationEvent event) {
         ModLogger.debug("Beginning Neorism preInit registries");
         ModPotions.init();
+        ModFluids.init();
         ModItems.init();
         ModBlocks.init();
         ModEntities.init();
