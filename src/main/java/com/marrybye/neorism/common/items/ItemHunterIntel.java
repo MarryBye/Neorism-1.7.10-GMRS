@@ -26,7 +26,7 @@ public class ItemHunterIntel extends ItemNeorism {
         setHasSubtypes(true);
         setMaxDamage(0);
         setMaxStackSize(64);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabBooks);
     }
 
     @Override

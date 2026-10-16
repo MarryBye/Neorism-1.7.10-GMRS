@@ -65,7 +65,7 @@ public class BlockCursedEarth extends BlockNeorism {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
         iconTop = register.registerIcon(Neorism.MODID + ":cursed_earth");
-        iconSide = register.registerIcon(Neorism.MODID + ":cursed_earth_side");
+        iconSide = iconTop;
         iconBottom = register.registerIcon("minecraft:dirt");
         blockIcon = iconTop;
     }

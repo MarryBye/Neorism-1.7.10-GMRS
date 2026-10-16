@@ -5585,3 +5585,66 @@ chat.neorism.taskmaster_bounty_reward=Bounty claimed! 4 Vampire Fangs exchanged 
 chat.neorism.taskmaster_need_fangs=Bring me 4 Vampire Fangs from your hunts to claim a bounty.
 chat.neorism.converted_villager_fear_hunter=The converted villager cowers in terror from the Hunter!
 chat.neorism.fed_on_converted_villager=You feed peacefully upon the converted thrall.
+# Multi-tier Swiftness Armor
+item.neorism.armor_of_swiftness_head.0.name=Helmet of Swiftness
+item.neorism.armor_of_swiftness_head.1.name=Enhanced Helmet of Swiftness
+item.neorism.armor_of_swiftness_head.2.name=Ultimate Helmet of Swiftness
+item.neorism.armor_of_swiftness_chest.0.name=Chestplate of Swiftness
+item.neorism.armor_of_swiftness_chest.1.name=Enhanced Chestplate of Swiftness
+item.neorism.armor_of_swiftness_chest.2.name=Ultimate Chestplate of Swiftness
+item.neorism.armor_of_swiftness_legs.0.name=Leggings of Swiftness
+item.neorism.armor_of_swiftness_legs.1.name=Enhanced Leggings of Swiftness
+item.neorism.armor_of_swiftness_legs.2.name=Ultimate Leggings of Swiftness
+item.neorism.armor_of_swiftness_feet.0.name=Boots of Swiftness
+item.neorism.armor_of_swiftness_feet.1.name=Enhanced Boots of Swiftness
+item.neorism.armor_of_swiftness_feet.2.name=Ultimate Boots of Swiftness
+
+# Multi-tier Hunter Coat Armor
+item.neorism.hunter_coat_head.0.name=Hunter Hat
+item.neorism.hunter_coat_head.1.name=Enhanced Hunter Hat
+item.neorism.hunter_coat_head.2.name=Ultimate Hunter Hat
+item.neorism.hunter_coat_chest.0.name=Hunter Coat
+item.neorism.hunter_coat_chest.1.name=Enhanced Hunter Coat
+item.neorism.hunter_coat_chest.2.name=Ultimate Hunter Coat
+item.neorism.hunter_coat_legs.0.name=Hunter Trousers
+item.neorism.hunter_coat_legs.1.name=Enhanced Hunter Trousers
+item.neorism.hunter_coat_legs.2.name=Ultimate Hunter Trousers
+item.neorism.hunter_coat_feet.0.name=Hunter Boots
+item.neorism.hunter_coat_feet.1.name=Enhanced Hunter Boots
+item.neorism.hunter_coat_feet.2.name=Ultimate Hunter Boots
+
+# Weapons Multi-tier
+item.neorism.heart_seeker.0.name=Heart Seeker
+item.neorism.heart_seeker.1.name=Enhanced Heart Seeker
+item.neorism.heart_seeker.2.name=Ultimate Heart Seeker
+item.neorism.heart_striker.0.name=Heart Striker
+item.neorism.heart_striker.1.name=Enhanced Heart Striker
+item.neorism.heart_striker.2.name=Ultimate Heart Striker
+item.neorism.hunter_axe.0.name=Hunter Axe
+item.neorism.hunter_axe.1.name=Enhanced Hunter Axe
+item.neorism.hunter_axe.2.name=Ultimate Hunter Axe
+item.neorism.crucifix.0.name=Wooden Crucifix
+item.neorism.crucifix.1.name=Iron Crucifix
+item.neorism.crucifix.2.name=Golden Crucifix
+
+# Injections & Fangs
+item.neorism.injection_sanguinare.name=Sanguinare Injection
+item.neorism.injection_garlic.name=Garlic Injection
+chat.neorism.injection_already_vampire=You are already a vampire!
+chat.neorism.injection_hunter_reject=Your garlic-infused blood violently rejects the Sanguinare virus!
+chat.neorism.injection_sanguinare_success=The dark serum flows through your veins... You became a Vampire (Level 1)!
+chat.neorism.injection_cured_vampire=The garlic injection purges the curse! You are mortal again.
+chat.neorism.injection_already_hunter=You are already a member of the Hunter Order!
+chat.neorism.fang_already_vampire=A vampire cannot re-infect themselves with their own venom.
+chat.neorism.fang_already_infected=Sanguinare Vampiris is already running through your veins. Wait for incubation.
+chat.neorism.fang_pricked=You pricked your flesh with the vampire fang... The Sanguinare curse begins to spread!
+
+# Skills & Keys
+key.neorism.skills=Faction Skill Tree
+gui.neorism.skills.title=Neorism Skill Tree
+gui.neorism.skills.points=Available Skill Points: %d
+gui.neorism.skills.unlock=Unlock
+gui.neorism.skills.unlocked=Unlocked
+gui.neorism.skills.bind1=Bind to [R]
+gui.neorism.skills.bind2=Bind to [Z]
+gui.neorism.skills.locked=Locked (Requires Level %d)

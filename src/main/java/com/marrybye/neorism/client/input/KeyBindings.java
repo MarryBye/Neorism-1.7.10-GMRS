@@ -25,9 +25,11 @@ public class KeyBindings {
     public static KeyBinding keyBite;
     public static KeyBinding keyAction1;
     public static KeyBinding keyAction2;
+    public static KeyBinding keySkills;
     private static boolean wasBiteKeyDown = false;
     private static boolean wasAction1KeyDown = false;
     private static boolean wasAction2KeyDown = false;
+    private static boolean wasSkillsKeyDown = false;
 
     public static void init() {
         keyBite = new KeyBinding("key.neorism.suck_blood", Keyboard.KEY_V, "key.category.neorism.main");
@@ -38,6 +40,9 @@ public class KeyBindings {
 
         keyAction2 = new KeyBinding("key.neorism.action2", Keyboard.KEY_Z, "key.category.neorism.main");
         ClientRegistry.registerKeyBinding(keyAction2);
+
+        keySkills = new KeyBinding("key.neorism.skills", Keyboard.KEY_K, "key.category.neorism.main");
+        ClientRegistry.registerKeyBinding(keySkills);
     }
 
     @SubscribeEvent
@@ -49,6 +54,7 @@ public class KeyBindings {
             wasBiteKeyDown = false;
             wasAction1KeyDown = false;
             wasAction2KeyDown = false;
+            wasSkillsKeyDown = false;
             return;
         }
 
@@ -91,5 +97,14 @@ public class KeyBindings {
             PacketHandler.sendToServer(new com.marrybye.neorism.common.network.packets.ActionKeyPacket(1));
         }
         wasAction2KeyDown = isAction2Down;
+
+        // Skill Tree Key
+        boolean isSkillsDown = keySkills.getIsKeyPressed();
+        if (isSkillsDown && !wasSkillsKeyDown) {
+            if (mc.currentScreen == null) {
+                mc.displayGuiScreen(new com.marrybye.neorism.client.gui.GuiSkillTree());
+            }
+        }
+        wasSkillsKeyDown = isSkillsDown;
     }
 }

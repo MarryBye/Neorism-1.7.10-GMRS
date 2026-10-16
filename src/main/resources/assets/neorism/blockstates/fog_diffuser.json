@@ -1,5 +1,11 @@
-﻿{
+{
   "variants": {
+    "": {
+      "model": "neorism:block/fog_diffuser"
+    },
+    "normal": {
+      "model": "neorism:block/fog_diffuser"
+    },
     "facing=east": {
       "model": "neorism:block/fog_diffuser",
       "y": 90

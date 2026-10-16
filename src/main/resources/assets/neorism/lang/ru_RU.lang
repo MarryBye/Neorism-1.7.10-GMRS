@@ -5506,3 +5506,66 @@ chat.neorism.taskmaster_bounty_reward=Награда получена! 4 клы�
 chat.neorism.taskmaster_need_fangs=Принеси мне 4 клыка вампиров с охоты, чтобы получить награду.
 chat.neorism.converted_villager_fear_hunter=Обращённый житель в ужасе сжимается перед охотником!
 chat.neorism.fed_on_converted_villager=Вы спокойно питаетесь кровью своего верного раба.
+# Multi-tier Swiftness Armor
+item.neorism.armor_of_swiftness_head.0.name=Шлем стремительности
+item.neorism.armor_of_swiftness_head.1.name=Улучшенный шлем стремительности
+item.neorism.armor_of_swiftness_head.2.name=Совершенный шлем стремительности
+item.neorism.armor_of_swiftness_chest.0.name=Нагрудник стремительности
+item.neorism.armor_of_swiftness_chest.1.name=Улучшенный нагрудник стремительности
+item.neorism.armor_of_swiftness_chest.2.name=Совершенный нагрудник стремительности
+item.neorism.armor_of_swiftness_legs.0.name=Поножи стремительности
+item.neorism.armor_of_swiftness_legs.1.name=Улучшенные поножи стремительности
+item.neorism.armor_of_swiftness_legs.2.name=Совершенные поножи стремительности
+item.neorism.armor_of_swiftness_feet.0.name=Ботинки стремительности
+item.neorism.armor_of_swiftness_feet.1.name=Улучшенные ботинки стремительности
+item.neorism.armor_of_swiftness_feet.2.name=Совершенные ботинки стремительности
+
+# Multi-tier Hunter Coat Armor
+item.neorism.hunter_coat_head.0.name=Шляпа охотника
+item.neorism.hunter_coat_head.1.name=Улучшенная шляпа охотника
+item.neorism.hunter_coat_head.2.name=Совершенная шляпа охотника
+item.neorism.hunter_coat_chest.0.name=Куртка охотника
+item.neorism.hunter_coat_chest.1.name=Улучшенная куртка охотника
+item.neorism.hunter_coat_chest.2.name=Совершенная куртка охотника
+item.neorism.hunter_coat_legs.0.name=Штаны охотника
+item.neorism.hunter_coat_legs.1.name=Улучшенные штаны охотника
+item.neorism.hunter_coat_legs.2.name=Совершенные штаны охотника
+item.neorism.hunter_coat_feet.0.name=Сапоги охотника
+item.neorism.hunter_coat_feet.1.name=Улучшенные сапоги охотника
+item.neorism.hunter_coat_feet.2.name=Совершенные сапоги охотника
+
+# Weapons Multi-tier
+item.neorism.heart_seeker.0.name=Искатель сердец
+item.neorism.heart_seeker.1.name=Улучшенный искатель сердец
+item.neorism.heart_seeker.2.name=Совершенный искатель сердец
+item.neorism.heart_striker.0.name=Пронзатель сердец
+item.neorism.heart_striker.1.name=Улучшенный пронзатель сердец
+item.neorism.heart_striker.2.name=Совершенный пронзатель сердец
+item.neorism.hunter_axe.0.name=Топор охотника
+item.neorism.hunter_axe.1.name=Улучшенный топор охотника
+item.neorism.hunter_axe.2.name=Совершенный топор охотника
+item.neorism.crucifix.0.name=Деревянное распятие
+item.neorism.crucifix.1.name=Железное распятие
+item.neorism.crucifix.2.name=Золотое распятие
+
+# Injections & Fangs
+item.neorism.injection_sanguinare.name=Инъекция Сангвинаре
+item.neorism.injection_garlic.name=Чесночная инъекция
+chat.neorism.injection_already_vampire=Вы уже являетесь вампиром!
+chat.neorism.injection_hunter_reject=Чесночная кровь охотника яростно отторгает вирус Сангвинаре!
+chat.neorism.injection_sanguinare_success=Тёмная сыворотка вливается в кровь... Вы обратились в вампира 1 уровня!
+chat.neorism.injection_cured_vampire=Чесночная инъекция выжигает проклятие! Вы снова смертный человек.
+chat.neorism.injection_already_hunter=Вы уже состоите в ордене Охотников!
+chat.neorism.fang_already_vampire=Вампир не может повторно заразиться собственным ядом.
+chat.neorism.fang_already_infected=В ваших венах уже кипит вирус Сангвинаре. Ждите завершения инкубации.
+chat.neorism.fang_pricked=Вы укололи палец о клык вампира... Сангвинаре Вампирис медленно проникает в кровь!
+
+# Skills & Keys
+key.neorism.skills=Древо навыков фракции
+gui.neorism.skills.title=Древо навыков Neorism
+gui.neorism.skills.points=Доступно очков навыков: %d
+gui.neorism.skills.unlock=Изучить
+gui.neorism.skills.unlocked=Изучено
+gui.neorism.skills.bind1=Назначить на [R]
+gui.neorism.skills.bind2=Назначить на [Z]
+gui.neorism.skills.locked=Заблокировано (требуется ур. %d)

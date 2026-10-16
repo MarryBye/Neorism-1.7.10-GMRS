@@ -275,5 +275,17 @@ public class ModRecipes {
             'W', Blocks.wool,
             'G', Items.gold_ingot
         );
+
+        // Injections
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.injectionSanguinare),
+            Items.glass_bottle,
+            ModItems.vampireFang,
+            Items.redstone
+        );
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.injectionGarlic),
+            Items.glass_bottle,
+            ModItems.garlic,
+            Items.sugar
+        );
     }
 }

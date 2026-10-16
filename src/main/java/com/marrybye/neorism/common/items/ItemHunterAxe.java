@@ -86,6 +86,14 @@ public class ItemHunterAxe extends ItemSword {
         if (StatCollector.canTranslate(specificKey)) {
             return StatCollector.translateToLocal(specificKey).trim();
         }
+        String numberedKey = "item.neorism.hunter_axe." + tier + ".name";
+        if (StatCollector.canTranslate(numberedKey)) {
+            return StatCollector.translateToLocal(numberedKey).trim();
+        }
+        String baseKey = "item.neorism.hunter_axe.name";
+        if (StatCollector.canTranslate(baseKey)) {
+            return StatCollector.translateToLocal(baseKey).trim() + " (" + (tier + 1) + ")";
+        }
         return super.getItemStackDisplayName(stack);
     }
 

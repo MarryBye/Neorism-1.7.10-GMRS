@@ -82,6 +82,14 @@ public class ItemSwiftnessArmor extends ItemArmor {
         if (StatCollector.canTranslate(specificKey)) {
             return StatCollector.translateToLocal(specificKey).trim();
         }
+        String numberedKey = "item.neorism.armor_of_swiftness_" + partName + "." + tier + ".name";
+        if (StatCollector.canTranslate(numberedKey)) {
+            return StatCollector.translateToLocal(numberedKey).trim();
+        }
+        String baseKey = "item.neorism.armor_of_swiftness_" + partName + ".name";
+        if (StatCollector.canTranslate(baseKey)) {
+            return StatCollector.translateToLocal(baseKey).trim() + " (" + (tier + 1) + ")";
+        }
         return super.getItemStackDisplayName(stack);
     }
 

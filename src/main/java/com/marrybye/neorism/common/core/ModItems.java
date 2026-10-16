@@ -25,6 +25,8 @@ import com.marrybye.neorism.common.items.ItemUmbrella;
 import com.marrybye.neorism.common.items.ItemVampireBook;
 import com.marrybye.neorism.common.items.ItemVampireCloak;
 import com.marrybye.neorism.common.items.ItemVampireClothing;
+import com.marrybye.neorism.common.items.ItemVampireFang;
+import com.marrybye.neorism.common.items.ItemInjection;
 import com.marrybye.neorism.common.util.ModLogger;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -56,6 +58,8 @@ public class ModItems {
     public static Item sovereignBlood;
     public static Item vampireBloodBottle;
     public static Item soulOrbVampire;
+    public static Item injectionSanguinare;
+    public static Item injectionGarlic;
 
     // Ingot infusions
     public static Item bloodInfusedIron;
@@ -108,7 +112,7 @@ public class ModItems {
         ARMOR_VAMPIRE = EnumHelper.addArmorMaterial("NEORISM_VAMPIRE", 25, new int[]{3, 7, 5, 3}, 25);
 
         // Materials & Collectibles
-        vampireFang = register("vampire_fang", new ItemNeorism("vampire_fang"));
+        vampireFang = register("vampire_fang", new ItemVampireFang());
         humanHeart = register("human_heart", new ItemNeorism("human_heart"));
         weakHumanHeart = register("weak_human_heart", new ItemNeorism("weak_human_heart"));
         garlic = register("garlic", new ItemGarlic());
@@ -121,6 +125,8 @@ public class ModItems {
         sovereignBlood = register("sovereign_blood", new ItemNeorism("sovereign_blood"));
         vampireBloodBottle = register("vampire_blood_bottle", new ItemNeorism("vampire_blood_bottle"));
         soulOrbVampire = register("soul_orb_vampire", new ItemNeorism("soul_orb_vampire"));
+        injectionSanguinare = register("injection_sanguinare", new ItemInjection("injection_sanguinare", ItemInjection.Type.SANGUINARE));
+        injectionGarlic = register("injection_garlic", new ItemInjection("injection_garlic", ItemInjection.Type.GARLIC));
 
         // Infusions
         bloodInfusedIron = register("blood_infused_iron_ingot", new ItemNeorism("blood_infused_iron_ingot"));

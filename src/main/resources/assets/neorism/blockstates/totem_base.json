@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "": {
+      "model": "neorism:block/totem_base"
+    },
+    "normal": {
+      "model": "neorism:block/totem_base"
+    }
+  }
+}

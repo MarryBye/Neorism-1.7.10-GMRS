@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.common.collect.Multimap;
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
+import com.marrybye.neorism.common.util.Helper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 
 /**
  * Hunter Coat armor set (head, chest, legs, feet) with 3 tiers (Normal, Enhanced, Ultimate).
@@ -63,6 +65,17 @@ public class ItemHunterArmor extends ItemArmor {
     }
 
     @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+        if (!world.isRemote && Helper.isVampire(player)) {
+            if (world.getTotalWorldTime() % 40 == 0) {
+                player.attackEntityFrom(com.marrybye.neorism.common.core.ModDamageSource.causeIndirectHolyWaterDamage(player, player), 1.0F);
+                player.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.weakness.id, 60, 0));
+                com.marrybye.neorism.common.core.ModSounds.playAtEntity(player, com.marrybye.neorism.common.core.ModSounds.SIZZLE, 0.5F, 1.0F);
+            }
+        }
+    }
+
+    @Override
     public Multimap getAttributeModifiers(ItemStack stack) {
         Multimap multimap = super.getAttributeModifiers(stack);
         int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
@@ -83,6 +96,14 @@ public class ItemHunterArmor extends ItemArmor {
         String specificKey = "item.neorism.hunter_coat_" + partName + "_" + SUFFIXES[tier] + ".name";
         if (StatCollector.canTranslate(specificKey)) {
             return StatCollector.translateToLocal(specificKey).trim();
+        }
+        String numberedKey = "item.neorism.hunter_coat_" + partName + "." + tier + ".name";
+        if (StatCollector.canTranslate(numberedKey)) {
+            return StatCollector.translateToLocal(numberedKey).trim();
+        }
+        String baseKey = "item.neorism.hunter_coat_" + partName + ".name";
+        if (StatCollector.canTranslate(baseKey)) {
+            return StatCollector.translateToLocal(baseKey).trim() + " (" + (tier + 1) + ")";
         }
         return super.getItemStackDisplayName(stack);
     }

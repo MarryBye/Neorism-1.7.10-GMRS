@@ -1,5 +1,8 @@
 package com.marrybye.neorism.common.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.entity.EntityHolyWaterBottle;
 import com.marrybye.neorism.common.entity.converted.EntityConvertedCow;
@@ -12,15 +15,24 @@ import com.marrybye.neorism.common.entity.hunter.EntityHunterTrainer;
 import com.marrybye.neorism.common.entity.hunter.EntityTaskmaster;
 import com.marrybye.neorism.common.entity.projectile.EntityDarkBloodProjectile;
 import com.marrybye.neorism.common.entity.projectile.EntityQuarrel;
-import com.marrybye.neorism.common.entity.vampire.*;
+import com.marrybye.neorism.common.entity.vampire.EntityAdvancedVampire;
+import com.marrybye.neorism.common.entity.vampire.EntityBloodBat;
+import com.marrybye.neorism.common.entity.vampire.EntityDracula;
+import com.marrybye.neorism.common.entity.vampire.EntityVampire;
+import com.marrybye.neorism.common.entity.vampire.EntityVampireBaron;
+import com.marrybye.neorism.common.entity.vampire.EntityVampireBaroness;
+import com.marrybye.neorism.common.entity.vampire.EntityVampireMother;
 import com.marrybye.neorism.common.util.ModLogger;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.world.biome.BiomeGenBase;
 
 /**
  * Entity registry for Neorism entities, projectiles, vampires, hunters, and converted mobs.
+ * Registers both Forge mod entities and global vanilla mappings for spawn eggs, /summon, and world generation.
  */
 public class ModEntities {
 
@@ -53,18 +65,48 @@ public class ModEntities {
         registerMob(EntityConvertedHorse.class, "converted_horse", 0x6e431f, 0x8b0000);
         registerMob(EntityConvertedVillager.class, "converted_villager", 0x563c24, 0x8b0000);
 
-        ModLogger.debug("Successfully registered all Neorism entities and spawn eggs (total: %d entities)", nextEntityId);
+        // Natural Spawns in Overworld
+        List<BiomeGenBase> overworldBiomes = new ArrayList<BiomeGenBase>();
+        for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
+            if (biome != null && biome.biomeID != BiomeGenBase.hell.biomeID && biome.biomeID != BiomeGenBase.sky.biomeID) {
+                overworldBiomes.add(biome);
+            }
+        }
+        BiomeGenBase[] biomes = overworldBiomes.toArray(new BiomeGenBase[0]);
+
+        EntityRegistry.addSpawn(EntityVampire.class, 25, 1, 3, EnumCreatureType.monster, biomes);
+        EntityRegistry.addSpawn(EntityAdvancedVampire.class, 6, 1, 1, EnumCreatureType.monster, biomes);
+        EntityRegistry.addSpawn(EntityBloodBat.class, 20, 2, 4, EnumCreatureType.ambient, biomes);
+        EntityRegistry.addSpawn(EntityHunter.class, 12, 1, 2, EnumCreatureType.creature, biomes);
+
+        ModLogger.debug("Successfully registered all Neorism entities, spawn eggs, and natural world spawns (total: %d entities)", nextEntityId);
     }
 
+    @SuppressWarnings("unchecked")
     private static void registerMob(Class<? extends Entity> entityClass, String name, int primaryEgg, int secondaryEgg) {
-        EntityRegistry.registerModEntity(entityClass, name, ++nextEntityId, Neorism.instance, 80, 3, true);
+        int modId = ++nextEntityId;
+        EntityRegistry.registerModEntity(entityClass, name, modId, Neorism.instance, 80, 3, true);
+
+        // Map vanilla /summon strings
+        EntityList.stringToClassMapping.put(name, entityClass);
+        EntityList.stringToClassMapping.put("neorism." + name, entityClass);
+        EntityList.stringToClassMapping.put("neorism:" + name, entityClass);
+        EntityList.classToStringMapping.put(entityClass, "neorism." + name);
+
+        // Global egg ID for creative spawn eggs & ItemMonsterPlacer
+        int eggId = 400 + modId;
+        EntityList.IDtoClassMapping.put(Integer.valueOf(eggId), entityClass);
+        EntityList.entityEggs.put(Integer.valueOf(eggId), new EntityList.EntityEggInfo(eggId, primaryEgg, secondaryEgg));
         try {
-            int globalId = EntityRegistry.findGlobalUniqueEntityId();
-            if (globalId > 0) {
-                EntityRegistry.registerGlobalEntityID(entityClass, name, globalId);
-                EntityList.entityEggs.put(Integer.valueOf(globalId), new EntityList.EntityEggInfo(globalId, primaryEgg, secondaryEgg));
-            }
-        } catch (Throwable ignored) {
-        }
+            java.lang.reflect.Field c2id = EntityList.class.getDeclaredField("classToIDMapping");
+            c2id.setAccessible(true);
+            ((java.util.Map) c2id.get(null)).put(entityClass, Integer.valueOf(eggId));
+        } catch (Throwable ignored) {}
+        try {
+            java.lang.reflect.Field s2id = EntityList.class.getDeclaredField("stringToIDMapping");
+            s2id.setAccessible(true);
+            ((java.util.Map) s2id.get(null)).put("neorism." + name, Integer.valueOf(eggId));
+            ((java.util.Map) s2id.get(null)).put(name, Integer.valueOf(eggId));
+        } catch (Throwable ignored) {}
     }
 }

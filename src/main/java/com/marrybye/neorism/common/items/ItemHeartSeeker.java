@@ -54,6 +54,12 @@ public class ItemHeartSeeker extends ItemSword {
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
         int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
 
+        if (!target.worldObj.isRemote && attacker instanceof EntityPlayer && Helper.isVampire((EntityPlayer) attacker)) {
+            attacker.attackEntityFrom(ModDamageSource.causeIndirectHolyWaterDamage(attacker, attacker), 2.5F);
+            ModSounds.playAtEntity(attacker, ModSounds.SIZZLE, 0.7F, 1.0F);
+            ModLogger.combat("Heart Seeker burned vampire wielder %s", attacker.getCommandSenderName());
+        }
+
         boolean isUnholy = Helper.isVampire(target) ||
             target.isEntityUndead() ||
             (target instanceof IVampireEntity) ||
@@ -86,6 +92,14 @@ public class ItemHeartSeeker extends ItemSword {
         String specificKey = "item.neorism.heart_seeker_" + suffix + ".name";
         if (StatCollector.canTranslate(specificKey)) {
             return StatCollector.translateToLocal(specificKey).trim();
+        }
+        String numberedKey = "item.neorism.heart_seeker." + tier + ".name";
+        if (StatCollector.canTranslate(numberedKey)) {
+            return StatCollector.translateToLocal(numberedKey).trim();
+        }
+        String baseKey = "item.neorism.heart_seeker.name";
+        if (StatCollector.canTranslate(baseKey)) {
+            return StatCollector.translateToLocal(baseKey).trim() + " (" + (tier + 1) + ")";
         }
         return super.getItemStackDisplayName(stack);
     }

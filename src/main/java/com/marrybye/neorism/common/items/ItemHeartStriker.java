@@ -55,6 +55,14 @@ public class ItemHeartStriker extends ItemSword {
 
         if (!target.worldObj.isRemote && attacker instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) attacker;
+            if (!Helper.isVampire(player)) {
+                player.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.wither.id, 60, 0));
+                ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 0.5F, 0.8F);
+                ModLogger.combat("Heart Striker withered non-vampire wielder %s", player.getCommandSenderName());
+                stack.damageItem(1, attacker);
+                return true;
+            }
+
             float heal = 6.0F * LIFESTEAL_RATIO[tier];
 
             if (player.shouldHeal()) {
@@ -89,6 +97,14 @@ public class ItemHeartStriker extends ItemSword {
         String specificKey = "item.neorism.heart_striker_" + suffix + ".name";
         if (StatCollector.canTranslate(specificKey)) {
             return StatCollector.translateToLocal(specificKey).trim();
+        }
+        String numberedKey = "item.neorism.heart_striker." + tier + ".name";
+        if (StatCollector.canTranslate(numberedKey)) {
+            return StatCollector.translateToLocal(numberedKey).trim();
+        }
+        String baseKey = "item.neorism.heart_striker.name";
+        if (StatCollector.canTranslate(baseKey)) {
+            return StatCollector.translateToLocal(baseKey).trim() + " (" + (tier + 1) + ")";
         }
         return super.getItemStackDisplayName(stack);
     }

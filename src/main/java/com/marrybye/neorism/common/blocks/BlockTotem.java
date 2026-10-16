@@ -8,7 +8,7 @@ import net.minecraft.block.material.Material;
 public class BlockTotem extends BlockModeled {
 
     public BlockTotem() {
-        super("totem_base", Material.rock);
+        super("totem_base", "dark_stone", Material.rock);
         setHardness(5.0F);
         setResistance(10.0F);
         setStepSound(soundTypeStone);
