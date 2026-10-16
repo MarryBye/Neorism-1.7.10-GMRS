@@ -64,20 +64,20 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 2: Faction Architecture & Player Capability Storage (IEEP)
 *The structural spine separating Vampires, Hunters, and Neutrals.*
 
-- [ ] **2.1. Faction Model & Interfaces (`com.marrybye.neorism.api.faction`)**
-  - [ ] Port `IFaction`, `IPlayableFaction`, `IFactionPlayer`.
-  - [ ] Implement `ModFactions`: `NEUTRAL` (Level 0), `VAMPIRE` (Levels 1-14, Lord 1-5), `HUNTER` (Levels 1-14, Lord 1-5).
-  - [ ] Faction hostility rules: Vampire vs Hunter (hostile), Vampire vs Neutral (prey/neutral), Hunter vs Vampire (hostile).
-- [ ] **2.2. Extended Player Properties (`FactionPlayerHandler`)**
-  - [ ] Implement `FactionPlayerHandler` implementing Forge `IExtendedEntityProperties` registered under `"neorism:faction_player"`.
-  - [ ] Implement `canJoin(faction)`, `canLeaveFaction()`, `setFaction(faction, level)`.
-  - [ ] Implement death & dimension cloning handler via `PlayerEvent.Clone` (persistent faction state across deaths).
-- [ ] **2.3. Client-Server Faction Synchronization**
-  - [ ] Packet: `SyncFactionPacket` (syncs player faction, level, lord title, and disguise state to tracking clients).
-  - [ ] Hook into `EntityJoinWorldEvent` and `PlayerLoggedInEvent` for immediate sync.
-- [ ] **2.4. Faction Disguise Subsystem**
-  - [ ] Implement `IDisguise` mechanics (Vampire disguise skill, Hunter disguise skill).
-  - [ ] Visibility check: `Helper.appearsAsVampire(player, viewer)`.
+- [x] **2.1. Faction Model & Interfaces (`com.marrybye.neorism.api.faction`)**
+  - [x] Port `IFaction`, `IPlayableFaction`, `IFactionPlayer`.
+  - [x] Implement `ModFactions`: `NEUTRAL` (Level 0), `VAMPIRE` (Levels 1-14, Lord 1-5), `HUNTER` (Levels 1-14, Lord 1-5).
+  - [x] Faction hostility rules: Vampire vs Hunter (hostile), Vampire vs Neutral (prey/neutral), Hunter vs Vampire (hostile).
+- [x] **2.2. Extended Player Properties (`FactionPlayerHandler`)**
+  - [x] Implement `FactionPlayerHandler` implementing Forge `IExtendedEntityProperties` registered under `"neorism:faction_player"`.
+  - [x] Implement `canJoin(faction)`, `canLeaveFaction()`, `setFaction(faction, level)`.
+  - [x] Implement death & dimension cloning handler via `PlayerEvent.Clone` (persistent faction state across deaths).
+- [x] **2.3. Client-Server Faction Synchronization**
+  - [x] Packet: `SyncFactionPacket` (syncs player faction, level, lord title, and disguise state to tracking clients).
+  - [x] Hook into `EntityJoinWorldEvent` and `PlayerLoggedInEvent` for immediate sync.
+- [x] **2.4. Faction Disguise Subsystem**
+  - [x] Implement `IDisguise` mechanics (Vampire disguise skill, Hunter disguise skill).
+  - [x] Visibility check: `Helper.appearsAsVampire(player, viewer)`.
 
 ---
 

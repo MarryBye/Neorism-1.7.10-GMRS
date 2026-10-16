@@ -1,6 +1,7 @@
 package com.marrybye.neorism.common.network;
 
 import com.marrybye.neorism.Neorism;
+import com.marrybye.neorism.common.network.packets.SyncFactionPacket;
 import com.marrybye.neorism.common.util.ModLogger;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -22,7 +23,8 @@ public class PacketHandler {
         INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Neorism.MODID);
         ModLogger.debug("Initialized network channel '%s'", Neorism.MODID);
 
-        // Packet registrations will be added as packet classes are created
+        // Packet registrations
+        registerMessage(SyncFactionPacket.Handler.class, SyncFactionPacket.class, Side.CLIENT);
     }
 
     public static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(

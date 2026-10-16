@@ -24,6 +24,12 @@ public class ModRegistries {
     public static void init(FMLInitializationEvent event) {
         ModLogger.debug("Beginning Neorism init registries");
         ModAchievements.init();
+
+        // Register event handlers
+        com.marrybye.neorism.common.events.PlayerCapabilityEventHandler playerCapHandler =
+            new com.marrybye.neorism.common.events.PlayerCapabilityEventHandler();
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(playerCapHandler);
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(playerCapHandler);
     }
 
     public static void postInit(FMLPostInitializationEvent event) {
