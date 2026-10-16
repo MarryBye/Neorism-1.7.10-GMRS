@@ -21,6 +21,25 @@ public class ClientProxy extends CommonProxy {
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new com.marrybye.neorism.client.gui.overlay.BloodBarOverlay(net.minecraft.client.Minecraft.getMinecraft())
         );
+
+        net.minecraft.block.Block[] modeledBlocks = new net.minecraft.block.Block[]{
+            com.marrybye.neorism.common.core.ModBlocks.bloodPedestal,
+            com.marrybye.neorism.common.core.ModBlocks.altarInfusion,
+            com.marrybye.neorism.common.core.ModBlocks.altarInspiration,
+            com.marrybye.neorism.common.core.ModBlocks.altarPillar,
+            com.marrybye.neorism.common.core.ModBlocks.altarTip,
+            com.marrybye.neorism.common.core.ModBlocks.bloodContainer
+        };
+        for (net.minecraft.block.Block block : modeledBlocks) {
+            if (block != null) {
+                net.minecraft.item.Item item = net.minecraft.item.Item.getItemFromBlock(block);
+                if (item != null) {
+                    net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
+                        item, com.gtnewhorizon.gtnhlib.client.model.ModelISBRH.INSTANCE.get()
+                    );
+                }
+            }
+        }
     }
 
     @Override

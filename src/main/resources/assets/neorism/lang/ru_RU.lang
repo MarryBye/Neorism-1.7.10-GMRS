@@ -5331,3 +5331,13 @@ item.neorism.blood_bottle.5.name=Флакон с кровью (5/5)
 
 chat.neorism.became_vampire=Вы пали жертвой Sanguinare Vampiris и обратились в вампира!
 chat.neorism.contracted_sanguinare=Вы чувствуете странное жжение в венах... Вы заразились Sanguinare Vampiris!
+
+item.neorism.pure_blood_0.name=Чистая кровь
+item.neorism.pure_blood_1.name=Чистая кровь (Уровень 1)
+item.neorism.pure_blood_2.name=Чистая кровь (Уровень 2)
+item.neorism.pure_blood_3.name=Чистая кровь (Уровень 3)
+item.neorism.pure_blood_4.name=Чистая кровь (Уровень 4)
+item.neorism.vampire_fang.name=Клык вампира
+item.neorism.human_heart.name=Человеческое сердце
+item.neorism.garlic.name=Чеснок
+item.neorism.vampire_book.name=Дневник вампира

@@ -34,6 +34,24 @@ public class ItemBloodFlask extends Item {
         this.setUnlocalizedName("neorism.blood_flask");
     }
 
+    @Override
+    public String getUnlocalizedNameInefficiently(ItemStack stack) {
+        return this.getUnlocalizedName(stack);
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        String key = this.getUnlocalizedName(stack) + ".name";
+        if (net.minecraft.util.StatCollector.canTranslate(key)) {
+            return net.minecraft.util.StatCollector.translateToLocal(key).trim();
+        }
+        String fallback = this.getUnlocalizedName(stack);
+        if (net.minecraft.util.StatCollector.canTranslate(fallback)) {
+            return net.minecraft.util.StatCollector.translateToLocal(fallback).trim();
+        }
+        return super.getItemStackDisplayName(stack);
+    }
+
     public static int getBlood(ItemStack stack) {
         if (stack == null || !stack.hasTagCompound()) return 0;
         return stack.getTagCompound().getInteger("blood");

@@ -5413,3 +5413,13 @@ item.neorism.blood_bottle.5.name=Blood Bottle (5/5)
 
 chat.neorism.became_vampire=You have succumbed to Sanguinare Vampiris and become a Vampire!
 chat.neorism.contracted_sanguinare=You feel a strange burning in your veins... You have contracted Sanguinare Vampiris!
+
+item.neorism.pure_blood_0.name=Pure Blood
+item.neorism.pure_blood_1.name=Pure Blood (Tier 1)
+item.neorism.pure_blood_2.name=Pure Blood (Tier 2)
+item.neorism.pure_blood_3.name=Pure Blood (Tier 3)
+item.neorism.pure_blood_4.name=Pure Blood (Tier 4)
+item.neorism.vampire_fang.name=Vampire Fang
+item.neorism.human_heart.name=Human Heart
+item.neorism.garlic.name=Garlic
+item.neorism.vampire_book.name=Vampire Book
