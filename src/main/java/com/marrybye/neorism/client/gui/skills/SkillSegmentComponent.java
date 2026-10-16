@@ -7,7 +7,9 @@ import org.lwjgl.opengl.GL11;
 
 import com.marrybye.neorism.common.skills.SkillHandler;
 import com.marrybye.neorism.common.skills.SkillSegment;
+import com.marrybye.neorism.common.util.Helper;
 import de.teamlapen.faction.api.factions.skills.ISkill;
+import de.teamlapen.faction.api.factions.skills.ISkillSegment;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -66,12 +68,59 @@ public class SkillSegmentComponent {
 
     public boolean isUnlocked() {
         ISkill skill = getSkill();
-        return skill != null && skillHandler.isSkillUnlocked(skill.getSkillId());
+        return skill != null && skillHandler != null && skillHandler.isSkillUnlocked(skill.getSkillId());
+    }
+
+    public boolean isExclusiveLocked() {
+        if (segment == null || skillHandler == null) return false;
+        for (ISkillSegment ex : segment.getExclusiveSegments()) {
+            for (ISkill exSkill : ex.getSkills()) {
+                if (skillHandler.isSkillUnlocked(exSkill.getSkillId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isPrerequisitesMet() {
+        if (segment == null || segment.isRoot()) return true;
+        if (!parents.isEmpty()) {
+            for (SkillSegmentComponent p : parents) {
+                if (p.isUnlocked()) return true;
+            }
+            return false;
+        }
+        // Fallback: check segment's parents directly
+        for (ISkillSegment p : segment.getParents()) {
+            for (ISkill ps : p.getSkills()) {
+                if (skillHandler != null && skillHandler.isSkillUnlocked(ps.getSkillId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean hasLevel() {
+        ISkill skill = getSkill();
+        if (skill == null) return true;
+        Minecraft mc = Minecraft.getMinecraft();
+        return mc.thePlayer != null && Helper.getLevel(mc.thePlayer) >= skill.getRequiredLevel();
+    }
+
+    public boolean hasPoints() {
+        ISkill skill = getSkill();
+        if (skill == null) return true;
+        return skillHandler != null && skillHandler.getSkillPoints() >= skill.getSkillPointCost();
     }
 
     public boolean isAvailable() {
-        ISkill skill = getSkill();
-        return skill != null && skillHandler.canSkillBeEnabled(skill);
+        return !isUnlocked() && !isExclusiveLocked() && isPrerequisitesMet();
+    }
+
+    public boolean canUnlock() {
+        return isAvailable() && hasLevel() && hasPoints();
     }
 
     public SkillSegmentConnection.State getConnectionState() {
@@ -144,18 +193,35 @@ public class SkillSegmentComponent {
         List<String> lines = new ArrayList<String>();
         String name = StatCollector.translateToLocal(skill.getTranslationKey());
         boolean unlocked = isUnlocked();
-        boolean available = isAvailable();
+        boolean exclusive = isExclusiveLocked();
+        boolean prereq = isPrerequisitesMet();
+        boolean levelMet = hasLevel();
+        boolean pointsMet = hasPoints();
 
         if (unlocked) {
             lines.add(EnumChatFormatting.GREEN + EnumChatFormatting.BOLD.toString() + name);
             lines.add(EnumChatFormatting.DARK_GREEN + "✔ " + StatCollector.translateToLocal("gui.factionapi.skills.unlocked"));
-        } else if (available) {
-            lines.add(EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD.toString() + name);
-            lines.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("gui.factionapi.skills.points") + ": " + skill.getSkillPointCost());
-            lines.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("gui.factionapi.skills.hold_to_unlock"));
-        } else {
+            lines.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("gui.factionapi.skills.refund"));
+        } else if (exclusive) {
             lines.add(EnumChatFormatting.GRAY + EnumChatFormatting.BOLD.toString() + name);
-            lines.add(EnumChatFormatting.RED + StatCollector.translateToLocal("gui.factionapi.skills.locked"));
+            lines.add(EnumChatFormatting.RED + StatCollector.translateToLocal("gui.factionapi.skills.locked_exclusive"));
+        } else if (!prereq) {
+            lines.add(EnumChatFormatting.GRAY + EnumChatFormatting.BOLD.toString() + name);
+            lines.add(EnumChatFormatting.RED + StatCollector.translateToLocal("gui.factionapi.skills.unlock_parent_first"));
+            lines.add(EnumChatFormatting.GOLD + String.format(StatCollector.translateToLocal("gui.factionapi.skills.cost"), skill.getSkillPointCost()));
+        } else if (!levelMet) {
+            lines.add(EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD.toString() + name);
+            lines.add(EnumChatFormatting.RED + String.format(StatCollector.translateToLocal("gui.factionapi.skills.requires_level"), skill.getRequiredLevel()));
+            lines.add(EnumChatFormatting.GOLD + String.format(StatCollector.translateToLocal("gui.factionapi.skills.cost"), skill.getSkillPointCost()));
+        } else if (!pointsMet) {
+            lines.add(EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD.toString() + name);
+            int currentPts = skillHandler != null ? skillHandler.getSkillPoints() : 0;
+            lines.add(EnumChatFormatting.RED + String.format(StatCollector.translateToLocal("gui.factionapi.skills.not_enough_points"), currentPts, skill.getSkillPointCost()));
+            lines.add(EnumChatFormatting.GOLD + String.format(StatCollector.translateToLocal("gui.factionapi.skills.cost"), skill.getSkillPointCost()));
+        } else {
+            lines.add(EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD.toString() + name);
+            lines.add(EnumChatFormatting.GOLD + String.format(StatCollector.translateToLocal("gui.factionapi.skills.cost"), skill.getSkillPointCost()));
+            lines.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("gui.factionapi.skills.hold_to_unlock"));
         }
 
         // Description
@@ -163,7 +229,7 @@ public class SkillSegmentComponent {
         if (StatCollector.canTranslate(descKey)) {
             String desc = StatCollector.translateToLocal(descKey);
             lines.add("");
-            // Wrap to 200px
+            // Wrap to 180px
             List<String> wrapped = font.listFormattedStringToWidth(desc, 180);
             for (String w : wrapped) {
                 lines.add(EnumChatFormatting.ITALIC.toString() + EnumChatFormatting.GRAY + w);

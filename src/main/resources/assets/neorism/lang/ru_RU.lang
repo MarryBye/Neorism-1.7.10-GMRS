@@ -5587,3 +5587,43 @@ skill_tree.neorism.vampire_dracula=Дракула
 skill_tree.neorism.hunter_level=Уровни охотника
 skill_tree.neorism.hunter_lord=Лорд охотников
 skill_tree.neorism.hunter_marshall=Маршал
+
+# Action names & descriptions
+action.vampirism.night_vision=Ночное зрение
+action.neorism.night_vision=Ночное зрение
+action.vampirism.night_vision.desc=Позволяет видеть в темноте
+action.neorism.night_vision.desc=Позволяет видеть в темноте
+action.neorism.vampire_regen=Регенерация
+action.neorism.vampire_regen.desc=Ускорьте восстановление здоровья ценой повышенного расхода крови
+action.neorism.bat_form=Форма летучей мыши
+action.neorism.bat_form.desc=Обратитесь в летучую мышь и получите способность летать
+action.neorism.summon_bats=Призыв летучих мышей
+action.neorism.summon_bats.desc=Призовите рой летучих мышей, ослепляющий любого, кто его коснётся
+action.neorism.invisibility=Невидимость
+action.neorism.invisibility.desc=Станьте невидимым на короткое время
+action.neorism.hunter_awareness=Чутьё на вампиров
+action.neorism.hunter_awareness.desc=Сконцентрируйтесь, чтобы почувствовать присутствие вампиров и вампирских существ поблизости
+action.neorism.potion_resistance=Сопротивление зельям
+action.neorism.potion_resistance.desc=Мгновенно снимите с себя некоторые негативные эффекты зелий
+
+# Skills Tree Screen & Tooltips
+gui.factionapi.skills.unlock_parent_first=Заблокировано: требуется предыдущий навык
+gui.factionapi.skills.locked_exclusive=Заблокировано (выбран другой путь)
+gui.factionapi.skills.requires_level=Требуется %d уровень
+gui.factionapi.skills.not_enough_points=Недостаточно очков (в наличии: %d, требуется: %d)
+gui.factionapi.skills.cost=Стоимость: %d очк.
+gui.factionapi.skills.refund=Зажмите ПКМ для возврата очков
+
+# Root skills names
+skill.neorism.vampire=Вампир
+skill.neorism.vampire.desc=Вы дитя ночи, наделённое бессмертием и жаждой крови
+skill.neorism.vampire_level_root=Вампир
+skill.neorism.vampire_level_root.desc=Вы дитя ночи, наделённое бессмертием и жаждой крови
+skill.neorism.hunter=Охотник
+skill.neorism.hunter.desc=Вы защитник человечества, обученный искоренять вампирскую заразу
+skill.neorism.hunter_level_root=Охотник
+skill.neorism.hunter_level_root.desc=Вы защитник человечества, обученный искоренять вампирскую заразу
+skill.neorism.vampire_lord_root=Лорд вампиров
+skill.neorism.vampire_lord_root.desc=Властитель ночи, повелевающий вампирами и миньонами
+skill.neorism.hunter_lord_root=Лорд охотников
+skill.neorism.hunter_lord_root.desc=Командующий орденом охотников

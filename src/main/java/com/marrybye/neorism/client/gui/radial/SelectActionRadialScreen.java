@@ -58,7 +58,10 @@ public class SelectActionRadialScreen extends GuiRadialMenu {
         List<IRadialMenuSlot> slots = new ArrayList<IRadialMenuSlot>();
         for (IAction action : actions) {
             String name = StatCollector.translateToLocal(action.getUnlocalizedName());
-            ResourceLocation icon = new ResourceLocation("neorism", "textures/actions/" + action.getId() + ".png");
+            ResourceLocation icon = action.getIcon();
+            if (icon == null) {
+                icon = new ResourceLocation("neorism", "textures/actions/" + action.getId() + ".png");
+            }
             slots.add(new RadialMenuSlot(name, action, icon));
         }
 

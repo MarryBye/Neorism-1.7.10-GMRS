@@ -147,11 +147,18 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
     }
 
     public void setFaction(IPlayableFaction faction, int level) {
+        int oldLevel = this.currentLevel;
         this.currentFaction = faction != null ? faction : ModFactions.NEUTRAL;
         this.currentLevel = level;
         if (this.currentFaction.isNeutral()) {
             this.lordLevel = 0;
             this.disguised = false;
+        } else if (this.currentLevel > oldLevel) {
+            com.marrybye.neorism.common.skills.SkillHandler sh =
+                com.marrybye.neorism.common.skills.SkillHandler.get(player);
+            if (sh != null) {
+                sh.addSkillPoints(this.currentLevel - oldLevel);
+            }
         }
         ModLogger.leveling("Player %s faction changed to %s (level %d)",
             player.getCommandSenderName(), this.currentFaction.getId(), this.currentLevel);

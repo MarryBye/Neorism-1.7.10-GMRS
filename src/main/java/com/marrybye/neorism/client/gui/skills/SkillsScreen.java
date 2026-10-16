@@ -23,6 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
@@ -139,9 +140,16 @@ public class SkillsScreen extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
         // 1. Draw Tab Buttons at top
         drawTabs(mouseX, mouseY);
+
+        // Ensure lighting is completely off and color reset before drawing canvas contents
+        RenderHelper.disableStandardItemLighting();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
         // 2. Draw Inside Canvas
         float holdProgress = 0.0f;
@@ -156,8 +164,9 @@ public class SkillsScreen extends GuiScreen {
         }
 
         // 3. Draw Window Border & Header
-        mc.getTextureManager().bindTexture(WINDOW_TEX);
+        GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        mc.getTextureManager().bindTexture(WINDOW_TEX);
         func_146110_a(guiLeft, guiTop, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 256, 256);
 
         // Header Title
@@ -173,11 +182,24 @@ public class SkillsScreen extends GuiScreen {
         // 4. Draw Buttons
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        // 5. Draw Tooltip for hovered node (if not dragging)
+        // 5. Draw Tooltip for hovered node or tab at the very end on top of everything
         if (!isDraggingCanvas && selectedTab != null) {
             SkillSegmentComponent hovered = selectedTab.getComponentAt(mouseX, mouseY, guiLeft, guiTop, CANVAS_X, CANVAS_Y, CANVAS_W, CANVAS_H);
             if (hovered != null) {
                 hovered.drawTooltip(mouseX, mouseY, fontRendererObj);
+            }
+        }
+
+        // Tab hover tooltip
+        if (tabs.size() > 1 && mouseY >= guiTop - 26 && mouseY <= guiTop) {
+            int tabX = guiLeft + 10;
+            int tabY = guiTop - 24;
+            for (SkillsTabComponent tab : tabs) {
+                if (mouseX >= tabX && mouseX <= tabX + 28 && mouseY >= tabY && mouseY <= tabY + 26) {
+                    drawCreativeTabHoveringText(tab.getTitle(), mouseX, mouseY);
+                    break;
+                }
+                tabX += 30;
             }
         }
     }
@@ -201,17 +223,16 @@ public class SkillsScreen extends GuiScreen {
 
             // Tab icon (item stack)
             if (tab.getDisplayStack() != null) {
+                RenderHelper.enableGUIStandardItemLighting();
                 RenderItem itemRender = new RenderItem();
                 itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.getTextureManager(), tab.getDisplayStack(), tabX + 6, tabY + 5);
-            }
-
-            // Tab hover tooltip
-            if (mouseX >= tabX && mouseX <= tabX + tabW && mouseY >= tabY && mouseY <= tabY + tabH) {
-                drawCreativeTabHoveringText(tab.getTitle(), mouseX, mouseY);
+                RenderHelper.disableStandardItemLighting();
+                GL11.glDisable(GL11.GL_LIGHTING);
             }
 
             tabX += 30;
         }
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
@@ -282,7 +303,7 @@ public class SkillsScreen extends GuiScreen {
             if (holdingTicks >= targetTicks) {
                 ISkill skill = heldComponent.getSkill();
                 if (skill != null) {
-                    if (holdingButton == 0 && heldComponent.isAvailable()) {
+                    if (holdingButton == 0 && heldComponent.canUnlock()) {
                         // Unlock
                         PacketHandler.sendToServer(new UnlockSkillPacket(skill.getSkillId()));
                         mc.thePlayer.playSound("random.orb", 0.7f, 1.2f);

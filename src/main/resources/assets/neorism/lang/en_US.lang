@@ -5666,3 +5666,43 @@ skill_tree.neorism.vampire_dracula=Dracula
 skill_tree.neorism.hunter_level=Hunter Level
 skill_tree.neorism.hunter_lord=Hunter Lord
 skill_tree.neorism.hunter_marshall=Marshall
+
+# Action names & descriptions
+action.vampirism.night_vision=Night Vision
+action.neorism.night_vision=Night Vision
+action.vampirism.night_vision.desc=Toggle night vision to see in the dark
+action.neorism.night_vision.desc=Toggle night vision to see in the dark
+action.neorism.vampire_regen=Regeneration
+action.neorism.vampire_regen.desc=Regenerate health faster in exchange for increased blood consumption
+action.neorism.bat_form=Bat Form
+action.neorism.bat_form.desc=Transform into a bat, gaining the ability to fly
+action.neorism.summon_bats=Summon Bats
+action.neorism.summon_bats.desc=Summon a bat swarm that blinds any player who touches it
+action.neorism.invisibility=Invisibility
+action.neorism.invisibility.desc=Turn invisible for a short duration
+action.neorism.hunter_awareness=Awareness
+action.neorism.hunter_awareness.desc=Detect nearby vampires and vampire entities
+action.neorism.potion_resistance=Potion Resistance
+action.neorism.potion_resistance.desc=Remove certain negative potion effects from yourself
+
+# Skills Tree Screen & Tooltips
+gui.factionapi.skills.unlock_parent_first=Locked: requires previous skill
+gui.factionapi.skills.locked_exclusive=Locked (chosen alternative path)
+gui.factionapi.skills.requires_level=Requires level %d
+gui.factionapi.skills.not_enough_points=Not enough skill points (have %d, need %d)
+gui.factionapi.skills.cost=Cost: %d pts
+gui.factionapi.skills.refund=Hold Right-Click to refund
+
+# Root skills names
+skill.neorism.vampire=Vampire
+skill.neorism.vampire.desc=You are a child of the night, blessed with immortality and blood thirst
+skill.neorism.vampire_level_root=Vampire
+skill.neorism.vampire_level_root.desc=You are a child of the night, blessed with immortality and blood thirst
+skill.neorism.hunter=Hunter
+skill.neorism.hunter.desc=You are a protector of humanity, trained to purge the vampire plague
+skill.neorism.hunter_level_root=Hunter
+skill.neorism.hunter_level_root.desc=You are a protector of humanity, trained to purge the vampire plague
+skill.neorism.vampire_lord_root=Vampire Lord
+skill.neorism.vampire_lord_root.desc=Ruler of darkness, commanding minions and vampires
+skill.neorism.hunter_lord_root=Hunter Lord
+skill.neorism.hunter_lord_root.desc=Commander of the Hunter Order

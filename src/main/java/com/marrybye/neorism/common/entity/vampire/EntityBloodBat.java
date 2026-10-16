@@ -15,7 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAmbientCreature;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 /**
  * Hostile flying blood bat that swoops from the shadows, bites victims, and restores health.
  */
-public class EntityBloodBat extends EntityAmbientCreature implements IVampireEntity, IMob {
+public class EntityBloodBat extends EntityBat implements IVampireEntity, IMob {
 
     private ChunkCoordinates spawnPosition;
     private EntityLivingBase attackTarget;
@@ -34,6 +34,7 @@ public class EntityBloodBat extends EntityAmbientCreature implements IVampireEnt
     public EntityBloodBat(World world) {
         super(world);
         this.setSize(0.5F, 0.9F);
+        this.setIsBatHanging(false);
         this.experienceValue = 4;
     }
 

@@ -91,6 +91,11 @@ public abstract class ActionBase implements IAction {
     }
 
     @Override
+    public net.minecraft.util.ResourceLocation getIcon() {
+        return new net.minecraft.util.ResourceLocation("neorism", "textures/actions/" + id + ".png");
+    }
+
+    @Override
     public void onUpdate(EntityPlayer player, int activeTicksLeft) {
     }
 }
