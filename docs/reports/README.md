@@ -11,6 +11,7 @@ This directory stores standardized completion reports generated after every task
 | [`phase-03-blood-feeding.md`](phase-03-blood-feeding.md) | Phase 3: Blood Subsystem & Vampire Feeding Mechanics | 2026-10-16 | COMPLETED |
 | [`fix-block-models-and-achievements.md`](fix-block-models-and-achievements.md) | Fix 3D JSON block models, GTNHLib loader, and achievement localization | 2026-10-16 | COMPLETED |
 | [`phase-04-vampire-progression-sundamage.md`](phase-04-vampire-progression-sundamage.md) | Phase 4: Vampire Progression, Sun Weakness & Garlic System | 2026-10-16 | COMPLETED |
+| [`fix-vanilla-texture-isolation.md`](fix-vanilla-texture-isolation.md) | Isolate model textures to mod domain & restore vanilla textures | 2026-10-16 | COMPLETED |
 
 ---
 

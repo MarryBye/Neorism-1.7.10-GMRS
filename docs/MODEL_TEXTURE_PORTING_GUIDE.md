@@ -74,13 +74,21 @@
 1. `src/main/resources/assets/neorism/textures/block/<name>.png` (для JSON моделей).
 2. `src/main/resources/assets/neorism/textures/blocks/<name>.png` (для ванильного `registerIcon`).
 
-### 3.3. Ванильные текстуры (`minecraft:` domain)
-* Modern модели часто ссылаются на текстуры ванильного Майнкрафта без указания домена: `"block/stone"`, `"block/obsidian"`, `"block/iron_block"`, `"block/candle"`, `"block/black_concrete"`.
-* По умолчанию домен считается `minecraft`.
-* В ванильном 1.7.10 текстур в каталоге `assets/minecraft/textures/block/` нет.
-* **Правило:** Все используемые ванильные текстуры должны быть скопированы и слинкованы в:
-  - `src/main/resources/assets/minecraft/textures/block/<modern_name>.png`
-  - `src/main/resources/assets/minecraft/textures/blocks/<modern_name>.png`
+### 3.3. Изоляция от домена `minecraft` (СТРОЖАЙШЕЕ ПРАВИЛО)
+* **НИКОГДА не создавать каталог `assets/minecraft/` в ресурсах мода!**
+* **НИКОГДА не указывать в JSON-моделях ссылки на домен `minecraft:` или голые ванильные имена (`"stone"`, `"obsidian"`, `"gold_block"`, `"candle"` и т.д.)!**
+* **Почему это критично:** GTNHLib при сканировании JSON-моделей регистрирует все встреченные текстуры через `TexHelper.registerTexture`. Если текстура без префикса или с префиксом `minecraft:`, GTNHLib перехватывает уже зарегистрированный ванильный `TextureAtlasSprite` и выполняет:
+  ```java
+  bCT.nhlib$setHasBase(false);
+  ```
+  После этого ванильный Minecraft ищет текстуру по пути `minecraft:textures/<name>.png` вместо `minecraft:textures/blocks/<name>.png`. Так как таких файлов в ванильном клиенте нет, **ванильные блоки Minecraft теряют текстуры и превращаются в `missingno` (черно-фиолетовый или прозрачный куб)**!
+* **Правило:** Все текстуры (включая свечи, наковальни, котлы, металл, камень, шерсть), используемые в моделях Neorism, **ОБЯЗАНЫ** находиться в пространстве имён `neorism:` (`assets/neorism/textures/block/<name>.png` и `assets/neorism/textures/blocks/<name>.png`), а в JSON-моделях указываться строго как:
+  ```json
+  "textures": {
+    "stone": "neorism:block/stone",
+    "candle": "neorism:block/candle"
+  }
+  ```
 
 ---
 
