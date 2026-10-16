@@ -263,31 +263,31 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 9: Entities, Mobs & Custom AI Subsystem
 *Rich ecosystem of creatures with goal-oriented AI.*
 
-- [ ] **9.1. Entity Base Hierarchy & Faction Integration**
-  - [ ] `EntityVampireBase` (immune to dark, burns in sun, drinks blood, target hunters/villagers).
-  - [ ] `EntityHunterBase` (attacks vampires on sight, uses crossbows and stakes).
-- [ ] **9.2. Custom AI Tasks (Forge 1.7.10 `EntityAIBase`)**
-  - [ ] `EntityAISunFlee`: Scans for shadows, caves, or water when the sun rises; runs away from daylight.
-  - [ ] `EntityAIBiteLiving`: Vampire attacks victim, latches on, drains blood, restores health.
-  - [ ] `EntityAICrossbowAttack`: Hunter keeps distance, reloads crossbow, fires quarrels.
-- [ ] **9.3. Vampire Entities**
-  - [ ] `EntityVampire` (Basic melee vampire).
-  - [ ] `EntityAdvancedVampire` (Faster, uses abilities, carries weapons).
-  - [ ] `EntityVampireBaron` & `EntityVampireBaroness` (Minibosses found in crypts, drops Pure Blood).
-  - [ ] `EntityBloodBat` (Hostile blood-feeding flying bats).
-- [ ] **9.4. Hunter Entities**
-  - [ ] `EntityHunter` (Basic patrol hunter with sword/stake).
-  - [ ] `EntityAdvancedHunter` (Crossbow marksman, uses holy water grenades).
-  - [ ] `EntityHunterTrainer` (Friendly NPC trainer in camps/villages for leveling).
-  - [ ] `EntityTaskmaster` (Gives faction quests/bounties).
-- [ ] **9.5. Converted Mobs (Bitten Creatures)**
-  - [ ] `EntityConvertedCow`, `EntityConvertedSheep`, `EntityConvertedHorse`, `EntityConvertedVillager` (Red glowing eyes, immune to bleeding, hostile/allied to vampires).
-- [ ] **9.6. Boss Encounters**
-  - [ ] `EntityDracula` (Multi-phase boss: Phase 1 melee/teleport, Phase 2 mist form & bat swarm, Phase 3 blood rage).
-  - [ ] `EntityVampireMother` (Ancient deity boss).
-  - [ ] Custom Boss Bars, sound themes, and unique drops.
-- [ ] **9.7. Mob & Boss Audio Asset Adaptation**
-  - [ ] Adapt sound events for Dracula, Ghosts, and Remains Defenders (`sounds.json`) with bundled .ogg assets or vanilla 1.7.10 sound mappings (replacing modern vex/allay/amethyst sound references).
+- [x] **9.1. Entity Base Hierarchy & Faction Integration**
+  - [x] `EntityVampireBase` (immune to dark, burns in sun, drinks blood, target hunters/villagers).
+  - [x] `EntityHunterBase` (attacks vampires on sight, uses crossbows and stakes).
+- [x] **9.2. Custom AI Tasks (Forge 1.7.10 `EntityAIBase`)**
+  - [x] `EntityAISunFlee`: Scans for shadows, caves, or water when the sun rises; runs away from daylight.
+  - [x] `EntityAIBiteLiving`: Vampire attacks victim, latches on, drains blood, restores health.
+  - [x] `EntityAICrossbowAttack`: Hunter keeps distance, reloads crossbow, fires quarrels.
+- [x] **9.3. Vampire Entities**
+  - [x] `EntityVampire` (Basic melee vampire).
+  - [x] `EntityAdvancedVampire` (Faster, uses abilities, carries weapons).
+  - [x] `EntityVampireBaron` & `EntityVampireBaroness` (Minibosses found in crypts, drops Pure Blood).
+  - [x] `EntityBloodBat` (Hostile blood-feeding flying bats).
+- [x] **9.4. Hunter Entities**
+  - [x] `EntityHunter` (Basic patrol hunter with sword/stake).
+  - [x] `EntityAdvancedHunter` (Crossbow marksman, uses holy water grenades).
+  - [x] `EntityHunterTrainer` (Friendly NPC trainer in camps/villages for leveling).
+  - [x] `EntityTaskmaster` (Gives faction quests/bounties).
+- [x] **9.5. Converted Mobs (Bitten Creatures)**
+  - [x] `EntityConvertedCow`, `EntityConvertedSheep`, `EntityConvertedHorse`, `EntityConvertedVillager` (Red glowing eyes, immune to bleeding, hostile/allied to vampires).
+- [x] **9.6. Boss Encounters**
+  - [x] `EntityDracula` (Multi-phase boss: Phase 1 melee/teleport, Phase 2 mist form & bat swarm, Phase 3 blood rage).
+  - [x] `EntityVampireMother` (Ancient deity boss).
+  - [x] Custom Boss Bars, sound themes, and unique drops.
+- [x] **9.7. Mob & Boss Audio Asset Adaptation**
+  - [x] Adapt sound events for Dracula, Ghosts, and Remains Defenders (`sounds.json`) with bundled .ogg assets or vanilla 1.7.10 sound mappings (replacing modern vex/allay/amethyst sound references).
 
 ---
 

@@ -18,12 +18,19 @@ import net.minecraft.world.World;
  */
 public class EntityDarkBloodProjectile extends EntityThrowable {
 
+    private float customDamage = 8.0F;
+
     public EntityDarkBloodProjectile(World world) {
         super(world);
     }
 
     public EntityDarkBloodProjectile(World world, EntityLivingBase thrower) {
         super(world, thrower);
+    }
+
+    public EntityDarkBloodProjectile(World world, EntityLivingBase thrower, float damage) {
+        super(world, thrower);
+        this.customDamage = damage;
     }
 
     @Override
@@ -43,7 +50,7 @@ public class EntityDarkBloodProjectile extends EntityThrowable {
                 EntityLivingBase target = (EntityLivingBase) mop.entityHit;
                 EntityLivingBase thrower = getThrower();
 
-                float damage = 8.0F;
+                float damage = this.customDamage;
                 DamageSource source = thrower != null ?
                     DamageSource.causeIndirectMagicDamage(this, thrower) :
                     DamageSource.magic;

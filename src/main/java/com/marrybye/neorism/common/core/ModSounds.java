@@ -11,6 +11,7 @@ public class ModSounds {
     public static final String VAMPIRE_SCREAM = "neorism:entity.vampire_scream";
     public static final String SCREECH = VAMPIRE_SCREAM;
     public static final String VAMPIRE_BITE = "neorism:entity.vampire_bite";
+    public static final String BITE = VAMPIRE_BITE;
     public static final String VAMPIRE_FEEDING = "neorism:entity.vampire_feeding";
     public static final String BLOOD_DRIP = "neorism:ambient.blood_drip";
     public static final String COFFIN_LID = "neorism:block.coffin_lid";

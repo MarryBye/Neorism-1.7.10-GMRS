@@ -32,6 +32,10 @@ public class EntityQuarrel extends EntityArrow {
         }
     }
 
+    public EntityQuarrel(World world, EntityLivingBase shooter, EntityLivingBase target, float velocity, float inaccuracy) {
+        super(world, shooter, target, velocity, inaccuracy);
+    }
+
     public boolean isHeavy() {
         return heavy;
     }

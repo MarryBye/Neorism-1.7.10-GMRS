@@ -103,6 +103,10 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
         return ModFactions.HUNTER.equals(currentFaction);
     }
 
+    public boolean isNeutral() {
+        return currentFaction == null || currentFaction.isNeutral();
+    }
+
     public boolean canJoin(IPlayableFaction faction) {
         if (faction == null || faction.isNeutral()) return true;
         // Players can only join a faction if currently neutral

@@ -1,0 +1,76 @@
+package com.marrybye.neorism.common.entity.hunter;
+
+import com.marrybye.neorism.api.entity.IHunterEntity;
+import com.marrybye.neorism.api.faction.IFaction;
+import com.marrybye.neorism.common.core.ModFactions;
+import com.marrybye.neorism.common.entity.ai.EntityAIAttackFaction;
+import com.marrybye.neorism.common.util.ModLogger;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.*;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+
+/**
+ * Base class for all vampire hunter NPCs and patrol mobs.
+ * Allied with human hunters, attacks vampires on sight.
+ */
+public abstract class EntityHunterBase extends EntityCreature implements IHunterEntity {
+
+    public EntityHunterBase(World world) {
+        super(world);
+        this.experienceValue = 6;
+        this.setupAI();
+    }
+
+    protected void setupAI() {
+        this.tasks.addTask(0, new EntityAISwimming(this));
+        this.tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1.15D, false));
+        this.tasks.addTask(2, new EntityAIWander(this, 0.9D));
+        this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.tasks.addTask(4, new EntityAILookIdle(this));
+
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
+        this.targetTasks.addTask(2, new EntityAIAttackFaction(this, ModFactions.HUNTER, true));
+    }
+
+    @Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
+        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(30.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.28D);
+        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(4.5D);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(26.0D);
+    }
+
+    @Override
+    public IFaction getFaction() {
+        return ModFactions.HUNTER;
+    }
+
+    @Override
+    public EntityLivingBase asEntity() {
+        return this;
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity target) {
+        float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
+        boolean flag = target.attackEntityFrom(net.minecraft.util.DamageSource.causeMobDamage(this), damage);
+        if (flag) {
+            this.swingItem();
+            ModLogger.combat("Hunter %s attacked %s for %.1f damage",
+                this.getCommandSenderName(), target.getCommandSenderName(), damage);
+        }
+        return flag;
+    }
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+}

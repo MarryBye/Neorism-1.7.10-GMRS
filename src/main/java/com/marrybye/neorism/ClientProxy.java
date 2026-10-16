@@ -37,6 +37,72 @@ public class ClientProxy extends CommonProxy {
             new com.marrybye.neorism.client.render.entity.RenderQuarrel()
         );
 
+        // Mobs & Bosses
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.vampire.EntityVampire.class,
+            new com.marrybye.neorism.client.render.entity.RenderVampire()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.vampire.EntityAdvancedVampire.class,
+            new com.marrybye.neorism.client.render.entity.RenderAdvancedVampire()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.vampire.EntityVampireBaron.class,
+            new com.marrybye.neorism.client.render.entity.RenderVampireBaron()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.vampire.EntityVampireBaroness.class,
+            new com.marrybye.neorism.client.render.entity.RenderVampireBaron()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.vampire.EntityBloodBat.class,
+            new com.marrybye.neorism.client.render.entity.RenderBloodBat()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.vampire.EntityDracula.class,
+            new com.marrybye.neorism.client.render.entity.RenderDracula()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.vampire.EntityVampireMother.class,
+            new com.marrybye.neorism.client.render.entity.RenderVampireMother()
+        );
+
+        // Hunters
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.hunter.EntityHunter.class,
+            new com.marrybye.neorism.client.render.entity.RenderHunter()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.hunter.EntityAdvancedHunter.class,
+            new com.marrybye.neorism.client.render.entity.RenderAdvancedHunter()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.hunter.EntityHunterTrainer.class,
+            new com.marrybye.neorism.client.render.entity.RenderHunter()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.hunter.EntityTaskmaster.class,
+            new com.marrybye.neorism.client.render.entity.RenderHunter()
+        );
+
+        // Converted Mobs
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.converted.EntityConvertedCow.class,
+            new com.marrybye.neorism.client.render.entity.RenderConvertedCow()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.converted.EntityConvertedSheep.class,
+            new com.marrybye.neorism.client.render.entity.RenderConvertedSheep()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.converted.EntityConvertedHorse.class,
+            new com.marrybye.neorism.client.render.entity.RenderConvertedHorse()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.converted.EntityConvertedVillager.class,
+            new com.marrybye.neorism.client.render.entity.RenderConvertedVillager()
+        );
+
         net.minecraft.block.Block[] modeledBlocks = new net.minecraft.block.Block[]{
             com.marrybye.neorism.common.core.ModBlocks.bloodPedestal,
             com.marrybye.neorism.common.core.ModBlocks.altarInfusion,
