@@ -1,0 +1,21 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "core": "neorism:block/totem_top_core_vampire",
+    "particle": "neorism:block/totem_top_core_vampire"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "north": { "texture": "#core" },
+        "east": { "texture": "#core" },
+        "south": { "texture": "#core" },
+        "west": { "texture": "#core" },
+        "up": { "texture": "#core" },
+        "down": { "texture": "#core" }
+      }
+    }
+  ]
+}

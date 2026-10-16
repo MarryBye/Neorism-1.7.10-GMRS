@@ -26,3 +26,16 @@ Use this skill whenever tasked with implementing or porting a feature from moder
 4. **Logic & Events:** Hook into Forge event bus (`MinecraftForge.EVENT_BUS` or `FMLCommonHandler.bus()`).
 5. **Client Presentation:** Add textures, icons, localized `.lang` strings, and renderers.
 6. **Compile & Test:** Run `./gradlew classes` to verify clean compilation.
+
+## 3. 3D Models, Textures & Localization (GTNHLib / 1.7.10)
+Consult `docs/MODEL_TEXTURE_PORTING_GUIDE.md` for full details:
+1. **pack.mcmeta format 4:** Mandatory at root of resources for GTNHLib model bakery.
+2. **Blockstates variants:** Only `""` or `"normal"` for empty states; all property variants MUST have `=`. Bare words like `"inventory"` are forbidden.
+3. **Dual Texture Path:** Every block texture must exist in both `textures/block/<name>.png` and `textures/blocks/<name>.png`.
+4. **Vanilla Mirroring:** All vanilla textures referenced by modern models must exist in `assets/minecraft/textures/block/`.
+5. **ItemRenderer:** Modeled blocks must extend `BlockModeled` and register `ModelISBRH.INSTANCE.get()` as `IItemRenderer` in `ClientProxy.init`.
+6. **Localization (.lang):**
+   - Items: `item.neorism.<name>.name` (override `getItemStackDisplayName` to prevent vanilla `.name` suffix bug).
+   - Blocks: `tile.neorism.<name>.name`.
+   - Tabs: `itemGroup.neorism.<tab>` (override `getTranslatedTabLabel` with fallbacks).
+
