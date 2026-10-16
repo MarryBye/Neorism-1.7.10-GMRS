@@ -140,23 +140,23 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 5: Hunter Progression, Holy Water & Equipment Basics
 *The mortal retaliators: skill, technology, alchemy, and divine grace.*
 
-- [ ] **5.1. Hunter Player Subsystem (`HunterPlayer`)**
-  - [ ] Implement `HunterPlayer` property class managing hunter level (1 to 14) and training state.
-  - [ ] Attribute scaling: attack speed increase, movement speed increase, resistance to vampire drain.
-- [ ] **5.2. Hunter Leveling Engine (`HunterLeveling`)**
-  - [ ] Levels 1-4: Basic Hunter Training using Vampire Blood & Fangs (1, 5, 12 blood).
-  - [ ] Levels 5-14: Advanced Hunter Training with Hunter Trainer NPC + Weapon Table tiers (Hunter Intel items 0-9, Iron ingots, Gold ingots, Vampire Books).
-- [ ] **5.3. Hunter Intel Items**
-  - [ ] Implement items `HunterIntel0` through `HunterIntel9`.
-  - [ ] Crafting/research logic on Hunter Weapon Table.
-- [ ] **5.4. Holy Water Mechanics**
-  - [ ] `ItemHolyWater`: Normal, Enhanced, Ultimate tiers.
-  - [ ] Splash Holy Water entity: explodes on impact, damages vampires, cures Sanguinare infection, repels vampire mobs.
-- [ ] **5.5. Wooden Stake Mechanics (`ItemStake`)**
-  - [ ] Backstab instant-kill calculation: if attacking a vampire from behind (dot product of look vectors > 0.5) and target health is below threshold, instant kill with wood-shatter sound and critical particles.
-- [ ] **5.6. Garlic Diffuser & Crucifix Items**
-  - [ ] Portable garlic diffuser item & stationary block.
-  - [ ] Crucifix: passive repulsion of undead and vampire mobs when held in offhand/mainhand.
+- [x] **5.1. Hunter Player Subsystem (`HunterPlayer`)**
+  - [x] Implement `HunterPlayer` property class managing hunter level (1 to 14) and training state.
+  - [x] Attribute scaling: attack damage increase, movement speed increase, resistance to vampire drain.
+- [x] **5.2. Hunter Leveling Engine (`HunterLeveling`)**
+  - [x] Levels 1-4: Basic Hunter Training using Vampire Blood & Fangs (1, 5, 12, 20 fangs/blood).
+  - [x] Levels 5-14: Advanced Hunter Training with Hunter Trainer NPC + Weapon Table tiers (Hunter Intel items 0-9, Iron ingots, Gold ingots, Vampire Books).
+- [x] **5.3. Hunter Intel Items**
+  - [x] Implement items `ItemHunterIntel` with 10 tiers (Intel 0 through 9).
+  - [x] Crafting/research logic on crafting grid.
+- [x] **5.4. Holy Water Mechanics**
+  - [x] `ItemHolyWater`: Normal, Enhanced, Ultimate tiers with drinking & cure effects.
+  - [x] Splash Holy Water entity (`EntityHolyWaterBottle` / `ItemHolyWaterSplash`): explodes on impact, damages vampires, cures Sanguinare infection, repels vampire mobs.
+- [x] **5.5. Wooden Stake Mechanics (`ItemStake`)**
+  - [x] Backstab instant-kill calculation: if attacking a vampire from behind (dot product of look vectors > 0.4) and target health is below threshold, instant kill with wood-shatter sound and critical particles.
+- [x] **5.6. Garlic Diffuser & Crucifix Items**
+  - [x] Portable garlic diffuser core item (`ItemGarlicDiffuserCore`) emitting localized garlic aura in 3 tiers.
+  - [x] Crucifix (`ItemCrucifix`): channeled holy repulsion of undead and vampire mobs in 3 material tiers (Wooden, Iron, Gold).
 
 ---
 
@@ -255,6 +255,8 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
   - [ ] Faction Totem (Village capture center).
   - [ ] Cursed Earth (spreads dark foliage, spawns vampires at night).
   - [ ] Dark Spruce Wood, Planks, Leaves, Sapling.
+- [ ] **8.6. Remains & Block Sound Adaptation**
+  - [ ] Adapt modern sound events in `sounds.json` (`entity.remains.*`) with bundled 1.7.10 .ogg assets or valid vanilla sound fallbacks to eliminate startup warnings.
 
 ---
 
@@ -284,6 +286,8 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
   - [ ] `EntityDracula` (Multi-phase boss: Phase 1 melee/teleport, Phase 2 mist form & bat swarm, Phase 3 blood rage).
   - [ ] `EntityVampireMother` (Ancient deity boss).
   - [ ] Custom Boss Bars, sound themes, and unique drops.
+- [ ] **9.7. Mob & Boss Audio Asset Adaptation**
+  - [ ] Adapt sound events for Dracula, Ghosts, and Remains Defenders (`sounds.json`) with bundled .ogg assets or vanilla 1.7.10 sound mappings (replacing modern vex/allay/amethyst sound references).
 
 ---
 
@@ -322,6 +326,8 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
   - [ ] Surface tents, watchtowers, training dummies, Hunter Trainers, weapon benches.
 - [ ] **11.4. Altar Ruins in Overworld**
   - [ ] Ancient abandoned Altar of Inspiration structures in deep forests.
+- [ ] **11.5. Dimension & Ambient Audio Normalization**
+  - [ ] Adapt dimension ambient sound events (`ambient.velmorra_rumble`) with 1.7.10 wither ambient sound mapping or custom sound loop.
 
 ---
 

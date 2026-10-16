@@ -21,6 +21,7 @@ public class ModSounds {
     public static final String BLOOD_PROJECTILE_HIT = "neorism:fx.blood_projectile_hit";
     public static final String SPHERE_SPINNING = "neorism:block.sphere_spinning";
     public static final String BEAM_ENTER_PLAYER = "neorism:block.beam_enter_player";
+    public static final String BEAM_ENTER = BEAM_ENTER_PLAYER;
     public static final String WEAPON_TABLE_CRAFTING = "neorism:block.weapon_table_crafting";
     public static final String STAKE = "neorism:fx.stake";
     public static final String TELEPORT_AWAY = "neorism:fx.teleport_away";
@@ -37,6 +38,8 @@ public class ModSounds {
     public static final String DRACULA_TRANSFORM = "neorism:entity.dracula.transform";
     public static final String RAGE = "neorism:fx.rage";
     public static final String HEARTBEAT = "neorism:fx.heartbeat";
+    public static final String SIZZLE = "random.fizz";
+    public static final String FIZZ = "random.fizz";
 
     public static void playAtEntity(Entity entity, String soundName, float volume, float pitch) {
         if (entity != null && entity.worldObj != null) {
@@ -48,5 +51,9 @@ public class ModSounds {
         if (world != null) {
             world.playSoundEffect(x, y, z, soundName, volume, pitch);
         }
+    }
+
+    public static void playAt(World world, double x, double y, double z, String soundName, float volume, float pitch) {
+        playSound(world, x, y, z, soundName, volume, pitch);
     }
 }

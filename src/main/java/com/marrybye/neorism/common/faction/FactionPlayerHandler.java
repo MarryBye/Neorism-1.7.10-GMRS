@@ -129,6 +129,13 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
         } else if (!isVampire()) {
             com.marrybye.neorism.common.vampire.LevelAttributeModifier.removeVampireModifiers(player);
         }
+        com.marrybye.neorism.common.hunter.HunterPlayer hp =
+            com.marrybye.neorism.common.hunter.HunterPlayer.get(player);
+        if (hp != null && isHunter()) {
+            hp.onLevelChanged(this.currentLevel);
+        } else if (!isHunter()) {
+            com.marrybye.neorism.common.hunter.HunterPlayer.removeHunterModifiers(player);
+        }
         sync();
     }
 
@@ -141,6 +148,11 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
             com.marrybye.neorism.common.vampire.VampirePlayer.get(player);
         if (vp != null && isVampire()) {
             vp.onLevelChanged(this.currentLevel);
+        }
+        com.marrybye.neorism.common.hunter.HunterPlayer hp =
+            com.marrybye.neorism.common.hunter.HunterPlayer.get(player);
+        if (hp != null && isHunter()) {
+            hp.onLevelChanged(this.currentLevel);
         }
         sync();
     }

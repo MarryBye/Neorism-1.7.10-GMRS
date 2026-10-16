@@ -23,6 +23,7 @@ public class PlayerCapabilityEventHandler {
         if (event.entity instanceof EntityPlayer) {
             FactionPlayerHandler.register((EntityPlayer) event.entity);
             VampirePlayer.register((EntityPlayer) event.entity);
+            com.marrybye.neorism.common.hunter.HunterPlayer.register((EntityPlayer) event.entity);
         } else if (event.entity instanceof EntityLivingBase) {
             ExtendedCreature.register((EntityLivingBase) event.entity);
         }
@@ -42,6 +43,12 @@ public class PlayerCapabilityEventHandler {
         VampirePlayer newVp = VampirePlayer.get(event.entityPlayer);
         if (oldVp != null && newVp != null) {
             newVp.copyFrom(oldVp);
+        }
+
+        com.marrybye.neorism.common.hunter.HunterPlayer oldHp = com.marrybye.neorism.common.hunter.HunterPlayer.get(event.original);
+        com.marrybye.neorism.common.hunter.HunterPlayer newHp = com.marrybye.neorism.common.hunter.HunterPlayer.get(event.entityPlayer);
+        if (oldHp != null && newHp != null) {
+            newHp.copyFrom(oldHp);
         }
     }
 
@@ -93,6 +100,10 @@ public class PlayerCapabilityEventHandler {
             VampirePlayer vp = VampirePlayer.get(player);
             if (vp != null) {
                 vp.onUpdate();
+            }
+            com.marrybye.neorism.common.hunter.HunterPlayer hp = com.marrybye.neorism.common.hunter.HunterPlayer.get(player);
+            if (hp != null) {
+                hp.onUpdate();
             }
         } else {
             ExtendedCreature creature = ExtendedCreature.get(event.entityLiving);

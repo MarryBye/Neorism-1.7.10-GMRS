@@ -18,12 +18,14 @@ public class ModRegistries {
         ModPotions.init();
         ModItems.init();
         ModBlocks.init();
+        ModEntities.init();
         PacketHandler.init();
     }
 
     public static void init(FMLInitializationEvent event) {
         ModLogger.debug("Beginning Neorism init registries");
         ModAchievements.init();
+        ModRecipes.init();
 
         // Register event handlers
         com.marrybye.neorism.common.events.PlayerCapabilityEventHandler playerCapHandler =

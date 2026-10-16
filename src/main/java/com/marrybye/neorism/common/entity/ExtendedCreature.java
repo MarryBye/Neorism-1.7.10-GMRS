@@ -161,6 +161,20 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
             amt = Math.max(1, Math.round(amt / 3.0F));
         }
 
+        // Hunter resistance to vampire drain
+        if (entity instanceof net.minecraft.entity.player.EntityPlayer) {
+            com.marrybye.neorism.common.hunter.HunterPlayer hp =
+                com.marrybye.neorism.common.hunter.HunterPlayer.get((net.minecraft.entity.player.EntityPlayer) entity);
+            if (hp != null && hp.isHunter()) {
+                float res = hp.getDrainResistance();
+                if (res > 0.0F) {
+                    amt = Math.max(1, Math.round(amt * (1.0F - res)));
+                    ModLogger.combat("Hunter %s resisted blood drain (resistance: %.0f%%, actual drain: %d)",
+                        entity.getCommandSenderName(), res * 100.0F, amt);
+                }
+            }
+        }
+
         ModLogger.combat("Vampire %s bit creature %s for %d blood (remaining: %d/%d)",
             biter != null ? biter.asEntity().getCommandSenderName() : "unknown",
             entity.getCommandSenderName(), amt, blood, maxBlood);

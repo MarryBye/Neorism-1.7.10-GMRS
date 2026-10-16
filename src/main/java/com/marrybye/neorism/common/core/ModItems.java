@@ -18,6 +18,12 @@ public class ModItems {
     public static Item vampireBook;
     public static Item bloodBottle;
     public static Item bloodFlask;
+    public static Item hunterIntel;
+    public static Item holyWaterBottle;
+    public static Item holyWaterSplashBottle;
+    public static Item stake;
+    public static Item crucifix;
+    public static Item garlicDiffuserCore;
 
     public static void init() {
         vampireFang = register("vampire_fang", new ItemNeorism("vampire_fang"));
@@ -27,6 +33,13 @@ public class ModItems {
         vampireBook = register("vampire_book", new ItemNeorism("vampire_book"));
         bloodBottle = register("blood_bottle", new com.marrybye.neorism.common.items.ItemBloodBottle());
         bloodFlask = register("blood_flask", new com.marrybye.neorism.common.items.ItemBloodFlask());
+
+        hunterIntel = register("hunter_intel", new com.marrybye.neorism.common.items.ItemHunterIntel());
+        holyWaterBottle = register("holy_water_bottle", new com.marrybye.neorism.common.items.ItemHolyWater());
+        holyWaterSplashBottle = register("holy_water_splash_bottle", new com.marrybye.neorism.common.items.ItemHolyWaterSplash());
+        stake = register("stake", new com.marrybye.neorism.common.items.ItemStake());
+        crucifix = register("crucifix", new com.marrybye.neorism.common.items.ItemCrucifix());
+        garlicDiffuserCore = register("garlic_diffuser_core", new com.marrybye.neorism.common.items.ItemGarlicDiffuserCore());
 
         ModLogger.debug("Initialized core Neorism items");
     }
