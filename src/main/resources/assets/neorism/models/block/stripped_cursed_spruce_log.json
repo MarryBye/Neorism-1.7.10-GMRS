@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/cube_column",
+{
+  "parent": "neorism:block/cube_column",
   "textures": {
     "end": "neorism:block/stripped_cursed_spruce_log_top",
     "side": "neorism:block/stripped_cursed_spruce_log"

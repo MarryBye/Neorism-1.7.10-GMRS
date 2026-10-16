@@ -1,6 +1,6 @@
-﻿{
+{
   "parent": "neorism:block/wall_candelabra_filled",
   "textures": {
-    "candle": "minecraft:block/yellow_candle"
+    "candle": "neorism:block/yellow_candle"
   }
 }

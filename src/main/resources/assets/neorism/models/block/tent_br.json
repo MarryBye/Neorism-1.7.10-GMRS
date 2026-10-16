@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:block/tent",
   "textures": {
     "floor": "neorism:block/tent/floor_br"

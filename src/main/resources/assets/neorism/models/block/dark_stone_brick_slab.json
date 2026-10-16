@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/slab",
+{
+  "parent": "neorism:block/slab",
   "textures": {
     "bottom": "neorism:block/dark_stone_bricks",
     "side": "neorism:block/dark_stone_bricks",

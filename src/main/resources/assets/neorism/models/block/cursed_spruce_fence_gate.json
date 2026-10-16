@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/template_fence_gate",
+{
+  "parent": "neorism:block/template_fence_gate",
   "textures": {
     "texture": "neorism:block/cursed_spruce_planks"
   }

@@ -1,9 +1,9 @@
-﻿{
+{
   "__comment": "Designed by Maxanier",
   "textures": {
-    "light_wool": "wool_colored_white",
-    "dark_wool": "wool_colored_silver",
-    "particle": "wool_colored_white",
+    "light_wool": "neorism:block/wool_colored_white",
+    "dark_wool": "neorism:block/wool_colored_silver",
+    "particle": "neorism:block/wool_colored_white",
     "floor": "neorism:block/tent/floor_bl"
   },
   "render_type": "minecraft:cutout",

@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:block/coffin",
   "textures": {
     "inner": "neorism:block/coffin/coffin_inner_brown"

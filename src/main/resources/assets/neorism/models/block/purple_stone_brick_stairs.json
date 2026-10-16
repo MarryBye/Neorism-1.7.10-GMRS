@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/stairs",
+{
+  "parent": "neorism:block/stairs",
   "textures": {
     "bottom": "neorism:block/purple_stone_bricks",
     "side": "neorism:block/purple_stone_bricks",

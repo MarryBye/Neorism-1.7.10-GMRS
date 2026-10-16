@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/outer_stairs",
+{
+  "parent": "neorism:block/outer_stairs",
   "textures": {
     "bottom": "neorism:block/polished_dark_stone",
     "side": "neorism:block/polished_dark_stone",

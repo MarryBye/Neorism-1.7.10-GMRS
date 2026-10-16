@@ -1,11 +1,11 @@
-﻿{
+{
 	"credit": "Designed by Maxanier",
 	"render_type": "minecraft:cutout",
 	"textures": {
-		"particle": "anvil_base",
-		"anvil": "anvil_base",
-		"anvil_top": "anvil_top_damaged_0",
-		"cauldron": "cauldron_side",
+		"particle": "neorism:block/anvil_base",
+		"anvil": "neorism:block/anvil_base",
+		"anvil_top": "neorism:block/anvil_top_damaged_0",
+		"cauldron": "neorism:block/cauldron_side",
 		"hammer": "neorism:block/weapon_table_hammer"
 	},
 	"elements": [

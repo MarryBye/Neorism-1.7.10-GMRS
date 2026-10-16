@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:block/garlic_diffuser",
   "textures": {
     "core": "neorism:block/garlic_diffuser_core_long"

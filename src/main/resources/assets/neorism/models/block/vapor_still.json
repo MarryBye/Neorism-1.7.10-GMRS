@@ -1,11 +1,11 @@
-﻿{
+{
 	"credit": "Designed by GridExpert and Zozozrob",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
 	"texture_size": [32, 32],
 	"textures": {
 		"still": "neorism:block/vapor_still",
-		"particle": "iron_block"
+		"particle": "neorism:block/iron_block"
 	},
 	"elements": [
 		{

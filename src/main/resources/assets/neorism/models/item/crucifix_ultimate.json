@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:item/crucifix",
   "textures": {
     "particle": "neorism:item/crucifix_gold",

@@ -3,9 +3,9 @@
   "textures": {
     "particle": "neorism:block/dark_steel",
     "texture": "neorism:block/dark_steel",
-    "coal": "coal_block",
-    "wood": "log_oak",
-    "stone": "stonebrick"
+    "coal": "neorism:block/coal_block",
+    "wood": "neorism:block/log_oak",
+    "stone": "neorism:block/stonebrick"
   },
   "render_type": "minecraft:cutout",
   "elements": [

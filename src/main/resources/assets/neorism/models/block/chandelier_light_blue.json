@@ -1,6 +1,6 @@
-﻿{
+{
   "parent": "neorism:block/chandelier_filled",
   "textures": {
-    "candle": "minecraft:block/light_blue_candle"
+    "candle": "neorism:block/light_blue_candle"
   }
 }

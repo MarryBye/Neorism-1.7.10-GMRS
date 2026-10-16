@@ -1,4 +1,4 @@
-﻿{
+{
   "credit": "Zin",
   "parent": "block/block",
   "ambientocclusion": false,
@@ -7,7 +7,7 @@
     "1": "neorism:block/cursed_spruce_log",
     "3": "neorism:block/blood_still",
     "7": "neorism:block/candelabra_base",
-    "8": "obsidian",
+    "8": "neorism:block/obsidian",
     "particle": "neorism:block/dark_spruce_door_top",
     "1_3": "neorism:block/vampire_rack"
   },

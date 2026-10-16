@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:item/hunter_axe",
   "textures": {
     "texture": "neorism:item/hunter_axe_ultimate"

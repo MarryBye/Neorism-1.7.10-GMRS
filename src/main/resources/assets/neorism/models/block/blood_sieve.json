@@ -1,8 +1,8 @@
-﻿{
+{
 	"credit": "Made by GridExpert",
 	"parent": "block/block",
 	"textures": {
-		"particle": "planks_big_oak",
+		"particle": "neorism:block/dark_oak_planks",
 		"pipe": "neorism:block/blood_sieve_pipe",
 		"top": "neorism:block/blood_sieve_top",
 		"side": "neorism:block/blood_sieve_side",

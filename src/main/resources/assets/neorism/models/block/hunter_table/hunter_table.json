@@ -1,9 +1,9 @@
-﻿{
+{
 	"credit": "Made by Grid and FoxPrince",
 	"render_type": "minecraft:cutout",
 	"textures": {
 		"base": "neorism:block/hunter_table",
-		"particle": "planks_birch"
+		"particle": "neorism:block/planks_birch"
 	},
 	"elements": [
 		{

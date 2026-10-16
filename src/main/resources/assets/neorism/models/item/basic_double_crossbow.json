@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:item/double_crossbow",
   "textures": {
     "arrow": "neorism:item/crossbow_part_arrow",

@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/leaves",
+{
+  "parent": "neorism:block/leaves",
   "textures": {
     "all": "neorism:block/dark_spruce_leaves"
   }

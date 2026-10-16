@@ -1,4 +1,4 @@
-﻿{
+{
 	"credit": "Designed by Zozozrob",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
@@ -6,7 +6,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"throne": "neorism:block/throne",
-		"particle": "planks_big_oak"
+		"particle": "neorism:block/dark_oak_planks"
 	},
 	"elements": [
 		{

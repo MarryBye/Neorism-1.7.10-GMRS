@@ -1,6 +1,6 @@
-﻿{
+{
 	"credit": "Made by GridExpert",
-	"parent": "minecraft:block/template_candle",
+	"parent": "block/block",
 	"textures": {
 		"particle": "neorism:block/chandelier_base",
 		"base": "neorism:block/chandelier_base"

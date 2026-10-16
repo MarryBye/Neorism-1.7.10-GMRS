@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:item/heart_seeker_model",
   "textures": {
     "3": "neorism:item/heart_seeker_enhanced"

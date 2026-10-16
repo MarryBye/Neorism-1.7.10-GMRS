@@ -1,10 +1,10 @@
-﻿{
+{
   "credit": "Made by GridExpert",
-  "parent": "minecraft:block/template_candle",
+  "parent": "block/block",
   "textures": {
     "particle": "neorism:block/candle_stick_base",
     "base": "neorism:block/candle_stick_base",
-    "candle": "minecraft:block/candle"
+    "candle": "neorism:block/candle"
   },
   "render_type": "minecraft:cutout",
   "elements": [

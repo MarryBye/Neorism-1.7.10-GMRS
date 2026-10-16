@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/fence_post",
+{
+  "parent": "neorism:block/fence_post",
   "textures": {
     "texture": "neorism:block/cursed_spruce_planks"
   }

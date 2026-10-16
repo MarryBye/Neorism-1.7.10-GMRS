@@ -1,9 +1,9 @@
-﻿{
+{
   "__comment": "Made by Alis with Blockbench",
   "textures": {
-    "0": "log_oak",
-    "1": "log_oak_top",
-    "particle": "log_oak"
+    "0": "neorism:block/log_oak",
+    "1": "neorism:block/log_oak_top",
+    "particle": "neorism:block/log_oak"
   },
   "elements": [
     {

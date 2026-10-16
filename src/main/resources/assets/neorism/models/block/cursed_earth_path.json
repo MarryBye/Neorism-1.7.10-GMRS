@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/dirt_path",
+{
+  "parent": "neorism:block/dirt_path",
   "textures": {
     "bottom": "neorism:block/cursed_earth",
     "particle": "neorism:block/cursed_earth",

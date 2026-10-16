@@ -1,11 +1,11 @@
-﻿{
+{
 	"credit": "Designed by Zozozrob",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
 	"texture_size": [32, 32],
 	"textures": {
 		"cage": "neorism:block/bat_cage",
-		"particle": "gold_block"
+		"particle": "neorism:block/gold_block"
 	},
 	"elements": [
 		{

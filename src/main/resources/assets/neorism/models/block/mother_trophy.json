@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "block/block",
   "textures": {
     "0": "neorism:block/dark_stone",

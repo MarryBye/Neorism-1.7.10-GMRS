@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:block/altar_pillar_filled",
   "textures": {
     "side": "neorism:block/altar_pillar_iron"

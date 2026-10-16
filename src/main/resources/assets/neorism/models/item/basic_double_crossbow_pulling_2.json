@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:item/double_crossbow_pulling_2",
   "textures": {
     "string": "neorism:item/crossbow_part_double_string",

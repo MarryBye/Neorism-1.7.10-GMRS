@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/wall_inventory",
+{
+  "parent": "neorism:block/wall_inventory",
   "textures": {
     "wall": "neorism:block/polished_dark_stone"
   }

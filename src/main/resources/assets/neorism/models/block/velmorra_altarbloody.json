@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:block/velmorra_altar",
   "textures": {
     "top": "neorism:block/velmorra_altar_bloody"

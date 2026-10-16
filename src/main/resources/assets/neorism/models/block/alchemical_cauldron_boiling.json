@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "neorism:block/alchemy_cauldron_liquid",
   "textures": {
     "liquid": "neorism:block/blank_liquid_boiling"

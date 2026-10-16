@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/template_fire_side",
+{
+  "parent": "neorism:block/template_fire_side",
   "textures": {
     "fire": "neorism:block/alchemical_fire_0"
   }

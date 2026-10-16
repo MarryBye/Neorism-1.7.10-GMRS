@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/cube_bottom_top",
+{
+  "parent": "neorism:block/cube_bottom_top",
   "textures": {
     "bottom": "neorism:block/cursed_earth",
     "particle": "neorism:block/cursed_earth",

@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/inner_stairs",
+{
+  "parent": "neorism:block/inner_stairs",
   "textures": {
     "bottom": "neorism:block/dark_spruce_planks",
     "side": "neorism:block/dark_spruce_planks",

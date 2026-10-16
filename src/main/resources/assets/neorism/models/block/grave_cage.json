@@ -1,8 +1,8 @@
-﻿{
+{
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "minecraft:block/cauldron_inner",
-    "particle": "iron_block"
+    "0": "neorism:block/cauldron_inner",
+    "particle": "neorism:block/iron_block"
   },
   "render_type": "minecraft:cutout",
   "elements": [

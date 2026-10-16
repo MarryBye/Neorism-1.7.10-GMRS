@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/button_pressed",
+{
+  "parent": "neorism:block/button_pressed",
   "textures": {
     "texture": "neorism:block/dark_spruce_planks"
   }

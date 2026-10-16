@@ -1,11 +1,11 @@
-﻿{
+{
   "parent": "block/block",
   "textures": {
     "particle": "neorism:block/cursed_earth",
     "bottom": "neorism:block/cursed_earth",
     "top": "neorism:block/cursed_grass_block_top",
     "side": "neorism:block/cursed_earth",
-    "overlay": "grass_side_overlay"
+    "overlay": "neorism:block/grass_side_overlay"
   },
   "render_type": "minecraft:cutout_mipped",
   "elements": [

@@ -1,5 +1,5 @@
-﻿{
-  "parent": "minecraft:block/door_bottom_right_open",
+{
+  "parent": "neorism:block/door_bottom_right_open",
   "textures": {
     "bottom": "neorism:block/dark_spruce_door_bottom",
     "top": "neorism:block/dark_spruce_door_top"

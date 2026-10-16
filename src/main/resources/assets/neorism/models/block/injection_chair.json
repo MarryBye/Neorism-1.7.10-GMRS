@@ -1,4 +1,4 @@
-﻿{
+{
 	"credit": "Designed by GridExpert",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
@@ -7,7 +7,7 @@
 	"textures": {
 		"arms": "neorism:block/injection_chair_arms",
 		"chair": "neorism:block/injection_chair",
-		"particle": "planks_big_oak"
+		"particle": "neorism:block/dark_oak_planks"
 	},
 	"elements": [
 		{
