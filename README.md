@@ -49,6 +49,24 @@
 
 ---
 
+## 🧩 Совместимость с ключевыми модами GTNH
+
+В проекте Neorism изначально заложена глубокая интеграция и поддержка актуальных версий ключевых модов экосистемы GTNH (с прицелом на обратную и будущую совместимость с их последующими релизами):
+
+| Мод | Назначение и интеграция с Neorism | Репозиторий |
+| :--- | :--- | :--- |
+| **Et Futurum Requiem** | Бэкпорт современных предметов, блоков, арбалетов и сущностей. Совместимость со стрелковым оружием и эффектами. | [Et-Futurum-Requiem](https://github.com/GTNewHorizons/Et-Futurum-Requiem) |
+| **GTNHLib** | Библиотека математики, рендеринга и работы с частицами для эффектов крови и ритуалов. | [GTNHLib](https://github.com/GTNewHorizons/GTNHLib) |
+| **Hodgepodge** | Критические исправления движка 1.7.10, расчёт световых циклов дня/ночи и стабильность под современными JVM. | [Hodgepodge](https://github.com/GTNewHorizons/Hodgepodge) |
+| **Angelica** | Совместимость с современным пайплайном рендеринга Sodium / Iris / OptiFine для 1.7.10 (шейдеры, оверлеи вампирского зрения). | [Angelica](https://github.com/GTNewHorizons/Angelica) |
+| **VillageNames** | Совместимость со структурой деревень, генерацией поселений вампиров и охотников, именами NPC. | [VillageNames](https://github.com/GTNewHorizons/VillageNames) |
+| **lwjgl3ify** | Полная поддержка современного стека LWJGL 3, ввода с клавиатуры/мыши и запуска на Java 17-25. | [lwjgl3ify](https://github.com/GTNewHorizons/lwjgl3ify) |
+| **UniMixins** | Универсальный загрузчик миксинов (SpongePowered Mixin) для модификации логики сущностей и рендеринга. | [UniMixins](https://github.com/LegacyModdingMC/UniMixins) |
+
+Все зависимости подключены напрямую через **GTNH Maven Nexus** без необходимости локальных jar-файлов в папке `libs/`.
+
+---
+
 ## 📜 Лицензирование / Licenses
 
 Проект Neorism уважает и сохраняет оригинальную структуру лицензирования Vampirism:

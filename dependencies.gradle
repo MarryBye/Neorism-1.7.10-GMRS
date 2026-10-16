@@ -34,5 +34,31 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    //runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.69-GTNH:dev")
+    // 1. Et Futurum Requiem (modern MC features backport to 1.7.10)
+    // https://github.com/GTNewHorizons/Et-Futurum-Requiem
+    devOnlyNonPublishable("ganymedes01.etfuturum:Et-Futurum-Requiem:2.6.64-GTNH:dev")
+
+    // 2. GTNHLib (modern GTNH utility, rendering & math library)
+    // https://github.com/GTNewHorizons/GTNHLib
+    devOnlyNonPublishable("com.github.GTNewHorizons:GTNHLib:0.11.54:dev")
+
+    // 3. Hodgepodge (critical bugfixes, modern Java support & performance patches)
+    // https://github.com/GTNewHorizons/Hodgepodge
+    devOnlyNonPublishable("com.github.GTNewHorizons:Hodgepodge:2.7.216:dev")
+
+    // 4. Angelica (modern rendering engine: Sodium, Iris shaders backport for 1.7.10)
+    // https://github.com/GTNewHorizons/Angelica
+    devOnlyNonPublishable("com.github.GTNewHorizons:Angelica:2.2.33:dev")
+
+    // 5. VillageNames (village structure generation, names, and trade enhancements)
+    // https://github.com/GTNewHorizons/VillageNames
+    devOnlyNonPublishable("com.github.GTNewHorizons:VillageNames:4.5.19-GTNH:dev")
+
+    // 6. lwjgl3ify (modern LWJGL 3 backend enabling Java 17-25 execution)
+    // https://github.com/GTNewHorizons/lwjgl3ify
+    devOnlyNonPublishable("com.github.GTNewHorizons:lwjgl3ify:3.0.39:dev")
+
+    // 7. UniMixins (universal mixin loader & compatibility layer for 1.7.10)
+    // https://github.com/LegacyModdingMC/UniMixins
+    devOnlyNonPublishable("io.github.legacymoddingmc:unimixins:0.3.1:dev")
 }

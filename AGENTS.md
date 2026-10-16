@@ -26,6 +26,17 @@
    - Поддержка синтаксиса: `jabel` включен в `gradle.properties` (разрешает современный синтаксис Java, компилируя в J8-байткод).
    - Запуск клиента в dev-среде: таски `runClient25` (или `runClient17`, `runClient`).
 
+4. **Ключевые внешние зависимости (GTNH Ecosystem):**
+   Все зависимости подключаются через GTNH Maven в `dependencies.gradle`:
+   - `Et-Futurum-Requiem` (`ganymedes01.etfuturum:Et-Futurum-Requiem`): бэкпортированные сущности, предметы, стрелковая механика.
+   - `GTNHLib` (`com.github.GTNewHorizons:GTNHLib`): вспомогательные библиотеки рендеринга и математики.
+   - `Hodgepodge` (`com.github.GTNewHorizons:Hodgepodge`): патчи движка, расчёт дневного света и времени.
+   - `Angelica` (`com.github.GTNewHorizons:Angelica`): шейдеры, современный рендеринг (Sodium/Iris). При написании рендереров не использовать устаревшие вызовы OpenGL, ломающие пайплайн Angelica.
+   - `VillageNames` (`com.github.GTNewHorizons:VillageNames`): интеграция с деревнями, NPC и именами.
+   - `lwjgl3ify` (`com.github.GTNewHorizons:lwjgl3ify`): поддержка LWJGL3 и Java 17-25.
+   - `UniMixins` (`io.github.legacymoddingmc:unimixins`): миксины в байткод для глубоких хуков.
+   - **Ориентироваться на совместимость с последними версиями этих модов и их будущими обновлениями.**
+
 ---
 
 ## 2. Архитектурные правила портирования (Modern MC -> 1.7.10)

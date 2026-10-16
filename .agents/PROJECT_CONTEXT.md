@@ -17,6 +17,25 @@ The original 1.7.10 version of *Vampirism* was an early, simplistic release that
 - **Target Minecraft / Forge:** Minecraft 1.7.10 with Forge 10.13.4.1614.
 - **Modern Runtime Support:** Runs in development with LWJGL3ify, modern JVM optimizations, Hodgepodge, and UniMixins.
 
+### 2.1. Integrated GTNH Ecosystem Dependencies
+Neorism is configured to integrate with and support the latest versions (and anticipated future releases) of the following core GTNH mods:
+1. **Et-Futurum-Requiem (`ganymedes01.etfuturum:Et-Futurum-Requiem:2.6.64-GTNH:dev`)**:
+   Provides backported modern vanilla features (armors, crossbows, banners, sound types, block models). Neorism hunter crossbows and item behaviors hook into Et Futurum's item architectures.
+2. **GTNHLib (`com.github.GTNewHorizons:GTNHLib:0.11.54:dev`)**:
+   Core GTNH utility and math library, utilized for high-performance particle systems, color management, and rendering routines.
+3. **Hodgepodge (`com.github.GTNewHorizons:Hodgepodge:2.7.216:dev`)**:
+   Deep performance fixes, celestial cycle / sun calculation synchronization, and compatibility with modern JVMs (Java 17-25).
+4. **Angelica (`com.github.GTNewHorizons:Angelica:2.2.33:dev`)**:
+   Modern rendering overhaul (Sodium / Iris / OptiFine backport). Custom GUI shaders, vampire blood vision, and ritual TESR models must comply with modern OpenGL shader pipelines and avoid deprecated immediate mode calls (`glBegin`/`glEnd`).
+5. **VillageNames (`com.github.GTNewHorizons:VillageNames:4.5.19-GTNH:dev`)**:
+   Integration with village structures and naming. Used for vampire village takeovers, hunter outpost names, and villager lore.
+6. **lwjgl3ify (`com.github.GTNewHorizons:lwjgl3ify:3.0.39:dev`)**:
+   Provides modern input handling (GLFW, raw mouse input, high-refresh rate displays) and enables running on Java 17-25.
+7. **UniMixins (`io.github.legacymoddingmc:unimixins:0.3.1:dev`)**:
+   SpongePowered Mixin implementation for 1.7.10 bytecode manipulation for entity AI, day/night burning calculations, and HUD hooking.
+
+All dependencies are resolved via GTNH Maven (`nexus.gtnewhorizons.com`) in `dependencies.gradle` using `devOnlyNonPublishable`, ensuring clean decoupling from runtime distribution.
+
 ---
 
 ## 3. Subsystem Migration Mapping (Modern Vampirism -> Neorism 1.7.10)
