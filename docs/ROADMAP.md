@@ -195,25 +195,25 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 7: Custom Mod Items, Weapons & Armors
 *Full equipment arsenal ported with exact 1.7.10 models, icons, and attributes.*
 
-- [ ] **7.1. Basic & Crafting Materials**
-  - [ ] Vampire Fang, Pure Blood (Tiers 1-5), Human Heart, Weak/Strong Vampire Blood, Garlic, Garlic Bulb.
-  - [ ] Vampire Orchid, Cursed Wood stick, Blood Infused Ingot.
-- [ ] **7.2. Hunter Weapons**
-  - [ ] `HunterAxe`: Bonus damage against vampires, disables blocking.
-  - [ ] `Heartseeker` (Iron, Diamond, Netherite equivalent): Vampire slaying sword, bonus damage against unholy creatures.
-  - [ ] `Heartstriker`: Life-stealing blade.
-  - [ ] Wooden & Reinforced Stakes.
-- [ ] **7.3. Hunter Crossbow Arsenal**
-  - [ ] `BasicCrossbow`, `DoubleCrossbow` (dual shot), `EnhancedCrossbow`, `TechCrossbow` (rapid-fire magazine).
-  - [ ] Custom Projectiles: Arrows, Quarrels, Explosive Quarrels, Teleport Quarrels, Holy Water Quarrels.
-- [ ] **7.4. Armor & Wearables**
-  - [ ] Vampire Cloak & Vampire Robes (with custom Cape/Cloak renderer).
-  - [ ] Vampire Crown & Vampire Lord Armor.
-  - [ ] Hunter Hat, Hunter Coat, Hunter Trousers, Hunter Boots (with movement speed attribute bonuses).
-  - [ ] Umbrella (handheld sun shade preventing daylight burns).
-- [ ] **7.5. Vampire Books & Lore**
-  - [ ] Vampire Book items (Tiers 1 to 9).
-  - [ ] Guidebook integration.
+- [x] **7.1. Basic & Crafting Materials**
+  - [x] Vampire Fang, Pure Blood (Tiers 1-5), Human Heart, Weak/Strong Vampire Blood, Garlic, Garlic Bulb.
+  - [x] Vampire Orchid, Cursed Wood stick, Blood Infused Ingot.
+- [x] **7.2. Hunter Weapons**
+  - [x] `HunterAxe`: Bonus damage against vampires, disables blocking.
+  - [x] `Heartseeker` (Iron, Diamond, Netherite equivalent): Vampire slaying sword, bonus damage against unholy creatures.
+  - [x] `Heartstriker`: Life-stealing blade.
+  - [x] Wooden & Reinforced Stakes.
+- [x] **7.3. Hunter Crossbow Arsenal**
+  - [x] `BasicCrossbow`, `DoubleCrossbow` (dual shot), `EnhancedCrossbow`, `TechCrossbow` (rapid-fire magazine).
+  - [x] Custom Projectiles: Arrows, Quarrels, Explosive Quarrels, Teleport Quarrels, Holy Water Quarrels.
+- [x] **7.4. Armor & Wearables**
+  - [x] Vampire Cloak & Vampire Robes (with custom Cape/Cloak renderer).
+  - [x] Vampire Crown & Vampire Lord Armor.
+  - [x] Hunter Hat, Hunter Coat, Hunter Trousers, Hunter Boots (with movement speed attribute bonuses).
+  - [x] Umbrella (handheld sun shade preventing daylight burns).
+- [x] **7.5. Vampire Books & Lore**
+  - [x] Vampire Book items (Tiers 1 to 9).
+  - [x] Guidebook integration.
 
 ---
 

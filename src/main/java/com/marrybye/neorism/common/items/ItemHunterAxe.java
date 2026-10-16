@@ -1,0 +1,125 @@
+package com.marrybye.neorism.common.items;
+
+import java.util.List;
+
+import com.marrybye.neorism.Neorism;
+import com.marrybye.neorism.api.entity.IVampireEntity;
+import com.marrybye.neorism.common.core.ModCreativeTabs;
+import com.marrybye.neorism.common.core.ModDamageSource;
+import com.marrybye.neorism.common.core.ModSounds;
+import com.marrybye.neorism.common.util.Helper;
+import com.marrybye.neorism.common.util.ModLogger;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
+
+/**
+ * Hunter Axe weapon with 3 tiers (Normal, Enhanced, Ultimate).
+ * Heavy cleaving weapon dealing severe bonus damage against vampires and piercing defenses.
+ */
+public class ItemHunterAxe extends ItemSword {
+
+    public static final int TIERS = 3;
+    private static final float[] BASE_DAMAGE = {7.0F, 9.0F, 11.5F};
+    private static final float[] VAMPIRE_BONUS = {4.0F, 6.5F, 9.0F};
+    private static final int[] MAX_DURABILITY = {350, 850, 1800};
+
+    @SideOnly(Side.CLIENT)
+    private IIcon[] icons;
+
+    public ItemHunterAxe() {
+        super(ToolMaterial.IRON);
+        setHasSubtypes(true);
+        setMaxDamage(0);
+        setUnlocalizedName("neorism.hunter_axe");
+        setCreativeTab(ModCreativeTabs.tabMain);
+    }
+
+    @Override
+    public int getMaxDamage(ItemStack stack) {
+        int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
+        return MAX_DURABILITY[tier];
+    }
+
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
+
+        boolean isVampire = Helper.isVampire(target) ||
+            (target instanceof IVampireEntity) ||
+            target.getClass().getName().toLowerCase().contains("vampire");
+
+        if (isVampire) {
+            float bonus = VAMPIRE_BONUS[tier];
+            if (!target.worldObj.isRemote) {
+                target.attackEntityFrom(ModDamageSource.HOLY_WATER, bonus);
+                ModSounds.playAtEntity(target, ModSounds.STAKE, 1.0F, 0.8F);
+                ModLogger.combat("Hunter Axe (Tier %d) dealt +%.1f bonus holy cleave to vampire %s",
+                    tier + 1, bonus, target.getCommandSenderName());
+            }
+        }
+
+        stack.damageItem(1, attacker);
+        return true;
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return super.getUnlocalizedName(stack) + "." + stack.getItemDamage();
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        int tier = stack.getItemDamage();
+        String suffix = tier == 1 ? "enhanced" : (tier == 2 ? "ultimate" : "normal");
+        String specificKey = "item.neorism.hunter_axe_" + suffix + ".name";
+        if (StatCollector.canTranslate(specificKey)) {
+            return StatCollector.translateToLocal(specificKey).trim();
+        }
+        return super.getItemStackDisplayName(stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister register) {
+        icons = new IIcon[TIERS];
+        icons[0] = register.registerIcon(Neorism.MODID + ":hunter_axe_normal");
+        icons[1] = register.registerIcon(Neorism.MODID + ":hunter_axe_enhanced");
+        icons[2] = register.registerIcon(Neorism.MODID + ":hunter_axe_ultimate");
+        itemIcon = icons[0];
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconFromDamage(int meta) {
+        int idx = Math.max(0, Math.min(meta, TIERS - 1));
+        return icons != null ? icons[idx] : itemIcon;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(Item item, CreativeTabs tab, List list) {
+        for (int i = 0; i < TIERS; i++) {
+            list.add(new ItemStack(item, 1, i));
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+        int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
+        tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.hunter_axe.desc"));
+        tooltip.add(EnumChatFormatting.GOLD + "+" + VAMPIRE_BONUS[tier] + " " +
+            StatCollector.translateToLocal("tooltip.neorism.vampire_bonus_damage"));
+    }
+}

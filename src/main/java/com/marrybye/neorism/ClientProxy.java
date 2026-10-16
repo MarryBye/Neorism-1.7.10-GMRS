@@ -32,6 +32,11 @@ public class ClientProxy extends CommonProxy {
             new com.marrybye.neorism.client.render.entity.RenderDarkBloodProjectile()
         );
 
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.projectile.EntityQuarrel.class,
+            new com.marrybye.neorism.client.render.entity.RenderQuarrel()
+        );
+
         net.minecraft.block.Block[] modeledBlocks = new net.minecraft.block.Block[]{
             com.marrybye.neorism.common.core.ModBlocks.bloodPedestal,
             com.marrybye.neorism.common.core.ModBlocks.altarInfusion,
