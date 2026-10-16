@@ -61,4 +61,12 @@ dependencies {
     // 7. UniMixins (universal mixin loader & compatibility layer for 1.7.10)
     // https://github.com/LegacyModdingMC/UniMixins
     devOnlyNonPublishable("io.github.legacymoddingmc:unimixins:0.3.1:dev")
+
+    // 8. Combat Backport (MarryBye: modern 1.9+ combat mechanics backport)
+    // https://github.com/MarryBye/combat-backport
+    devOnlyNonPublishable("com.marrybye.combatbackport:combatbackport:1.0.0:dev")
+
+    // 9. Villager Trades Backport (MarryBye: modern 1.14+ villager trading & rebalance backport)
+    // https://github.com/MarryBye/villager-trades-backport
+    devOnlyNonPublishable("com.marrybye.villagertradesbackport:villagertradesbackport:1.0.0:dev")
 }

@@ -33,8 +33,12 @@ Neorism is configured to integrate with and support the latest versions (and ant
    Provides modern input handling (GLFW, raw mouse input, high-refresh rate displays) and enables running on Java 17-25.
 7. **UniMixins (`io.github.legacymoddingmc:unimixins:0.3.1:dev`)**:
    SpongePowered Mixin implementation for 1.7.10 bytecode manipulation for entity AI, day/night burning calculations, and HUD hooking.
+8. **Combat Backport (`com.marrybye.combatbackport:combatbackport:1.0.0:dev`)**:
+   Modern 1.9+ combat backport (attack cooldowns, weapon speed, shields, Sweeping Edge). Neorism vampire weapons, stakes, and combat abilities are designed to integrate with Combat Backport's speed heuristics and shielding mechanics.
+9. **Villager Trades Backport (`com.marrybye.villagertradesbackport:villagertradesbackport:1.0.0:dev`)**:
+   Modern 1.14+ villager trading system (levels, workstations, trade rebalance). Neorism vampire village control, villager biting effects, and hunter priests/trainers hook into modern villager trades and profession data.
 
-All dependencies are resolved via GTNH Maven (`nexus.gtnewhorizons.com`) in `dependencies.gradle` using `devOnlyNonPublishable`, ensuring clean decoupling from runtime distribution.
+All dependencies are resolved via Maven (`GTNH Nexus` and `mavenLocal`) in `dependencies.gradle` using `devOnlyNonPublishable`, ensuring clean decoupling from runtime distribution.
 
 ---
 

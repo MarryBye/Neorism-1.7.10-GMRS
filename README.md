@@ -62,8 +62,10 @@
 | **VillageNames** | Совместимость со структурой деревень, генерацией поселений вампиров и охотников, именами NPC. | [VillageNames](https://github.com/GTNewHorizons/VillageNames) |
 | **lwjgl3ify** | Полная поддержка современного стека LWJGL 3, ввода с клавиатуры/мыши и запуска на Java 17-25. | [lwjgl3ify](https://github.com/GTNewHorizons/lwjgl3ify) |
 | **UniMixins** | Универсальный загрузчик миксинов (SpongePowered Mixin) для модификации логики сущностей и рендеринга. | [UniMixins](https://github.com/LegacyModdingMC/UniMixins) |
+| **Combat Backport** | Бэкпорт боевой системы 1.9+ (кулдаун атак, скорость оружия, щиты, Sweeping Edge, оффхенд). Интеграция с вампирским оружием, клыками и защитой от атак. | [Combat-Backport](https://github.com/MarryBye/combat-backport) |
+| **Villager Trades Backport** | Бэкпорт торговли 1.14+ (уровни жителей, рабочие места, ребаланс сделок). Интеграция с вампирскими деревнями, заражением жителей и торговлей охотников. | [Villager-Trades-Backport](https://github.com/MarryBye/villager-trades-backport) |
 
-Все зависимости подключены напрямую через **GTNH Maven Nexus** без необходимости локальных jar-файлов в папке `libs/`.
+Все зависимости подключены напрямую через **Maven** (`GTNH Nexus` и `mavenLocal`) без необходимости локальных jar-файлов в папке `libs/`.
 
 ---
 

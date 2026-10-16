@@ -35,6 +35,8 @@
    - `VillageNames` (`com.github.GTNewHorizons:VillageNames`): интеграция с деревнями, NPC и именами.
    - `lwjgl3ify` (`com.github.GTNewHorizons:lwjgl3ify`): поддержка LWJGL3 и Java 17-25.
    - `UniMixins` (`io.github.legacymoddingmc:unimixins`): миксины в байткод для глубоких хуков.
+   - `Combat Backport` (`com.marrybye.combatbackport:combatbackport`): поддержка механик боя 1.9+ (скорость атаки, щиты, Sweeping Edge).
+   - `Villager Trades Backport` (`com.marrybye.villagertradesbackport:villagertradesbackport`): поддержка современной торговли 1.14+ и взаимодействия с жителями.
    - **Ориентироваться на совместимость с последними версиями этих модов и их будущими обновлениями.**
 
 ---
