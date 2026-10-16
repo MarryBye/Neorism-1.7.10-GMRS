@@ -1,5 +1,5 @@
 {
-  "parent": "neorism:block/flower_pot_cross",
+  "parent": "minecraft:block/flower_pot_cross",
   "textures": {
     "plant": "neorism:block/cursed_spruce_sapling"
   }

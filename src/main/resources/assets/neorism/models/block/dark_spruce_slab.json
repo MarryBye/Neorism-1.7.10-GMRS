@@ -1,5 +1,5 @@
 {
-  "parent": "neorism:block/slab",
+  "parent": "minecraft:block/slab",
   "textures": {
     "bottom": "neorism:block/dark_spruce_planks",
     "side": "neorism:block/dark_spruce_planks",

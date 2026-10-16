@@ -1,5 +1,5 @@
 {
-  "parent": "neorism:block/template_wall_side_tall",
+  "parent": "minecraft:block/template_wall_side_tall",
   "textures": {
     "wall": "neorism:block/purple_stone_bricks"
   }

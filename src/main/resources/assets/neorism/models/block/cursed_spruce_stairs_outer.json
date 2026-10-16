@@ -1,5 +1,5 @@
 {
-  "parent": "neorism:block/outer_stairs",
+  "parent": "minecraft:block/outer_stairs",
   "textures": {
     "bottom": "neorism:block/cursed_spruce_planks",
     "side": "neorism:block/cursed_spruce_planks",

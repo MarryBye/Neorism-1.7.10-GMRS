@@ -1,5 +1,5 @@
 {
-  "parent": "neorism:block/cross",
+  "parent": "minecraft:block/cross",
   "textures": {
     "cross": "neorism:block/cursed_roots"
   }
