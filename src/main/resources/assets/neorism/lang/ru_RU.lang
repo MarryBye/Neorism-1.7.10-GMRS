@@ -5627,3 +5627,34 @@ skill.neorism.vampire_lord_root=Лорд вампиров
 skill.neorism.vampire_lord_root.desc=Властитель ночи, повелевающий вампирами и миньонами
 skill.neorism.hunter_lord_root=Лорд охотников
 skill.neorism.hunter_lord_root.desc=Командующий орденом охотников
+
+# Quarrel Clips & Tech Crossbow
+item.neorism.quarrel_clip.name=Обойма для болтов
+item.neorism.heavy_quarrel_clip.name=Обойма для тяжёлых болтов
+item.neorism.quarrel.normal.name=Обычные
+item.neorism.quarrel.heavy.name=Тяжёлые
+tooltip.neorism.quarrel_clip.ammo=Боезапас
+tooltip.neorism.quarrel_clip.desc=Обойма вмещает до 16 болтов для полуавтоматического механического арбалета.
+tooltip.neorism.tech_crossbow.loaded=Заряжено в обойме
+tooltip.neorism.tech_crossbow.empty=Обойма пуста! Поместите снаряжённую обойму в инвентарь.
+
+# Alchemical Weapon Oils
+item.neorism.oil.empty.name=Пустая масляная бутыль
+item.neorism.oil.vampire_killer.name=Масло «Убийца вампиров»
+item.neorism.oil.vampire_killer.desc=Наносит +6 дополнительного урона вампирам и поджигает их святым огнём.
+item.neorism.oil.garlic.name=Чесночное масло
+item.neorism.oil.garlic.desc=Отравляет вампиров чесночной скверной при ударе.
+item.neorism.oil.bleeding.name=Кровоточащее масло
+item.neorism.oil.bleeding.desc=Вызывает обильное кровотечение у живых целей.
+item.neorism.oil.fire.name=Огненное масло
+item.neorism.oil.fire.desc=Поджигает врагов при ударе.
+item.neorism.oil.poison.name=Ядовитое масло
+item.neorism.oil.poison.desc=Отравляет цель смертоносным токсином.
+item.neorism.oil.weakness.name=Масло слабости
+item.neorism.oil.weakness.desc=Ослабляет физическую силу поражённого противника.
+item.neorism.oil.slowness.name=Масло замедления
+item.neorism.oil.slowness.desc=Сковывает движения цели, замедляя её бег.
+tooltip.neorism.oil.charges=Зарядов
+tooltip.neorism.oil.apply_hint=Нажмите ПКМ, чтобы нанести масло на оружие в панели быстрого доступа.
+tooltip.neorism.oil.coated=Покрытие лезвия
+

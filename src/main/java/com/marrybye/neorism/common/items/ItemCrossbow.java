@@ -64,8 +64,85 @@ public class ItemCrossbow extends ItemBow {
         return 72000;
     }
 
+    public static int getClipAmmo(ItemStack stack) {
+        if (stack != null && stack.hasTagCompound() && stack.getTagCompound().hasKey("clipAmmo")) {
+            return stack.getTagCompound().getInteger("clipAmmo");
+        }
+        return 0;
+    }
+
+    public static void setClipAmmo(ItemStack stack, int ammo, boolean heavy) {
+        if (stack == null) return;
+        if (!stack.hasTagCompound()) stack.setTagCompound(new net.minecraft.nbt.NBTTagCompound());
+        stack.getTagCompound().setInteger("clipAmmo", Math.max(0, ammo));
+        stack.getTagCompound().setBoolean("clipHeavy", heavy);
+    }
+
+    public static boolean isClipHeavy(ItemStack stack) {
+        return stack != null && stack.hasTagCompound() && stack.getTagCompound().getBoolean("clipHeavy");
+    }
+
+    private boolean reloadClipFromInventory(ItemStack crossbow, EntityPlayer player) {
+        for (int i = 0; i < player.inventory.mainInventory.length; i++) {
+            ItemStack stack = player.inventory.mainInventory[i];
+            if (stack != null && stack.getItem() instanceof ItemQuarrelClip) {
+                int ammo = ItemQuarrelClip.getAmmoCount(stack);
+                if (ammo > 0) {
+                    boolean heavy = ItemQuarrelClip.isHeavy(stack);
+                    setClipAmmo(crossbow, ammo, heavy);
+                    stack.stackSize--;
+                    if (stack.stackSize <= 0) {
+                        player.inventory.setInventorySlotContents(i, null);
+                    }
+                    player.worldObj.playSoundAtEntity(player, "tile.piston.in", 0.8F, 1.3F);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+        int meta = Math.max(0, Math.min(stack.getItemDamage(), TYPES - 1));
+
+        // Tech Crossbow: Semi-automatic firing from loaded clip!
+        if (meta == 3) {
+            int clipAmmo = getClipAmmo(stack);
+            if (clipAmmo > 0) {
+                boolean isHeavy = isClipHeavy(stack);
+                float vel = VELOCITY[meta];
+
+                if (!world.isRemote) {
+                    EntityQuarrel bolt = new EntityQuarrel(world, player, vel, isHeavy);
+                    world.spawnEntityInWorld(bolt);
+                    ModLogger.combat("Player %s semi-auto fired Tech Crossbow (remaining clip: %d, heavy: %b)",
+                        player.getCommandSenderName(), clipAmmo - 1, isHeavy);
+                }
+
+                world.playSoundAtEntity(player, "random.bow", 0.9F, 1.4F / (itemRand.nextFloat() * 0.2F + 0.9F));
+                player.swingItem();
+
+                if (!player.capabilities.isCreativeMode) {
+                    setClipAmmo(stack, clipAmmo - 1, isHeavy);
+                    stack.damageItem(1, player);
+                }
+
+                // If clip emptied, try reloading next clip from inventory
+                if (clipAmmo - 1 <= 0 && !player.capabilities.isCreativeMode) {
+                    reloadClipFromInventory(stack, player);
+                }
+                return stack;
+            } else {
+                // If clip is empty, try loading clip from inventory
+                if (reloadClipFromInventory(stack, player)) {
+                    world.playSoundAtEntity(player, "tile.piston.in", 0.8F, 1.3F);
+                    return stack;
+                }
+            }
+        }
+
+        // Standard draw for other crossbows or Tech without clip
         if (player.capabilities.isCreativeMode || findQuarrel(player) != null) {
             player.setItemInUse(stack, getMaxItemUseDuration(stack));
         }
@@ -195,5 +272,17 @@ public class ItemCrossbow extends ItemBow {
         int meta = Math.max(0, Math.min(stack.getItemDamage(), TYPES - 1));
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.crossbow.desc"));
         tooltip.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocalFormatted("tooltip.neorism.crossbow.velocity", VELOCITY[meta]));
+        if (meta == 3) {
+            int clipAmmo = getClipAmmo(stack);
+            boolean heavy = isClipHeavy(stack);
+            if (clipAmmo > 0) {
+                String typeStr = heavy ? StatCollector.translateToLocal("item.neorism.quarrel.heavy.name")
+                                       : StatCollector.translateToLocal("item.neorism.quarrel.normal.name");
+                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.neorism.tech_crossbow.loaded") + ": " 
+                    + EnumChatFormatting.YELLOW + clipAmmo + "/" + ItemQuarrelClip.MAX_AMMO + " (" + typeStr + ")");
+            } else {
+                tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.tech_crossbow.empty"));
+            }
+        }
     }
 }

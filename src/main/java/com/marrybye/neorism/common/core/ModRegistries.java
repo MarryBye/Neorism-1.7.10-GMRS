@@ -39,6 +39,10 @@ public class ModRegistries {
         com.marrybye.neorism.common.events.VampireCombatEventHandler combatHandler =
             new com.marrybye.neorism.common.events.VampireCombatEventHandler();
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(combatHandler);
+
+        com.marrybye.neorism.common.events.WeaponOilEventHandler oilHandler =
+            new com.marrybye.neorism.common.events.WeaponOilEventHandler();
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(oilHandler);
     }
 
     public static void postInit(FMLPostInitializationEvent event) {

@@ -5706,3 +5706,34 @@ skill.neorism.vampire_lord_root=Vampire Lord
 skill.neorism.vampire_lord_root.desc=Ruler of darkness, commanding minions and vampires
 skill.neorism.hunter_lord_root=Hunter Lord
 skill.neorism.hunter_lord_root.desc=Commander of the Hunter Order
+
+# Quarrel Clips & Tech Crossbow
+item.neorism.quarrel_clip.name=Quarrel Clip
+item.neorism.heavy_quarrel_clip.name=Heavy Quarrel Clip
+item.neorism.quarrel.normal.name=Standard
+item.neorism.quarrel.heavy.name=Heavy
+tooltip.neorism.quarrel_clip.ammo=Ammunition
+tooltip.neorism.quarrel_clip.desc=Holds up to 16 quarrels for semi-automatic firing with the Tech Crossbow.
+tooltip.neorism.tech_crossbow.loaded=Loaded Magazine
+tooltip.neorism.tech_crossbow.empty=Magazine empty! Keep a filled quarrel clip in your inventory.
+
+# Alchemical Weapon Oils
+item.neorism.oil.empty.name=Empty Oil Bottle
+item.neorism.oil.vampire_killer.name=Vampire Killer Oil
+item.neorism.oil.vampire_killer.desc=Deals +6 bonus damage to vampires and ignites them with holy flame.
+item.neorism.oil.garlic.name=Garlic Oil
+item.neorism.oil.garlic.desc=Afflicts struck vampires with garlic sickness.
+item.neorism.oil.bleeding.name=Bleeding Oil
+item.neorism.oil.bleeding.desc=Causes heavy bleeding and blood drainage on hit.
+item.neorism.oil.fire.name=Fire Oil
+item.neorism.oil.fire.desc=Ignites targets in fire on hit.
+item.neorism.oil.poison.name=Poison Oil
+item.neorism.oil.poison.desc=Inflicts deadly poison upon striking.
+item.neorism.oil.weakness.name=Weakness Oil
+item.neorism.oil.weakness.desc=Weakens the physical strength of target.
+item.neorism.oil.slowness.name=Slowness Oil
+item.neorism.oil.slowness.desc=Slows the target's movement speed.
+tooltip.neorism.oil.charges=Charges
+tooltip.neorism.oil.apply_hint=Right-click to apply to weapons on your hotbar.
+tooltip.neorism.oil.coated=Blade Coating
+

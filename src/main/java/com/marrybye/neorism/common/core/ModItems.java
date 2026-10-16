@@ -16,9 +16,11 @@ import com.marrybye.neorism.common.items.ItemHunterAxe;
 import com.marrybye.neorism.common.items.ItemHunterHat;
 import com.marrybye.neorism.common.items.ItemHunterIntel;
 import com.marrybye.neorism.common.items.ItemNeorism;
+import com.marrybye.neorism.common.items.ItemOilBottle;
 import com.marrybye.neorism.common.items.ItemPitchfork;
 import com.marrybye.neorism.common.items.ItemPureBlood;
 import com.marrybye.neorism.common.items.ItemQuarrel;
+import com.marrybye.neorism.common.items.ItemQuarrelClip;
 import com.marrybye.neorism.common.items.ItemStake;
 import com.marrybye.neorism.common.items.ItemSwiftnessArmor;
 import com.marrybye.neorism.common.items.ItemUmbrella;
@@ -85,7 +87,9 @@ public class ModItems {
 
     // Crossbows & Ammunition
     public static Item quarrel;
+    public static Item quarrelClip;
     public static Item crossbow;
+    public static Item oilBottle;
 
     // Wearables & Armor
     public static Item hunterHat;
@@ -152,7 +156,9 @@ public class ModItems {
 
         // Crossbow & Ammunition
         quarrel = register("quarrel", new ItemQuarrel());
+        quarrelClip = register("quarrel_clip", new ItemQuarrelClip());
         crossbow = register("crossbow", new ItemCrossbow());
+        oilBottle = register("oil_bottle", new ItemOilBottle());
 
         // Wearables & Armor
         hunterHat = register("hunter_hat", new ItemHunterHat(ARMOR_HUNTER));

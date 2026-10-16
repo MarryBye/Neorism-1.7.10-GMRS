@@ -224,6 +224,76 @@ public class ModRecipes {
             'T', Blocks.tripwire_hook
         );
 
+        // Tech Crossbow (Tier 3)
+        GameRegistry.addRecipe(new ItemStack(ModItems.crossbow, 1, 3),
+            "RIR",
+            "ECE",
+            " T ",
+            'R', Items.redstone,
+            'I', Items.iron_ingot,
+            'E', Items.repeater,
+            'C', new ItemStack(ModItems.crossbow, 1, 1),
+            'T', Blocks.tripwire_hook
+        );
+
+        // Quarrel Clips
+        GameRegistry.addRecipe(new ItemStack(ModItems.quarrelClip, 1, 0),
+            "QQQ",
+            "QCQ",
+            "QQQ",
+            'Q', new ItemStack(ModItems.quarrel, 1, 0),
+            'C', Items.iron_ingot
+        );
+        GameRegistry.addRecipe(new ItemStack(ModItems.quarrelClip, 1, 1),
+            "QQQ",
+            "QCQ",
+            "QQQ",
+            'Q', new ItemStack(ModItems.quarrel, 1, 1),
+            'C', Items.iron_ingot
+        );
+
+        // Empty Oil Bottle
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.oilBottle, 1, 0),
+            Items.glass_bottle,
+            Items.clay_ball
+        );
+
+        // Alchemical Weapon Oils
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.oilBottle, 1, 1),
+            new ItemStack(ModItems.oilBottle, 1, 0),
+            new ItemStack(ModItems.holyWaterBottle, 1, 0),
+            ModItems.garlic,
+            Items.blaze_powder
+        );
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.oilBottle, 1, 2),
+            new ItemStack(ModItems.oilBottle, 1, 0),
+            ModItems.garlic,
+            Items.spider_eye
+        );
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.oilBottle, 1, 3),
+            new ItemStack(ModItems.oilBottle, 1, 0),
+            ModItems.vampireFang,
+            Items.ghast_tear
+        );
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.oilBottle, 1, 4),
+            new ItemStack(ModItems.oilBottle, 1, 0),
+            Items.blaze_powder,
+            Items.magma_cream
+        );
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.oilBottle, 1, 5),
+            new ItemStack(ModItems.oilBottle, 1, 0),
+            Items.poisonous_potato
+        );
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.oilBottle, 1, 6),
+            new ItemStack(ModItems.oilBottle, 1, 0),
+            Items.fermented_spider_eye
+        );
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.oilBottle, 1, 7),
+            new ItemStack(ModItems.oilBottle, 1, 0),
+            Items.slime_ball,
+            Blocks.soul_sand
+        );
+
         // Umbrella
         GameRegistry.addRecipe(new ItemStack(ModItems.umbrella, 1),
             "WWW",
