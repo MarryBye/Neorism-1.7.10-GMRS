@@ -122,6 +122,11 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
         }
         ModLogger.leveling("Player %s faction changed to %s (level %d)",
             player.getCommandSenderName(), this.currentFaction.getId(), this.currentLevel);
+        com.marrybye.neorism.common.vampire.VampirePlayer vp =
+            com.marrybye.neorism.common.vampire.VampirePlayer.get(player);
+        if (vp != null && isVampire()) {
+            vp.onLevelChanged(this.currentLevel);
+        }
         sync();
     }
 
@@ -130,6 +135,11 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
         this.currentLevel = Math.max(0, Math.min(level, max));
         ModLogger.leveling("Player %s level updated to %d (faction: %s)",
             player.getCommandSenderName(), this.currentLevel, this.currentFaction.getId());
+        com.marrybye.neorism.common.vampire.VampirePlayer vp =
+            com.marrybye.neorism.common.vampire.VampirePlayer.get(player);
+        if (vp != null && isVampire()) {
+            vp.onLevelChanged(this.currentLevel);
+        }
         sync();
     }
 

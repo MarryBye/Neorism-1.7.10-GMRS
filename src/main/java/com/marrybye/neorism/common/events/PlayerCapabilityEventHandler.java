@@ -1,16 +1,20 @@
 package com.marrybye.neorism.common.events;
 
+import com.marrybye.neorism.common.entity.ExtendedCreature;
 import com.marrybye.neorism.common.faction.FactionPlayerHandler;
 import com.marrybye.neorism.common.util.ModLogger;
+import com.marrybye.neorism.common.vampire.VampirePlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 
 /**
- * Event handler managing IExtendedEntityProperties lifecycle, cloning across deaths, and syncing.
+ * Event handler managing IExtendedEntityProperties lifecycle, cloning across deaths, updates, and syncing.
  */
 public class PlayerCapabilityEventHandler {
 
@@ -18,6 +22,9 @@ public class PlayerCapabilityEventHandler {
     public void onEntityConstructing(EntityEvent.EntityConstructing event) {
         if (event.entity instanceof EntityPlayer) {
             FactionPlayerHandler.register((EntityPlayer) event.entity);
+            VampirePlayer.register((EntityPlayer) event.entity);
+        } else if (event.entity instanceof EntityLivingBase) {
+            ExtendedCreature.register((EntityLivingBase) event.entity);
         }
     }
 
@@ -30,6 +37,12 @@ public class PlayerCapabilityEventHandler {
             ModLogger.debug("Cloned faction properties across respawn/dimension for player %s",
                 event.entityPlayer.getCommandSenderName());
         }
+
+        VampirePlayer oldVp = VampirePlayer.get(event.original);
+        VampirePlayer newVp = VampirePlayer.get(event.entityPlayer);
+        if (oldVp != null && newVp != null) {
+            newVp.copyFrom(oldVp);
+        }
     }
 
     @SubscribeEvent
@@ -39,6 +52,10 @@ public class PlayerCapabilityEventHandler {
             FactionPlayerHandler handler = FactionPlayerHandler.get(player);
             if (handler != null) {
                 handler.sync();
+            }
+            VampirePlayer vp = VampirePlayer.get(player);
+            if (vp != null) {
+                vp.syncBlood();
             }
         }
     }
@@ -51,6 +68,10 @@ public class PlayerCapabilityEventHandler {
             ModLogger.debug("Player %s logged in with faction=%s, level=%d",
                 event.player.getCommandSenderName(), handler.getFaction().getId(), handler.getCurrentLevel());
         }
+        VampirePlayer vp = VampirePlayer.get(event.player);
+        if (vp != null) {
+            vp.syncBlood();
+        }
     }
 
     @SubscribeEvent
@@ -58,6 +79,26 @@ public class PlayerCapabilityEventHandler {
         FactionPlayerHandler handler = FactionPlayerHandler.get(event.player);
         if (handler != null) {
             handler.sync();
+        }
+        VampirePlayer vp = VampirePlayer.get(event.player);
+        if (vp != null) {
+            vp.syncBlood();
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            VampirePlayer vp = VampirePlayer.get(player);
+            if (vp != null) {
+                vp.onUpdate();
+            }
+        } else {
+            ExtendedCreature creature = ExtendedCreature.get(event.entityLiving);
+            if (creature != null) {
+                creature.updateLiving();
+            }
         }
     }
 }

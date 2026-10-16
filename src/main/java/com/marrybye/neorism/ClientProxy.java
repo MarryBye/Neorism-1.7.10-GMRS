@@ -9,13 +9,17 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        // Client renderers, entity renderers, keybindings pre-init
+        com.marrybye.neorism.client.input.KeyBindings.init();
+        com.marrybye.neorism.client.input.KeyBindings keyHandler = new com.marrybye.neorism.client.input.KeyBindings();
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(keyHandler);
     }
 
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
-        // Client tick handlers, HUD overlays, GUI registrations
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new com.marrybye.neorism.client.gui.overlay.BloodBarOverlay(net.minecraft.client.Minecraft.getMinecraft())
+        );
     }
 
     @Override

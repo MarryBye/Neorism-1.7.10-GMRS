@@ -107,6 +107,16 @@ public class Helper {
     }
 
     /**
+     * Checks if entity is located within a vampire biome.
+     */
+    public static boolean isEntityInVampireBiome(Entity entity) {
+        if (entity == null || entity.worldObj == null) return false;
+        net.minecraft.world.biome.BiomeGenBase biome =
+            entity.worldObj.getBiomeGenForCoords((int) entity.posX, (int) entity.posZ);
+        return biome != null && biome.biomeName != null && biome.biomeName.toLowerCase().contains("vampire");
+    }
+
+    /**
      * Checks if position is exposed to direct sunlight.
      */
     public static boolean canSunBurn(World world, int x, int y, int z) {

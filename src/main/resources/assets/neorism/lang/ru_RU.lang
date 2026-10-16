@@ -1,4 +1,4 @@
-﻿faction.vampirism.vampire=Вампиры
+faction.vampirism.vampire=Вампиры
 faction.neorism.vampire=Вампиры
 faction.vampirism.vampire.singular=Вампир
 faction.neorism.vampire.singular=Вампир
@@ -5318,3 +5318,13 @@ vampirism.configuration.lordAttackSpeedCooldown.tooltip=Перезарядка �
 neorism.configuration.lordAttackSpeedCooldown.tooltip=Перезарядка умения скорости атаки лорда-вампира, в секундах.
 credits.vampirism.translators=Нет переводчиков
 credits.neorism.translators=Нет переводчиков
+
+text.neorism.blood_bottle.content=Кровь: %d / %d
+text.neorism.blood_flask.content=Кровь: %d / %d
+item.neorism.blood_flask.name=Колба с кровью
+item.neorism.blood_bottle.0.name=Пустой флакон для крови
+item.neorism.blood_bottle.1.name=Флакон с кровью (1/5)
+item.neorism.blood_bottle.2.name=Флакон с кровью (2/5)
+item.neorism.blood_bottle.3.name=Флакон с кровью (3/5)
+item.neorism.blood_bottle.4.name=Флакон с кровью (4/5)
+item.neorism.blood_bottle.5.name=Флакон с кровью (5/5)

@@ -25,6 +25,8 @@ public class PacketHandler {
 
         // Packet registrations
         registerMessage(SyncFactionPacket.Handler.class, SyncFactionPacket.class, Side.CLIENT);
+        registerMessage(com.marrybye.neorism.common.network.packets.SyncBloodPacket.Handler.class, com.marrybye.neorism.common.network.packets.SyncBloodPacket.class, Side.CLIENT);
+        registerMessage(com.marrybye.neorism.common.network.packets.BiteRequestPacket.Handler.class, com.marrybye.neorism.common.network.packets.BiteRequestPacket.class, Side.SERVER);
     }
 
     public static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(

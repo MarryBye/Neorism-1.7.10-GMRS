@@ -16,6 +16,8 @@ public class ModItems {
     public static Item garlic;
     public static Item pureBlood;
     public static Item vampireBook;
+    public static Item bloodBottle;
+    public static Item bloodFlask;
 
     public static void init() {
         vampireFang = register("vampire_fang", new ItemNeorism("vampire_fang"));
@@ -23,6 +25,8 @@ public class ModItems {
         garlic = register("garlic", new ItemNeorism("garlic"));
         pureBlood = register("pure_blood", new ItemNeorism("pure_blood_0"));
         vampireBook = register("vampire_book", new ItemNeorism("vampire_book"));
+        bloodBottle = register("blood_bottle", new com.marrybye.neorism.common.items.ItemBloodBottle());
+        bloodFlask = register("blood_flask", new com.marrybye.neorism.common.items.ItemBloodFlask());
 
         ModLogger.debug("Initialized core Neorism items");
     }

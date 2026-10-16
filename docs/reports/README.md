@@ -8,6 +8,7 @@ This directory stores standardized completion reports generated after every task
 | :--- | :--- | :--- | :--- |
 | [`phase-01-foundation-registries.md`](phase-01-foundation-registries.md) | Phase 1: Foundation, Registries, Damage Sources & Network Pipeline | 2026-10-16 | COMPLETED |
 | [`phase-02-faction-ieep.md`](phase-02-faction-ieep.md) | Phase 2: Faction Architecture & Player Capability Storage (IEEP) | 2026-10-16 | COMPLETED |
+| [`phase-03-blood-feeding.md`](phase-03-blood-feeding.md) | Phase 3: Blood Subsystem & Vampire Feeding Mechanics | 2026-10-16 | COMPLETED |
 
 ---
 

@@ -18,6 +18,14 @@ public class ModLogger {
         }
     }
 
+    public static void warn(String format, Object... args) {
+        Neorism.LOG.warn("[WARN] " + String.format(format, args));
+    }
+
+    public static void error(String format, Object... args) {
+        Neorism.LOG.error("[ERROR] " + String.format(format, args));
+    }
+
     public static void combat(String format, Object... args) {
         if (Config.debugLogging && Config.debugCombat) {
             Neorism.LOG.info("[DEBUG:COMBAT] " + String.format(format, args));

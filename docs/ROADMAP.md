@@ -84,26 +84,26 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 3: Blood Subsystem & Vampire Feeding Mechanics
 *The lifeblood of the vampire gameplay loop.*
 
-- [ ] **3.1. Blood Stats Engine (`BloodStats`)**
-  - [ ] Port `IBloodStats` and `BloodStats` attached to `VampirePlayer`:
+- [x] **3.1. Blood Stats Engine (`BloodStats`)**
+  - [x] Port `IBloodStats` and `BloodStats` attached to `VampirePlayer`:
     - `maxBlood` (base 20, scales with level to 40+), `bloodLevel`, `bloodSaturationLevel`, `bloodExhaustionLevel`.
-  - [ ] Override vanilla `FoodStats`: lock vanilla food level at 10 (half bar, prevents natural health regen from food), route sprint/jump exhaustion to blood exhaustion.
-  - [ ] Biome exhaustion gate: 6.0F in Vampire Biome (vampires burn less blood at home), 4.0F outside.
-- [ ] **3.2. Blood Starvation & Low Blood Penalties**
-  - [ ] `bloodLevel == 0`: Apply `ModEffects.NO_BLOOD` (screen shake, slowness, weakness, progressive health decay).
-  - [ ] Heartbeat sound trigger when blood is below 20%.
-- [ ] **3.3. Entity Biting & Blood Drinking (`DrinkBloodContext`)**
-  - [ ] Implement `IBiteableEntity` logic for entities (animals, villagers, players).
-  - [ ] Biting mechanics: keybinding press, raytrace living entity within 2.5 blocks.
-  - [ ] Feeding duration: continuous drain over time, playing bite and gulp sounds with flying blood particles (`FlyingBloodParticle`).
-  - [ ] Animal drain: drains blood, leaves entity weakened/exhausted.
-  - [ ] Human/Villager drain: higher blood saturation; chance of inflicting `Sanguinare Vampiris`.
-- [ ] **3.4. Blood Containers & Items**
-  - [ ] `ItemBloodBottle`: Stores blood (1/9, 2/9, ... 9/9 or fluid fractions), drinking animation, restores blood stats.
-  - [ ] `ItemBloodFlask`: Multi-charge blood container for high-level vampires.
-- [ ] **3.5. Vampire Natural Healing Formula**
-  - [ ] Implement `getHealModifier()` = `1.0F + (level / 14.0F) * 0.5F`.
-  - [ ] Healing ticks consume blood saturation and blood level when wounded.
+  - [x] Override vanilla `FoodStats`: lock vanilla food level at 10 (half bar, prevents natural health regen from food), route sprint/jump exhaustion to blood exhaustion.
+  - [x] Biome exhaustion gate: 6.0F in Vampire Biome (vampires burn less blood at home), 4.0F outside.
+- [x] **3.2. Blood Starvation & Low Blood Penalties**
+  - [x] `bloodLevel == 0`: Apply `ModEffects.NO_BLOOD` (screen shake, slowness, weakness, progressive health decay).
+  - [x] Heartbeat sound trigger when blood is below 20%.
+- [x] **3.3. Entity Biting & Blood Drinking (`DrinkBloodContext`)**
+  - [x] Implement `IBiteableEntity` logic for entities (animals, villagers, players).
+  - [x] Biting mechanics: keybinding press, raytrace living entity within 2.5 blocks.
+  - [x] Feeding duration: continuous drain over time, playing bite and gulp sounds with flying blood particles (`FlyingBloodParticle`).
+  - [x] Animal drain: drains blood, leaves entity weakened/exhausted.
+  - [x] Human/Villager drain: higher blood saturation; chance of inflicting `Sanguinare Vampiris`.
+- [x] **3.4. Blood Containers & Items**
+  - [x] `ItemBloodBottle`: Stores blood (1/9, 2/9, ... 9/9 or fluid fractions), drinking animation, restores blood stats.
+  - [x] `ItemBloodFlask`: Multi-charge blood container for high-level vampires.
+- [x] **3.5. Vampire Natural Healing Formula**
+  - [x] Implement `getHealModifier()` = `1.0F + (level / 14.0F) * 0.5F`.
+  - [x] Healing ticks consume blood saturation and blood level when wounded.
 
 ---
 
