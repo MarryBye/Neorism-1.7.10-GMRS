@@ -5648,3 +5648,21 @@ gui.neorism.skills.unlocked=Unlocked
 gui.neorism.skills.bind1=Bind to [R]
 gui.neorism.skills.bind2=Bind to [Z]
 gui.neorism.skills.locked=Locked (Requires Level %d)
+
+# FactionAPI and Skills System
+key.neorism.faction_menu=Faction Dashboard
+gui.factionapi.action_radial.no_actions=No actions available
+gui.factionapi.faction_menu.skill_screen=Skills
+gui.factionapi.faction_menu.tasks=Faction Tasks
+gui.factionapi.faction_menu.no_tasks=No tasks available
+gui.factionapi.skills.points=Skill Points
+gui.factionapi.skills.unlocked=Unlocked
+gui.factionapi.skills.hold_to_unlock=Hold Left-Click to Unlock
+gui.factionapi.skills.locked=Locked (Requires previous skill)
+gui.factionapi.skills.resetall=Reset All
+skill_tree.neorism.vampire_level=Vampire Level
+skill_tree.neorism.vampire_lord=Vampire Lord
+skill_tree.neorism.vampire_dracula=Dracula
+skill_tree.neorism.hunter_level=Hunter Level
+skill_tree.neorism.hunter_lord=Hunter Lord
+skill_tree.neorism.hunter_marshall=Marshall

@@ -86,6 +86,10 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
         return currentFaction;
     }
 
+    public IPlayableFaction getCurrentFaction() {
+        return currentFaction;
+    }
+
     public int getCurrentLevel() {
         return currentLevel;
     }

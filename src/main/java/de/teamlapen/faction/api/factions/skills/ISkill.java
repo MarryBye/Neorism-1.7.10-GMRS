@@ -1,6 +1,7 @@
 package de.teamlapen.faction.api.factions.skills;
 
 import de.teamlapen.faction.api.factions.IPlayableFaction;
+import de.teamlapen.faction.api.factions.actions.IAction;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -23,4 +24,12 @@ public interface ISkill {
     int getSkillPointCost();
 
     boolean isPassive();
+
+    default boolean isActionSkill() {
+        return getAction() != null;
+    }
+
+    default IAction getAction() {
+        return null;
+    }
 }

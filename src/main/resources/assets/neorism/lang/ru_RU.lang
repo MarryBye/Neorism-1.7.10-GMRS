@@ -5569,3 +5569,21 @@ gui.neorism.skills.unlocked=Изучено
 gui.neorism.skills.bind1=Назначить на [R]
 gui.neorism.skills.bind2=Назначить на [Z]
 gui.neorism.skills.locked=Заблокировано (требуется ур. %d)
+
+# FactionAPI and Skills System
+key.neorism.faction_menu=Меню фракции
+gui.factionapi.action_radial.no_actions=Нет доступных способностей
+gui.factionapi.faction_menu.skill_screen=Древо навыков
+gui.factionapi.faction_menu.tasks=Задания фракции
+gui.factionapi.faction_menu.no_tasks=Нет активных заданий
+gui.factionapi.skills.points=Очки навыков
+gui.factionapi.skills.unlocked=Изучено
+gui.factionapi.skills.hold_to_unlock=Зажмите ЛКМ для изучения
+gui.factionapi.skills.locked=Заблокировано (Требуется предыдущий навык)
+gui.factionapi.skills.resetall=Сбросить всё
+skill_tree.neorism.vampire_level=Уровни вампира
+skill_tree.neorism.vampire_lord=Лорд вампиров
+skill_tree.neorism.vampire_dracula=Дракула
+skill_tree.neorism.hunter_level=Уровни охотника
+skill_tree.neorism.hunter_lord=Лорд охотников
+skill_tree.neorism.hunter_marshall=Маршал

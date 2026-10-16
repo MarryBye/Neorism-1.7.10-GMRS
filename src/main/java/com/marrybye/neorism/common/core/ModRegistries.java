@@ -28,6 +28,7 @@ public class ModRegistries {
         ModAchievements.init();
         ModRecipes.init();
         com.marrybye.neorism.common.action.ActionRegistry.init();
+        com.marrybye.neorism.common.skills.SkillRegistry.init();
 
         // Register event handlers
         com.marrybye.neorism.common.events.PlayerCapabilityEventHandler playerCapHandler =

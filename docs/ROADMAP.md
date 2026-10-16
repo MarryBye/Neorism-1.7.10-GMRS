@@ -193,11 +193,12 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
   - [x] Skill points awarded per level-up.
   - [x] Skill unlocking validation (parent skills required, mutually exclusive branches).
   - [x] Persistent NBT save/load in player properties.
-- [ ] **6.5. FactionAPI Skill Tree & Radial Action Rose Migration (TeamLapen Alignment)**
+- [x] **6.5. FactionAPI Skill Tree & Radial Action Rose Migration (TeamLapen Alignment)**
   - [x] Connect canonical `de.teamlapen.faction.api` interfaces (`ISkill`, `ISkillSegment`, `ISkillTree`, `IAction`, `FactionsApi`).
-  - [ ] Migrate skill definitions to `ISkillSegment` DAG with `(x, y)` coordinates, parent prerequisites, and exclusive choices.
-  - [ ] Build pannable/scrollable `GuiSkillTree` canvas with node connector lines matching TeamLapen's `SkillsScreen`.
-  - [ ] Implement `GuiActionRadial` (`SkillRoseScreen` / Action Ring on hold `[R]`): radial circular ability selector with cooldown sweeps.
+  - [x] Migrate skill definitions to `ISkillSegment` DAG with `(x, y)` coordinates, parent prerequisites, and exclusive choices.
+  - [x] Build pannable/scrollable `SkillsScreen` canvas with node connector lines matching TeamLapen's `SkillsScreen`.
+  - [x] Implement `SelectActionRadialScreen` (Action Rose / Radial Menu on hold `[R]`): circular ability selector with cooldown sweeps.
+  - [x] Implement `FactionMenuScreen` (Faction Dashboard on `[P]`): 3D player model, faction level, skills button, task overview.
 
 ---
 

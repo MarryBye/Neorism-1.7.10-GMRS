@@ -8,6 +8,9 @@ import com.marrybye.neorism.common.network.PacketHandler;
 import com.marrybye.neorism.common.network.packets.SyncSkillsPacket;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
+import de.teamlapen.faction.api.factions.skills.ISkill;
+import de.teamlapen.faction.api.factions.skills.ISkillSegment;
+import de.teamlapen.faction.api.factions.skills.ISkillTree;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -112,31 +115,86 @@ public class SkillHandler implements IExtendedEntityProperties {
         return unlockedSkills.contains(skillId);
     }
 
+    public boolean canSkillBeEnabled(ISkill skill) {
+        if (skill == null) return false;
+        if (unlockedSkills.contains(skill.getSkillId())) return false;
+        if (skillPoints < skill.getSkillPointCost()) return false;
+        if (Helper.getLevel(player) < skill.getRequiredLevel()) return false;
+
+        FactionPlayerHandler fph = FactionPlayerHandler.get(player);
+        if (fph == null) return false;
+
+        for (ISkillTree tree : SkillRegistry.getTreesForFaction(fph.getCurrentFaction())) {
+            for (ISkillSegment iseg : tree.getAllSegments()) {
+                SkillSegment seg = (SkillSegment) iseg;
+                for (ISkill s : seg.getSkills()) {
+                    if (s.getSkillId().equals(skill.getSkillId())) {
+                        // Check exclusive segments
+                        for (ISkillSegment ex : seg.getExclusiveSegments()) {
+                            for (ISkill exSkill : ex.getSkills()) {
+                                if (unlockedSkills.contains(exSkill.getSkillId())) {
+                                    return false; // Locked by exclusive choice
+                                }
+                            }
+                        }
+                        // Check parents
+                        if (seg.isRoot()) return true;
+                        for (ISkillSegment parent : seg.getParents()) {
+                            for (ISkill pSkill : parent.getSkills()) {
+                                if (unlockedSkills.contains(pSkill.getSkillId())) {
+                                    return true; // Parent unlocked!
+                                }
+                            }
+                        }
+                        return false; // No parent unlocked yet
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public boolean isActionUnlocked(String actionId) {
-        // By default, base vampire actions become available as level increases or through skills
         if ("night_vision".equals(actionId)) return true;
         if ("regen".equals(actionId)) return Helper.getLevel(player) >= 2 || isSkillUnlocked("vampire_regen");
-        if ("bat".equals(actionId)) return isSkillUnlocked("bat_form") || Helper.getLevel(player) >= 6;
+        if ("bat".equals(actionId)) return isSkillUnlocked("bat_form") || isSkillUnlocked("vampire_disguise") || Helper.getLevel(player) >= 6;
         if ("vampire_rage".equals(actionId)) return isSkillUnlocked("vampire_rage") || Helper.getLevel(player) >= 4;
         if ("teleport".equals(actionId)) return isSkillUnlocked("teleport") || Helper.getLevel(player) >= 8;
         if ("freeze".equals(actionId)) return isSkillUnlocked("freeze") || Helper.getLevel(player) >= 10;
         if ("dark_blood_projectile".equals(actionId)) return isSkillUnlocked("dark_blood_projectile") || Helper.getLevel(player) >= 5;
         if ("sunscreen".equals(actionId)) return isSkillUnlocked("sunscreen") || Helper.getLevel(player) >= 7;
-        if ("vampire_invisibility".equals(actionId)) return isSkillUnlocked("invisibility") || Helper.getLevel(player) >= 9;
+        if ("vampire_invisibility".equals(actionId)) return isSkillUnlocked("invisibility") || isSkillUnlocked("vampire_invisibility") || Helper.getLevel(player) >= 9;
         if ("summon_bats".equals(actionId)) return isSkillUnlocked("summon_bats") || Helper.getLevel(player) >= 11;
-        if ("awareness_hunter".equals(actionId)) return Helper.isHunter(player) && (isSkillUnlocked("hunter_awareness") || Helper.getLevel(player) >= 2);
-        if ("potion_resistance_hunter".equals(actionId)) return Helper.isHunter(player) && (isSkillUnlocked("potion_resistance") || Helper.getLevel(player) >= 4);
+        if ("awareness_hunter".equals(actionId)) return Helper.isHunter(player) && (isSkillUnlocked("hunter_awareness") || isSkillUnlocked("awareness_hunter") || Helper.getLevel(player) >= 2);
+        if ("potion_resistance_hunter".equals(actionId)) return Helper.isHunter(player) && (isSkillUnlocked("potion_resistance") || isSkillUnlocked("potion_resistance_hunter") || Helper.getLevel(player) >= 4);
 
         return unlockedSkills.contains(actionId);
     }
 
     public boolean unlockSkill(String skillId) {
-        if (skillPoints <= 0 || unlockedSkills.contains(skillId)) return false;
+        ISkill skill = SkillRegistry.getSkill(skillId);
+        if (skill != null && !canSkillBeEnabled(skill)) {
+            return false;
+        }
+        int cost = skill != null ? skill.getSkillPointCost() : 1;
+        if (skillPoints < cost || unlockedSkills.contains(skillId)) return false;
 
         unlockedSkills.add(skillId);
-        skillPoints--;
-        ModLogger.leveling("Player %s unlocked skill '%s' (remaining points: %d)",
-            player.getCommandSenderName(), skillId, skillPoints);
+        skillPoints -= cost;
+        ModLogger.leveling("Player %s unlocked skill '%s' (cost: %d, remaining points: %d)",
+            player.getCommandSenderName(), skillId, cost, skillPoints);
+        sync();
+        return true;
+    }
+
+    public boolean forgetSkill(String skillId) {
+        if (!unlockedSkills.contains(skillId)) return false;
+        ISkill skill = SkillRegistry.getSkill(skillId);
+        int refund = skill != null ? skill.getSkillPointCost() : 1;
+        unlockedSkills.remove(skillId);
+        skillPoints += refund;
+        ModLogger.leveling("Player %s forgot skill '%s' (refund: %d, total points: %d)",
+            player.getCommandSenderName(), skillId, refund, skillPoints);
         sync();
         return true;
     }

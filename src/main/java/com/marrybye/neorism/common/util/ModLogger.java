@@ -12,6 +12,10 @@ import net.minecraft.entity.Entity;
  */
 public class ModLogger {
 
+    public static void info(String format, Object... args) {
+        Neorism.LOG.info(String.format(format, args));
+    }
+
     public static void debug(String format, Object... args) {
         if (Config.debugLogging) {
             Neorism.LOG.info("[DEBUG] " + String.format(format, args));
