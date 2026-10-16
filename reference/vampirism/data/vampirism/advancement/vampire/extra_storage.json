@@ -1,0 +1,42 @@
+{
+  "parent": "vampirism:vampire/first_blood",
+  "criteria": {
+    "blood_container": {
+      "conditions": {
+        "items": [
+          {
+            "items": "vampirism:blood_container"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "main": {
+      "conditions": {
+        "faction": "vampirism:vampire",
+        "level": 1
+      },
+      "trigger": "factionapi:faction"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.vampirism.extra_storage.desc"
+    },
+    "icon": {
+      "id": "vampirism:blood_container"
+    },
+    "title": {
+      "translate": "advancement.vampirism.extra_storage"
+    }
+  },
+  "requirements": [
+    [
+      "blood_container"
+    ],
+    [
+      "main"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

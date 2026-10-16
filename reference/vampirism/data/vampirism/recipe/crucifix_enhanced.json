@@ -1,0 +1,23 @@
+{
+  "type": "vampirism:shaped_crafting_weapontable",
+  "category": "equipment",
+  "key": {
+    "A": "vampirism:stake",
+    "X": "vampirism:holy_water_bottle_normal",
+    "Y": "#c:ingots/iron",
+    "Z": "vampirism:holy_water_bottle_enhanced"
+  },
+  "lava": 1,
+  "pattern": [
+    "XYYX",
+    "YZAY",
+    "XYYX",
+    "XYYX"
+  ],
+  "result": {
+    "id": "vampirism:crucifix_enhanced"
+  },
+  "skill": [
+    "vampirism:crucifix_wielder"
+  ]
+}

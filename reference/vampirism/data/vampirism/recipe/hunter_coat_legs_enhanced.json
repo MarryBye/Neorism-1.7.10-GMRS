@@ -1,0 +1,22 @@
+{
+  "type": "vampirism:shaped_crafting_weapontable",
+  "category": "equipment",
+  "key": {
+    "X": "#c:ingots/iron",
+    "Y": "#c:gems/diamond",
+    "Z": "#c:crops/garlic"
+  },
+  "lava": 3,
+  "pattern": [
+    "XYYX",
+    "XZZX",
+    "XZZX",
+    "X  X"
+  ],
+  "result": {
+    "id": "vampirism:hunter_coat_legs_enhanced"
+  },
+  "skill": [
+    "vampirism:master_craftsmanship"
+  ]
+}

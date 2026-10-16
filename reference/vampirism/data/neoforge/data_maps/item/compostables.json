@@ -1,0 +1,10 @@
+{
+  "values": {
+    "vampirism:garlic": {
+      "chance": 0.65
+    },
+    "vampirism:vampire_orchid": {
+      "chance": 0.65
+    }
+  }
+}

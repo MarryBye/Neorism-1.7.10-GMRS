@@ -1,0 +1,33 @@
+{
+  "parent": "vampirism:vampire/blood_cult",
+  "criteria": {
+    "level": {
+      "conditions": {
+        "faction": "vampirism:vampire",
+        "level": 14
+      },
+      "trigger": "factionapi:faction"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.vampirism.max_level_vampire.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "id": "vampirism:vampire_fang"
+    },
+    "title": {
+      "translate": "advancement.vampirism.max_level_vampire"
+    }
+  },
+  "requirements": [
+    [
+      "level"
+    ]
+  ],
+  "rewards": {
+    "experience": 100
+  },
+  "sends_telemetry_event": true
+}

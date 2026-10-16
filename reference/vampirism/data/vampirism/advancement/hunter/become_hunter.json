@@ -1,0 +1,31 @@
+{
+  "parent": "vampirism:main/root",
+  "criteria": {
+    "main": {
+      "conditions": {
+        "faction": "vampirism:hunter",
+        "level": 1
+      },
+      "trigger": "factionapi:faction"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.vampirism.become_hunter.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "id": "vampirism:garlic"
+    },
+    "title": {
+      "translate": "advancement.vampirism.become_hunter"
+    }
+  },
+  "requirements": [
+    [
+      "main"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

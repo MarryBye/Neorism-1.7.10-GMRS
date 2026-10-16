@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "#minecraft:beds",
+    "W": "#minecraft:wool"
+  },
+  "pattern": [
+    " W ",
+    "WBW"
+  ],
+  "result": {
+    "id": "vampirism:item_tent"
+  }
+}

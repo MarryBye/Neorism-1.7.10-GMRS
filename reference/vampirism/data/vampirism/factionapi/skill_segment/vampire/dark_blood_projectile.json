@@ -1,0 +1,9 @@
+{
+  "parents": [
+    "vampirism:vampire/sunscreen"
+  ],
+  "skills": [
+    "vampirism:dark_blood_projectile"
+  ],
+  "tree": "vampirism:vampire/level"
+}

@@ -1,0 +1,64 @@
+package de.teamlapen.vampirism.common.world.entity.vampire;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+
+
+public class TrainingDummyVampireEntity extends BasicVampireEntity {
+
+    private final TargetingConditions PREDICATE = TargetingConditions.forNonCombat().ignoreLineOfSight();
+    private int startTicks = 0;
+    private float damageTaken = 0;
+
+    public TrainingDummyVampireEntity(EntityType<? extends BasicVampireEntity> type, Level world) {
+        super(type, world);
+        this.disableImobConversion();
+    }
+
+    @Override
+    public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) {
+        level.getNearbyPlayers(PREDICATE, this, this.getBoundingBox().inflate(40)).forEach(p -> p.sendSystemMessage(Component.literal("Damage " + amount + " from " + damageSource.type().msgId())));
+        if (this.startTicks != 0) this.damageTaken += amount;
+        return super.hurtServer(level, damageSource, amount);
+
+    }
+
+    @Override
+    public void convertToMinion(Player lord) {
+        super.convertToMinion(lord);
+    }
+
+    @Override
+    protected void actuallyHurt(ServerLevel level, DamageSource damageSrc, float damageAmount) {
+        if (damageSrc.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            super.actuallyHurt(level, damageSrc, damageAmount);
+        }
+    }
+
+    @Override
+    protected InteractionResult mobInteract(Player player, InteractionHand hand) { //processInteract
+        if (!this.level().isClientSide() && hand == InteractionHand.MAIN_HAND) {
+            if (startTicks == 0) {
+                player.sendSystemMessage(Component.literal("Start recording"));
+                this.startTicks = this.tickCount;
+            } else {
+                player.sendSystemMessage(Component.literal("Damage: " + damageTaken + " - DPS: " + (damageTaken / ((float) (this.tickCount - this.startTicks)) * 20f)));
+                this.discard();
+            }
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    protected void registerGoals() {
+
+    }
+}

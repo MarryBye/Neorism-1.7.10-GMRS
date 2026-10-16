@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "vampirism:config",
+      "option": "umbrella"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "#minecraft:wool",
+    "A": "#c:rods/wooden",
+    "B": "vampirism:vampire_orchid"
+  },
+  "pattern": [
+    "###",
+    "BAB",
+    " A "
+  ],
+  "result": {
+    "id": "vampirism:umbrella"
+  }
+}

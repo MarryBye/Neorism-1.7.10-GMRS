@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"2": "vampirism:block/blood_still",
+		"particle": "block/gold_block"
+	},
+	"elements": [
+		{
+			"from": [2, 5, 2],
+			"to": [14, 8, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 5, 2]},
+			"faces": {
+				"north": {"uv": [2, 8, 14, 11], "texture": "#2"},
+				"east": {"uv": [2, 8, 14, 11], "texture": "#2"},
+				"south": {"uv": [2, 8, 14, 11], "texture": "#2"},
+				"west": {"uv": [2, 8, 14, 11], "texture": "#2"},
+				"up": {"uv": [2, 2, 14, 14], "texture": "#2"},
+				"down": {"uv": [2, 2, 14, 14], "texture": "#2"}
+			}
+		}
+	]
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "vampirism:block/dark_spruce_leaves"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "vampirism:hunter_coat_enhanced"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "vampirism:hunter_coat_enhanced"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "vampirism:hunter_coat_enhanced"
+      }
+    ]
+  }
+}

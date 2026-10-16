@@ -1,0 +1,35 @@
+{
+  "parent": "vampirism:hunter/become_hunter",
+  "criteria": {
+    "cure": {
+      "trigger": "vampirism:cured_vampire_villager"
+    },
+    "main": {
+      "conditions": {
+        "faction": "vampirism:hunter",
+        "level": 1
+      },
+      "trigger": "factionapi:faction"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.vampirism.cure_vampire_villager.desc"
+    },
+    "icon": {
+      "id": "minecraft:golden_apple"
+    },
+    "title": {
+      "translate": "advancement.vampirism.cure_vampire_villager"
+    }
+  },
+  "requirements": [
+    [
+      "cure"
+    ],
+    [
+      "main"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

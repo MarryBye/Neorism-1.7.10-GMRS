@@ -1,0 +1,20 @@
+{
+  "type": "vampirism:shaped_crafting_weapontable",
+  "category": "equipment",
+  "key": {
+    "X": "#c:ingots/iron",
+    "Y": "#c:strings"
+  },
+  "lava": 2,
+  "pattern": [
+    "YXXY",
+    " XX ",
+    " XX "
+  ],
+  "result": {
+    "id": "vampirism:enhanced_crossbow"
+  },
+  "skill": [
+    "vampirism:master_craftsmanship"
+  ]
+}

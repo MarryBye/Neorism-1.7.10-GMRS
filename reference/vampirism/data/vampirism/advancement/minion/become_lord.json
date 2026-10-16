@@ -1,0 +1,29 @@
+{
+  "parent": "vampirism:main/root",
+  "criteria": {
+    "level": {
+      "conditions": {
+        "level": 1
+      },
+      "trigger": "factionapi:lord"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.vampirism.become_lord.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "id": "vampirism:vampire_clothing_crown"
+    },
+    "title": {
+      "translate": "advancement.vampirism.become_lord"
+    }
+  },
+  "requirements": [
+    [
+      "level"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

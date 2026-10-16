@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": "#c:nuggets/gold",
+    "S": "vampirism:soul_orb_vampire"
+  },
+  "pattern": [
+    "GGG",
+    "GSG",
+    "GGG"
+  ],
+  "result": {
+    "id": "vampirism:vampire_soul_lantern"
+  }
+}

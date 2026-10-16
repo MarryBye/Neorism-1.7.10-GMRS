@@ -1,0 +1,7 @@
+{
+  "parent": "vampirism:item/crucifix",
+  "textures": {
+    "particle": "vampirism:item/crucifix_iron",
+    "texture": "vampirism:item/crucifix_iron"
+  }
+}

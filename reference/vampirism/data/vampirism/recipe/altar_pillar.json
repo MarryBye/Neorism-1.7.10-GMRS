@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "X": "minecraft:stone_bricks"
+  },
+  "pattern": [
+    "X X",
+    "   ",
+    "XXX"
+  ],
+  "result": {
+    "id": "vampirism:altar_pillar"
+  }
+}

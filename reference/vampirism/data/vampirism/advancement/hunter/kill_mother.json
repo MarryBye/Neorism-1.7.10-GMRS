@@ -1,0 +1,37 @@
+{
+  "parent": "vampirism:hunter/become_hunter",
+  "criteria": {
+    "killed": {
+      "trigger": "vampirism:mother_win"
+    },
+    "main": {
+      "conditions": {
+        "faction": "vampirism:hunter",
+        "level": 1
+      },
+      "trigger": "factionapi:faction"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.vampirism.hunter_kill_mother.desc"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "id": "vampirism:mother_core"
+    },
+    "title": {
+      "translate": "advancement.vampirism.hunter_kill_mother"
+    }
+  },
+  "requirements": [
+    [
+      "killed"
+    ],
+    [
+      "main"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

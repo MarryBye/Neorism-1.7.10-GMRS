@@ -1,0 +1,58 @@
+package de.teamlapen.faction.common.factions;
+
+import com.mojang.logging.LogUtils;
+import de.teamlapen.faction.api.factions.FactionExtensionType;
+import de.teamlapen.faction.api.world.entities.player.IFactionPlayer;
+import de.teamlapen.faction.common.world.entities.IPlayerEventListener;
+import de.teamlapen.sync.AttachmentSync;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+
+import java.util.Optional;
+
+public abstract class FactionBasePlayer<T extends IFactionPlayer<T>> extends AttachmentSync implements IFactionPlayer<T>, IPlayerEventListener {
+
+    protected static final Logger LOGGER = LogUtils.getLogger();
+
+    protected final Player player;
+    @Nullable
+    private FactionPlayerHandler factionHandler;
+
+    public FactionBasePlayer(Player player) {
+        this.player = player;
+    }
+
+    @Override
+    public Player asEntity() {
+        return this.player;
+    }
+
+    @Override
+    public int getLevel() {
+        return factionHandler().getCurrentLevel(getFaction());
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public boolean isRemote() {
+        if (this.player.level() == null) {
+            LOGGER.error("Trying to check if remote, but world is not set yet", new Throwable("World not loaded").fillInStackTrace());
+            return false;
+        }
+        return player.level().isClientSide();
+    }
+
+    protected FactionPlayerHandler factionHandler() {
+        if (this.factionHandler == null) {
+            this.factionHandler = FactionPlayerHandler.get(this.player);
+        }
+        return this.factionHandler;
+    }
+
+    @Override
+    public <TInterface> Optional<TInterface> getExtension(Class<TInterface> type) {
+        FactionExtensionType<TInterface> extension = getFaction().value().extension(type);
+        return extension == null ? Optional.empty() : Optional.of(extension.get(player));
+    }
+}

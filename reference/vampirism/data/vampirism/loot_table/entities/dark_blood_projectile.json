@@ -1,0 +1,4 @@
+{
+  "type": "minecraft:entity",
+  "random_sequence": "vampirism:entities/dark_blood_projectile"
+}

@@ -1,0 +1,50 @@
+{
+	"credit": "Designed by Zozozrob",
+	"parent": "block/block",
+	"texture_size": [32, 32],
+	"textures": {
+		"tip": "vampirism:block/altar_tip",
+		"particle": "block/iron_block"
+	},
+	"elements": [
+		{
+			"from": [2, 0, 2],
+			"to": [14, 2, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 0, 2]},
+			"faces": {
+				"north": {"uv": [1, 15, 7, 16], "texture": "#tip"},
+				"east": {"uv": [1, 15, 7, 16], "texture": "#tip"},
+				"south": {"uv": [1, 15, 7, 16], "texture": "#tip"},
+				"west": {"uv": [1, 15, 7, 16], "texture": "#tip"},
+				"up": {"uv": [1, 2, 7, 8], "texture": "#tip"},
+				"down": {"uv": [1, 2, 7, 8], "texture": "#tip"}
+			}
+		},
+		{
+			"from": [4, 2, 4],
+			"to": [12, 5, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 2, 2]},
+			"faces": {
+				"north": {"uv": [2, 13.5, 6, 15], "texture": "#tip"},
+				"east": {"uv": [2, 13.5, 6, 15], "texture": "#tip"},
+				"south": {"uv": [2, 13.5, 6, 15], "texture": "#tip"},
+				"west": {"uv": [2, 13.5, 6, 15], "texture": "#tip"},
+				"up": {"uv": [2, 3, 6, 7], "texture": "#tip"},
+				"down": {"uv": [2, 3, 6, 7], "texture": "#tip"}
+			}
+		},
+		{
+			"from": [6, 5, 6],
+			"to": [10, 8, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 5, 2]},
+			"faces": {
+				"north": {"uv": [3, 12, 5, 13.5], "texture": "#tip"},
+				"east": {"uv": [3, 12, 5, 13.5], "texture": "#tip"},
+				"south": {"uv": [3, 12, 5, 13.5], "texture": "#tip"},
+				"west": {"uv": [3, 12, 5, 13.5], "texture": "#tip"},
+				"up": {"uv": [3, 4, 5, 6], "texture": "#tip"},
+				"down": {"uv": [3, 4, 5, 6], "texture": "#tip"}
+			}
+		}
+	]
+}

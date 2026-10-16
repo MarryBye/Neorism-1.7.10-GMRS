@@ -1,0 +1,22 @@
+{
+  "type": "vampirism:shaped_crafting_weapontable",
+  "category": "equipment",
+  "key": {
+    "X": "#c:leathers",
+    "Y": "#c:crops/garlic",
+    "Z": "#c:ingots/gold"
+  },
+  "lava": 3,
+  "pattern": [
+    "XZZX",
+    "XXXX",
+    "XYYX",
+    "XXXX"
+  ],
+  "result": {
+    "id": "vampirism:armor_of_swiftness_chest_enhanced"
+  },
+  "skill": [
+    "vampirism:master_craftsmanship"
+  ]
+}

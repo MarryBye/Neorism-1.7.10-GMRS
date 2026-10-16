@@ -1,0 +1,33 @@
+{
+  "__comment": "Designed by Maxanier",
+  "textures": {
+    "particle": "block/lava_still",
+    "lava": "block/lava_still"
+  },
+  "render_type": "minecraft:cutout",
+  "elements": [
+    {
+      "from": [
+        1,
+        2,
+        10
+      ],
+      "to": [
+        6,
+        3,
+        15
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            1,
+            10,
+            6,
+            15
+          ],
+          "texture": "#lava"
+        }
+      }
+    }
+  ]
+}

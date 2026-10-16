@@ -1,0 +1,57 @@
+package de.teamlapen.vampirism.client.core;
+
+import de.teamlapen.faction.api.util.FIdentifier;
+import de.teamlapen.faction.client.core.FactionAppearanceScreens;
+import de.teamlapen.vampirism.api.client.VampirismOverlays;
+import de.teamlapen.vampirism.client.gui.overlay.DisguiseOverlay;
+import de.teamlapen.vampirism.client.VampirismModClient;
+import de.teamlapen.vampirism.client.gui.overlay.*;
+import de.teamlapen.vampirism.client.gui.screens.*;
+import de.teamlapen.vampirism.client.gui.screens.diffuser.FogDiffuserScreen;
+import de.teamlapen.vampirism.client.gui.screens.diffuser.GarlicDiffuserScreen;
+import de.teamlapen.vampirism.common.core.ModFactions;
+import de.teamlapen.vampirism.common.core.ModMenus;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import org.jetbrains.annotations.NotNull;
+
+public class ModScreens {
+    /**
+     * Call on serial loading queue to avoid possible issues with parallel access
+     */
+    public static void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(ModMenus.HUNTER_TABLE.get(), HunterTableScreen::new);
+        event.register(ModMenus.ALCHEMICAL_CAULDRON.get(), AlchemicalCauldronScreen::new);
+        event.register(ModMenus.WEAPON_TABLE.get(), WeaponTableScreen::new);
+        event.register(ModMenus.HUNTER_TRAINER.get(), HunterTrainerScreen::new);
+        event.register(ModMenus.HUNTER_BASIC.get(), HunterBasicScreen::new);
+        event.register(ModMenus.ALTAR_INFUSION.get(), AltarInfusionScreen::new);
+        event.register(ModMenus.BLOOD_GRINDER.get(), BloodGrinderScreen::new);
+        event.register(ModMenus.EXTENDED_VAPOR_STILL.get(), VaporStillScreen::new);
+        event.register(ModMenus.ALCHEMICAL_TABLE.get(), AlchemyTableScreen::new);
+        event.register(ModMenus.VAMPIRE_BEACON.get(), VampireBeaconScreen::new);
+        event.register(ModMenus.REVERT_BACK.get(), InjectionChairRevertBackScreen::new);
+        event.register(ModMenus.GARLIC_DIFFUSER.get(), GarlicDiffuserScreen::new);
+        event.register(ModMenus.FOG_DIFFUSER.get(), FogDiffuserScreen::new);
+        event.register(ModMenus.INFUSER_MENU.get(), InfuserScreen::new);
+    }
+
+    public static void registerScreenOverlays(@NotNull RegisterGuiLayersEvent event) {
+        event.registerAbove(VanillaGuiLayers.FOOD_LEVEL, VampirismOverlays.BLOOD_BAR, new BloodBarOverlay());
+        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, VampirismOverlays.RAGE, new RageOverlay());
+        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, VampirismOverlays.BAT, new BatOverlay());
+        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, VampirismOverlays.DISGUISE, new DisguiseOverlay());
+        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, VampirismOverlays.SUN, new SunOverlay());
+        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, VampirismOverlays.SUN_BLIND, VampirismModClient.services().sunBlindOverlay());
+        event.registerAbove(VanillaGuiLayers.HOTBAR, VampirismOverlays.ITEM_CHARGE, new ItemChargeOverlay());
+        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, VampirismOverlays.NEARBY_VAMPIRE, new NearbyVampireOverlay());
+        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, VampirismOverlays.FULL_SCREEN, VampirismModClient.services().fullScreenOverlay());
+        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, VampirismOverlays.DRACULA_EVENT, VampirismModClient.services().draculaEventOverlay());
+    }
+
+    public static void registerAppearanceScreens(FactionAppearanceScreens.RegisterFactionAppearanceScreensEvent event) {
+        event.register(ModFactions.VAMPIRE, VampirePlayerAppearanceScreen::new, new WidgetSprites(FIdentifier.mod("widget/appearance"), FIdentifier.mod("widget/appearance_highlighted")));
+    }
+}

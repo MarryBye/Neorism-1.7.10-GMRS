@@ -1,0 +1,31 @@
+{
+  "parent": "vampirism:main/root",
+  "criteria": {
+    "main": {
+      "conditions": {
+        "faction": "vampirism:vampire",
+        "level": 1
+      },
+      "trigger": "factionapi:faction"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.vampirism.become_vampire.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "id": "vampirism:vampire_fang"
+    },
+    "title": {
+      "translate": "advancement.vampirism.become_vampire"
+    }
+  },
+  "requirements": [
+    [
+      "main"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

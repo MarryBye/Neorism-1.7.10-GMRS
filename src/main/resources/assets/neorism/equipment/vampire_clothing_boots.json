@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "vampirism:vampire_clothing_boots"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "vampirism:vampire_clothing_boots"
+      }
+    ]
+  }
+}

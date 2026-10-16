@@ -1,5 +1,6 @@
 package com.marrybye.neorism;
 
+import com.marrybye.neorism.common.achievement.ModAchievements;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -16,6 +17,8 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
+        // Register achievements
+        ModAchievements.init();
         // Register handlers, recipes, network packets
     }
 

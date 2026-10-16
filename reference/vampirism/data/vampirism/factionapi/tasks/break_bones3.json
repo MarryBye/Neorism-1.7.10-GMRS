@@ -1,0 +1,23 @@
+{
+  "requirements": [
+    {
+      "type": "factionapi:entity",
+      "amount": 10,
+      "description": {
+        "translate": "entity.minecraft.skeleton"
+      },
+      "entityType": "minecraft:skeleton",
+      "id": "minecraft:skeleton"
+    }
+  ],
+  "reward": {
+    "type": "factionapi:item",
+    "item": {
+      "id": "minecraft:chainmail_boots"
+    }
+  },
+  "title": {
+    "translate": "task.vampirism.break_bones3"
+  },
+  "unlocker": []
+}

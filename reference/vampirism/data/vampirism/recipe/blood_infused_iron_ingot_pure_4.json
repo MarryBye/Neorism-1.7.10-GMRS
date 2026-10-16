@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:ingots/iron",
+    "#c:ingots/iron",
+    "#c:ingots/iron",
+    "vampirism:pure_blood_4"
+  ],
+  "result": {
+    "count": 3,
+    "id": "vampirism:blood_infused_iron_ingot"
+  }
+}

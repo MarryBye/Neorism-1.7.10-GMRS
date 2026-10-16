@@ -1,0 +1,38 @@
+{
+  "parent": "vampirism:vampire/become_vampire",
+  "criteria": {
+    "kill": {
+      "conditions": {
+        "action": "kill_frozen_hunter"
+      },
+      "trigger": "vampirism:vampire_action"
+    },
+    "main": {
+      "conditions": {
+        "faction": "vampirism:vampire",
+        "level": 1
+      },
+      "trigger": "factionapi:faction"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.vampirism.freeze_kill.desc"
+    },
+    "icon": {
+      "id": "minecraft:clock"
+    },
+    "title": {
+      "translate": "advancement.vampirism.freeze_kill"
+    }
+  },
+  "requirements": [
+    [
+      "kill"
+    ],
+    [
+      "main"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "W": "#c:crops/garlic",
+    "X": "vampirism:vampire_fang",
+    "Y": "minecraft:book",
+    "Z": "#minecraft:planks"
+  },
+  "pattern": [
+    "XYW",
+    "ZZZ",
+    "Z Z"
+  ],
+  "result": {
+    "id": "vampirism:hunter_table"
+  }
+}

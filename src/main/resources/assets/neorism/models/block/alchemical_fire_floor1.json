@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fire_floor",
+  "textures": {
+    "fire": "vampirism:block/alchemical_fire_1"
+  }
+}

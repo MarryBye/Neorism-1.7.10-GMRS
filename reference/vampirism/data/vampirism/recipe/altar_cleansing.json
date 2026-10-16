@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "X": "vampirism:vampire_book",
+    "Y": "#minecraft:planks"
+  },
+  "pattern": [
+    " X ",
+    "YYY",
+    " Y "
+  ],
+  "result": {
+    "id": "vampirism:altar_cleansing"
+  }
+}

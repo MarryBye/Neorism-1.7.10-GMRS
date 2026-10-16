@@ -1,0 +1,51 @@
+{
+	"credit": "Designed by Zozozrob",
+	"parent": "block/block",
+	"render_type": "minecraft:cutout",
+	"texture_size": [32, 32],
+	"textures": {
+		"pedestal": "vampirism:block/blood_pedestal",
+		"particle": "block/dark_oak_planks"
+	},
+	"elements": [
+		{
+			"from": [1, 0, 1],
+			"to": [15, 2, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, 0, 1]},
+			"faces": {
+				"north": {"uv": [8.5, 7, 15.5, 8], "texture": "#pedestal"},
+				"east": {"uv": [8.5, 7, 15.5, 8], "texture": "#pedestal"},
+				"south": {"uv": [8.5, 7, 15.5, 8], "texture": "#pedestal"},
+				"west": {"uv": [8.5, 7, 15.5, 8], "texture": "#pedestal"},
+				"up": {"uv": [0.5, 0.5, 7.5, 7.5], "texture": "#pedestal"},
+				"down": {"uv": [0.5, 8.5, 7.5, 15.5], "texture": "#pedestal"}
+			}
+		},
+		{
+			"from": [2, 8, 2],
+			"to": [14, 10, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 8, 2]},
+			"faces": {
+				"north": {"uv": [9, 3, 15, 4], "texture": "#pedestal"},
+				"east": {"uv": [9, 3, 15, 4], "texture": "#pedestal"},
+				"south": {"uv": [9, 3, 15, 4], "texture": "#pedestal"},
+				"west": {"uv": [9, 3, 15, 4], "texture": "#pedestal"},
+				"up": {"uv": [1, 1, 7, 7], "texture": "#pedestal"},
+				"down": {"uv": [1, 1, 7, 7], "texture": "#pedestal"}
+			}
+		},
+		{
+			"from": [4, 2, 4],
+			"to": [12, 8, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 2, 4]},
+			"faces": {
+				"north": {"uv": [10, 4, 14, 7], "texture": "#pedestal"},
+				"east": {"uv": [10, 4, 14, 7], "texture": "#pedestal"},
+				"south": {"uv": [10, 4, 14, 7], "texture": "#pedestal"},
+				"west": {"uv": [10, 4, 14, 7], "texture": "#pedestal"},
+				"up": {"uv": [2, 2, 6, 6], "texture": "#pedestal"},
+				"down": {"uv": [2, 2, 6, 6], "texture": "#pedestal"}
+			}
+		}
+	]
+}

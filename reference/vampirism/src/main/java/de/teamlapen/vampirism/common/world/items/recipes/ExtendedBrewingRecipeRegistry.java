@@ -1,0 +1,141 @@
+package de.teamlapen.vampirism.common.world.items.recipes;
+
+import de.teamlapen.vampirism.api.world.items.ExtendedPotionMix;
+import de.teamlapen.vampirism.api.world.items.IExtendedBrewingRecipeRegistry;
+import de.teamlapen.vampirism.common.util.ItemDataUtils;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ThrowablePotionItem;
+import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.level.Level;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
+import org.jspecify.annotations.Nullable;
+
+import java.util.*;
+import java.util.stream.StreamSupport;
+
+public class ExtendedBrewingRecipeRegistry implements IExtendedBrewingRecipeRegistry {
+
+    private final List<ExtendedPotionMix> conversionMixes = new ArrayList<>();
+
+
+    @Override
+    public void addMix(ExtendedPotionMix potionMix) {
+        this.conversionMixes.add(potionMix);
+    }
+
+    @Override
+    public void addMix(ExtendedPotionMix[] mixPredicate) {
+        this.conversionMixes.addAll(Arrays.asList(mixPredicate));
+    }
+
+
+    @Override
+    public boolean brewPotions(Level level, NonNullList<ItemStack> inputs, ItemStack ingredient, ItemStack extraIngredient, IExtendedBrewingCapabilities capabilities, int[] inputIndexes, boolean onlyExtended) {
+        boolean brewed = false;
+        int useMain = 0;
+        int useExtra = 0;
+        for (int i : inputIndexes) {
+            Optional<Pair<ItemStack, BrewingData>> output = getOutput(level, inputs.get(i), ingredient, extraIngredient, capabilities, onlyExtended);
+            if (output.isPresent()) {
+                Pair<ItemStack, BrewingData> triple = output.get();
+                inputs.set(i, triple.getLeft());
+                useMain = Math.max(useMain, triple.getRight().reagent1Count());
+                useExtra = Math.max(useExtra, triple.getRight().reagent2Count());
+                brewed = true;
+            }
+        }
+        ingredient.shrink(useMain);
+        extraIngredient.shrink(useExtra);
+        return brewed;
+    }
+
+    @Nullable
+    @Override
+    public BrewingData canBrew(Level level, NonNullList<ItemStack> inputs, ItemStack ingredient, ItemStack extraIngredient, IExtendedBrewingCapabilities capabilities, int[] inputIndexes) {
+        if (ingredient.isEmpty()) return null;
+
+        for (int i : inputIndexes) {
+            var output = getOutput(level, inputs.get(i), ingredient, extraIngredient, capabilities, false);
+            if (output.isPresent()) {
+                return output.map(Pair::getValue).orElse(null);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Optional<Pair<ItemStack, BrewingData>> getOutput(Level level, ItemStack bottle, ItemStack ingredient, ItemStack extraIngredient, IExtendedBrewingCapabilities capabilities, boolean onlyExtended) {
+        if (bottle.isEmpty() || bottle.getCount() != 1) return Optional.empty();
+        if (ingredient.isEmpty()) return Optional.empty();
+        PotionContents potion = bottle.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        if (bottle.getItem() instanceof ThrowablePotionItem && StreamSupport.stream(potion.getAllEffects().spliterator(), false).anyMatch(a -> a.getEffect().value().getCategory() == MobEffectCategory.BENEFICIAL)) {
+            return Optional.empty();
+        }
+        Item item = bottle.getItem();
+        //Collect mixes that can be brewed with the given ingredients and capabilities
+        List<ExtendedPotionMix> possibleResults = new ArrayList<>();
+        for (ExtendedPotionMix mix : conversionMixes) {
+            if (potion.is(mix.input) && mix.reagent1.get().test(ingredient) && ingredient.getCount() >= mix.reagent1Count && (mix.reagent2Count <= 0 || (mix.reagent2.get().test(extraIngredient) && extraIngredient.getCount() >= mix.reagent2Count)) && mix.canBrew(capabilities)) {
+                possibleResults.add(mix);
+            }
+        }
+        if (!possibleResults.isEmpty()) {
+            //Make sure to use the efficient version if multiple mixes have been found
+            possibleResults.sort((mix1, mix2) ->
+                    mix1.efficient ? (mix2.efficient ? 0 : -1) : (mix2.efficient ? 1 : 0)
+            );
+            ExtendedPotionMix mix = possibleResults.getFirst();
+            return Optional.of(Pair.of(ItemDataUtils.setPotion(new ItemStack(item), mix.output), new BrewingData(mix)));
+
+        }
+        ItemStack output = level.potionBrewing().mix(ingredient, bottle);
+        return output.isEmpty() || ItemStack.matches(output, bottle) ? Optional.empty() : Optional.of(Pair.of(output, new BrewingData(false,1, 0)));
+    }
+
+    @Override
+    public List<ExtendedPotionMix> getPotionMixes() {
+        return Collections.unmodifiableList(conversionMixes);
+    }
+
+
+    @Override
+    public boolean hasOutput(Level level, ItemStack input, ItemStack ingredient, ItemStack extraIngredient, IExtendedBrewingCapabilities capabilities) {
+        return getOutput(level, input, ingredient, extraIngredient, capabilities, false).isPresent();
+    }
+
+    @Override
+    public boolean isValidExtraIngredient(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+
+        for (ExtendedPotionMix mix : conversionMixes) {
+            if (mix.reagent2.get().test(stack)) return true;
+
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isValidIngredient(PotionBrewing registry, ItemStack stack) {
+        if (stack.isEmpty()) return false;
+
+        for (ExtendedPotionMix mix : conversionMixes) {
+            if (mix.reagent1.get().test(stack)) return true;
+        }
+        return registry.isIngredient(stack);
+    }
+
+    @Override
+    public boolean isValidInput(PotionBrewing registry, ItemStack stack) {
+        Item item = stack.getItem();
+        return item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE || registry.isInput(stack);
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "X": "#c:ingots/iron",
+    "Y": "minecraft:stone_bricks",
+    "Z": "#c:crops/garlic"
+  },
+  "pattern": [
+    "XZX",
+    "XXX",
+    "Y Y"
+  ],
+  "result": {
+    "id": "vampirism:alchemical_cauldron"
+  }
+}

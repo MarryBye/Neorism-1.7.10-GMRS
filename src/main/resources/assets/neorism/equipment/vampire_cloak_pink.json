@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "vampirism:cloak/pink"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "vampirism:cloak/pink"
+      }
+    ]
+  }
+}

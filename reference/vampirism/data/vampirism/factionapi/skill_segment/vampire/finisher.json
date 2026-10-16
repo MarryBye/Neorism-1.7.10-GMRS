@@ -1,0 +1,9 @@
+{
+  "parents": [
+    "vampirism:vampire/damage_limiter"
+  ],
+  "skills": [
+    "vampirism:sword_finisher"
+  ],
+  "tree": "vampirism:vampire/level"
+}

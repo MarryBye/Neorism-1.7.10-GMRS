@@ -1,0 +1,18 @@
+{
+  "type": "vampirism:shaped_crafting_weapontable",
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/iron",
+    "L": "#c:leathers",
+    "P": "#minecraft:planks"
+  },
+  "lava": 1,
+  "pattern": [
+    "ILLI",
+    "PLLP",
+    "ILLI"
+  ],
+  "result": {
+    "id": "vampirism:quarrel_pouch"
+  }
+}

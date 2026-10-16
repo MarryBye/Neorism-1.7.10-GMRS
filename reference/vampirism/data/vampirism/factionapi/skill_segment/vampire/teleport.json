@@ -1,0 +1,9 @@
+{
+  "parents": [
+    "vampirism:vampire/freeze"
+  ],
+  "skills": [
+    "vampirism:teleport"
+  ],
+  "tree": "vampirism:vampire/level"
+}

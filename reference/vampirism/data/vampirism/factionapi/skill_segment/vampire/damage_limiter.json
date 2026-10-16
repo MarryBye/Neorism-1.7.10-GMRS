@@ -1,0 +1,9 @@
+{
+  "parents": [
+    "vampirism:vampire/blood_vision"
+  ],
+  "skills": [
+    "vampirism:half_invulnerable"
+  ],
+  "tree": "vampirism:vampire/level"
+}

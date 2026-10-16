@@ -1,0 +1,74 @@
+package de.teamlapen.vampirism.data.loot.functions;
+
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.teamlapen.faction.api.factions.IFactionHelper;
+import de.teamlapen.faction.api.factions.IFactionSpecificTags;
+import de.teamlapen.vampirism.api.VampirismRegistries;
+import de.teamlapen.vampirism.api.world.entity.VampireBookLootProvider;
+import de.teamlapen.vampirism.api.world.items.components.IVampireBook;
+import de.teamlapen.vampirism.common.tags.ModVampireBookTags;
+import de.teamlapen.vampirism.common.world.items.component.VampireBook;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.List;
+
+public class SetVampireBookFunction extends LootItemConditionalFunction {
+
+    public static final MapCodec<SetVampireBookFunction> CODEC = RecordCodecBuilder.mapCodec(instance ->
+            commonFields(instance)
+                    .and(TagKey.codec(VampirismRegistries.Keys.VAMPIRE_BOOK).fieldOf("tag").forGetter(SetBookFunction -> SetBookFunction.tag))
+                    .apply(instance, SetVampireBookFunction::new)
+    );
+
+    public static final Logger LOGGER = LogManager.getLogger();
+
+    /**
+     * Used for special books dropped from advanced entities. Tag isn't really used here, but it is required so that it doesn't crush, it cannot be null.
+     */
+    public static LootItemConditionalFunction.Builder<?> special() {
+        return simpleBuilder(conditions -> new SetVampireBookFunction(conditions, ModVampireBookTags.NON_TREASURE));
+    }
+
+    public static LootItemConditionalFunction.Builder<?> randomTagged(TagKey<IVampireBook> tag) {
+        return simpleBuilder(conditions -> new SetVampireBookFunction(conditions, tag));
+    }
+
+    private final TagKey<IVampireBook> tag;
+
+    public SetVampireBookFunction(List<LootItemCondition> predicates, TagKey<IVampireBook> tag) {
+        super(predicates);
+        this.tag = tag;
+    }
+
+    @Override
+    public MapCodec<? extends LootItemConditionalFunction> codec() {
+        return CODEC;
+    }
+
+    @Override
+    protected ItemStack run(ItemStack stack, LootContext lootContext) {
+        IVampireBook vampireBook = VampireBook.getRandomBook(tag, lootContext);
+
+        Entity entity = lootContext.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        if (entity instanceof VampireBookLootProvider provider) {
+            if (provider.getBookLootId().isPresent()) {
+                vampireBook = provider.getBookLootId().get().value();
+            } else {
+                var tag = IFactionSpecificTags.get().get(IFactionHelper.get().getFaction(entity), VampirismRegistries.Keys.VAMPIRE_BOOK).orElse(ModVampireBookTags.IS_GENERAL);
+                vampireBook = VampireBook.getRandomBook(tag, lootContext);
+            }
+        }
+
+        VampireBook.addToStack(stack, vampireBook);
+        return stack;
+    }
+}

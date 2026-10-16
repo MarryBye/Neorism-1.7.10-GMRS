@@ -1,0 +1,26 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 36413509,
+    "separation": 25,
+    "spacing": 45
+  },
+  "structures": [
+    {
+      "structure": "vampirism:hunter_outpost_plains",
+      "weight": 1
+    },
+    {
+      "structure": "vampirism:hunter_outpost_desert",
+      "weight": 1
+    },
+    {
+      "structure": "vampirism:hunter_outpost_vampire_forest",
+      "weight": 1
+    },
+    {
+      "structure": "vampirism:hunter_outpost_badlands",
+      "weight": 1
+    }
+  ]
+}

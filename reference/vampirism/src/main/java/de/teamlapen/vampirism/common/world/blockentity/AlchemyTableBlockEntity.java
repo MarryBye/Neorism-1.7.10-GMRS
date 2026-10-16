@@ -1,0 +1,320 @@
+package de.teamlapen.vampirism.common.world.blockentity;
+
+import de.teamlapen.faction.api.factions.skills.ISkillHandler;
+import de.teamlapen.vampirism.VampirismMod;
+import de.teamlapen.vampirism.common.core.ModBlockEntities;
+import de.teamlapen.vampirism.common.core.ModRecipes;
+import de.teamlapen.vampirism.common.util.Helper;
+import de.teamlapen.vampirism.common.world.blocks.AlchemyTableBlock;
+import de.teamlapen.vampirism.common.world.entity.player.hunter.HunterPlayer;
+import de.teamlapen.vampirism.common.world.inventory.AlchemyTableMenu;
+import de.teamlapen.vampirism.common.world.items.component.OilContent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.UUID;
+
+public class AlchemyTableBlockEntity extends BaseContainerBlockEntity {
+
+    public static final String KEY_USER = "user";
+
+    private NonNullList<ItemStack> items = NonNullList.withSize(6, ItemStack.EMPTY);
+    private @Nullable UUID userID;
+    private int brewTime;
+    private boolean @Nullable [] lastOilCount;
+    private Item ingredient;
+    private int fuel;
+    private int productColor;
+    protected final ContainerData dataAccess = new ContainerData() {
+        public int get(int slotId) {
+            return switch (slotId) {
+                case 0 -> AlchemyTableBlockEntity.this.brewTime;
+                case 1 -> AlchemyTableBlockEntity.this.fuel;
+                case 2 -> AlchemyTableBlockEntity.this.productColor;
+                default -> 0;
+            };
+        }
+
+        public void set(int slotId, int value) {
+            switch (slotId) {
+                case 0 -> AlchemyTableBlockEntity.this.brewTime = value;
+                case 1 -> AlchemyTableBlockEntity.this.fuel = value;
+                case 2 -> AlchemyTableBlockEntity.this.productColor = value;
+            }
+
+        }
+
+        public int getCount() {
+            return 3;
+        }
+    };
+
+    public AlchemyTableBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        super(ModBlockEntities.ALCHEMICAL_TABLE.get(), pos, state);
+    }
+
+    @Override
+    @NotNull
+    protected Component getDefaultName() {
+        return Component.translatable("container.vampirism.alchemy_table");
+    }
+
+    @Override
+    protected @NotNull NonNullList<ItemStack> getItems() {
+        return this.items;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> items) {
+        this.items = items;
+    }
+
+    @NotNull
+    @Override
+    protected AbstractContainerMenu createMenu(int menuId, @NotNull Inventory playerInventory) {
+        return new AlchemyTableMenu(menuId, this.level, playerInventory, this, this.dataAccess);
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int menuId, @NotNull Inventory playerInventory, @NotNull Player player) {
+        if (!canOpen(player)) return null;
+        if (Helper.isHunter(player) && !player.getUUID().equals(this.userID)) {
+            this.userID = player.getUUID();
+            this.setChanged();
+        }
+        return createMenu(menuId, playerInventory);
+    }
+
+    @Nullable
+    private ISkillHandler<?> getUserSkillHandler() {
+        if (this.level == null || this.userID == null) return null;
+        Player user = this.level.getPlayerByUUID(this.userID);
+        return user == null ? null : HunterPlayer.get(user).getSkillHandler();
+    }
+
+    @Override
+    public int getContainerSize() {
+        return this.items.size();
+    }
+
+    public boolean isEmpty() {
+        for (ItemStack itemstack : this.items) {
+            if (!itemstack.isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean[] getPotionBits() {
+        boolean[] aboolean = new boolean[4];
+
+        for (int i = 0; i < 4; ++i) {
+            if (!this.items.get(i).isEmpty()) {
+                aboolean[i] = true;
+            }
+        }
+
+        return aboolean;
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getItem(int p_70301_1_) {
+        return p_70301_1_ >= 0 && p_70301_1_ < this.items.size() ? this.items.get(p_70301_1_) : ItemStack.EMPTY;
+    }
+
+    @NotNull
+    @Override
+    public ItemStack removeItem(int p_70298_1_, int p_70298_2_) {
+        return ContainerHelper.removeItem(this.items, p_70298_1_, p_70298_2_);
+
+    }
+
+    @NotNull
+    @Override
+    public ItemStack removeItemNoUpdate(int p_70304_1_) {
+        return ContainerHelper.takeItem(this.items, p_70304_1_);
+
+    }
+
+    @Override
+    public void setItem(int p_70299_1_, @NotNull ItemStack stack) {
+        if (p_70299_1_ >= 0 && p_70299_1_ < this.items.size()) {
+            this.items.set(p_70299_1_, stack);
+        }
+    }
+
+    @Override
+    public boolean stillValid(@NotNull Player player) {
+        if (this.level.getBlockEntity(this.worldPosition) != this) {
+            return false;
+        } else {
+            return !(player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) > 64.0D);
+        }
+    }
+
+    @Override
+    public void clearContent() {
+        this.items.clear();
+    }
+
+    public static void serverTick(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull AlchemyTableBlockEntity blockEntity) {
+        ItemStack itemstack = blockEntity.items.get(5);
+        if (blockEntity.fuel <= 0 && itemstack.getItem() == Items.BLAZE_POWDER) {
+            blockEntity.fuel = 20;
+            itemstack.shrink(1);
+            blockEntity.setChanged();
+        }
+
+        boolean flag = blockEntity.isBrewable(level);
+        boolean flag1 = blockEntity.brewTime > 0;
+        ItemStack itemstack1 = blockEntity.items.get(4);
+        if (flag1) {
+            --blockEntity.brewTime;
+            boolean flag2 = blockEntity.brewTime == 0;
+            if (flag2 && flag) {
+                blockEntity.doBrew(level);
+                blockEntity.setChanged();
+            } else if (!flag) {
+                blockEntity.brewTime = 0;
+                blockEntity.setChanged();
+            } else if (blockEntity.ingredient != itemstack1.getItem()) {
+                blockEntity.brewTime = 0;
+                blockEntity.setChanged();
+            }
+        } else if (flag && blockEntity.fuel > 0) {
+            --blockEntity.fuel;
+            blockEntity.brewTime = 600;
+            blockEntity.ingredient = itemstack1.getItem();
+            ISkillHandler<?> skills = blockEntity.getUserSkillHandler();
+            blockEntity.productColor = VampirismMod.services().recipes().getRecipes().byType(ModRecipes.ALCHEMICAL_TABLE_TYPE.get()).stream().filter(recipe -> recipe.value().isInput(blockEntity.items.get(4)) && (recipe.value().isIngredient(blockEntity.items.getFirst()) || recipe.value().isIngredient(blockEntity.items.get(1))) && recipe.value().canBeBrewed(skills)).map(recipe -> recipe.value().getResultItem()).map(s -> OilContent.getOil(s).value().getColor()).findAny().orElse(0xffffff);
+            blockEntity.setChanged();
+        }
+
+        boolean[] aboolean = blockEntity.getPotionBits();
+        if (!Arrays.equals(aboolean, blockEntity.lastOilCount)) {
+            blockEntity.lastOilCount = aboolean;
+            if (!(state.getBlock() instanceof AlchemyTableBlock)) {
+                return;
+            }
+
+            state = state.setValue(AlchemyTableBlock.HAS_BOTTLE_INPUT_0, aboolean[0]);
+            state = state.setValue(AlchemyTableBlock.HAS_BOTTLE_INPUT_1, aboolean[1]);
+            state = state.setValue(AlchemyTableBlock.HAS_BOTTLE_OUTPUT_0, aboolean[2]);
+            state = state.setValue(AlchemyTableBlock.HAS_BOTTLE_OUTPUT_1, aboolean[3]);
+
+            level.setBlock(pos, state, 2);
+        }
+    }
+
+    private boolean isBrewable(@NotNull Level level) {
+        ItemStack itemstack = this.items.get(4);
+        if (itemstack.isEmpty()) {
+            return false;
+        } else if (!isValidInput(level, itemstack)) {
+            return false;
+        } else {
+            for (int i = 0; i < 2; ++i) {
+                if (!this.items.get(i + 2).isEmpty()) {
+                    continue;
+                }
+                ItemStack itemstack1 = this.items.get(i);
+                if (!itemstack1.isEmpty() && hasRecipe(level, itemstack, itemstack1)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    private void doBrew(@NotNull Level level) {
+        ItemStack itemstack = this.items.get(4);
+
+        for (int i = 0; i < 2; i++) {
+            if (this.items.get(i + 2).isEmpty()) {
+                ItemStack stack = getOutput(level, itemstack, this.items.get(i));
+                if (stack.isEmpty()) {
+                    continue;
+                }
+                this.items.get(i).shrink(1);
+                this.items.set(i + 2, stack);
+            }
+        }
+        BlockPos blockpos = this.getBlockPos();
+
+        itemstack = Helper.shrinkItemStack(itemstack, level, blockpos); //Reduce ingredient by 1
+
+        this.items.set(4, itemstack);
+        level.levelEvent(1035, blockpos, 0);
+    }
+
+    public boolean canPlaceItem(int slot, @NotNull ItemStack stack) {
+        return switch (slot) {
+            case AlchemyTableMenu.OIL_SLOT_1, AlchemyTableMenu.OIL_SLOT_2 -> isValidIngredient(this.level, stack) && this.getItem(slot).isEmpty();
+            case AlchemyTableMenu.INGREDIENT_SLOT -> isValidInput(this.level, stack);
+            case AlchemyTableMenu.FUEL_SLOT -> stack.getItem() == Items.BLAZE_POWDER;
+            default -> false;
+        };
+    }
+
+    private boolean hasRecipe(@NotNull Level level, ItemStack input, @NotNull ItemStack ingredient) {
+        ISkillHandler<?> skills = getUserSkillHandler();
+        return VampirismMod.services().recipes().getRecipes().byType(ModRecipes.ALCHEMICAL_TABLE_TYPE.get()).stream().anyMatch(recipe -> recipe.value().isInput(input) && recipe.value().isIngredient(ingredient) && recipe.value().canBeBrewed(skills));
+    }
+
+    public boolean isValidIngredient(@NotNull Level level, @NotNull ItemStack stack) {
+        return VampirismMod.services().recipes().getRecipes().byType(ModRecipes.ALCHEMICAL_TABLE_TYPE.get()).stream().anyMatch(recipe -> recipe.value().isIngredient(stack));
+    }
+
+    public boolean isValidInput(@NotNull Level level, @NotNull ItemStack stack) {
+        return VampirismMod.services().recipes().getRecipes().byType(ModRecipes.ALCHEMICAL_TABLE_TYPE.get()).stream().anyMatch(recipe -> recipe.value().isInput(stack));
+    }
+
+    public @NotNull ItemStack getOutput(@NotNull Level level, @NotNull ItemStack input, @NotNull ItemStack ingredient) {
+        ISkillHandler<?> skills = getUserSkillHandler();
+        return VampirismMod.services().recipes().getRecipes().byType(ModRecipes.ALCHEMICAL_TABLE_TYPE.get()).stream().filter(recipe -> recipe.value().canBeBrewed(skills)).map(recipe -> recipe.value().getResult(input, ingredient)).filter(a -> !a.isEmpty()).findFirst().orElse(ItemStack.EMPTY);
+    }
+
+    @Override
+    public void loadAdditional(@NotNull ValueInput input) {
+        super.loadAdditional(input);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(input.childOrEmpty("items"), this.items);
+        this.brewTime = input.getShortOr("BrewTime", (short) 0);
+        this.fuel = input.getByteOr("Fuel", (byte) 0);
+        this.userID = input.read(KEY_USER, UUIDUtil.CODEC).orElse(null);
+    }
+
+    @Override
+    public void saveAdditional(@NotNull ValueOutput output) {
+        super.saveAdditional(output);
+        output.putShort("BrewTime", (short) this.brewTime);
+        ContainerHelper.saveAllItems(output.child("items"), this.items);
+        output.putByte("Fuel", (byte) this.fuel);
+        if (this.userID != null) {
+            output.store(KEY_USER, UUIDUtil.CODEC, this.userID);
+        }
+    }
+}

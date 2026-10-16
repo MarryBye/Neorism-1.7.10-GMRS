@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "vampirism:block/cursed_earth_path"
+      },
+      {
+        "model": "vampirism:block/cursed_earth_path",
+        "y": 90
+      },
+      {
+        "model": "vampirism:block/cursed_earth_path",
+        "y": 180
+      },
+      {
+        "model": "vampirism:block/cursed_earth_path",
+        "y": 270
+      }
+    ]
+  }
+}

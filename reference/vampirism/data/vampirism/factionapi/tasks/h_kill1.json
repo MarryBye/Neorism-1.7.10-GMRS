@@ -1,0 +1,24 @@
+{
+  "requirements": [
+    {
+      "type": "factionapi:entity_type",
+      "amount": 20,
+      "description": {
+        "translate": "task_tag.vampirism.vampire"
+      },
+      "entityType": "vampirism:vampire",
+      "id": "vampirism:vampire"
+    }
+  ],
+  "reward": {
+    "type": "factionapi:item",
+    "item": {
+      "count": 2,
+      "id": "minecraft:diamond"
+    }
+  },
+  "title": {
+    "translate": "task.vampirism.h_kill1"
+  },
+  "unlocker": []
+}

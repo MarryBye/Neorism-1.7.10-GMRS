@@ -1,0 +1,94 @@
+package de.teamlapen.faction.client.gui.screens;
+
+import de.teamlapen.faction.FactionsMod;
+import de.teamlapen.faction.api.factions.actions.IAction;
+import de.teamlapen.faction.api.factions.actions.IActionHandler;
+import de.teamlapen.faction.api.factions.skills.ISkillPlayer;
+import de.teamlapen.faction.client.config.preferences.UserPreferences;
+import de.teamlapen.faction.client.gui.GuiRenderer;
+import de.teamlapen.faction.client.gui.radialmenu.IRadialMenuSlot;
+import de.teamlapen.faction.client.gui.radialmenu.RadialMenu;
+import de.teamlapen.faction.client.gui.radialmenu.RadialMenuSlot;
+import de.teamlapen.faction.client.gui.screens.radial.DualSwitchingRadialMenu;
+import de.teamlapen.faction.common.config.FactionConfig;
+import de.teamlapen.faction.common.core.FactionKeys;
+import de.teamlapen.faction.common.factions.FactionPlayerHandler;
+import de.teamlapen.faction.common.factions.actions.ActionHelper;
+import de.teamlapen.faction.common.network.packets.server.ServerboundToggleActionPacket;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SelectActionRadialScreen<T extends ISkillPlayer<T>> extends DualSwitchingRadialMenu<Holder<? extends IAction<?>>> {
+
+    private final IActionHandler<T> actionHandler;
+    private final T player;
+
+    private SelectActionRadialScreen(T player, List<Holder<? extends IAction<?>>> actions, KeyMapping keyMapping) {
+        super(getRadialMenu(actions), keyMapping, SelectMinionTaskRadialScreen::show);
+        this.actionHandler = player.getActionHandler();
+        this.player = player;
+    }
+
+    public static void show() {
+        show(FactionKeys.ACTION);
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static <T extends ISkillPlayer<T>> void show(KeyMapping keyMapping) {
+        FactionPlayerHandler.get(Minecraft.getInstance().player).getCurrentSkillPlayer().ifPresent(player -> {
+            //noinspection rawtypes
+            List<Holder<? extends IAction<?>>> actions = FactionConfig.preferences().actionOrder().getOrder(player.getFaction()).stream().filter(f -> ((IActionHandler) player.getActionHandler()).isActionUnlocked(f)).collect(Collectors.toList());
+            if (!actions.isEmpty()) {
+                Minecraft.getInstance().setScreen(new SelectActionRadialScreen<>(player, actions, keyMapping));
+            } else {
+                Minecraft.getInstance().player.sendOverlayMessage(Component.translatable("gui.factionapi.action_radial.no_actions"));
+                Minecraft.getInstance().setScreen(null);
+            }
+        });
+    }
+
+    @Override
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    }
+
+    private static RadialMenu<Holder<? extends IAction<?>>> getRadialMenu(List<Holder<? extends IAction<?>>> actions) {
+        List<IRadialMenuSlot<Holder<? extends IAction<?>>>> parts = actions.stream().map(a -> (IRadialMenuSlot<Holder<? extends IAction<?>>>) (Object) new RadialMenuSlot<>(a.value().getName(), a, Collections.emptyList())).toList();
+        return new RadialMenu<>((i) -> {
+            FactionsMod.proxy.sendToServer(ServerboundToggleActionPacket.createFromRaytrace(parts.get(i).primarySlotIcon(), Minecraft.getInstance().hitResult));
+        }, parts, SelectActionRadialScreen::drawActionPart, 0);
+    }
+
+    private static void drawActionPart(Holder<? extends IAction<?>> action, GuiGraphicsExtractor graphics, int posX, int posY, int size, boolean transparent) {
+        var texture = action.unwrapKey().map(ResourceKey::identifier).map(s -> s.withPath("textures/actions/" + s.getPath() + ".png")).orElseThrow();
+        GuiRenderer.blit(graphics, texture, posX, posY, 16, 16, 16, 16);
+    }
+
+    @Override
+    public void drawSlice(IRadialMenuSlot<Holder<? extends IAction<?>>> slot, boolean highlighted, GuiGraphicsExtractor buffer, float x, float y, float z, float radiusIn, float radiusOut, float startAngle, float endAngle, int r, int g, int b, int a) {
+        @SuppressWarnings("unchecked")
+        Holder<? extends IAction<T>> iActionHolder = (Holder<? extends IAction<T>>) (Object) slot.primarySlotIcon();
+        float actionPercentage = actionHandler.getPercentageForAction(iActionHolder);
+        if (ActionHelper.checkActionDisableEffect(player) || !this.player.getActionHandler().checkDefaultToggleConditions(iActionHolder).successful()) {
+            actionPercentage = -1;
+        }
+        if (actionPercentage == 0) {
+            super.drawSlice(slot, highlighted, buffer, x, y, z, radiusIn, radiusOut, startAngle, endAngle, r, g, b, 100);
+        } else if (actionPercentage > 0) {
+            int color = highlighted ? 200 : 160;
+            super.drawSlice(slot, true, buffer, x, y, z, radiusIn, radiusOut, startAngle, endAngle, color, color, 60, 100);
+            super.drawSlice(slot, true, buffer, x, y, z, radiusIn, radiusIn + ((radiusOut - radiusIn) * actionPercentage), startAngle, endAngle, color, color, 60, 100);
+        } else {
+            int color = highlighted ? 200 : 160;
+            super.drawSlice(slot, true, buffer, x, y, z, radiusIn, radiusOut, startAngle, endAngle, color, 60, 60, 100);
+            super.drawSlice(slot, true, buffer, x, y, z, radiusIn, radiusIn + ((radiusOut - radiusIn) * -actionPercentage), startAngle, endAngle, color, 60, 60, 100);
+        }
+    }
+}

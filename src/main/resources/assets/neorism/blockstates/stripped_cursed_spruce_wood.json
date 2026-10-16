@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "vampirism:block/stripped_cursed_spruce_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "vampirism:block/stripped_cursed_spruce_wood"
+    },
+    "axis=z": {
+      "model": "vampirism:block/stripped_cursed_spruce_wood",
+      "x": 90
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "vampirism:infuser",
+  "commoninfo": {},
+  "cookingtime": 600,
+  "ingredient1": "vampirism:pure_blood_4",
+  "ingredient2": "vampirism:pure_blood_4",
+  "ingredient3": "vampirism:pure_blood_4",
+  "ingredient4": "vampirism:pure_blood_4",
+  "item": "minecraft:raw_gold",
+  "result": {
+    "components": {
+      "vampirism:pure_level": {
+        "level": 4
+      }
+    },
+    "id": "vampirism:blood_infused_raw_gold"
+  },
+  "result1": {
+    "id": "vampirism:pure_blood_3"
+  },
+  "result2": {
+    "id": "vampirism:pure_blood_3"
+  },
+  "result3": {
+    "id": "vampirism:pure_blood_3"
+  }
+}

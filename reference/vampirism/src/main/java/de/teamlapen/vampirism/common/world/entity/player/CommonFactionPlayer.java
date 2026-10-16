@@ -1,0 +1,142 @@
+package de.teamlapen.vampirism.common.world.entity.player;
+
+import de.teamlapen.faction.api.factions.level.FactionUpdate;
+import de.teamlapen.faction.api.factions.lord.ILordPlayer;
+import de.teamlapen.faction.api.factions.skills.ISkillPlayer;
+import de.teamlapen.faction.api.world.entities.player.IFactionPlayer;
+import de.teamlapen.faction.common.config.FactionConfig;
+import de.teamlapen.faction.common.factions.FactionBasePlayer;
+import de.teamlapen.faction.common.factions.actions.ActionHandler;
+import de.teamlapen.faction.common.factions.skills.SkillHandler;
+import de.teamlapen.vampirism.api.util.VIdentifier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
+import org.jetbrains.annotations.Nullable;
+
+public abstract class CommonFactionPlayer<T extends IFactionPlayer<T> & ISkillPlayer<T>> extends FactionBasePlayer<T> implements ISkillPlayer<T> {
+
+    /**
+     * {@code @NotNull} on server, otherwise {@code null}
+     */
+    private final ActionHandler<T> actionHandler;
+    private final SkillHandler<T> skillHandler;
+
+    public CommonFactionPlayer(Player player) {
+        super(player);
+        this.actionHandler = createActionHandler();
+        this.skillHandler = createSkillHandler();
+    }
+
+    protected abstract ActionHandler<T> createActionHandler();
+
+    protected abstract SkillHandler<T> createSkillHandler();
+
+    @Override
+    public ActionHandler<T> getActionHandler() {
+        return this.actionHandler;
+    }
+
+    @Override
+    public SkillHandler<T> getSkillHandler() {
+        return this.skillHandler;
+    }
+
+    @MustBeInvokedByOverriders
+    @Override
+    public void onDeath(DamageSource src) {
+        this.actionHandler.deactivateAllActions();
+    }
+
+    @MustBeInvokedByOverriders
+    @Override
+    public void onRespawn() {
+        onLevelChanged(getLevel());
+    }
+
+    @MustBeInvokedByOverriders
+    @Override
+    public void onUpdate() {
+        if (getLevel() > 0) {
+            this.actionHandler.updateActions();
+        }
+    }
+
+    @MustBeInvokedByOverriders
+    @Override
+    public void onJoinWorld() {
+        if (getLevel() > 0) {
+            this.actionHandler.onActionsReactivated();
+        }
+    }
+
+    @MustBeInvokedByOverriders
+    @Override
+    public void levelChanged(FactionUpdate changes) {
+        onLevelChanged(changes.getLevel());
+        tryUnlockingSkill();
+    }
+
+    /**
+     * On level up, automatically enables a skill if - and only if - there is exactly one skill in the whole
+     * skill tree(s) that can currently be unlocked. If the choice is ambiguous the player picks it themselves.
+     */
+    private void tryUnlockingSkill() {
+        var unlockable = this.skillHandler.unlockableSkills();
+        if (unlockable.size() == 1) {
+            var skill = unlockable.getFirst();
+            this.skillHandler.enableSkill(skill.getValue(), skill.getKey());
+            tryUnlockingSkill();
+        }
+    }
+
+    protected void onLevelChanged(int newLevel) {
+
+    }
+
+    @MustBeInvokedByOverriders
+    @Override
+    public void leaveFaction() {
+        onLevelChanged(0);
+        this.onLevelReset();
+        this.sync();
+    }
+
+    @MustBeInvokedByOverriders
+    protected void onLevelReset() {
+        this.getActionHandler().resetTimers();
+        this.getSkillHandler().reset();
+    }
+
+    @Override
+    public Component getShortLevelDisplay() {
+        return getPlayerLord().filter(l -> l.getLordLevel() > 0).map(ILordPlayer::getLordTitleShort)
+                .orElseGet(() -> Component.literal(String.valueOf(getLevel())));
+    }
+
+    @Override
+    public Component getLevelDisplay() {
+        return getPlayerLord().filter(l -> l.getLordLevel() > 0).map(ILordPlayer::getLordTitle)
+                .orElseGet(() -> Component.translatable("gui.factionapi.level").append(" " + getLevel()));
+    }
+
+    @Nullable
+    @Override
+    public Component getChatDisplay() {
+        if (FactionConfig.server().factionLordPrefixInChat.get()) {
+            return getPlayerLord().filter(x -> x.getLordLevel() > 0).map(ILordPlayer::getLordTitle).orElse(null);
+        }
+        return null;
+    }
+
+    @MustBeInvokedByOverriders
+    @Override
+    protected void registerProperties() {
+        super.registerProperties();
+        this.registerProperty(VIdentifier.mod("action_handler")).subProperty(() -> this.actionHandler).register();
+        this.registerProperty(VIdentifier.mod("skill_handler")).subProperty(() -> this.skillHandler).register();
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "#c:dusts/redstone",
+    "X": "vampirism:blood_infused_iron_ingot",
+    "Y": "#c:crops/garlic",
+    "Z": "#minecraft:planks"
+  },
+  "pattern": [
+    "XXX",
+    "XYX",
+    "ZAZ"
+  ],
+  "result": {
+    "id": "vampirism:garlic_finder"
+  }
+}

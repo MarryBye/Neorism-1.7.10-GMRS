@@ -1,0 +1,37 @@
+{
+  "parent": "vampirism:main/vampire_forest",
+  "criteria": {
+    "main": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "vampirism:vampire_baron"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.vampirism.regicide.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "vampirism:pure_blood_0"
+    },
+    "title": {
+      "translate": "advancement.vampirism.regicide"
+    }
+  },
+  "requirements": [
+    [
+      "main"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

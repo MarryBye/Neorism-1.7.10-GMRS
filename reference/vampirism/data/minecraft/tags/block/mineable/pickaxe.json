@@ -1,0 +1,33 @@
+{
+  "values": [
+    "vampirism:altar_pillar",
+    "vampirism:altar_tip",
+    "vampirism:blood_pedestal",
+    "vampirism:altar_infusion",
+    "vampirism:blood_sieve",
+    "vampirism:weapon_table",
+    "vampirism:grave_cage",
+    "vampirism:tombstone_short",
+    "vampirism:tombstone_medium",
+    "vampirism:tombstone_cross",
+    "vampirism:grave_cage",
+    "vampirism:alchemical_cauldron",
+    "vampirism:vapor_still",
+    "vampirism:garlic_diffuser_long",
+    "vampirism:garlic_diffuser_normal",
+    "vampirism:garlic_diffuser_strong",
+    "vampirism:fog_diffuser",
+    "vampirism:alchemy_table",
+    "vampirism:blood_infused_iron_block",
+    "vampirism:blood_infused_enhanced_iron_block",
+    "vampirism:vampire_soul_lantern",
+    "#vampirism:dark_stone",
+    "#vampirism:dark_stone_bricks",
+    "#vampirism:dark_brick_tiles",
+    "#vampirism:polished_dark_brick",
+    "#vampirism:cobbled_dark_brick",
+    "#vampirism:candle_stick",
+    "#vampirism:candelabra",
+    "#vampirism:chandelier"
+  ]
+}

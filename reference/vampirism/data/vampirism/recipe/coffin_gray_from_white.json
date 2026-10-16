@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "vampirism:coffin_white",
+    "minecraft:gray_dye"
+  ],
+  "result": {
+    "id": "vampirism:coffin_gray"
+  }
+}

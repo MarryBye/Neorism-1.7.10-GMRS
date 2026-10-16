@@ -1,0 +1,9 @@
+{
+  "parents": [
+    "vampirism:vampire/advanced_biter"
+  ],
+  "skills": [
+    "vampirism:hissing"
+  ],
+  "tree": "vampirism:vampire/level"
+}

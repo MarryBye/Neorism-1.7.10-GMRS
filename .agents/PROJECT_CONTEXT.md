@@ -89,3 +89,22 @@ All dependencies are resolved via Maven (`GTNH Nexus` and `mavenLocal`) in `depe
    - Any question, issue, crash, or bug must be addressed to the Neorism issue tracker, NEVER to Vampirism or maxanier.
 3. **Non-Commercial:**
    - Absolutely no paywalls, paid early-access, or commercial distribution of assets.
+
+---
+
+## 5. Reference Codebase & Asset Infrastructure
+
+1. **Modern Reference Repository (`reference/vampirism/`):**
+   - Full Java source code (`vampirism`, `vampirism-api`, `faction`, `faction-api`) preserved for exact algorithmic, AI, leveling, and balance parity.
+   - Data generation results (`data/`): full JSON registries for advancements, recipes, loot tables, tags, and worldgen.
+   - Raw models (`raw_models/`): Blockbench (`.bbmodel`), Cubik (`.cubik`), and Techne (`.tcn`) models for TESR conversion.
+2. **Assets Migration (`src/main/resources/assets/neorism/`):**
+   - Textures: Organized with dual-index directories (`textures/block` + `textures/blocks`, `textures/item` + `textures/items`, `textures/entity`, `textures/gui`, `textures/particle`, `textures/skills`, `textures/actions`, `textures/mob_effect`, `textures/minion_tasks`).
+   - Sounds: All sounds and music (`sounds.json` and `.ogg` sound sets) converted to domain `neorism:`.
+   - Localization: All 31 language files converted to Forge 1.7.10 `.lang` format (`en_US.lang`, `ru_RU.lang`, etc.) with bidirectional fallback keys for `neorism`, `vampirism`, `tile.`, `item.`, and `achievement.`.
+   - Lore Books & Shaders: `vampire_books/`, `texts/`, and `shaders/` imported.
+3. **Achievements System (`ModAchievements`):**
+   - Implemented via Forge 1.7.10 `Achievement` and `AchievementPage`.
+   - Dedicated pages: `Neorism: Vampires` and `Neorism: Hunters`.
+   - Initialized in `CommonProxy.init()`.
+

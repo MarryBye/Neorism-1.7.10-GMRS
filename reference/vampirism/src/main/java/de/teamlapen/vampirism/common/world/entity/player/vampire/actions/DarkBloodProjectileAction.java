@@ -1,0 +1,103 @@
+package de.teamlapen.vampirism.common.world.entity.player.vampire.actions;
+
+import de.teamlapen.faction.api.factions.actions.IActionResult;
+import de.teamlapen.faction.api.factions.refinements.IRefinementAccess;
+import de.teamlapen.vampirism.api.world.entity.player.vampire.IVampirePlayer;
+import de.teamlapen.vampirism.common.config.ModConfig;
+import de.teamlapen.vampirism.common.core.ModRefinements;
+import de.teamlapen.vampirism.common.world.entity.DarkBloodProjectileEntity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+
+public class DarkBloodProjectileAction extends DefaultVampireAction {
+
+
+    public DarkBloodProjectileAction() {
+        super();
+    }
+
+    @Override
+    public int getCooldown(IVampirePlayer player) {
+        int cooldown = ModConfig.balance().vaDarkBloodProjectileCooldown.get() * 20;
+        if (player.getRefinementHandler().isRefinementEquipped(ModRefinements.DARK_BLOOD_PROJECTILE_AOE)) {
+            cooldown *= ModConfig.balance().vrDarkBloodProjectileAOECooldownMod.get();
+        }
+        return cooldown;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModConfig.balance().vaDarkBloodProjectileEnabled.get();
+    }
+
+    @Override
+    protected IActionResult activateServer(IVampirePlayer player, ActivationContext context) {
+        Player shooter = player.asEntity();
+        IRefinementAccess skillHandler = player.getRefinementHandler();
+
+        float directDamage = ModConfig.balance().vaDarkBloodProjectileDamage.get().floatValue();
+        float indirectDamage = directDamage * 0.5f;
+        float speed = 0.95f;
+        if (skillHandler.isRefinementEquipped(ModRefinements.DARK_BLOOD_PROJECTILE_DAMAGE)) {
+            float modifier = ModConfig.balance().vrDarkBloodProjectileDamageMod.get().floatValue();
+            directDamage *= modifier;
+            indirectDamage *= modifier;
+        }
+        if (skillHandler.isRefinementEquipped(ModRefinements.DARK_BLOOD_PROJECTILE_SPEED)) {
+            speed = 1.4f;
+        }
+
+        if (skillHandler.isRefinementEquipped(ModRefinements.DARK_BLOOD_PROJECTILE_AOE)) {
+            for (int i = 0; i < 32; i++) {
+                Vec3 vec3d = getRotationVector(shooter.getViewXRot(1.0f), shooter.getViewYRot(1.0f) + i * 11.25f);
+                DarkBloodProjectileEntity entity = createProjectile(shooter, shooter.position(), 0, vec3d, false, 0, 0, 0.95f);
+                entity.setMaxTicks(7);
+                entity.excludeShooter();
+                if (i == 0) {
+                    entity.setDamage(0, directDamage);
+                    entity.explode(ModConfig.balance().vrDarkBloodProjectileAOERange.get(), null);
+                }
+            }
+        } else {
+            boolean goThrough = skillHandler.isRefinementEquipped(ModRefinements.DARK_BLOOD_PROJECTILE_PENETRATION);
+            createProjectile(shooter, shooter.position(), shooter.getEyeHeight() * 0.9f, shooter.getViewVector(1.0F), goThrough, directDamage, indirectDamage, speed);
+            if (skillHandler.isRefinementEquipped(ModRefinements.DARK_BLOOD_PROJECTILE_MULTI_SHOT)) {
+                createProjectile(shooter, shooter.position(), shooter.getEyeHeight() * 0.9f, getVectorForRotation(shooter.getViewXRot(1.0f), shooter.getViewYRot(1.0f) + 30f), goThrough, directDamage, indirectDamage, speed);
+                createProjectile(shooter, shooter.position(), shooter.getEyeHeight() * 0.9f, getVectorForRotation(shooter.getViewXRot(1.0f), shooter.getViewYRot(1.0f) - 30f), goThrough, directDamage, indirectDamage, speed);
+            }
+        }
+        return IActionResult.SUCCESS;
+    }
+
+    private DarkBloodProjectileEntity createProjectile(Player shooter, Vec3 position, double height, Vec3 direction, boolean goThrough, float directDamage, float indirectDamage, float speed) {
+        DarkBloodProjectileEntity entity = new DarkBloodProjectileEntity(shooter.level(), position.x + direction.x, position.y + height, position.z + direction.z, direction);
+        entity.setMotionFactor(speed);
+        entity.setOwner(shooter);
+        entity.setDamage(directDamage, indirectDamage);
+        if (goThrough) {
+            entity.setGothrough(true);
+        }
+        shooter.level().addFreshEntity(entity);
+        return entity;
+    }
+
+    private Vec3 getRotationVector(float pitch, float yaw) {
+        float f = pitch * ((float) Math.PI / 180F);
+        float f1 = -yaw * ((float) Math.PI / 180F);
+        float f2 = Mth.cos(f1);
+        float f3 = Mth.sin(f1);
+        float f4 = Mth.cos(f);
+        return new Vec3(f3 * f4, 0, f2 * f4);
+    }
+
+    private Vec3 getVectorForRotation(float pitch, float yaw) {
+        float f = pitch * ((float) Math.PI / 180F);
+        float f1 = -yaw * ((float) Math.PI / 180F);
+        float f2 = Mth.cos(f1);
+        float f3 = Mth.sin(f1);
+        float f4 = Mth.cos(f);
+        float f5 = Mth.sin(f);
+        return new Vec3(f3 * f4, -f5, f2 * f4);
+    }
+}

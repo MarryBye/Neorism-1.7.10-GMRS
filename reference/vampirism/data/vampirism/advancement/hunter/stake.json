@@ -1,0 +1,42 @@
+{
+  "parent": "vampirism:hunter/become_hunter",
+  "criteria": {
+    "flower": {
+      "conditions": {
+        "action": "stake"
+      },
+      "trigger": "vampirism:hunter_action"
+    },
+    "main": {
+      "conditions": {
+        "faction": "vampirism:hunter",
+        "level": 1
+      },
+      "trigger": "factionapi:faction"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.vampirism.stake.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "vampirism:stake"
+    },
+    "title": {
+      "translate": "advancement.vampirism.stake"
+    }
+  },
+  "requirements": [
+    [
+      "flower"
+    ],
+    [
+      "main"
+    ]
+  ],
+  "rewards": {
+    "experience": 100
+  },
+  "sends_telemetry_event": true
+}

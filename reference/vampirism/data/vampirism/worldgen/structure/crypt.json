@@ -1,0 +1,9 @@
+{
+  "type": "vampirism:crypt",
+  "biomes": "#vampirism:has_structure/crypt",
+  "max_depth": 9,
+  "spawn_overrides": {},
+  "start_pool": "vampirism:crypt/church",
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin"
+}

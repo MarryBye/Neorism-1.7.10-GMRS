@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": "vampirism:holy_water_bottle_normal",
+    "Y": "#minecraft:planks",
+    "Z": "#c:rods/wooden"
+  },
+  "pattern": [
+    "XY ",
+    "ZYZ",
+    " Y "
+  ],
+  "result": {
+    "id": "vampirism:crucifix_normal"
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "values": {
+    "minecraft:camel": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_camel"
+      }
+    },
+    "minecraft:cat": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_cat"
+      }
+    },
+    "minecraft:cow": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_cow"
+      }
+    },
+    "minecraft:donkey": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_donkey"
+      }
+    },
+    "minecraft:fox": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_fox"
+      }
+    },
+    "minecraft:goat": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_goat"
+      }
+    },
+    "minecraft:horse": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_horse"
+      }
+    },
+    "minecraft:llama": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_llama"
+      }
+    },
+    "minecraft:mooshroom": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_mushroom_cow"
+      }
+    },
+    "minecraft:mule": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_mule"
+      }
+    },
+    "minecraft:ocelot": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_ocelot"
+      }
+    },
+    "minecraft:panda": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_panda"
+      }
+    },
+    "minecraft:pig": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_pig"
+      }
+    },
+    "minecraft:polar_bear": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_polar_bear"
+      }
+    },
+    "minecraft:rabbit": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_rabbit"
+      }
+    },
+    "minecraft:sheep": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_sheep"
+      }
+    },
+    "minecraft:trader_llama": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_trader_llama"
+      }
+    },
+    "minecraft:turtle": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_turtle"
+      }
+    },
+    "minecraft:villager": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_villager"
+      }
+    },
+    "minecraft:wolf": {
+      "handler": {
+        "type": "vampirism:special",
+        "converted_type": "vampirism:converted_wolf"
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "type": "vampirism:infuser",
+  "commoninfo": {},
+  "ingredient1": "vampirism:pure_blood_3",
+  "ingredient2": "vampirism:pure_blood_3",
+  "ingredient3": "vampirism:pure_blood_3",
+  "ingredient4": "vampirism:pure_blood_3",
+  "item": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      {
+        "neoforge:ingredient_type": "neoforge:components",
+        "components": {
+          "vampirism:pure_level": {
+            "level": 0
+          }
+        },
+        "items": "vampirism:diamond_heart_seeker"
+      },
+      {
+        "neoforge:ingredient_type": "neoforge:components",
+        "components": {
+          "vampirism:pure_level": {
+            "level": 1
+          }
+        },
+        "items": "vampirism:diamond_heart_seeker"
+      },
+      {
+        "neoforge:ingredient_type": "neoforge:components",
+        "components": {
+          "vampirism:pure_level": {
+            "level": 2
+          }
+        },
+        "items": "vampirism:diamond_heart_seeker"
+      }
+    ]
+  }
+}

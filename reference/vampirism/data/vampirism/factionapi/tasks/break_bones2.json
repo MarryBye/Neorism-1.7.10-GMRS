@@ -1,0 +1,23 @@
+{
+  "requirements": [
+    {
+      "type": "factionapi:entity",
+      "amount": 14,
+      "description": {
+        "translate": "entity.minecraft.skeleton"
+      },
+      "entityType": "minecraft:skeleton",
+      "id": "minecraft:skeleton"
+    }
+  ],
+  "reward": {
+    "type": "factionapi:item",
+    "item": {
+      "id": "minecraft:chainmail_leggings"
+    }
+  },
+  "title": {
+    "translate": "task.vampirism.break_bones2"
+  },
+  "unlocker": []
+}

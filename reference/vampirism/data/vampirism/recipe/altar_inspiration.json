@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "X": "#minecraft:planks",
+    "Y": "vampirism:blood_container"
+  },
+  "pattern": [
+    "X X",
+    "XYX",
+    "XXX"
+  ],
+  "result": {
+    "id": "vampirism:altar_inspiration"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": "#minecraft:planks",
+    "S": "#c:rods/wooden",
+    "W": "#minecraft:wool"
+  },
+  "pattern": [
+    " WP",
+    "PWP",
+    "S S"
+  ],
+  "result": {
+    "id": "vampirism:throne"
+  }
+}

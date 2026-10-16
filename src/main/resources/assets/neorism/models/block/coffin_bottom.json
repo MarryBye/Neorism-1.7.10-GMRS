@@ -1,0 +1,90 @@
+{
+	"credit": "Designed by Zozozrob",
+	"parent": "block/block",
+	"render_type": "minecraft:cutout",
+	"texture_size": [32, 32],
+	"textures": {
+		"particle": "vampirism:block/coffin_base",
+		"base": "vampirism:block/coffin_base",
+		"inner": "vampirism:block/coffin/coffin_inner_white"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 9, 32],
+			"faces": {
+				"north": {"uv": [8, 8.75, 12, 11], "texture": "#base"},
+				"east": {"uv": [0, 8.75, 8, 11], "texture": "#base"},
+				"south": {"uv": [8, 8.75, 12, 11], "texture": "#base"},
+				"west": {"uv": [0, 8.75, 8, 11], "texture": "#base"},
+				"up": {"uv": [0, 0, 4, 8], "texture": "#base"},
+				"down": {"uv": [4, 0, 8, 8], "texture": "#base"}
+			}
+		},
+		{
+			"from": [2, 3, 2],
+			"to": [14, 3, 30],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, 2]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [14, 3, 2],
+			"to": [14, 9, 30],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, 2]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [2, 3, 30],
+			"to": [14, 9, 30],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, 2]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [2, 3, 2],
+			"to": [2, 9, 30],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, 2]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [2, 3, 2],
+			"to": [14, 9, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, 2]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		}
+	]
+}

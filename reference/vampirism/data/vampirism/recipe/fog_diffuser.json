@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": "#c:obsidians",
+    "X": "vampirism:cursed_spruce_planks",
+    "Y": "#c:gems/diamond",
+    "Z": "vampirism:mother_core"
+  },
+  "pattern": [
+    "XYX",
+    "YZY",
+    "OOO"
+  ],
+  "result": {
+    "id": "vampirism:fog_diffuser"
+  }
+}

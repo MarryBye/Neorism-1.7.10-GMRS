@@ -1,0 +1,305 @@
+package de.teamlapen.vampirism.common.util;
+
+import de.teamlapen.faction.api.factions.IFaction;
+import de.teamlapen.faction.api.factions.IFactionHelper;
+import de.teamlapen.faction.api.factions.skills.ISkill;
+import de.teamlapen.faction.api.factions.skills.ISkillHandler;
+import de.teamlapen.faction.api.world.entities.player.IFactionPlayer;
+import de.teamlapen.faction.common.factions.FactionPlayerHandler;
+import de.teamlapen.vampirism.api.world.EnumStrength;
+import de.teamlapen.vampirism.api.VampirismApi;
+import de.teamlapen.vampirism.api.world.entity.hunter.IHunterMob;
+import de.teamlapen.vampirism.api.world.entity.player.vampire.IVampirePlayer;
+import de.teamlapen.vampirism.api.world.entity.vampire.IVampire;
+import de.teamlapen.vampirism.common.config.ModConfig;
+import de.teamlapen.vampirism.common.core.ModEffects;
+import de.teamlapen.vampirism.common.core.ModEnvironmentAttributes;
+import de.teamlapen.vampirism.common.core.ModFactions;
+import de.teamlapen.vampirism.common.tags.ModBiomeTags;
+import de.teamlapen.vampirism.common.tags.ModDamageTypeTags;
+import de.teamlapen.vampirism.common.world.attachments.LevelFog;
+import de.teamlapen.vampirism.common.world.entity.QuarrelEntity;
+import de.teamlapen.vampirism.common.world.entity.player.vampire.VampirePlayer;
+import de.teamlapen.vampirism.common.world.items.StakeItem;
+import de.teamlapen.vampirism.common.world.items.crossbow.behavior.VampireKillerBehavior;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.Containers;
+import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.biome.Biome;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+
+public class Helper {
+
+
+    /**
+     * Checks if the entity is currently being burned by the sun.
+     * Unlike {@link de.teamlapen.vampirism.common.world.entity.SundamageRegistry#isGettingSundamage(LivingEntity, LevelAccessor)}, this uses the cached state of the vampire itself and
+     * respects the safe period players get before they start taking damage.
+     */
+    public static boolean isBurningInSun(LivingEntity entity) {
+        if (entity instanceof Player player) {
+            return isVampire(player) && VampirePlayer.get(player).isBurningInSun();
+        }
+        return entity instanceof IVampire vampire && vampire.isGettingSundamage(entity.level());
+    }
+
+    public static boolean hasLevelSunDamage(Level level, BlockPos pos) {
+        return level.dimensionType().hasSkyLight()
+                && isDay(level, pos)
+                && level.environmentAttributes().getValue(ModEnvironmentAttributes.SUN_DAMAGE.get(), pos);
+    }
+
+    public static boolean isDay(LevelAccessor level, BlockPos pos) {
+        float angle = level.environmentAttributes().getValue(EnvironmentAttributes.SUN_ANGLE, pos) / 360;
+        return angle > 0.78 || angle < 0.24;
+    }
+
+    @NotNull
+    public static EnumStrength getGarlicStrength(@NotNull Entity e, LevelAccessor world) {
+        return getGarlicStrengthAt(world, e.blockPosition());
+    }
+
+    @NotNull
+    public static EnumStrength getGarlicStrengthAt(LevelAccessor world, @NotNull BlockPos pos) {
+        return world instanceof Level ? VampirismApi.garlicHandler((Level) world).getStrengthAtChunk(ChunkPos.containing(pos)) : EnumStrength.NONE;
+    }
+
+    @NotNull
+    public static ResourceKey<Level> getWorldKey(LevelAccessor world) {
+        return world instanceof Level ? ((Level) world).dimension() : world instanceof ServerLevelAccessor ? ((ServerLevelAccessor) world).getLevel().dimension() : Level.OVERWORLD;
+    }
+
+    public static boolean canBecomeVampire(@NotNull Player player) {
+        return FactionPlayerHandler.get(player).canJoin(ModFactions.VAMPIRE);
+    }
+
+    public static boolean canTurnPlayer(IVampire biter, @Nullable Player target) {
+        if (target != null && (target.isCreative() || target.isSpectator())) return false;
+        if (biter instanceof IVampirePlayer player) {
+            if (!ModConfig.server().playerCanInfectPlayers.get()) return false;
+            return !(player instanceof ServerPlayer) || Permissions.INFECT_PLAYER.isAllowed((ServerPlayer) player);
+        } else {
+            return ModConfig.server().mobBiteInfection.get();
+        }
+    }
+
+    /**
+     * Checks if
+     *
+     * @return If the given entity is a vampire (Either a player in the vampire faction or a vampire entity
+     */
+    public static boolean isVampire(Entity entity) {
+        return IFaction.is(ModFactions.VAMPIRE, IFactionHelper.get().getFaction(entity));
+    }
+
+    public static boolean isHunter(Entity entity) {
+        return IFaction.is(ModFactions.HUNTER, IFactionHelper.get().getFaction(entity));
+    }
+
+    public static boolean isHunter(@NotNull Player entity) {
+        return FactionPlayerHandler.get(entity).isInFaction(ModFactions.HUNTER);
+    }
+
+    public static boolean isVampire(Player entity) {
+        return FactionPlayerHandler.get(entity).isInFaction(ModFactions.VAMPIRE);
+    }
+
+    public static boolean appearsAsVampire(Entity entity, Entity viewer) {
+        if (entity instanceof Player player) {
+            return appearsAsVampire(player, viewer);
+        } else {
+            return isVampire(entity);
+        }
+    }
+
+    public static boolean appearsAsVampire(Player player, Entity viewer) {
+        return IFaction.is(ModFactions.VAMPIRE, viewedFaction(player, viewer));
+    }
+
+    public static Holder<? extends IFaction<?>> viewedFaction(Player player, Entity viewer) {
+        return FactionPlayerHandler.getCurrentFactionPlayer(player).map(IFactionPlayer::getDisguise).map(s -> s.getViewedFaction(IFactionHelper.get().getFaction(viewer))).orElse(null);
+    }
+
+    /**
+     * @return Checks if all given skills are enabled
+     */
+    public static boolean areSkillsEnabled(@NotNull ISkillHandler<?> skillHandler, @NotNull List<Holder<? extends ISkill<?>>> skills) {
+        for (Holder<? extends ISkill<?>> skill : skills) {
+            if (!skillHandler.isSkillEnabled(skill)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isEntityInVampireBiome(@Nullable Entity e) {
+        if (e == null) return false;
+        Level w = e.level();
+        return w.getBiome(e.blockPosition()).is(ModBiomeTags.HasFaction.IS_VAMPIRE_BIOME);
+    }
+
+    public static boolean isPosInVampireBiome(@NotNull BlockPos pos, @NotNull LevelAccessor level) {
+        Holder<Biome> biome = level.getBiome(pos);
+        return biome.is(ModBiomeTags.HasFaction.IS_VAMPIRE_BIOME);
+    }
+
+    /**
+     * @return Whether the entity is in a vampire fog area (does not check for vampire biome)
+     */
+    public static boolean isEntityInArtificalVampireFogArea(@Nullable Entity e) {
+        if (e == null) return false;
+        Level w = e.level();
+        return LevelFog.get(w).isInsideArtificialVampireFogArea(e.blockPosition());
+    }
+
+    public static Identifier getBiomeId(@NotNull Entity e) {
+        return getBiomeId(e.level(), e.blockPosition());
+    }
+
+    public static Holder<Biome> getBiome(@NotNull Entity e) {
+        return e.level().getBiome(e.blockPosition());
+    }
+
+    public static Identifier getBiomeId(@NotNull CommonLevelAccessor world, @NotNull BlockPos pos) {
+        return getBiomeId(world, world.getBiome(pos));
+    }
+
+    public static Identifier getBiomeId(@NotNull CommonLevelAccessor world, @NotNull Holder<Biome> biome) {
+        return biome.unwrap().map(ResourceKey::identifier, b -> world.registryAccess().lookupOrThrow(Registries.BIOME).getKey(b));
+    }
+
+
+    /**
+     * blockpos to nbt
+     */
+    public static @NotNull ListTag newDoubleNBTList(double @NotNull ... numbers) {
+        ListTag listnbt = new ListTag();
+
+        for (double d0 : numbers) {
+            listnbt.add(DoubleTag.valueOf(d0));
+        }
+
+        return listnbt;
+    }
+
+    /**
+     * Check if
+     *
+     * @return Whether the given damage source can kill a vampire player or go to DBNO state instead
+     */
+    public static boolean canKillVampires(@NotNull DamageSource source) {
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            if (source.is(ModDamageTypeTags.VAMPIRE_IMMORTAL) || ModConfig.balance().vpImmortalFromDamageSources.get().contains(source.getMsgId())) {
+                if (source.getDirectEntity() instanceof LivingEntity) {
+                    //Maybe use all IVampireFinisher??
+                    return source.getDirectEntity() instanceof IHunterMob || ((LivingEntity) source.getDirectEntity()).getMainHandItem().getItem() instanceof StakeItem;
+                } else if (source.getDirectEntity() instanceof QuarrelEntity quarrel) {
+                    return quarrel.getBehavior().orElse(null) instanceof VampireKillerBehavior;
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Call this in Item inventoryTick to make Vampires drop this item and get a short poison effect when held
+     *
+     * @param stack  item
+     * @param entity Entity holding the item
+     * @param slot   Equipment slot holding the item
+     * @return If entity is vampire
+     */
+    public static boolean handleHeldNonVampireItem(ItemStack stack, Entity entity, @Nullable EquipmentSlot slot) {
+        if (entity instanceof LivingEntity living && (slot != null && slot.getType() == EquipmentSlot.Type.HAND) && entity.tickCount % 16 == 8 ) {
+            if (Helper.isVampire(living)) {
+                living.addEffect(new MobEffectInstance(ModEffects.TOXICANT, 20, 1));
+                if (living instanceof Player player) {
+                    player.getInventory().removeItem(stack);
+                    player.drop(stack, true);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Reduce stack size by one and handle remainder (e.g. empty bucket when crafting with a water bucket)
+     * If the stack is not empty, the remainder is added to the player's inventory
+     *
+     * @param stack  Will be shrunk by 1
+     * @param player The player to give the crafting remainder to, if necessary
+     * @return The reduced stack if still >0 or the remainder or empty if neither exist. Update the inventory with this.
+     */
+    public static ItemStack shrinkItemStack(ItemStack stack, Player player) {
+        ItemStackTemplate remainder = stack.getCraftingRemainder();
+        stack.shrink(1);
+        if (remainder != null) {
+            if (stack.isEmpty()) {
+                return remainder.create();
+            } else {
+                player.getInventory().placeItemBackInInventory(remainder.create());
+
+            }
+        }
+        return stack;
+    }
+
+    /**
+     * Reduce stack size by one and handle remainder (e.g. empty bucket when crafting with a water bucket)
+     * If the stack is not empty, the remainder is added to the player's inventory
+     *
+     * @param stack Will be shrunk by 1
+     * @param level The level to spawn the remainder itemstack in, if necessary
+     * @param pos   The position to spawn the remainder itemstack at, if necessary
+     * @return The reduced stack if still >0 or the remainder or empty if neither exist. Update the inventory with this.
+     */
+    public static ItemStack shrinkItemStack(ItemStack stack, Level level, BlockPos pos) {
+        ItemStackTemplate remainder = stack.getCraftingRemainder();
+        stack.shrink(1);
+        if (remainder != null) {
+            if (stack.isEmpty()) {
+                return remainder.create();
+            } else {
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), remainder.create());
+
+            }
+        }
+        return stack;
+    }
+
+    /**
+     * Plays a sound at the player's position, but only for that player
+     */
+    public static void playSoundToPlayer(@NotNull Player player, @NotNull SoundEvent sound, @NotNull SoundSource source, float volume, float pitch) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.connection.send(new ClientboundSoundPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), source, player.getX(), player.getY(), player.getZ(), volume, pitch, player.getRandom().nextLong()));
+        }
+    }
+}

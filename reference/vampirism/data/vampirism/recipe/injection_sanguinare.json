@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "vampirism:syringe_empty",
+    "vampirism:vampire_fang",
+    "vampirism:vampire_fang",
+    "vampirism:vampire_fang",
+    "vampirism:vampire_fang",
+    "vampirism:vampire_fang",
+    "vampirism:vampire_fang",
+    "vampirism:vampire_fang",
+    "vampirism:vampire_fang"
+  ],
+  "result": {
+    "id": "vampirism:injection_sanguinare"
+  }
+}

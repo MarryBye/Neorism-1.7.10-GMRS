@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "vampirism:mother_core",
+    "G": "#c:glass_blocks",
+    "O": "#c:obsidians"
+  },
+  "pattern": [
+    "GGG",
+    "GCG",
+    "OOO"
+  ],
+  "result": {
+    "id": "vampirism:vampire_beacon"
+  }
+}

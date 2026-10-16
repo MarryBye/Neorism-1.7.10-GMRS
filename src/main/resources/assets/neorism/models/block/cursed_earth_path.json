@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/dirt_path",
+  "textures": {
+    "bottom": "vampirism:block/cursed_earth",
+    "particle": "vampirism:block/cursed_earth",
+    "side": "vampirism:block/cursed_earth_path_side",
+    "top": "vampirism:block/cursed_earth_path_top"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "type": "vampirism:shaped_crafting_weapontable",
+  "category": "equipment",
+  "key": {
+    "X": "#c:leathers",
+    "Y": "#c:crops/garlic",
+    "Z": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:swiftness"
+        }
+      },
+      "items": "minecraft:potion"
+    }
+  },
+  "lava": 1,
+  "pattern": [
+    "XZZX",
+    "XXXX",
+    "XYYX",
+    "XXXX"
+  ],
+  "result": {
+    "id": "vampirism:armor_of_swiftness_chest_normal"
+  },
+  "skill": [
+    "vampirism:weapon_table"
+  ]
+}

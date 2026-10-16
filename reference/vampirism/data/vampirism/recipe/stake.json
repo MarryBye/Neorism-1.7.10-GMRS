@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": "#c:rods/wooden",
+    "Y": "#minecraft:planks"
+  },
+  "pattern": [
+    "X",
+    "Y",
+    "X"
+  ],
+  "result": {
+    "id": "vampirism:stake"
+  }
+}

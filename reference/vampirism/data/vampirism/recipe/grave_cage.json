@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "X": "#c:ingots/iron",
+    "Y": "#minecraft:coals"
+  },
+  "pattern": [
+    " X ",
+    "XYX",
+    "XYX"
+  ],
+  "result": {
+    "id": "vampirism:grave_cage"
+  }
+}

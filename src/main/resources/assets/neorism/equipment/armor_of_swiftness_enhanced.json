@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "vampirism:armor_of_swiftness_enhanced"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "vampirism:armor_of_swiftness_enhanced"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "vampirism:armor_of_swiftness_enhanced"
+      }
+    ]
+  }
+}

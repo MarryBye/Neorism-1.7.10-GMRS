@@ -1,0 +1,58 @@
+package de.teamlapen.vampirism.common.world.items;
+
+import de.teamlapen.vampirism.common.core.ModAdvancements;
+import de.teamlapen.vampirism.common.core.ModEffects;
+import de.teamlapen.vampirism.common.tags.ModPotionTags;
+import de.teamlapen.vampirism.common.util.Helper;
+import de.teamlapen.vampirism.common.world.potions.BasePotion;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
+
+public class SerumInjectionItem extends Item {
+
+    public SerumInjectionItem(Properties properties) {
+        super(properties);
+    }
+
+    public static boolean isBlockedPotion(Holder<Potion> potion) {
+        return potion.is(ModPotionTags.SERUM_BLOCKED) || BasePotion.isHunterPotion(potion);
+    }
+
+    @Override
+    public ItemStack getDefaultInstance() {
+        ItemStack stack = super.getDefaultInstance();
+        stack.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.WATER));
+        return stack;
+    }
+
+    @Override
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (level.isClientSide()) {
+            return InteractionResult.PASS;
+        }
+        ItemStack stack = player.getItemInHand(hand);
+        PotionContents potionContents = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        potionContents.applyToLivingEntity(player, stack.getOrDefault(DataComponents.POTION_DURATION_SCALE, 0.5F));
+        player.addEffect(new MobEffectInstance(ModEffects.EXPOSED, 100));
+        if (!player.hasInfiniteMaterials()) {
+            stack = Helper.shrinkItemStack(stack, player);
+        }
+
+        if (player instanceof ServerPlayer serverPlayer) {
+            ModAdvancements.TRIGGER_SERUM_INJECTED.get().trigger(serverPlayer, potionContents);
+        }
+        //item transformed
+        return InteractionResult.SUCCESS_SERVER.heldItemTransformedTo(stack);
+    }
+}

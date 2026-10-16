@@ -1,0 +1,121 @@
+{
+	"credit": "Designed by Zozozrob",
+	"parent": "block/block",
+	"render_type": "minecraft:cutout",
+	"texture_size": [32, 32],
+	"textures": {
+		"particle": "vampirism:block/coffin_base",
+		"base": "vampirism:block/coffin_base",
+		"inner": "vampirism:block/coffin/coffin_inner_white"
+	},
+	"elements": [
+		{
+			"from": [0, 0, -8],
+			"to": [16, 9, 24],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -8]},
+			"faces": {
+				"north": {"uv": [8, 8.75, 12, 11], "texture": "#base"},
+				"east": {"uv": [0, 8.75, 8, 11], "texture": "#base"},
+				"south": {"uv": [8, 8.75, 12, 11], "texture": "#base"},
+				"west": {"uv": [0, 8.75, 8, 11], "texture": "#base"},
+				"up": {"uv": [0, 0, 4, 8], "texture": "#base"},
+				"down": {"uv": [4, 0, 8, 8], "texture": "#base"}
+			}
+		},
+		{
+			"from": [2, 3, -6],
+			"to": [14, 3, 22],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, -6]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [14, 3, -6],
+			"to": [14, 9, 22],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, -6]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [2, 3, 22],
+			"to": [14, 9, 22],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, -6]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [2, 3, -6],
+			"to": [2, 9, 22],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, -6]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [2, 3, -6],
+			"to": [14, 9, -6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 3, -6]},
+			"faces": {
+				"north": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"east": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"south": {"uv": [9, 0, 15, 3], "texture": "#inner"},
+				"west": {"uv": [0, 0, 3, 14], "rotation": 270, "texture": "#inner"},
+				"up": {"uv": [3, 14, 9, 0], "texture": "#inner"},
+				"down": {"uv": [3, 0, 9, 14], "texture": "#inner"}
+			}
+		},
+		{
+			"from": [-7, 0, -8],
+			"to": [-5, 16, 24],
+			"rotation": {"angle": -32.5, "axis": "z", "origin": [-5, 0, -8]},
+			"faces": {
+				"north": {"uv": [8, 8, 12, 8.5], "rotation": 90, "texture": "#base"},
+				"east": {"uv": [12, 0, 16, 8], "rotation": 270, "texture": "#base"},
+				"south": {"uv": [8, 8, 12, 8.5], "rotation": 270, "texture": "#base"},
+				"west": {"uv": [8, 0, 12, 8], "rotation": 270, "texture": "#base"},
+				"up": {"uv": [0, 8, 8, 8.5], "rotation": 270, "texture": "#base"},
+				"down": {"uv": [0, 8, 8, 8.5], "rotation": 270, "texture": "#base"}
+			}
+		}
+	],
+	"display": {
+		"firstperson_righthand": {
+			"rotation": [0, -150, 0],
+			"translation": [1.5, 0, 1.5],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 30, 0],
+			"translation": [1.5, 0, 1.5],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"gui": {
+			"rotation": [30, -135, 0],
+			"translation": [-0.5, 0, 0],
+			"scale": [0.45, 0.45, 0.45]
+		}
+	}
+}

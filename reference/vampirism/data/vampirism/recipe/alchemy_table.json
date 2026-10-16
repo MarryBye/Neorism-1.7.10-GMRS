@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "minecraft:basalt",
+    "P": "#minecraft:planks"
+  },
+  "pattern": [
+    "B  ",
+    "BBB",
+    "P P"
+  ],
+  "result": {
+    "id": "vampirism:alchemy_table"
+  }
+}

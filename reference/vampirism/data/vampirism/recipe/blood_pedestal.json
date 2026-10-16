@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": "#c:ingots/gold",
+    "X": "#c:obsidians",
+    "Y": "#minecraft:planks",
+    "Z": "vampirism:blood_bottle"
+  },
+  "pattern": [
+    "GYG",
+    "YZY",
+    "XXX"
+  ],
+  "result": {
+    "id": "vampirism:blood_pedestal"
+  }
+}

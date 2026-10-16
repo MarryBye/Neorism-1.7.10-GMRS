@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pure_blood": {
+      "conditions": {
+        "items": [
+          {
+            "items": "vampirism:pure_blood_3"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "vampirism:iron_heart_striker_infuse_3_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pure_blood"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "vampirism:iron_heart_striker_infuse_3_upgrade"
+    ]
+  }
+}

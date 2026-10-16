@@ -1,0 +1,81 @@
+package de.teamlapen.vampirism.client.gui.screens;
+
+import de.teamlapen.vampirism.VampirismMod;
+import de.teamlapen.vampirism.api.util.VIdentifier;
+import de.teamlapen.vampirism.common.network.packets.server.ServerboundSimpleInputEvent;
+import de.teamlapen.vampirism.common.world.inventory.HunterBasicMenu;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.inventory.CyclingSlotBackground;
+import net.minecraft.client.gui.screens.inventory.ItemCombinerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+
+
+public class HunterBasicScreen extends ItemCombinerScreen<HunterBasicMenu> {
+    private static final Identifier BACKGROUND = VIdentifier.mod("textures/gui/container/basic_hunter.png");
+    private static final Identifier PURE_BLOOD_BOTTLE_SLOT_SPRITE = VIdentifier.mod("container/slot/pure_blood_bottle");
+
+    @Nullable
+    private Button buttonLevelUp;
+
+    private final CyclingSlotBackground bloodIcon = new CyclingSlotBackground(0);
+
+    public HunterBasicScreen(HunterBasicMenu inventorySlotsIn, Inventory playerInventory, Component name) {
+        super(inventorySlotsIn, playerInventory, name, BACKGROUND);
+    }
+
+    @Override
+    protected void extractErrorIcon(GuiGraphicsExtractor graphics, int xo, int yo) {
+
+        Component component = switch (this.menu.canLevelUp()) {
+            case WRONG_LEVEL -> Component.translatable("dialogue.vampirism.hunter.cannot_train_further");
+            case NEED_BLOOD ->  Component.translatable("dialogue.vampirism.hunter.pay_vampire_blood", this.menu.requiredBloodBottles());
+            case CAN_LEVEL_UP -> Component.translatable("dialogue.vampirism.hunter.will_train_you");
+            default -> Component.empty();
+        };
+
+        graphics.setTooltipForNextFrame(this.font, this.font.split(component, 120), xo + 45, yo + 23);
+
+//        GuiGraphicsExtractor.drawWordWrap(this.font, component, x + 50, y + 12, 120, -1);
+    }
+
+
+
+    @Override
+    public void init() {
+        super.init();
+
+        Component name = Component.translatable("gui.vampirism.level_up");
+        int wid = this.font.width(name) + 10;
+        int i = (this.imageWidth - wid) / 2;
+        int j = (this.height - this.imageHeight) / 2;
+        addRenderableWidget(buttonLevelUp = new ExtendedButton(this.leftPos + i, j + 50, wid, 20, name, (context) -> {
+            VampirismMod.proxy.sendToServer(new ServerboundSimpleInputEvent(ServerboundSimpleInputEvent.Event.BASIC_HUNTER_LEVELUP));
+            this.onClose();
+        }));
+        buttonLevelUp.active = false;
+    }
+
+
+
+    @Override
+    protected void containerTick() {
+        if (buttonLevelUp != null) {
+            buttonLevelUp.active = this.menu.canLevelUp() == HunterBasicMenu.LevelingState.CAN_LEVEL_UP;
+        }
+        super.containerTick();
+        this.bloodIcon.tick(List.of(PURE_BLOOD_BOTTLE_SLOT_SPRITE));
+    }
+
+    @Override
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
+        this.bloodIcon.extractRenderState(this.menu, graphics, a, this.leftPos, this.topPos);
+    }
+}

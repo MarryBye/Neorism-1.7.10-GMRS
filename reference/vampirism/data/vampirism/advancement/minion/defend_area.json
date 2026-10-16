@@ -1,0 +1,28 @@
+{
+  "parent": "vampirism:minion/become_lord",
+  "criteria": {
+    "task": {
+      "conditions": {
+        "task": "factionapi:defend_area"
+      },
+      "trigger": "factionapi:minion_action"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.vampirism.defend_area.desc"
+    },
+    "icon": {
+      "id": "minecraft:red_banner"
+    },
+    "title": {
+      "translate": "advancement.vampirism.defend_area"
+    }
+  },
+  "requirements": [
+    [
+      "task"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

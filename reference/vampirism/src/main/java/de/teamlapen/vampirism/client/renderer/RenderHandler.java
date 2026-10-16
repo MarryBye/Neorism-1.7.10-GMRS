@@ -1,0 +1,228 @@
+package de.teamlapen.vampirism.client.renderer;
+
+import de.teamlapen.faction.client.IMinecraftAccessor;
+import de.teamlapen.faction.common.config.FactionConfig;
+import de.teamlapen.vampirism.common.events.VampirismEventFactory;
+import de.teamlapen.vampirism.client.core.ModEntityRenderStates;
+import de.teamlapen.vampirism.common.config.ModConfig;
+import de.teamlapen.vampirism.common.core.ModRefinements;
+import de.teamlapen.vampirism.common.util.Helper;
+import de.teamlapen.vampirism.common.world.blocks.CoffinBlock;
+import de.teamlapen.vampirism.common.world.entity.player.vampire.VampirePlayer;
+import de.teamlapen.vampirism.common.world.items.CrucifixItem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.debug.DebugScreenEntries;
+import net.minecraft.client.gui.components.debug.DebugScreenEntryStatus;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.event.level.LevelEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Handle most general rendering related stuff
+ */
+@SuppressWarnings("unused")
+public class RenderHandler implements IMinecraftAccessor {
+    private final int VAMPIRE_BIOME_FADE_TICKS = 60;
+    private final Logger LOGGER = LogManager.getLogger();
+
+    private int vampireBiomeTicks = 0;
+    /**
+     * If inside a foggy area.
+     * Only updated every n ticks
+     */
+    private boolean insideFog = false;
+
+    private float vampireBiomeFogDistanceMultiplier = 1;
+
+    @SubscribeEvent
+    public void onCameraSetup(ViewportEvent.@NotNull ComputeCameraAngles event) {
+        if (FactionConfig.helper().preventRenderingDebugBoundingBoxes()) {
+            DebugScreenEntryStatus status = this.mc().debugEntries.getStatus(DebugScreenEntries.ENTITY_HITBOXES);
+            if (status != DebugScreenEntryStatus.NEVER) {
+                this.mc().debugEntries.setStatus(DebugScreenEntries.ENTITY_HITBOXES, DebugScreenEntryStatus.NEVER);
+            }
+        }
+        if (event.getCamera().entity() instanceof LivingEntity living && living.isSleeping()) {
+            living.getSleepingPos().map(pos -> living.level().getBlockState(pos)).filter(blockState -> blockState.getBlock() instanceof CoffinBlock).ifPresent(blockState -> {
+                if (blockState.getValue(CoffinBlock.VERTICAL)) {
+                    event.getCamera().invokeMove(0.2f, -0.2f, 0);
+                } else {
+                    event.getCamera().invokeMove(0, -0.2f, 0);
+                }
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public void onClientTick(ClientTickEvent.Pre event) {
+        if (Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive()) return;
+        VampirePlayer vampire = VampirePlayer.get(player());
+
+        //Vampire biome/village fog
+        if (player().tickCount % 10 == 0) {
+            if (!player().isSpectator() && (ModConfig.client().renderVampireForestFog.get() || ModConfig.server().enforceRenderForestFog.get()) && (Helper.isEntityInArtificalVampireFogArea(player()) || Helper.isEntityInVampireBiome(player()))) {
+                insideFog = true;
+                vampireBiomeFogDistanceMultiplier = vampire.getLevel() > 0 ? 2 : 1;
+                vampireBiomeFogDistanceMultiplier += vampire.getRefinementHandler().isRefinementEquipped(ModRefinements.VISTA) ? ModConfig.balance().vrVistaMod.get().floatValue() : 0;
+
+                vampireBiomeFogDistanceMultiplier = VampirismEventFactory.fireVampireFogEvent(vampireBiomeFogDistanceMultiplier);
+
+            } else {
+                insideFog = false;
+            }
+        }
+        if (insideFog) {
+            if (vampireBiomeTicks < VAMPIRE_BIOME_FADE_TICKS) {
+                vampireBiomeTicks++;
+            }
+        } else {
+            if (vampireBiomeTicks > 0) {
+                vampireBiomeTicks--;
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onRenderFog(ViewportEvent.@NotNull RenderFog event) {
+        if (vampireBiomeTicks == 0) return;
+        float f = ((float) VAMPIRE_BIOME_FADE_TICKS) / (float) vampireBiomeTicks / 1.5f;
+        f *= vampireBiomeFogDistanceMultiplier;
+
+        switch (event.getType()) {
+            case ATMOSPHERIC -> {
+                event.setNearPlaneDistance(Math.min(event.getNearPlaneDistance() * 0.75f, 6 * f));
+                event.setFarPlaneDistance(Math.min(event.getFarPlaneDistance(), 50 * f));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onRenderHand(@NotNull RenderHandEvent event) {
+        //noinspection ConstantValue
+        if (player() != null && player().isAlive() && VampirePlayer.get(player()).getSkillProperties().hasForm()) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onRenderLivingPre(RenderLivingEvent.@NotNull Pre<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>> event) {
+        if (event.getRenderState().getRenderDataOrDefault(ModEntityRenderStates.HUNTER_DISGUISED, false)) {
+            double dist = event.getRenderState().distanceToCameraSq;
+            if (dist > 64) {
+                event.setCanceled(true);
+            } else if (dist > 16 && event.getRenderState().getRenderDataOrDefault(ModEntityRenderStates.HUNTER_FULL_COAT, false)) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    /**
+     * Submits the aura of darkness for any living entity carrying the effect.
+     * <p>
+     * Hooked here rather than added as a {@link net.minecraft.client.renderer.entity.layers.RenderLayer} because
+     * the draw needs the scene depth bound as a sampler, which a layer cannot do - see {@link
+     * VolumetricBillboards}. {@code AvatarRenderer#submit} delegates to {@code LivingEntityRenderer#submit}, so
+     * this one handler covers players as well as mobs. It does not fire for the forms cancelled in
+     * {@link #onRenderPlayerPreHigh} - invisibility, bat and mist - which is what we want: an invisible player
+     * should not be given away by a halo.
+     */
+    @SubscribeEvent
+    public void onRenderLivingPost(RenderLivingEvent.@NotNull Post<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>> event) {
+        LivingEntityRenderState renderState = event.getRenderState();
+        if (Boolean.TRUE.equals(renderState.getRenderData(ModEntityRenderStates.AURA_OF_DARKNESS))) {
+            AuraOfDarknessRenderer.submitAura(
+                    renderState.getRenderDataOrDefault(ModEntityRenderStates.AURA_OF_DARKNESS_FADE, 1f),
+                    renderState.boundingBoxWidth,
+                    renderState.boundingBoxHeight,
+                    event.getPoseStack());
+        }
+    }
+
+    @SubscribeEvent
+    public void onRenderFirstPersonHand(@NotNull RenderHandEvent event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && player.isUsingItem() && player.getUseItemRemainingTicks() > 0 && event.getHand() == player.getUsedItemHand()) {
+            if (event.getItemStack().getItem() instanceof CrucifixItem) {
+                HumanoidArm humanoidarm = event.getHand() == InteractionHand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite();
+                int i = humanoidarm == HumanoidArm.RIGHT ? 1 : -1;
+                event.getPoseStack().translate(((float) -i * 0.56F), -0.0, -0.2F);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onRenderPlayer(RenderPlayerEvent.@NotNull Pre<AbstractClientPlayer> event) {
+        if (event.getRenderState().getRenderDataOrDefault(ModEntityRenderStates.VAMPIRE_DBNO, false)) {
+            event.getPoseStack().translate(1.2, 0, 0);
+            PlayerModel m = event.getRenderer().getModel();
+            m.rightArm.visible = false;
+            m.rightSleeve.visible = false;
+            m.leftArm.visible = false;
+            m.leftSleeve.visible = false;
+            m.rightLeg.visible = false;
+            m.leftLeg.visible = false;
+            m.rightPants.visible = false;
+            m.leftPants.visible = false;
+        } else if (event.getRenderState().getRenderDataOrDefault(ModEntityRenderStates.VAMPIRE_SLEEPING_IN_COFFIN, false)) {
+            //Shrink player, so they fit into the coffin model
+            event.getPoseStack().scale(0.8f, 0.95f, 0.8f);
+        }
+    }
+
+    @SubscribeEvent
+    public void onWorldLoad(LevelEvent.Load event) {
+        this.vampireBiomeTicks = 0;
+        this.insideFog = false;
+    }
+
+    @SubscribeEvent
+    public void onPreFrame(ExtractLevelRenderStateEvent event) {
+        if (VampirePlayer.get(player()).getSkillProperties().mist) {
+            mc().gameRenderer.getGameRenderState().optionsRenderState.bobView = false;
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onRenderPlayerPreHigh(RenderPlayerEvent.@NotNull Pre<AbstractClientPlayer> event) {
+        var renderState = event.getRenderState();
+        if (renderState.getRenderDataOrDefault(ModEntityRenderStates.VAMPIRE_INVISIBLE, false)) {
+            event.setCanceled(true);
+        } else if (renderState.getRenderData(ModEntityRenderStates.VAMPIRE_BAT) instanceof Bat bat) {
+            event.setCanceled(true);
+            float partialTicks = event.getPartialTick();
+
+            bat.tickCount = (int) event.getRenderState().ageInTicks;
+            bat.setInvisible(event.getRenderState().isInvisible);
+            EntityRenderer<? super Bat, ?> renderer = mc().getEntityRenderDispatcher().getRenderer(bat);
+            EntityRenderState batRenderState = renderer.createRenderState(bat, partialTicks);
+            mc().getEntityRenderDispatcher().submit(batRenderState, new CameraRenderState(), 0, 0, 0, event.getPoseStack(), event.getSubmitNodeCollector());
+        } else if (Boolean.TRUE.equals(renderState.getRenderData(ModEntityRenderStates.MIST))) {
+            event.setCanceled(true);
+            MistRenderer.submitMistCloud(
+                    renderState.getRenderDataOrDefault(ModEntityRenderStates.MIST_FADE, 1f),
+                    renderState.boundingBoxWidth,
+                    renderState.boundingBoxHeight,
+                    renderState.getRenderDataOrDefault(ModEntityRenderStates.MIST_VELOCITY, Vec3.ZERO),
+                    renderState.getRenderDataOrDefault(ModEntityRenderStates.MIST_FLOW, Vec3.ZERO),
+                    event.getPoseStack());
+        }
+    }
+
+}

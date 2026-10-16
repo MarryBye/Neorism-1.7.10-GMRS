@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "vampirism:polished_dark_stone",
+  "result": {
+    "id": "vampirism:polished_dark_stone_wall"
+  }
+}
