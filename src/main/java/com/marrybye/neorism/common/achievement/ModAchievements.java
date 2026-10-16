@@ -53,7 +53,6 @@ public class ModAchievements {
     public static Achievement enhancedCrossbow;
     public static Achievement techCrossbow;
     public static Achievement hunterMaxLevel;
-    public static Achievement hunterBecomeLord;
     public static Achievement hunterMaxLord;
     public static Achievement brochette;
     public static Achievement crazedGunman;
@@ -124,13 +123,12 @@ public class ModAchievements {
         crazedGunman = registerHunter("crazed_gunman", -2, 6, new ItemStack(Items.arrow), hunterCrossbow);
 
         hunterMaxLevel = registerHunter("max_level_hunter", 0, 6, new ItemStack(Items.nether_star), hunterCrossbow).setSpecial();
-        hunterBecomeLord = registerHunter("become_lord", 0, 8, new ItemStack(Items.gold_ingot), hunterMaxLevel);
-        hunterMaxLord = registerHunter("max_lord_hunter", 0, 10, new ItemStack(Items.diamond), hunterBecomeLord).setSpecial();
+        hunterMaxLord = registerHunter("max_lord_hunter", 0, 8, new ItemStack(Items.diamond), hunterMaxLevel).setSpecial();
 
-        hunterKillMother = registerHunter("hunter_kill_mother", -2, 8, new ItemStack(Items.ghast_tear), hunterBecomeLord).setSpecial();
-        killResurrectedVampire = registerHunter("kill_resurrected_vampire", 2, 8, new ItemStack(Items.skull), hunterBecomeLord);
-        betrayal = registerHunter("betrayal", 2, 6, new ItemStack(Items.bone), hunterMaxLevel);
-        worthIt = registerHunter("worth_it", 2, 10, new ItemStack(Items.emerald), hunterMaxLord).setSpecial();
+        hunterKillMother = registerHunter("hunter_kill_mother", -2, 8, new ItemStack(Items.ghast_tear), becomeHunter).setSpecial();
+        killResurrectedVampire = registerHunter("kill_resurrected_vampire", -2, 0, new ItemStack(Items.skull), stake);
+        betrayal = registerHunter("betrayal", 2, 0, new ItemStack(Items.bone), becomeHunter);
+        worthIt = registerHunter("worth_it", 2, 4, new ItemStack(Items.emerald), hunterTraining).setSpecial();
     }
 
     private static Achievement registerVampire(String name, int column, int row, ItemStack icon, Achievement parent) {
