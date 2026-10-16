@@ -302,63 +302,126 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 
 ## Phase 10: Minion Management & Lordship System
 *Rule as a Vampire Count or Hunter General with loyal follower NPCs.*
+*Original Sources:*
+- Faction Lord API: `reference/vampirism/src/main/java/de/teamlapen/faction/api/factions/lord/ILordPlayer.java`
+- Titles Provider: `reference/vampirism/src/main/java/de/teamlapen/faction/api/factions/lord/LordTitles.java`
+- Minion Entities: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/entity/minion/VampireMinionEntity.java`, `HunterMinionEntity.java`
+- Minion Tasks Engine: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/entity/minion/MinionTasks.java`
+- Client Screens: `reference/vampirism/src/main/java/de/teamlapen/faction/client/gui/screens/MinionScreen.java`, `MinionStatsScreen.java`
 
 - [ ] **10.1. Lordship Hierarchy & Titles**
-  - [ ] Lord Levels 1 to 5.
-  - [ ] Titles: Baron/Baroness, Viscount/Viscountess, Count/Countess, Duke/Duchess, Prince/Princess.
-  - [ ] Nametag prefix display and chat integration.
-- [ ] **10.2. Minion Entities (`EntityVampireMinion`, `EntityHunterMinion`)**
-  - [ ] Summoned or hired by Lords.
-  - [ ] Persistent ownership, stats, custom names, and equipment inventory.
-- [ ] **10.3. Minion Tasks & Orders**
+  - [ ] Lord Levels 1 to 5 (`ILordPlayer`, `ILordTitleProvider`).
+  - [ ] Titles: Baron/Baroness, Viscount/Viscountess, Count/Countess, Duke/Duchess, Prince/Princess (`LordTitles.java`).
+  - [ ] Nametag prefix display and chat integration (`ScoreboardUtil.java`).
+- [ ] **10.2. Minion Entities (`VampireMinionEntity`, `HunterMinionEntity`)**
+  - [ ] Summoned or hired by Lords (`IMinionEntity`).
+  - [ ] Persistent ownership, stats, custom names, and equipment inventory (`MinionEntry.java`, `MinionContainer.java`).
+- [ ] **10.3. Minion Tasks & Orders (`MinionTasks.java`)**
   - [ ] `TaskFollow`: Protects and follows the Lord.
   - [ ] `TaskDefendArea`: Guards a designated radius around a beacon/coffin.
   - [ ] `TaskCollectBlood`: Collects blood from surrounding wildlife and stores in containers.
   - [ ] `TaskGatherLoot`: Collects drops from slain hunters/vampires.
 - [ ] **10.4. Minion Management GUI**
-  - [ ] Client GUI for inspecting minion health, stats, inventory, and issuing remote commands.
+  - [ ] Client GUI for inspecting minion health, stats, inventory, and issuing remote commands (`MinionScreen.java`, `MinionStatsScreen.java`).
 
 ---
 
 ## Phase 11: World Generation, Vampire Biome & Structures
 *Atmospheric exploration across spooky biomes, crypts, and camps.*
+*Original Sources:*
+- Biomes: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/biomes/VampirismBiomes.java`
+- Vegetation & Foliage: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/features/`
+- Crypt Structure: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/structures/crypt/CryptStructure.java`
+- Hunter Camp & Outpost: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/structures/huntercamp/HunterCampStructure.java`, `hunteroutpost/`
+- Vampire Altar Ruins: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/structures/vampirealtar/VampireAltarStructure.java`
+- Dracula Castle: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/structures/draculacastle/DraculaCastleStructure.java`
 
 - [ ] **11.1. Vampire Forest Biome**
-  - [ ] Biome registration (`BiomeGenVampireForest`).
-  - [ ] Dark purple sky fog color, blood-red water color, dead grass color.
-  - [ ] Dense dark spruce trees with Spanish moss / vampire vines.
+  - [ ] Biome registration (`BiomeGenVampireForest` / `VampirismBiomes.java`).
+  - [ ] Dark purple sky fog color (`0x1b002c`), blood-red water color (`0x4a0000`), dead grass color.
+  - [ ] Dense dark spruce trees with Spanish moss / cursed roots (`ModFeatures.java`).
   - [ ] Vampire mob spawn weights enabled during both day and night (under tree canopy).
-- [ ] **11.2. Underground Vampire Crypt Structure**
+- [ ] **11.2. Underground Vampire Crypt Structure (`CryptStructure.java`)**
   - [ ] Procedural multiblock underground crypt rooms.
   - [ ] Coffin chambers, Vampire Barons spawners, rare loot chests (Vampire Books, Pure Blood).
-- [ ] **11.3. Hunter Camps & Outposts**
+- [ ] **11.3. Hunter Camps & Outposts (`HunterCampStructure.java`, `HunterOutpostStructure.java`)**
   - [ ] Surface tents, watchtowers, training dummies, Hunter Trainers, weapon benches.
-- [ ] **11.4. Altar Ruins in Overworld**
+- [ ] **11.4. Altar Ruins in Overworld (`VampireAltarStructure.java`)**
   - [ ] Ancient abandoned Altar of Inspiration structures in deep forests.
-- [ ] **11.5. Dimension & Ambient Audio Normalization**
-  - [ ] Adapt dimension ambient sound events (`ambient.velmorra_rumble`) with 1.7.10 wither ambient sound mapping or custom sound loop.
+- [ ] **11.5. Dracula Castle Boss Arena (`DraculaCastleStructure.java`)**
+  - [ ] Gothic castle structure in Vampire Forest with throne room, bat roosts, and boss summon altar.
+- [ ] **11.6. Dimension & Ambient Audio Normalization**
+  - [ ] Adapt dimension ambient sound events (`ambient.velmorra_rumble`) with 1.7.10 sound loops.
 
 ---
 
 ## Phase 12: Client Experience, GUI, Angelica Shaders & Integrations
 *Polished visuals, modern HUD overlays, shader compatibility, and modpack integrations.*
+*Original Sources:*
+- Faction Dashboard: `reference/vampirism/src/main/java/de/teamlapen/faction/client/gui/screens/FactionMenuScreen.java`
+- Skills Screen: `reference/vampirism/src/main/java/de/teamlapen/faction/client/gui/screens/skills/SkillsScreen.java`, `SkillSegmentComponent.java`, `SkillSegmentConnection.java`
+- Action Radial: `reference/vampirism/src/main/java/de/teamlapen/faction/client/gui/screens/SelectActionRadialScreen.java`, `DualSwitchingRadialMenu.java`
+- HUD Overlays: `reference/vampirism/src/main/java/de/teamlapen/vampirism/client/gui/overlay/`
+- Blood Vision: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/entity/player/vampire/vision/BloodVision.java`
 
 - [ ] **12.1. In-Game HUD Overlays**
-  - [ ] Blood Bar overlay (replaces vanilla hunger bar when Vampire, with blood drop icons, saturation halo, thirst warnings).
-  - [ ] Faction & Level indicator widget.
+  - [ ] Blood Bar overlay (`BloodBarOverlay.java`): replaces vanilla hunger bar when Vampire, with blood drop icons, saturation halo, thirst warnings.
+  - [ ] Sun exposure warning vignette (`SunOverlay.java`, `SunBlindOverlay.java`).
+  - [ ] Rage effect vignette (`RageOverlay.java`) and Bat flight overlay (`BatOverlay.java`).
   - [ ] Active action cooldown badges on hotbar.
-- [ ] **12.2. Interactive GUIs**
-  - [ ] `GuiSkillTree`: Smooth zooming and dragging canvas showing skill nodes, lines, and tooltips.
-  - [ ] `GuiActionRadial`: Radial pop-up selector for triggering skills via hotkey.
-  - [ ] `GuiAltarInspiration`, `GuiAltarInfusion`, `GuiWeaponTable`, `GuiAlchemicalCauldron`.
+- [ ] **12.2. Interactive GUIs (FactionAPI Port)**
+  - [ ] `FactionMenuScreen` on `[P]`: Main player dashboard with overview, skills, tasks, and refinement slots.
+  - [ ] `SkillsScreen`: Smooth zooming and dragging canvas showing skill nodes, lines, and tooltips.
+  - [ ] `SelectActionRadialScreen`: Radial pop-up selector for triggering skills via hotkey `[R]`.
+  - [ ] `AltarInfusionScreen`, `HunterTableScreen`, `AlchemicalCauldronScreen`.
 - [ ] **12.3. Angelica Shader Compatibility & Post-Processing**
   - [ ] `BloodVision`: Highlights living warm-blooded creatures through blocks in red/gold glow without breaking Angelica/Sodium pipelines.
   - [ ] Night Vision tone mapping (no bright green wash-out).
   - [ ] Fog Diffuser volumetric fog rendering.
-- [ ] **12.4. Cross-Mod Integrations (GTNH Stack)**
-  - [ ] **Et-Futurum-Requiem**: Shared crossbow firing logic, banner patterns, shield blocking against stakes.
-  - [ ] **Combat Backport**: Attack speed attributes on Hunter Axes and Heartseekers; Sweeping Edge compatibility.
-  - [ ] **Villager Trades Backport**: Custom trades for Hunter Trainers and converted villagers; workstation interaction.
-  - [ ] **VillageNames**: Generates lore-accurate names for vampire villages and hunter outposts.
-  - [ ] **Hodgepodge**: Perfect celestial time and day/night sync.
-  - [ ] **NEI (Not Enough Items)**: Recipe handlers for Altar of Inspiration, Altar of Infusion, Weapon Table, and Cauldron.
+
+---
+
+## Phase 13: Villages, Territory Control & Faction War
+*Conquer villages, raise faction banners, and defend territory against enemy raids.*
+*Original Sources:*
+- Village Faction API: `reference/vampirism/src/main/java/de/teamlapen/faction/api/factions/village/IFactionVillage.java`
+- Village Logic: `reference/vampirism/src/main/java/de/teamlapen/faction/common/factions/FactionVillage.java`
+- Totem Block & Entity: `reference/vampirism/src/main/java/de/teamlapen/faction/common/world/blocks/TotemBaseBlock.java`, `TotemTopBlock.java`, `TotemBlockEntity.java`
+- Totem Renderer: `reference/vampirism/src/main/java/de/teamlapen/faction/client/renderer/TotemRenderer.java`
+- Village Banners: `reference/vampirism/src/main/java/de/teamlapen/faction/api/factions/village/VillageBanner.java`
+- Capture Entity: `reference/vampirism/src/main/java/de/teamlapen/faction/api/world/entities/IVillageCaptureEntity.java`
+
+- [ ] **13.1. Village Faction Territory Subsystem (`FactionVillage.java`)**
+  - [ ] Track village boundaries, controlling faction, and capture status.
+  - [ ] Village faction state machine: Neutral, Vampire Controlled, Hunter Controlled.
+- [ ] **13.2. Faction Totem Multiblock (`TotemBlockEntity.java`)**
+  - [ ] Central totem block structure (`TotemBase` + `TotemTop`).
+  - [ ] Right-click interaction to view defense level, garrison health, and initiate capture.
+- [ ] **13.3. Village Raid & Capture Mechanics (`IVillageCaptureEntity.java`)**
+  - [ ] Attacking players trigger village siege raid.
+  - [ ] Capture progress bar: players must hold territory near the totem and defeat defenders.
+  - [ ] Capture completion flips village control, spawns faction-specific guards, and replaces banners (`VillageBanner.java`).
+- [ ] **13.4. Faction Villagers & Trades**
+  - [ ] Villagers in vampire-controlled villages provide blood peacefully or become thralls.
+  - [ ] Hunter-controlled villages spawn additional Hunter patrols and discount trades.
+
+---
+
+## Phase 14: Cross-Mod Integrations & Balance Tuning (GTNH Stack)
+*Seamless integration with modern backports and GT New Horizons core mods.*
+
+- [ ] **14.1. Et-Futurum-Requiem Integration**
+  - [ ] Shared crossbow mechanics, arrow/quarrel pooling, shield blocking against stakes.
+  - [ ] Modern banner patterns for Vampire and Hunter factions.
+- [ ] **14.2. Combat Backport Integration**
+  - [ ] Attack cooldowns and attack speed attributes on Hunter Axes and Heartseekers.
+  - [ ] Sweeping Edge enchantment support for faction blades.
+- [ ] **14.3. Villager Trades Backport Integration**
+  - [ ] Modern 1.14+ trading GUI and workstation AI for Hunter Trainers and converted villagers.
+- [ ] **14.4. VillageNames Integration**
+  - [ ] Procedural gothic/vampiric name generation for captured villages and crypts.
+- [ ] **14.5. Hodgepodge & GTNHLib Integration**
+  - [ ] Celestial angle time sync with Hodgepodge day/night calculations.
+  - [ ] Matrix transformations and rendering math via GTNHLib.
+- [ ] **14.6. NEI (Not Enough Items) Integration**
+  - [ ] Recipe handlers for Altar of Inspiration, Altar of Infusion, Weapon Table, and Cauldron.
