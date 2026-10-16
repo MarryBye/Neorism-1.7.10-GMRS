@@ -10,6 +10,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.*;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,15 +28,14 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
     public static final String PROPERTY_ID = "neorism:extended_creature";
 
     private final EntityLivingBase entity;
-    private int maxBlood;
-    private int blood;
+    private int maxBlood = -1;
+    private int blood = -1;
     private int poisonousBlood = 0;
     private boolean canBecomeVampire = false;
+    private boolean initialized = false;
 
     public ExtendedCreature(EntityLivingBase entity) {
         this.entity = entity;
-        this.maxBlood = calculateMaxBlood(entity);
-        this.blood = this.maxBlood;
         this.canBecomeVampire = entity instanceof EntityVillager;
     }
 
@@ -49,9 +50,28 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
         }
     }
 
+    private void ensureInitialized() {
+        if (!initialized) {
+            initialized = true;
+            if (this.maxBlood < 0) {
+                this.maxBlood = calculateMaxBlood(this.entity);
+            }
+            if (this.blood < 0) {
+                this.blood = this.maxBlood;
+            }
+        }
+    }
+
     private static int calculateMaxBlood(EntityLivingBase e) {
         if (e == null || e instanceof IMob) return 0;
-        if (e.getMaxHealth() > 50.0F) return 0;
+
+        try {
+            IAttributeInstance maxHealth = e.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+            if (maxHealth != null && maxHealth.getAttributeValue() > 50.0D) {
+                return 0;
+            }
+        } catch (Exception ignored) {
+        }
 
         if (e instanceof EntityVillager) return 15;
         if (e instanceof EntityCow) return 10;
@@ -85,6 +105,7 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
 
     @Override
     public void saveNBTData(NBTTagCompound compound) {
+        ensureInitialized();
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger("blood", blood);
         tag.setInteger("maxBlood", maxBlood);
@@ -99,16 +120,19 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
             this.blood = tag.getInteger("blood");
             this.maxBlood = tag.getInteger("maxBlood");
             this.poisonousBlood = tag.getInteger("poisonousBlood");
+            this.initialized = true;
         }
     }
 
     @Override
     public boolean canBeBitten(IVampireEntity biter) {
+        ensureInitialized();
         return blood > 0 && maxBlood > 0;
     }
 
     @Override
     public float getBloodLevelRelative() {
+        ensureInitialized();
         return maxBlood > 0 ? (float) blood / (float) maxBlood : 0.0F;
     }
 
@@ -119,6 +143,7 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
 
     @Override
     public int onBite(IVampireEntity biter) {
+        ensureInitialized();
         if (blood <= 0 || maxBlood <= 0) return 0;
 
         int amt = Math.max(1, maxBlood / 6);
@@ -156,6 +181,7 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
 
     @Override
     public boolean canDrain(int amount) {
+        ensureInitialized();
         int avail = blood;
         if (entity instanceof EntityAgeable && ((EntityAgeable) entity).isChild()) {
             avail /= 3;
@@ -165,6 +191,7 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
 
     @Override
     public int onSyringeUse(int amount) {
+        ensureInitialized();
         if (!canDrain(amount)) return 0;
         boolean child = entity instanceof EntityAgeable && ((EntityAgeable) entity).isChild();
         blood -= amount / (child ? 3 : 1);
@@ -193,6 +220,7 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
     }
 
     public void updateLiving() {
+        ensureInitialized();
         // Natural blood replenishment over time (1 in 20 chance every 40 ticks = ~2 seconds)
         if (blood < maxBlood && entity.ticksExisted % 40 == 0) {
             if (entity.worldObj.rand.nextInt(20) == 0) {
@@ -202,10 +230,12 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
     }
 
     public int getBlood() {
+        ensureInitialized();
         return blood;
     }
 
     public int getMaxBlood() {
+        ensureInitialized();
         return maxBlood;
     }
 }
