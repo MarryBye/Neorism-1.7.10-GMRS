@@ -1,0 +1,21 @@
+{
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "Neorism is a faithful backport of modern 'Vampirism: Become a Vampire' mechanics, items, rituals, factions, and creatures to Minecraft 1.7.10 within the GTNH ecosystem.",
+		"version": "${modVersion}",
+		"mcversion": "${minecraftVersion}",
+		"url": "https://github.com/TeamLapen/Vampirism",
+		"updateUrl": "",
+		"authorList": ["maxanier (Original Vampirism)", "TeamLapen", "MarryBye (Backport Lead)", "Gemini AI (Backport Co-Author)"],
+		"credits": "Huge thanks and full intellectual credit to maxanier & TeamLapen for creating the original Vampirism mod. Backported to 1.7.10 by MarryBye + Gemini AI. IMPORTANT: Do NOT contact or report bugs to the original authors!",
+		"logoFile": "",
+		"screenshots": [],
+		"parent": "",
+		"requiredMods": [],
+		"dependencies": [],
+		"dependants": [],
+		"useDependencyInformation": false
+	}]
+}

@@ -1,0 +1,69 @@
+                      Neorism (Vampirism 1.7.10 Backport)
+                               Licensing & Notice
+
+================================================================================
+                              IMPORTANT NOTICE
+================================================================================
+
+This project ("Neorism") is an independent, unofficial backport of the modern
+Minecraft mod "Vampirism: Become a Vampire" to Minecraft 1.7.10.
+
+ORIGINAL WORK & INTELLECTUAL PROPERTY:
+- Original Mod: "Vampirism: Become a Vampire"
+- Original Authors & Maintainers: maxanier and TeamLapen
+- Original Repository: https://github.com/TeamLapen/Vampirism
+- CurseForge Page: https://www.curseforge.com/minecraft/mc-mods/vampirism-become-a-vampire
+- Official Website: https://vampirism.co
+
+We express our deepest gratitude, sincere appreciation, and full credit to
+maxanier, TeamLapen, and all original contributors for creating Vampirism.
+
+BACKPORT AUTHORS:
+- MarryBye + Gemini AI
+
+DISCLAIMER & BUG REPORTING:
+Any bugs, crashes, performance issues, behavioral differences, or unintended
+side effects in this backport (Neorism) are solely the result of this backport
+and are the responsibility of the backport maintainers (MarryBye + Gemini AI).
+THEY DO NOT REFLECT THE WORK OR QUALITY OF THE ORIGINAL AUTHORS.
+
+ABSOLUTELY DO NOT report issues, bugs, or crash reports from Neorism to the
+original Vampirism repository, Discord, or authors. The original authors provide
+no support for this backport, and you must never bother them regarding this mod.
+
+================================================================================
+                             LICENSING BREAKDOWN
+================================================================================
+
+This repository incorporates original content and modified derivative works
+governed by the following licenses:
+
+1. SOURCE CODE (licenses/CODE_LICENSE)
+   All source code is licensed under the GNU Lesser General Public License (LGPL)
+   v3.0. In compliance with Section 2 of LGPL-3.0, this work conveys a modified
+   version (backport to Minecraft 1.7.10 / Forge 10.13.4.1614 / GTNH ecosystem),
+   with all modifications authored by MarryBye + Gemini AI, building upon the
+   original codebase by maxanier and TeamLapen.
+
+2. ASSETS - TEXTURES AND MODELS (licenses/ASSET_LICENSE)
+   All original textures and models ported from Vampirism are licensed under the
+   Vampirism Asset License v1.0. This license explicitly permits use, remixing,
+   and distribution in forks and addon mods of the project, under strictly
+   NON-COMMERCIAL conditions and with attribution to the Vampirism project.
+
+3. NARRATIVE CONTENT - LORE AND TEXTS (licenses/NARRATIVE_LICENSE)
+   All narrative, lore entries, in-game books, and descriptive texts are licensed
+   under the Vampirism Narrative Content License (VNCL) v1.0, permitting technical
+   adaptation and inclusion into project forks without commercial use.
+
+4. SOUNDS
+   Original sound assets retain their respective individual licenses and attributions
+   as designated by the Vampirism project.
+
+================================================================================
+                               NO WARRANTY
+================================================================================
+
+THIS SOFTWARE AND ACCOMPANYING ASSETS ARE PROVIDED "AS IS", WITHOUT WARRANTY
+OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
