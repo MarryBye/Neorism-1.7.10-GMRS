@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/sovereign_blood"
+    "model": "neorism:item/sovereign_blood"
   }
 }

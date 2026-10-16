@@ -1,9 +1,9 @@
-{
+﻿{
 	"credit": "Made by Grid and FoxPrince",
 	"render_type": "minecraft:cutout",
 	"textures": {
-      "particle": "vampirism:block/weapon_table_hammer",
-      "hammer": "vampirism:block/weapon_table_hammer"
+      "particle": "neorism:block/weapon_table_hammer",
+      "hammer": "neorism:block/weapon_table_hammer"
 	},
 	"elements": [
 		{

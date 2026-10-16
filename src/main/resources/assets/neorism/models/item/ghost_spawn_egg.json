@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/ghost_spawn_egg"
+    "layer0": "neorism:item/ghost_spawn_egg"
   }
 }

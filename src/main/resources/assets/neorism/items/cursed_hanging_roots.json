@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/cursed_hanging_roots"
+    "model": "neorism:item/cursed_hanging_roots"
   }
 }

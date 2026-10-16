@@ -1,5 +1,5 @@
-{
-  "parent": "vampirism:block/weapon_table/weapon_table",
+﻿{
+  "parent": "neorism:block/weapon_table/weapon_table",
   "display": {
     "gui": {
       "rotation": [

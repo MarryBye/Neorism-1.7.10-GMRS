@@ -12,9 +12,15 @@ import net.minecraft.block.material.Material;
 public class BlockNeorism extends Block {
 
     public BlockNeorism(String name, Material material) {
+        this(name, name, material);
+    }
+
+    public BlockNeorism(String name, String textureName, Material material) {
         super(material);
         setBlockName("neorism." + name);
-        setBlockTextureName(Neorism.MODID + ":" + name);
+        if (textureName != null && !textureName.isEmpty()) {
+            setBlockTextureName(Neorism.MODID + ":" + textureName);
+        }
         setCreativeTab(ModCreativeTabs.tabMain);
     }
 }

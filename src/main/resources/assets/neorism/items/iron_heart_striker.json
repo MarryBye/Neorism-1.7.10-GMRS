@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/iron_heart_striker"
+    "model": "neorism:item/iron_heart_striker"
   }
 }

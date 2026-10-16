@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/altar_cleansing"
+    "model": "neorism:block/altar_cleansing"
   }
 }

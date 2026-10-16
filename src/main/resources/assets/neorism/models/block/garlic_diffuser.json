@@ -1,11 +1,11 @@
-{
+﻿{
   "credit": "Designed by Zozozrob",
   "parent": "block/block",
   "render_type": "minecraft:cutout",
   "texture_size": [32, 32],
   "textures": {
-    "diffuser": "vampirism:block/garlic_diffuser",
-    "core": "vampirism:block/garlic_diffuser_core",
+    "diffuser": "neorism:block/garlic_diffuser",
+    "core": "neorism:block/garlic_diffuser_core",
     "particle": "block/obsidian"
   },
   "elements": [

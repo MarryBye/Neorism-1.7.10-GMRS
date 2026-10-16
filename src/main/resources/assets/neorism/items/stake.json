@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/stake"
+    "model": "neorism:item/stake"
   }
 }

@@ -1,9 +1,9 @@
-{
+﻿{
 	"credit": "Designed by Zozozrob",
 	"parent": "block/block",
 	"textures": {
-		"particle": "vampirism:block/garlic_diffuser_core",
-		"core": "vampirism:block/garlic_diffuser_core"
+		"particle": "neorism:block/garlic_diffuser_core",
+		"core": "neorism:block/garlic_diffuser_core"
 	},
 	"elements": [
 		{

@@ -1,7 +1,7 @@
-{
+﻿{
   "parent": "block/crop",
   "textures": {
-    "crop": "vampirism:block/garlic_stage_2"
+    "crop": "neorism:block/garlic_stage_2"
   },
   "render_type": "minecraft:cutout"
 }

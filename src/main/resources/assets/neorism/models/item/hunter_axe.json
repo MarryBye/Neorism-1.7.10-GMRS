@@ -1,9 +1,9 @@
-{
+﻿{
   "__comment": "Made by Random",
   "ambientocclusion": false,
   "textures": {
-    "texture": "vampirism:item/hunter_axe_normal",
-    "particle": "vampirism:item/hunter_axe_normal"
+    "texture": "neorism:item/hunter_axe_normal",
+    "particle": "neorism:item/hunter_axe_normal"
   },
   "elements": [
     {

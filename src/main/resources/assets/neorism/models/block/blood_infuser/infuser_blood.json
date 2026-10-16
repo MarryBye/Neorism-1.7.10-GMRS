@@ -1,7 +1,7 @@
-{
+﻿{
 	"credit": "Made with Blockbench",
 	"textures": {
-		"2": "vampirism:block/blood_still",
+		"2": "neorism:block/blood_still",
 		"particle": "block/gold_block"
 	},
 	"elements": [

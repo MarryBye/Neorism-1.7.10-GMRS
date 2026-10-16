@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/ritual_knife"
+    "layer0": "neorism:item/ritual_knife"
   }
 }

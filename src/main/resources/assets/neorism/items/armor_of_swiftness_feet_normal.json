@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/armor_of_swiftness_feet_normal"
+    "model": "neorism:item/armor_of_swiftness_feet_normal"
   }
 }

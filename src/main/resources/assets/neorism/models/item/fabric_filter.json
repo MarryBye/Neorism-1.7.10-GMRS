@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/fabric_filter"
+    "layer0": "neorism:item/fabric_filter"
   }
 }

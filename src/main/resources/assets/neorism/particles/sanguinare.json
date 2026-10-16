@@ -1,10 +1,10 @@
-{
+﻿{
   "textures": [
-    "vampirism:sanguinare_0",
-    "vampirism:sanguinare_1",
-    "vampirism:sanguinare_2",
-    "vampirism:sanguinare_2",
-    "vampirism:sanguinare_3",
-    "vampirism:sanguinare_3"
+    "neorism:sanguinare_0",
+    "neorism:sanguinare_1",
+    "neorism:sanguinare_2",
+    "neorism:sanguinare_2",
+    "neorism:sanguinare_3",
+    "neorism:sanguinare_3"
   ]
 }

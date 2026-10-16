@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/tombstone_cross"
+    "model": "neorism:block/tombstone_cross"
   }
 }

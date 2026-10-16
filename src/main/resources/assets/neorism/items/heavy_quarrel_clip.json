@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/heavy_quarrel_clip"
+    "model": "neorism:item/heavy_quarrel_clip"
   }
 }

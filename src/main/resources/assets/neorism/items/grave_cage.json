@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/grave_cage"
+    "model": "neorism:block/grave_cage"
   }
 }

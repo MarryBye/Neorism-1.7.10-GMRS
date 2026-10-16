@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/human_heart"
+    "layer0": "neorism:item/human_heart"
   }
 }

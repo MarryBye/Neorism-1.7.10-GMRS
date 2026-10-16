@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/vampire_fang"
+    "model": "neorism:item/vampire_fang"
   }
 }

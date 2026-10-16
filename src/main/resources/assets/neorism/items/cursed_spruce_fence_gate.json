@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/cursed_spruce_fence_gate"
+    "model": "neorism:block/cursed_spruce_fence_gate"
   }
 }

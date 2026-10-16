@@ -9,6 +9,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
+        com.gtnewhorizon.gtnhlib.client.model.loading.ModelRegistry.registerModid(Neorism.MODID);
         com.marrybye.neorism.client.input.KeyBindings.init();
         com.marrybye.neorism.client.input.KeyBindings keyHandler = new com.marrybye.neorism.client.input.KeyBindings();
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(keyHandler);

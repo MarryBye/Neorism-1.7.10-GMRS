@@ -1,7 +1,7 @@
-{
+﻿{
   "parent": "minecraft:block/cube_column_horizontal",
   "textures": {
-    "end": "vampirism:block/stripped_dark_spruce_log_top",
-    "side": "vampirism:block/stripped_dark_spruce_log"
+    "end": "neorism:block/stripped_dark_spruce_log_top",
+    "side": "neorism:block/stripped_dark_spruce_log"
   }
 }

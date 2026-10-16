@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/purple_stone_bricks"
+    "model": "neorism:block/purple_stone_bricks"
   }
 }

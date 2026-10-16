@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/weak_human_heart"
+    "model": "neorism:item/weak_human_heart"
   }
 }

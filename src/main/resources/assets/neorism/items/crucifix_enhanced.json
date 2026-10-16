@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/crucifix_enhanced"
+    "model": "neorism:item/crucifix_enhanced"
   }
 }

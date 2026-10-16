@@ -1,13 +1,13 @@
-{
+﻿{
   "variants": {
     "type=bottom": {
-      "model": "vampirism:block/purple_stone_tiles_slab"
+      "model": "neorism:block/purple_stone_tiles_slab"
     },
     "type=double": {
-      "model": "vampirism:block/purple_stone_tiles"
+      "model": "neorism:block/purple_stone_tiles"
     },
     "type=top": {
-      "model": "vampirism:block/purple_stone_tiles_slab_top"
+      "model": "neorism:block/purple_stone_tiles_slab_top"
     }
   }
 }

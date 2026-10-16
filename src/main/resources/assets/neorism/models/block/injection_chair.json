@@ -1,12 +1,12 @@
-{
+﻿{
 	"credit": "Designed by GridExpert",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"arms": "vampirism:block/injection_chair_arms",
-		"chair": "vampirism:block/injection_chair",
+		"arms": "neorism:block/injection_chair_arms",
+		"chair": "neorism:block/injection_chair",
 		"particle": "block/dark_oak_planks"
 	},
 	"elements": [

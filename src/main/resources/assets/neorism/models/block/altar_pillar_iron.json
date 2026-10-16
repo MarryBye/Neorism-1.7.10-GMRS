@@ -1,6 +1,6 @@
-{
-  "parent": "vampirism:block/altar_pillar_filled",
+﻿{
+  "parent": "neorism:block/altar_pillar_filled",
   "textures": {
-    "side": "vampirism:block/altar_pillar_iron"
+    "side": "neorism:block/altar_pillar_iron"
   }
 }

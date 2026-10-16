@@ -1,11 +1,11 @@
-{
+﻿{
 	"credit": "Designed by Zozozrob",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
 	"textures": {
-		"side": "vampirism:block/blood_container_side",
-		"particle": "vampirism:block/blood_container_top",
-		"top": "vampirism:block/blood_container_top"
+		"side": "neorism:block/blood_container_side",
+		"particle": "neorism:block/blood_container_top",
+		"top": "neorism:block/blood_container_top"
 	},
 	"elements": [
 		{

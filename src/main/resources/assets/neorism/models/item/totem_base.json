@@ -1,5 +1,5 @@
-{
-  "parent": "vampirism:block/totem_base",
+﻿{
+  "parent": "neorism:block/totem_base",
   "display": {
     "gui": {
       "rotation": [

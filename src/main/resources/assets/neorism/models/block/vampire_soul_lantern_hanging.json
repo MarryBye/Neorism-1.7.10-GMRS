@@ -1,9 +1,9 @@
-{
+﻿{
 	"credit": "Made by GridExpert",
 	"parent": "block/block",
 	"textures": {
-		"lantern": "vampirism:block/vampire_soul_lantern",
-		"particle": "vampirism:block/vampire_soul_lantern"
+		"lantern": "neorism:block/vampire_soul_lantern",
+		"particle": "neorism:block/vampire_soul_lantern"
 	},
 	"render_type": "minecraft:cutout",
 	"elements": [

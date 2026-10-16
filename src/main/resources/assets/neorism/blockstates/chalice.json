@@ -1,10 +1,10 @@
-{
+﻿{
   "variants": {
     "filled=false": {
-      "model": "vampirism:block/chalice"
+      "model": "neorism:block/chalice"
     },
     "filled=true": {
-      "model": "vampirism:block/chalice_filled"
+      "model": "neorism:block/chalice_filled"
     }
   }
 }

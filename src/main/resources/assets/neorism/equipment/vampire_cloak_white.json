@@ -1,13 +1,13 @@
-{
+﻿{
   "layers": {
     "humanoid": [
       {
-        "texture": "vampirism:cloak/white"
+        "texture": "neorism:cloak/white"
       }
     ],
     "humanoid_baby": [
       {
-        "texture": "vampirism:cloak/white"
+        "texture": "neorism:cloak/white"
       }
     ]
   }

@@ -1,8 +1,8 @@
-{
+﻿{
   "multipart": [
     {
       "apply": {
-        "model": "vampirism:block/vampire_soul_lantern"
+        "model": "neorism:block/vampire_soul_lantern"
       },
       "when": {
         "AND": [
@@ -17,7 +17,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/vampire_soul_lantern",
+        "model": "neorism:block/vampire_soul_lantern",
         "y": 90
       },
       "when": {
@@ -33,7 +33,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/vampire_soul_lantern",
+        "model": "neorism:block/vampire_soul_lantern",
         "y": 180
       },
       "when": {
@@ -49,7 +49,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/vampire_soul_lantern",
+        "model": "neorism:block/vampire_soul_lantern",
         "y": 270
       },
       "when": {
@@ -65,7 +65,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/vampire_soul_lantern_hanging"
+        "model": "neorism:block/vampire_soul_lantern_hanging"
       },
       "when": {
         "AND": [
@@ -80,7 +80,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/vampire_soul_lantern_hanging",
+        "model": "neorism:block/vampire_soul_lantern_hanging",
         "y": 90
       },
       "when": {
@@ -96,7 +96,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/vampire_soul_lantern_hanging",
+        "model": "neorism:block/vampire_soul_lantern_hanging",
         "y": 180
       },
       "when": {
@@ -112,7 +112,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/vampire_soul_lantern_hanging",
+        "model": "neorism:block/vampire_soul_lantern_hanging",
         "y": 270
       },
       "when": {

@@ -1,15 +1,15 @@
-{
+﻿{
   "credit": "Zin",
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "0": "vampirism:block/dark_spruce_door_top",
-    "1": "vampirism:block/cursed_spruce_log",
-    "3": "vampirism:block/blood_still",
+    "0": "neorism:block/dark_spruce_door_top",
+    "1": "neorism:block/cursed_spruce_log",
+    "3": "neorism:block/blood_still",
     "7": "block/candle",
     "8": "block/black_concrete",
-    "particle": "vampirism:block/dark_spruce_door_top",
-    "1_3": "vampirism:block/vampire_rack"
+    "particle": "neorism:block/dark_spruce_door_top",
+    "1_3": "neorism:block/vampire_rack"
   },
   "render_type": "minecraft:cutout",
   "elements": [

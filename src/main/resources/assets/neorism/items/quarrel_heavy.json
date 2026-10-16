@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/quarrel_heavy"
+    "model": "neorism:item/quarrel_heavy"
   }
 }

@@ -1,8 +1,8 @@
-{
+﻿{
   "parent": "minecraft:block/inner_stairs",
   "textures": {
-    "bottom": "vampirism:block/purple_stone_bricks",
-    "side": "vampirism:block/purple_stone_bricks",
-    "top": "vampirism:block/purple_stone_bricks"
+    "bottom": "neorism:block/purple_stone_bricks",
+    "side": "neorism:block/purple_stone_bricks",
+    "top": "neorism:block/purple_stone_bricks"
   }
 }

@@ -1,6 +1,6 @@
-{
+﻿{
   "textures": {
-    "particle": "vampirism:block/cursed_bark"
+    "particle": "neorism:block/cursed_bark"
   },
   "elements": [
   ]

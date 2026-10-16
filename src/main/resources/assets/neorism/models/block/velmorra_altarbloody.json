@@ -1,6 +1,6 @@
-{
-  "parent": "vampirism:block/velmorra_altar",
+﻿{
+  "parent": "neorism:block/velmorra_altar",
   "textures": {
-    "top": "vampirism:block/velmorra_altar_bloody"
+    "top": "neorism:block/velmorra_altar_bloody"
   }
 }

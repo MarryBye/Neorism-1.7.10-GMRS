@@ -1,12 +1,12 @@
-{
+﻿{
 	"credit": "Made by GridExpert",
 	"parent": "block/block",
 	"textures": {
 		"particle": "block/dark_oak_planks",
-		"pipe": "vampirism:block/blood_sieve_pipe",
-		"top": "vampirism:block/blood_sieve_top",
-		"side": "vampirism:block/blood_sieve_side",
-		"filter": "vampirism:block/blood_sieve_filter"
+		"pipe": "neorism:block/blood_sieve_pipe",
+		"top": "neorism:block/blood_sieve_top",
+		"side": "neorism:block/blood_sieve_side",
+		"filter": "neorism:block/blood_sieve_filter"
 	},
 	"render_type": "minecraft:cutout",
 	"elements": [

@@ -1,7 +1,7 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/cursed_grass",
+    "model": "neorism:block/cursed_grass",
     "tints": [
       {
         "type": "minecraft:grass",

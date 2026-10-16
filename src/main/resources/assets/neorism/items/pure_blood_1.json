@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/pure_blood_1"
+    "model": "neorism:item/pure_blood_1"
   }
 }

@@ -1,9 +1,9 @@
-{
+﻿{
 	"credit": "Designed by Zozozrob",
 	"parent": "block/block",
 	"texture_size": [32, 32],
 	"textures": {
-		"tip": "vampirism:block/altar_tip",
+		"tip": "neorism:block/altar_tip",
 		"particle": "block/iron_block"
 	},
 	"elements": [

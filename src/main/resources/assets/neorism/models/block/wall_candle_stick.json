@@ -1,9 +1,9 @@
-{
+﻿{
   "credit": "Made by GridExpert",
   "parent": "minecraft:block/template_candle",
   "textures": {
-    "particle": "vampirism:block/candle_stick_base",
-    "base": "vampirism:block/candle_stick_base"
+    "particle": "neorism:block/candle_stick_base",
+    "base": "neorism:block/candle_stick_base"
   },
   "render_type": "minecraft:cutout",
   "elements": [

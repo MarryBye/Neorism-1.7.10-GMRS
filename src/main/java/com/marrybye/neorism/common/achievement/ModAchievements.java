@@ -80,7 +80,7 @@ public class ModAchievements {
 
     private static void registerMainAndVampireAchievements() {
         // Root: Vampirism / Neorism
-        root = registerVampire("neorism.vampirism", 0, 0, new ItemStack(Items.glass_bottle), null);
+        root = registerVampire("neorism", 0, 0, new ItemStack(Items.glass_bottle), null);
 
         // General exploration
         vampireForest = registerVampire("vampire_forest", 0, -2, new ItemStack(Blocks.sapling), root);
@@ -90,51 +90,52 @@ public class ModAchievements {
         regicide = registerVampire("regicide", 6, 0, new ItemStack(Items.skull, 1, 1), reopeningOldWounds).setSpecial();
 
         // Vampire Path
-        becomeVampire = registerVampire("vampire.become_vampire", 0, 2, new ItemStack(Items.rotten_flesh), root);
-        firstBlood = registerVampire("vampire.first_blood", -2, 2, new ItemStack(Items.glass_bottle), becomeVampire);
-        baptismOfBlood = registerVampire("vampire.baptism_of_blood", 0, 4, new ItemStack(Blocks.redstone_block), becomeVampire);
-        vampireBat = registerVampire("vampire.bat", -2, 4, new ItemStack(Items.feather), becomeVampire);
-        extraStorage = registerVampire("vampire.extra_storage", -4, 2, new ItemStack(Blocks.chest), firstBlood);
-        freezeKill = registerVampire("vampire.freeze_kill", -4, 4, new ItemStack(Blocks.ice), vampireBat);
-        yuck = registerVampire("vampire.yuck", 2, 2, new ItemStack(Items.spider_eye), becomeVampire);
-        texasMassacre = registerVampire("vampire.texas_massacre", -2, 6, new ItemStack(Items.iron_sword), baptismOfBlood);
-        sniped = registerVampire("vampire.sniped", 2, 4, new ItemStack(Items.arrow), becomeVampire);
-        resurrect = registerVampire("vampire.resurrect", 2, 6, new ItemStack(Items.golden_apple), baptismOfBlood);
+        becomeVampire = registerVampire("become_vampire", 0, 2, new ItemStack(Items.rotten_flesh), root);
+        firstBlood = registerVampire("sucking_blood", -2, 2, new ItemStack(Items.glass_bottle), becomeVampire);
+        baptismOfBlood = registerVampire("baptism_of_blood", 0, 4, new ItemStack(Blocks.redstone_block), becomeVampire);
+        vampireBat = registerVampire("bat", -2, 4, new ItemStack(Items.feather), becomeVampire);
+        extraStorage = registerVampire("extra_storage", -4, 2, new ItemStack(Blocks.chest), firstBlood);
+        freezeKill = registerVampire("freeze_kill", -4, 4, new ItemStack(Blocks.ice), vampireBat);
+        yuck = registerVampire("yuck", 2, 2, new ItemStack(Items.spider_eye), becomeVampire);
+        texasMassacre = registerVampire("texas_massacre", -2, 6, new ItemStack(Items.iron_sword), baptismOfBlood);
+        sniped = registerVampire("sniped", 2, 4, new ItemStack(Items.arrow), becomeVampire);
+        resurrect = registerVampire("resurrect", 2, 6, new ItemStack(Items.golden_apple), baptismOfBlood);
 
-        vampireMaxLevel = registerVampire("vampire.max_level", 0, 6, new ItemStack(Items.nether_star), baptismOfBlood).setSpecial();
-        vampireBecomeLord = registerVampire("minion.become_lord", 0, 8, new ItemStack(Items.gold_ingot), vampireMaxLevel);
-        vampireMaxLord = registerVampire("vampire.max_lord", 0, 10, new ItemStack(Items.diamond), vampireBecomeLord).setSpecial();
+        vampireMaxLevel = registerVampire("max_level_vampire", 0, 6, new ItemStack(Items.nether_star), baptismOfBlood).setSpecial();
+        vampireBecomeLord = registerVampire("become_lord", 0, 8, new ItemStack(Items.gold_ingot), vampireMaxLevel);
+        vampireMaxLord = registerVampire("max_lord_vampire", 0, 10, new ItemStack(Items.diamond), vampireBecomeLord).setSpecial();
 
-        defeatDracula = registerVampire("vampire.defeat_dracula", 2, 8, new ItemStack(Items.skull), vampireBecomeLord).setSpecial();
-        vampireKillMother = registerVampire("vampire.kill_mother", -2, 8, new ItemStack(Items.ghast_tear), vampireBecomeLord).setSpecial();
-        plagueInc = registerVampire("vampire.plague_inc", -2, 10, new ItemStack(Items.fermented_spider_eye), vampireMaxLord);
+        defeatDracula = registerVampire("defeat_dracula", 2, 8, new ItemStack(Items.skull), vampireBecomeLord).setSpecial();
+        vampireKillMother = registerVampire("vampire_kill_mother", -2, 8, new ItemStack(Items.ghast_tear), vampireBecomeLord).setSpecial();
+        plagueInc = registerVampire("plague_inc", -2, 10, new ItemStack(Items.fermented_spider_eye), vampireMaxLord);
     }
 
     private static void registerHunterAchievements() {
         // Hunter Root
-        becomeHunter = registerHunter("hunter.become_hunter", 0, 0, new ItemStack(Items.wooden_sword), null);
-        hunterTraining = registerHunter("hunter.mainline", 0, 2, new ItemStack(Items.iron_helmet), becomeHunter);
-        stake = registerHunter("hunter.stake", -2, 2, new ItemStack(Items.stick), becomeHunter);
-        brochette = registerHunter("hunter.brochette", -4, 2, new ItemStack(Items.iron_sword), stake);
-        cureVampireVillager = registerHunter("hunter.cure_vampire_villager", 2, 2, new ItemStack(Items.golden_apple), becomeHunter);
+        becomeHunter = registerHunter("become_hunter", 0, 0, new ItemStack(Items.wooden_sword), null);
+        hunterTraining = registerHunter("mainline", 0, 2, new ItemStack(Items.iron_helmet), becomeHunter);
+        stake = registerHunter("stake", -2, 2, new ItemStack(Items.stick), becomeHunter);
+        brochette = registerHunter("brochette", -4, 2, new ItemStack(Items.iron_sword), stake);
+        cureVampireVillager = registerHunter("cure_vampire_villager", 2, 2, new ItemStack(Items.golden_apple), becomeHunter);
 
-        hunterCrossbow = registerHunter("hunter.hunter_crossbow", 0, 4, new ItemStack(Items.bow), hunterTraining);
-        enhancedCrossbow = registerHunter("hunter.enhanced_crossbow", -2, 4, new ItemStack(Items.bow), hunterCrossbow);
-        techCrossbow = registerHunter("hunter.tech_crossbow", -4, 4, new ItemStack(Items.repeater), enhancedCrossbow);
-        crazedGunman = registerHunter("hunter.crazed_gunman", -2, 6, new ItemStack(Items.arrow), hunterCrossbow);
+        hunterCrossbow = registerHunter("hunter_crossbow", 0, 4, new ItemStack(Items.bow), hunterTraining);
+        enhancedCrossbow = registerHunter("enhanced_crossbow", -2, 4, new ItemStack(Items.bow), hunterCrossbow);
+        techCrossbow = registerHunter("tech_crossbow", -4, 4, new ItemStack(Items.repeater), enhancedCrossbow);
+        crazedGunman = registerHunter("crazed_gunman", -2, 6, new ItemStack(Items.arrow), hunterCrossbow);
 
-        hunterMaxLevel = registerHunter("hunter.max_level", 0, 6, new ItemStack(Items.nether_star), hunterCrossbow).setSpecial();
-        hunterBecomeLord = registerHunter("hunter.become_lord", 0, 8, new ItemStack(Items.gold_ingot), hunterMaxLevel);
-        hunterMaxLord = registerHunter("hunter.max_lord", 0, 10, new ItemStack(Items.diamond), hunterBecomeLord).setSpecial();
+        hunterMaxLevel = registerHunter("max_level_hunter", 0, 6, new ItemStack(Items.nether_star), hunterCrossbow).setSpecial();
+        hunterBecomeLord = registerHunter("become_lord", 0, 8, new ItemStack(Items.gold_ingot), hunterMaxLevel);
+        hunterMaxLord = registerHunter("max_lord_hunter", 0, 10, new ItemStack(Items.diamond), hunterBecomeLord).setSpecial();
 
-        hunterKillMother = registerHunter("hunter.kill_mother", -2, 8, new ItemStack(Items.ghast_tear), hunterBecomeLord).setSpecial();
-        killResurrectedVampire = registerHunter("hunter.kill_resurrected_vampire", 2, 8, new ItemStack(Items.skull), hunterBecomeLord);
-        betrayal = registerHunter("hunter.betrayal", 2, 6, new ItemStack(Items.bone), hunterMaxLevel);
-        worthIt = registerHunter("hunter.worth_it", 2, 10, new ItemStack(Items.emerald), hunterMaxLord).setSpecial();
+        hunterKillMother = registerHunter("hunter_kill_mother", -2, 8, new ItemStack(Items.ghast_tear), hunterBecomeLord).setSpecial();
+        killResurrectedVampire = registerHunter("kill_resurrected_vampire", 2, 8, new ItemStack(Items.skull), hunterBecomeLord);
+        betrayal = registerHunter("betrayal", 2, 6, new ItemStack(Items.bone), hunterMaxLevel);
+        worthIt = registerHunter("worth_it", 2, 10, new ItemStack(Items.emerald), hunterMaxLord).setSpecial();
     }
 
     private static Achievement registerVampire(String name, int column, int row, ItemStack icon, Achievement parent) {
-        Achievement achievement = new Achievement("achievement." + name, name, column, row, icon, parent);
+        String key = name.equals("neorism") ? "neorism" : "neorism." + name;
+        Achievement achievement = new Achievement("achievement." + key, key, column, row, icon, parent);
         achievement.registerStat();
         ALL_ACHIEVEMENTS.add(achievement);
         VAMPIRE_ACHIEVEMENTS.add(achievement);
@@ -142,7 +143,8 @@ public class ModAchievements {
     }
 
     private static Achievement registerHunter(String name, int column, int row, ItemStack icon, Achievement parent) {
-        Achievement achievement = new Achievement("achievement." + name, name, column, row, icon, parent);
+        String key = "neorism." + name;
+        Achievement achievement = new Achievement("achievement." + key, key, column, row, icon, parent);
         achievement.registerStat();
         ALL_ACHIEVEMENTS.add(achievement);
         HUNTER_ACHIEVEMENTS.add(achievement);

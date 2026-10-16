@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/candelabra_pink"
+    "model": "neorism:block/candelabra_pink"
   }
 }

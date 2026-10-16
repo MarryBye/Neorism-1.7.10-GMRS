@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/tombstone_medium"
+    "model": "neorism:block/tombstone_medium"
   }
 }

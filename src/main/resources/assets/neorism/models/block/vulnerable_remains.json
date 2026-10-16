@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "vampirism:block/vulnerable_remains"
+    "all": "neorism:block/vulnerable_remains"
   }
 }

@@ -1,5 +1,5 @@
-{
-  "parent": "vampirism:block/altar_pillar",
+﻿{
+  "parent": "neorism:block/altar_pillar",
   "display": {
     "gui": {
       "rotation": [

@@ -1,13 +1,13 @@
-{
+﻿{
   "multipart": [
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_base"
+        "model": "neorism:block/blood_grinder_base"
       }
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_bottom_empty"
+        "model": "neorism:block/blood_grinder_bottom_empty"
       },
       "when": {
         "AND": [
@@ -22,7 +22,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_bottom_empty",
+        "model": "neorism:block/blood_grinder_bottom_empty",
         "y": 90
       },
       "when": {
@@ -38,7 +38,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_bottom_empty",
+        "model": "neorism:block/blood_grinder_bottom_empty",
         "y": 180
       },
       "when": {
@@ -54,7 +54,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_bottom_empty",
+        "model": "neorism:block/blood_grinder_bottom_empty",
         "y": 270
       },
       "when": {
@@ -70,7 +70,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_bottom"
+        "model": "neorism:block/blood_grinder_bottom"
       },
       "when": {
         "AND": [
@@ -85,7 +85,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_bottom",
+        "model": "neorism:block/blood_grinder_bottom",
         "y": 90
       },
       "when": {
@@ -101,7 +101,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_bottom",
+        "model": "neorism:block/blood_grinder_bottom",
         "y": 180
       },
       "when": {
@@ -117,7 +117,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_bottom",
+        "model": "neorism:block/blood_grinder_bottom",
         "y": 270
       },
       "when": {
@@ -133,7 +133,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_wheel"
+        "model": "neorism:block/blood_grinder_wheel"
       },
       "when": {
         "grinding": "false"
@@ -141,7 +141,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/blood_grinder_wheel_grinding"
+        "model": "neorism:block/blood_grinder_wheel_grinding"
       },
       "when": {
         "grinding": "true"

@@ -1,7 +1,7 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/serum_injection",
+    "model": "neorism:item/serum_injection",
     "tints": [
       {
         "type": "minecraft:potion",

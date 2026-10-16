@@ -1,8 +1,8 @@
-{
+﻿{
   "parent": "minecraft:block/slab_top",
   "textures": {
-    "bottom": "vampirism:block/cobbled_dark_stone",
-    "side": "vampirism:block/cobbled_dark_stone",
-    "top": "vampirism:block/cobbled_dark_stone"
+    "bottom": "neorism:block/cobbled_dark_stone",
+    "side": "neorism:block/cobbled_dark_stone",
+    "top": "neorism:block/cobbled_dark_stone"
   }
 }

@@ -1,8 +1,8 @@
-{
+﻿{
   "__comment": "Designed by Maxanier with Cubik Studio",
   "textures": {
-    "particle": "vampirism:block/dark_steel",
-    "texture": "vampirism:block/dark_steel",
+    "particle": "neorism:block/dark_steel",
+    "texture": "neorism:block/dark_steel",
     "coal": "block/coal_block",
     "wood": "block/oak_log",
     "stone": "block/stone_bricks"

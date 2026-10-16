@@ -1,16 +1,16 @@
-{
+﻿{
   "model": {
     "type": "minecraft:composite",
     "models": [
       {
         "type": "minecraft:model",
-        "model": "vampirism:block/blood_container"
+        "model": "neorism:block/blood_container"
       },
       {
         "type": "minecraft:special",
-        "base": "vampirism:block/blood_container",
+        "base": "neorism:block/blood_container",
         "model": {
-          "type": "vampirism:blood_container"
+          "type": "neorism:blood_container"
         }
       }
     ]

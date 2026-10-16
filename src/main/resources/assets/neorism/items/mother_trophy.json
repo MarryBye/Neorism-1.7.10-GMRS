@@ -1,16 +1,16 @@
-{
+﻿{
   "model": {
     "type": "minecraft:composite",
     "models": [
       {
         "type": "minecraft:model",
-        "model": "vampirism:block/mother_trophy"
+        "model": "neorism:block/mother_trophy"
       },
       {
         "type": "minecraft:special",
-        "base": "vampirism:block/mother_trophy",
+        "base": "neorism:block/mother_trophy",
         "model": {
-          "type": "vampirism:mother_trophy"
+          "type": "neorism:mother_trophy"
         }
       }
     ]

@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/stripped_dark_spruce_wood"
+    "model": "neorism:block/stripped_dark_spruce_wood"
   }
 }

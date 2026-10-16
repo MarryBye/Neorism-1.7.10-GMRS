@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/hunter_coat_head_ultimate"
+    "model": "neorism:item/hunter_coat_head_ultimate"
   }
 }

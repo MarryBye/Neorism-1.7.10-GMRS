@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/injection_garlic"
+    "layer0": "neorism:item/injection_garlic"
   }
 }

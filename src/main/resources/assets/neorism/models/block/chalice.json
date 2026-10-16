@@ -1,10 +1,10 @@
-{
+﻿{
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"2": "vampirism:block/chalice",
-		"particle": "vampirism:block/chalice"
+		"2": "neorism:block/chalice",
+		"particle": "neorism:block/chalice"
 	},
 	"render_type": "minecraft:cutout",
 	"elements": [

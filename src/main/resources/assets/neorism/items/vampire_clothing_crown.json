@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/vampire_clothing_crown"
+    "model": "neorism:item/vampire_clothing_crown"
   }
 }

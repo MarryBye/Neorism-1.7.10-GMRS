@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:block/wall_inventory",
   "textures": {
-    "wall": "vampirism:block/purple_stone_tiles"
+    "wall": "neorism:block/purple_stone_tiles"
   }
 }

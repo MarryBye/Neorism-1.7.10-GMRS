@@ -1,6 +1,6 @@
-{
-  "parent": "vampirism:block/tent",
+﻿{
+  "parent": "neorism:block/tent",
   "textures": {
-    "floor": "vampirism:block/tent/floor_bl"
+    "floor": "neorism:block/tent/floor_bl"
   }
 }

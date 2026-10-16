@@ -1,7 +1,7 @@
-{
+﻿{
   "variants": {
     "": {
-      "model": "vampirism:block/velmorra_portal"
+      "model": "neorism:block/velmorra_portal"
     }
   }
 }

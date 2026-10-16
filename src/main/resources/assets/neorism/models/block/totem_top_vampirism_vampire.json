@@ -1,6 +1,6 @@
-{
-  "parent": "factionapi:block/totem_top",
+﻿{
+  "parent": "neorism:block/totem_top",
   "textures": {
-    "core": "vampirism:block/totem_top_core_vampire"
+    "core": "neorism:block/totem_top_core_vampire"
   }
 }

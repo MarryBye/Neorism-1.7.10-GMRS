@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/cursed_earth"
+    "model": "neorism:block/cursed_earth"
   }
 }

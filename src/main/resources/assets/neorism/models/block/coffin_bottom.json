@@ -1,12 +1,12 @@
-{
+﻿{
 	"credit": "Designed by Zozozrob",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
 	"texture_size": [32, 32],
 	"textures": {
-		"particle": "vampirism:block/coffin_base",
-		"base": "vampirism:block/coffin_base",
-		"inner": "vampirism:block/coffin/coffin_inner_white"
+		"particle": "neorism:block/coffin_base",
+		"base": "neorism:block/coffin_base",
+		"inner": "neorism:block/coffin/coffin_inner_white"
 	},
 	"elements": [
 		{

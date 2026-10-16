@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/blood_pedestal"
+    "model": "neorism:block/blood_pedestal"
   }
 }

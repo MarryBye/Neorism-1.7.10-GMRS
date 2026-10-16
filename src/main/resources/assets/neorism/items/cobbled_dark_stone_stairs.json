@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/cobbled_dark_stone_stairs"
+    "model": "neorism:block/cobbled_dark_stone_stairs"
   }
 }

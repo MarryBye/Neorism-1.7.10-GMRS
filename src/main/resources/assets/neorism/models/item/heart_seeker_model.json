@@ -1,9 +1,9 @@
-{
+﻿{
   "credit": "Made with Blockbench",
   "ambientocclusion": false,
   "textures": {
-    "particle": "vampirism:item/heart_seeker_normal",
-    "3": "vampirism:item/heart_seeker_normal"
+    "particle": "neorism:item/heart_seeker_normal",
+    "3": "neorism:item/heart_seeker_normal"
   },
   "elements": [
     {
@@ -2009,7 +2009,7 @@
         -0.75
       ]
     },
-    "vampirism:pedestal": {
+    "neorism:pedestal": {
       "translation": [-0.25, 4, -0.25],
       "scale": [0.75, 0.75, 0.75]
     }

@@ -24,12 +24,12 @@ public class ModBlocks {
     public static void init() {
         cursedEarth = register("cursed_earth", new BlockNeorism("cursed_earth", Material.ground).setHardness(0.6F));
         darkSprucePlanks = register("dark_spruce_planks", new BlockNeorism("dark_spruce_planks", Material.wood).setHardness(2.0F));
-        altarInspiration = register("altar_inspiration", new BlockNeorism("altar_inspiration", Material.rock).setHardness(3.0F));
-        altarInfusion = register("altar_infusion", new BlockNeorism("altar_infusion", Material.rock).setHardness(3.0F));
-        altarPillar = register("altar_pillar", new BlockNeorism("altar_pillar", Material.rock).setHardness(2.0F));
-        altarTip = register("altar_tip", new BlockNeorism("altar_tip", Material.rock).setHardness(2.0F));
-        bloodPedestal = register("blood_pedestal", new BlockNeorism("blood_pedestal", Material.rock).setHardness(2.5F));
-        bloodContainer = register("blood_container", new BlockNeorism("blood_container", Material.glass).setHardness(1.5F));
+        altarInspiration = register("altar_inspiration", new com.marrybye.neorism.common.blocks.BlockAltarInspiration());
+        altarInfusion = register("altar_infusion", new com.marrybye.neorism.common.blocks.BlockAltarInfusion());
+        altarPillar = register("altar_pillar", new com.marrybye.neorism.common.blocks.BlockAltarPillar());
+        altarTip = register("altar_tip", new com.marrybye.neorism.common.blocks.BlockAltarTip());
+        bloodPedestal = register("blood_pedestal", new com.marrybye.neorism.common.blocks.BlockBloodPedestal());
+        bloodContainer = register("blood_container", new com.marrybye.neorism.common.blocks.BlockBloodContainer());
 
         ModLogger.debug("Initialized core Neorism blocks");
     }

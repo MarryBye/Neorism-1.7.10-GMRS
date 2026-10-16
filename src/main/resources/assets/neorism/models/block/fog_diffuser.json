@@ -1,10 +1,10 @@
-{
+﻿{
   "credit": "Designed by Zozozrob",
   "parent": "block/block",
   "render_type": "minecraft:cutout",
   "texture_size": [32, 32],
   "textures": {
-    "diffuser": "vampirism:block/fog_diffuser",
+    "diffuser": "neorism:block/fog_diffuser",
     "particle": "block/obsidian"
   },
   "elements": [

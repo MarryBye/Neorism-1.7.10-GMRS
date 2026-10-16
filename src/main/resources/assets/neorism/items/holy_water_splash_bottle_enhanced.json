@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/holy_water_splash_bottle_enhanced"
+    "model": "neorism:item/holy_water_splash_bottle_enhanced"
   }
 }

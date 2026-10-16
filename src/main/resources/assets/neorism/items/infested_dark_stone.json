@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/infested_dark_stone"
+    "model": "neorism:block/infested_dark_stone"
   }
 }

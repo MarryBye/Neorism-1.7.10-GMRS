@@ -1,7 +1,7 @@
-{
+﻿{
   "variants": {
     "": {
-      "model": "vampirism:block/diagonal_cursed_bark"
+      "model": "neorism:block/diagonal_cursed_bark"
     }
   }
 }

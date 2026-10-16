@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/vampire_beacon"
+    "model": "neorism:block/vampire_beacon"
   }
 }

@@ -1,14 +1,14 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/ring",
+    "model": "neorism:item/ring",
     "tints": [
       {
         "type": "minecraft:constant",
         "value": -1
       },
       {
-        "type": "factionapi:refinement_tint"
+        "type": "neorism:refinement_tint"
       }
     ]
   }

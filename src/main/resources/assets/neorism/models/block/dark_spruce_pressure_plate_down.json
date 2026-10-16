@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:block/pressure_plate_down",
   "textures": {
-    "texture": "vampirism:block/dark_spruce_planks"
+    "texture": "neorism:block/dark_spruce_planks"
   }
 }

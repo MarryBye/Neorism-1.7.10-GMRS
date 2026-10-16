@@ -1,7 +1,7 @@
-{
-  "parent": "vampirism:item/crucifix",
+﻿{
+  "parent": "neorism:item/crucifix",
   "textures": {
-    "particle": "vampirism:item/crucifix_gold",
-    "texture": "vampirism:item/crucifix_gold"
+    "particle": "neorism:item/crucifix_gold",
+    "texture": "neorism:item/crucifix_gold"
   }
 }

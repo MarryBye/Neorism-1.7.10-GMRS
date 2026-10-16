@@ -1,8 +1,8 @@
-{
+﻿{
 	"credit": "Made by GridExpert",
-	"parent": "vampirism:block/blood_grinder_wheel",
+	"parent": "neorism:block/blood_grinder_wheel",
 	"textures": {
-      "particle": "vampirism:block/blood_grinder_wheel_grinding",
-		"wheel": "vampirism:block/blood_grinder_wheel_grinding"
+      "particle": "neorism:block/blood_grinder_wheel_grinding",
+		"wheel": "neorism:block/blood_grinder_wheel_grinding"
 	}
 }

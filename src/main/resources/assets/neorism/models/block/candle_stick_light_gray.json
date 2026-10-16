@@ -1,5 +1,5 @@
-{
-  "parent": "vampirism:block/candle_stick_filled",
+﻿{
+  "parent": "neorism:block/candle_stick_filled",
   "textures": {
     "candle": "minecraft:block/light_gray_candle"
   }

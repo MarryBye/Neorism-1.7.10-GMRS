@@ -1,9 +1,9 @@
-{
+﻿{
   "credit": "Made with Blockbench",
   "ambientocclusion": false,
   "textures": {
-    "particle": "vampirism:item/heart_striker_normal",
-    "2": "vampirism:item/heart_striker_normal"
+    "particle": "neorism:item/heart_striker_normal",
+    "2": "neorism:item/heart_striker_normal"
   },
   "elements": [
     {
@@ -2176,7 +2176,7 @@
         -1
       ]
     },
-    "vampirism:pedestal": {
+    "neorism:pedestal": {
       "translation": [0.5, 11, 0.5],
       "scale": [0.75, 0.75, 0.75]
     }

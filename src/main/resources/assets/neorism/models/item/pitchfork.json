@@ -1,12 +1,12 @@
-{
+﻿{
   "credit": "Made by ThariCorvy",
   "texture_size": [
     32,
     32
   ],
   "textures": {
-    "particle": "vampirism:item/pitchfork",
-    "0": "vampirism:item/pitchfork"
+    "particle": "neorism:item/pitchfork",
+    "0": "neorism:item/pitchfork"
   },
   "elements": [
     {

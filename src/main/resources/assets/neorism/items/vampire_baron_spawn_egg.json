@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/vampire_baron_spawn_egg"
+    "model": "neorism:item/vampire_baron_spawn_egg"
   }
 }

@@ -1,7 +1,7 @@
-{
+﻿{
   "variants": {
     "": {
-      "model": "vampirism:block/garlic_diffuser"
+      "model": "neorism:block/garlic_diffuser"
     }
   }
 }

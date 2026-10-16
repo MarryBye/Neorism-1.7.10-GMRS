@@ -1,6 +1,6 @@
-{
-  "parent": "vampirism:block/coffin",
+﻿{
+  "parent": "neorism:block/coffin",
   "textures": {
-    "inner": "vampirism:block/coffin/coffin_inner_orange"
+    "inner": "neorism:block/coffin/coffin_inner_orange"
   }
 }

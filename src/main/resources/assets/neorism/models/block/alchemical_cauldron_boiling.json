@@ -1,6 +1,6 @@
-{
-  "parent": "vampirism:block/alchemy_cauldron_liquid",
+﻿{
+  "parent": "neorism:block/alchemy_cauldron_liquid",
   "textures": {
-    "liquid": "vampirism:block/blank_liquid_boiling"
+    "liquid": "neorism:block/blank_liquid_boiling"
   }
 }

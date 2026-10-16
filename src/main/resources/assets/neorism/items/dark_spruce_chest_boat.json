@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/dark_spruce_chest_boat"
+    "model": "neorism:item/dark_spruce_chest_boat"
   }
 }

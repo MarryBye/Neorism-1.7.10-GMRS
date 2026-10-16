@@ -1,10 +1,10 @@
-{
+﻿{
   "format_version": "1.21.6",
   "credit": "Made with Blockbench",
   "textures": {
-    "top": "vampirism:block/dark_stone_bricks",
-    "stone": "vampirism:block/dark_stone_bricks",
-    "particle": "vampirism:block/dark_stone_bricks"
+    "top": "neorism:block/dark_stone_bricks",
+    "stone": "neorism:block/dark_stone_bricks",
+    "particle": "neorism:block/dark_stone_bricks"
   },
   "render_type": "minecraft:cutout",
   "elements": [

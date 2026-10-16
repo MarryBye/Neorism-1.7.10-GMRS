@@ -1,7 +1,7 @@
-{
+﻿{
   "variants": {
     "": {
-      "model": "vampirism:block/cursed_earth"
+      "model": "neorism:block/cursed_earth"
     }
   }
 }

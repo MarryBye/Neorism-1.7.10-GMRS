@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:block/template_fire_side",
   "textures": {
-    "fire": "vampirism:block/alchemical_fire_1"
+    "fire": "neorism:block/alchemical_fire_1"
   }
 }

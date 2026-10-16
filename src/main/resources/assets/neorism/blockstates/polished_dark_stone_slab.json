@@ -1,13 +1,13 @@
-{
+﻿{
   "variants": {
     "type=bottom": {
-      "model": "vampirism:block/polished_dark_stone_slab"
+      "model": "neorism:block/polished_dark_stone_slab"
     },
     "type=double": {
-      "model": "vampirism:block/polished_dark_stone"
+      "model": "neorism:block/polished_dark_stone"
     },
     "type=top": {
-      "model": "vampirism:block/polished_dark_stone_slab_top"
+      "model": "neorism:block/polished_dark_stone_slab_top"
     }
   }
 }

@@ -1,8 +1,8 @@
-{
+﻿{
   "multipart": [
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table"
+        "model": "neorism:block/hunter_table/hunter_table"
       },
       "when": {
         "facing": "north"
@@ -10,7 +10,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table",
+        "model": "neorism:block/hunter_table/hunter_table",
         "y": 90
       },
       "when": {
@@ -19,7 +19,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table",
+        "model": "neorism:block/hunter_table/hunter_table",
         "y": 180
       },
       "when": {
@@ -28,7 +28,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table",
+        "model": "neorism:block/hunter_table/hunter_table",
         "y": 270
       },
       "when": {
@@ -37,7 +37,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_hammer"
+        "model": "neorism:block/hunter_table/hunter_table_hammer"
       },
       "when": {
         "AND": [
@@ -52,7 +52,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_hammer",
+        "model": "neorism:block/hunter_table/hunter_table_hammer",
         "y": 90
       },
       "when": {
@@ -68,7 +68,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_hammer",
+        "model": "neorism:block/hunter_table/hunter_table_hammer",
         "y": 180
       },
       "when": {
@@ -84,7 +84,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_hammer",
+        "model": "neorism:block/hunter_table/hunter_table_hammer",
         "y": 270
       },
       "when": {
@@ -100,7 +100,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_garlic"
+        "model": "neorism:block/hunter_table/hunter_table_garlic"
       },
       "when": {
         "AND": [
@@ -115,7 +115,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_garlic",
+        "model": "neorism:block/hunter_table/hunter_table_garlic",
         "y": 90
       },
       "when": {
@@ -131,7 +131,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_garlic",
+        "model": "neorism:block/hunter_table/hunter_table_garlic",
         "y": 180
       },
       "when": {
@@ -147,7 +147,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_garlic",
+        "model": "neorism:block/hunter_table/hunter_table_garlic",
         "y": 270
       },
       "when": {
@@ -163,7 +163,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_bottle"
+        "model": "neorism:block/hunter_table/hunter_table_bottle"
       },
       "when": {
         "AND": [
@@ -178,7 +178,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_bottle",
+        "model": "neorism:block/hunter_table/hunter_table_bottle",
         "y": 90
       },
       "when": {
@@ -194,7 +194,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_bottle",
+        "model": "neorism:block/hunter_table/hunter_table_bottle",
         "y": 180
       },
       "when": {
@@ -210,7 +210,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/hunter_table/hunter_table_bottle",
+        "model": "neorism:block/hunter_table/hunter_table_bottle",
         "y": 270
       },
       "when": {

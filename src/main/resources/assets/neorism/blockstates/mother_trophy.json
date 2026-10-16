@@ -1,7 +1,7 @@
-{
+﻿{
   "variants": {
     "": {
-      "model": "vampirism:block/mother_trophy"
+      "model": "neorism:block/mother_trophy"
     }
   }
 }

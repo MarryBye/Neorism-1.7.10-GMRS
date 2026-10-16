@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/quarrel_clip"
+    "layer0": "neorism:item/quarrel_clip"
   }
 }

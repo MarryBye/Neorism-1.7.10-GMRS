@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/blood_infused_refined_iron_block"
+    "model": "neorism:block/blood_infused_refined_iron_block"
   }
 }

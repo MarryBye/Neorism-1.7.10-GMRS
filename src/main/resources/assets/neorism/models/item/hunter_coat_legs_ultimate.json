@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/hunter_coat_legs_ultimate"
+    "layer0": "neorism:item/hunter_coat_legs_ultimate"
   }
 }

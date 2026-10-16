@@ -1,8 +1,8 @@
-{
+﻿{
   "__comment": "Designed by Maxanier with Cubik Studio - https://cubik.studio",
   "textures": {
-    "liquid": "vampirism:block/blank_liquid_still",
-    "particle": "vampirism:block/blank_liquid_still"
+    "liquid": "neorism:block/blank_liquid_still",
+    "particle": "neorism:block/blank_liquid_still"
   },
   "render_type": "minecraft:cutout",
   "elements": [

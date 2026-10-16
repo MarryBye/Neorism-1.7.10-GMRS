@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/chandelier_light_blue"
+    "model": "neorism:block/chandelier_light_blue"
   }
 }

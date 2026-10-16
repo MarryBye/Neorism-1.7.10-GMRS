@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/hunter_trainer_spawn_egg"
+    "layer0": "neorism:item/hunter_trainer_spawn_egg"
   }
 }

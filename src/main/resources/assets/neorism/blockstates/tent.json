@@ -1,8 +1,8 @@
-{
+﻿{
   "multipart": [
     {
       "apply": {
-        "model": "vampirism:block/tent_br"
+        "model": "neorism:block/tent_br"
       },
       "when": {
         "AND": [
@@ -17,7 +17,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_br",
+        "model": "neorism:block/tent_br",
         "y": 90
       },
       "when": {
@@ -33,7 +33,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_br",
+        "model": "neorism:block/tent_br",
         "y": 180
       },
       "when": {
@@ -49,7 +49,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_br",
+        "model": "neorism:block/tent_br",
         "y": 270
       },
       "when": {
@@ -65,7 +65,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_bl"
+        "model": "neorism:block/tent_bl"
       },
       "when": {
         "AND": [
@@ -80,7 +80,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_bl",
+        "model": "neorism:block/tent_bl",
         "y": 90
       },
       "when": {
@@ -96,7 +96,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_bl",
+        "model": "neorism:block/tent_bl",
         "y": 180
       },
       "when": {
@@ -112,7 +112,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_bl",
+        "model": "neorism:block/tent_bl",
         "y": 270
       },
       "when": {
@@ -128,7 +128,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_tl"
+        "model": "neorism:block/tent_tl"
       },
       "when": {
         "AND": [
@@ -143,7 +143,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_tl",
+        "model": "neorism:block/tent_tl",
         "y": 90
       },
       "when": {
@@ -159,7 +159,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_tl",
+        "model": "neorism:block/tent_tl",
         "y": 180
       },
       "when": {
@@ -175,7 +175,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_tl",
+        "model": "neorism:block/tent_tl",
         "y": 270
       },
       "when": {
@@ -191,7 +191,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_tr"
+        "model": "neorism:block/tent_tr"
       },
       "when": {
         "AND": [
@@ -206,7 +206,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_tr",
+        "model": "neorism:block/tent_tr",
         "y": 90
       },
       "when": {
@@ -222,7 +222,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_tr",
+        "model": "neorism:block/tent_tr",
         "y": 180
       },
       "when": {
@@ -238,7 +238,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tent_tr",
+        "model": "neorism:block/tent_tr",
         "y": 270
       },
       "when": {
@@ -254,7 +254,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tentback",
+        "model": "neorism:block/tentback",
         "y": 180
       },
       "when": {
@@ -270,7 +270,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tentback",
+        "model": "neorism:block/tentback",
         "y": 270
       },
       "when": {
@@ -286,7 +286,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tentback"
+        "model": "neorism:block/tentback"
       },
       "when": {
         "AND": [
@@ -301,7 +301,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tentback",
+        "model": "neorism:block/tentback",
         "y": 90
       },
       "when": {
@@ -317,7 +317,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tentback_flipped"
+        "model": "neorism:block/tentback_flipped"
       },
       "when": {
         "AND": [
@@ -332,7 +332,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tentback_flipped",
+        "model": "neorism:block/tentback_flipped",
         "y": 90
       },
       "when": {
@@ -348,7 +348,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tentback_flipped",
+        "model": "neorism:block/tentback_flipped",
         "y": 180
       },
       "when": {
@@ -364,7 +364,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/tentback_flipped",
+        "model": "neorism:block/tentback_flipped",
         "y": 270
       },
       "when": {

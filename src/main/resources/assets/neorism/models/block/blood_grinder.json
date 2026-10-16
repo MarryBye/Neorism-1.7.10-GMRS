@@ -1,15 +1,15 @@
-{
+﻿{
 	"credit": "Made by GridExpert",
 	"parent": "block/block",
 	"textures": {
 		"particle": "block/dark_oak_planks",
-		"side": "vampirism:block/blood_grinder_side",
-		"filter": "vampirism:block/blood_grinder_side_filter",
-		"bottom": "vampirism:block/blood_grinder_bottom",
-		"wheel": "vampirism:block/blood_grinder_wheel",
-		"glass": "vampirism:block/blood_grinder_glass",
-		"inner": "vampirism:block/blood_grinder_inner",
-		"top": "vampirism:block/blood_grinder_top"
+		"side": "neorism:block/blood_grinder_side",
+		"filter": "neorism:block/blood_grinder_side_filter",
+		"bottom": "neorism:block/blood_grinder_bottom",
+		"wheel": "neorism:block/blood_grinder_wheel",
+		"glass": "neorism:block/blood_grinder_glass",
+		"inner": "neorism:block/blood_grinder_inner",
+		"top": "neorism:block/blood_grinder_top"
 	},
 	"render_type": "minecraft:cutout",
 	"elements": [

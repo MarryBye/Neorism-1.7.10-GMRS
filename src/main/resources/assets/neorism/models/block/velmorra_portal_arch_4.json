@@ -1,9 +1,9 @@
-{
+﻿{
 	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "vampirism:block/dark_stone_bricks",
-		"particle": "vampirism:block/dark_stone_bricks"
+		"0": "neorism:block/dark_stone_bricks",
+		"particle": "neorism:block/dark_stone_bricks"
 	},
 	"elements": [
 		{

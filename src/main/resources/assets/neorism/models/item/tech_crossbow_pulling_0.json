@@ -1,7 +1,7 @@
-{
+﻿{
   "__comment": "Designed by Random",
   "textures": {
-    "particle": "vampirism:item/tech_crossbow"
+    "particle": "neorism:item/tech_crossbow"
   },
   "elements": [
     {

@@ -1,7 +1,7 @@
-{
+﻿{
   "credit": "Designed by Random",
   "textures": {
-    "particle": "vampirism:item/crossbow_double"
+    "particle": "neorism:item/crossbow_double"
   },
   "elements": [
     {

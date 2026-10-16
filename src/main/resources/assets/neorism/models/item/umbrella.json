@@ -1,12 +1,12 @@
-{
+﻿{
   "credit": "Made by ThariCorvy",
   "texture_size": [
     64,
     64
   ],
   "textures": {
-    "particle": "vampirism:item/umbrella",
-    "0": "vampirism:item/umbrella"
+    "particle": "neorism:item/umbrella",
+    "0": "neorism:item/umbrella"
   },
   "elements": [
     {

@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:block/fog_diffuser"
+    "model": "neorism:block/fog_diffuser"
   }
 }

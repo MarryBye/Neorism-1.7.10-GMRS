@@ -1,13 +1,13 @@
-{
+﻿{
   "multipart": [
     {
       "apply": {
-        "model": "vampirism:block/alchemy_cauldron"
+        "model": "neorism:block/alchemy_cauldron"
       }
     },
     {
       "apply": {
-        "model": "vampirism:block/alchemy_cauldron_fire"
+        "model": "neorism:block/alchemy_cauldron_fire"
       },
       "when": {
         "lit": "true"
@@ -15,7 +15,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/alchemy_cauldron_liquid"
+        "model": "neorism:block/alchemy_cauldron_liquid"
       },
       "when": {
         "liquid": "filled"
@@ -23,7 +23,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/alchemical_cauldron_boiling"
+        "model": "neorism:block/alchemical_cauldron_boiling"
       },
       "when": {
         "liquid": "boiling"

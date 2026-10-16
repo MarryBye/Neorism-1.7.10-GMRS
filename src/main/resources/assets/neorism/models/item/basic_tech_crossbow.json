@@ -1,7 +1,7 @@
-{
-  "parent": "vampirism:item/tech_crossbow",
+﻿{
+  "parent": "neorism:item/tech_crossbow",
   "textures": {
-    "string": "vampirism:item/crossbow_part_tech_string",
-    "texture": "vampirism:item/tech_crossbow"
+    "string": "neorism:item/crossbow_part_tech_string",
+    "texture": "neorism:item/tech_crossbow"
   }
 }

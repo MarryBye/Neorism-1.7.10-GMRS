@@ -1,5 +1,5 @@
-{
-  "parent": "vampirism:block/blood_container/blood_container",
+﻿{
+  "parent": "neorism:block/blood_container/blood_container",
   "display": {
     "gui": {
       "rotation": [

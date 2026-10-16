@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/cursed_spruce_sign"
+    "layer0": "neorism:item/cursed_spruce_sign"
   }
 }

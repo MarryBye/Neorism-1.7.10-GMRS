@@ -1,7 +1,7 @@
-{
+﻿{
   "variants": {
     "": {
-      "model": "vampirism:block/vulnerable_remains"
+      "model": "neorism:block/vulnerable_remains"
     }
   }
 }

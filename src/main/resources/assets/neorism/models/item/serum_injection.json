@@ -1,7 +1,7 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/serum_injection_overlay",
-    "layer1": "vampirism:item/serum_injection"
+    "layer0": "neorism:item/serum_injection_overlay",
+    "layer1": "neorism:item/serum_injection"
   }
 }

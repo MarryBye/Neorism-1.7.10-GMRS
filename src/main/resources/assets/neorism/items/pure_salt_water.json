@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/pure_salt_water"
+    "model": "neorism:item/pure_salt_water"
   }
 }

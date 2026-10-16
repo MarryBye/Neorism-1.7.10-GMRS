@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/sovereign_blood"
+    "layer0": "neorism:item/sovereign_blood"
   }
 }

@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:block/beacon",
   "textures": {
-    "beacon": "vampirism:block/vampire_beacon"
+    "beacon": "neorism:block/vampire_beacon"
   }
 }

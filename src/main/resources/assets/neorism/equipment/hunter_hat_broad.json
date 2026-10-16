@@ -1,13 +1,13 @@
-{
+﻿{
   "layers": {
     "humanoid": [
       {
-        "texture": "vampirism:hunter_hat_broad"
+        "texture": "neorism:hunter_hat_broad"
       }
     ],
     "humanoid_baby": [
       {
-        "texture": "vampirism:hunter_hat_broad"
+        "texture": "neorism:hunter_hat_broad"
       }
     ]
   }

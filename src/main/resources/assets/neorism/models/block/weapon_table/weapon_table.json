@@ -1,4 +1,4 @@
-{
+﻿{
 	"credit": "Designed by Maxanier",
 	"render_type": "minecraft:cutout",
 	"textures": {
@@ -6,7 +6,7 @@
 		"anvil": "block/anvil",
 		"anvil_top": "block/anvil_top",
 		"cauldron": "block/cauldron_side",
-		"hammer": "vampirism:block/weapon_table_hammer"
+		"hammer": "neorism:block/weapon_table_hammer"
 	},
 	"elements": [
 		{

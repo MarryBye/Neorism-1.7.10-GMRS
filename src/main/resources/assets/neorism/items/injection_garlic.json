@@ -1,6 +1,6 @@
-{
+﻿{
   "model": {
     "type": "minecraft:model",
-    "model": "vampirism:item/injection_garlic"
+    "model": "neorism:item/injection_garlic"
   }
 }

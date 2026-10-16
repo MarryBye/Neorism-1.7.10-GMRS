@@ -1,6 +1,6 @@
-{
-  "parent": "vampirism:block/garlic_diffuser_core",
+﻿{
+  "parent": "neorism:block/garlic_diffuser_core",
   "textures": {
-    "core": "vampirism:block/garlic_diffuser_core_strong"
+    "core": "neorism:block/garlic_diffuser_core_strong"
   }
 }

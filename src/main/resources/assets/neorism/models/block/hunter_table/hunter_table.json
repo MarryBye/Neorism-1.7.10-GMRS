@@ -1,8 +1,8 @@
-{
+﻿{
 	"credit": "Made by Grid and FoxPrince",
 	"render_type": "minecraft:cutout",
 	"textures": {
-		"base": "vampirism:block/hunter_table",
+		"base": "neorism:block/hunter_table",
 		"particle": "block/birch_planks"
 	},
 	"elements": [

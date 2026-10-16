@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "vampirism:block/dark_stone_tiles"
+    "all": "neorism:block/dark_stone_tiles"
   }
 }

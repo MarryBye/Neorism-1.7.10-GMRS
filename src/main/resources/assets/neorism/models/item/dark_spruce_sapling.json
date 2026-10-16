@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:block/dark_spruce_sapling"
+    "layer0": "neorism:block/dark_spruce_sapling"
   }
 }

@@ -1,10 +1,10 @@
-{
+﻿{
 	"credit": "Designed by Zozozrob",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
 	"texture_size": [32, 32],
 	"textures": {
-		"pedestal": "vampirism:block/blood_pedestal",
+		"pedestal": "neorism:block/blood_pedestal",
 		"particle": "block/dark_oak_planks"
 	},
 	"elements": [

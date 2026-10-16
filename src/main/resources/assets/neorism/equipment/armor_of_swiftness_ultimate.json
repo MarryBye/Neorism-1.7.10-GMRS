@@ -1,18 +1,18 @@
-{
+﻿{
   "layers": {
     "humanoid": [
       {
-        "texture": "vampirism:armor_of_swiftness_ultimate"
+        "texture": "neorism:armor_of_swiftness_ultimate"
       }
     ],
     "humanoid_baby": [
       {
-        "texture": "vampirism:armor_of_swiftness_ultimate"
+        "texture": "neorism:armor_of_swiftness_ultimate"
       }
     ],
     "humanoid_leggings": [
       {
-        "texture": "vampirism:armor_of_swiftness_ultimate"
+        "texture": "neorism:armor_of_swiftness_ultimate"
       }
     ]
   }

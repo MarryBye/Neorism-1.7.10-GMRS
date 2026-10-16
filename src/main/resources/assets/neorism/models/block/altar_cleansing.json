@@ -1,10 +1,10 @@
-{
+﻿{
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
 	"textures": {
 		"planks": "block/spruce_planks",
 		"particle": "block/spruce_planks",
-		"book": "vampirism:block/altar_cleansing_book"
+		"book": "neorism:block/altar_cleansing_book"
 	},
 	"elements": [
 		{

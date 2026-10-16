@@ -1,8 +1,8 @@
-{
+﻿{
   "multipart": [
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side",
+        "model": "neorism:block/cursed_bark_side",
         "y": 90
       },
       "when": {
@@ -11,7 +11,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side"
+        "model": "neorism:block/cursed_bark_side"
       },
       "when": {
         "north_type": "vertical"
@@ -19,7 +19,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side",
+        "model": "neorism:block/cursed_bark_side",
         "y": 270
       },
       "when": {
@@ -28,7 +28,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side",
+        "model": "neorism:block/cursed_bark_side",
         "y": 180
       },
       "when": {
@@ -37,7 +37,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side",
+        "model": "neorism:block/cursed_bark_side",
         "y": 270
       },
       "when": {
@@ -46,7 +46,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side",
+        "model": "neorism:block/cursed_bark_side",
         "y": 90
       },
       "when": {
@@ -55,7 +55,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side_2",
+        "model": "neorism:block/cursed_bark_side_2",
         "y": 90
       },
       "when": {
@@ -64,7 +64,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side_2",
+        "model": "neorism:block/cursed_bark_side_2",
         "y": 180
       },
       "when": {
@@ -73,7 +73,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side_2",
+        "model": "neorism:block/cursed_bark_side_2",
         "y": 270
       },
       "when": {
@@ -82,7 +82,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side_2",
+        "model": "neorism:block/cursed_bark_side_2",
         "y": 180
       },
       "when": {
@@ -91,7 +91,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side_2",
+        "model": "neorism:block/cursed_bark_side_2",
         "y": 270
       },
       "when": {
@@ -100,7 +100,7 @@
     },
     {
       "apply": {
-        "model": "vampirism:block/cursed_bark_side_2",
+        "model": "neorism:block/cursed_bark_side_2",
         "y": 90
       },
       "when": {

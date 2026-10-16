@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vampirism:item/feeding_adapter"
+    "layer0": "neorism:item/feeding_adapter"
   }
 }

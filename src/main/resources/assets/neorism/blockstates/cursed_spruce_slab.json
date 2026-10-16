@@ -1,13 +1,13 @@
-{
+﻿{
   "variants": {
     "type=bottom": {
-      "model": "vampirism:block/cursed_spruce_slab"
+      "model": "neorism:block/cursed_spruce_slab"
     },
     "type=double": {
-      "model": "vampirism:block/cursed_spruce_planks"
+      "model": "neorism:block/cursed_spruce_planks"
     },
     "type=top": {
-      "model": "vampirism:block/cursed_spruce_slab_top"
+      "model": "neorism:block/cursed_spruce_slab_top"
     }
   }
 }

@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "vampirism:block/incapacitated_vulnerable_remains"
+    "all": "neorism:block/incapacitated_vulnerable_remains"
   }
 }
