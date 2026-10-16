@@ -1,9 +1,9 @@
-﻿{
+{
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
 	"textures": {
-		"planks": "block/spruce_planks",
-		"particle": "block/spruce_planks",
+		"planks": "planks_spruce",
+		"particle": "planks_spruce",
 		"book": "neorism:block/altar_cleansing_book"
 	},
 	"elements": [

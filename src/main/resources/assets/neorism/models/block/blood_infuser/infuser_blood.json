@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"2": "neorism:block/blood_still",
-		"particle": "block/gold_block"
+		"particle": "gold_block"
 	},
 	"elements": [
 		{

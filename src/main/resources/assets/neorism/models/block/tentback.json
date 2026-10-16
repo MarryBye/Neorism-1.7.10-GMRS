@@ -2,7 +2,7 @@
   "__comment": "Designed by Maxanier",
   "textures": {
     "tent_back": "neorism:block/tent_back",
-    "particle": "block/white_wool"
+    "particle": "wool_colored_white"
   },
   "render_type": "minecraft:cutout",
   "elements": [

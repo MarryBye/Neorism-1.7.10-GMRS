@@ -5,7 +5,7 @@
   "texture_size": [32, 32],
   "textures": {
     "diffuser": "neorism:block/fog_diffuser",
-    "particle": "block/obsidian"
+    "particle": "neorism:block/dark_stone"
   },
   "elements": [
     {

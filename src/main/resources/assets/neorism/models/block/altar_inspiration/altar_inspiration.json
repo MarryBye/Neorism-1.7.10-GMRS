@@ -6,8 +6,8 @@
     "0": "neorism:block/dark_spruce_door_top",
     "1": "neorism:block/cursed_spruce_log",
     "3": "neorism:block/blood_still",
-    "7": "block/candle",
-    "8": "block/black_concrete",
+    "7": "neorism:block/candelabra_base",
+    "8": "obsidian",
     "particle": "neorism:block/dark_spruce_door_top",
     "1_3": "neorism:block/vampire_rack"
   },

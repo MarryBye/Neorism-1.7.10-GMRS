@@ -4,7 +4,7 @@
   "textures": {
     "top": "neorism:block/altar_pillar_top",
     "side": "neorism:block/altar_pillar_stone",
-    "particle": "block/stone"
+    "particle": "neorism:block/altar_pillar_stone"
   },
   "elements": [
     {

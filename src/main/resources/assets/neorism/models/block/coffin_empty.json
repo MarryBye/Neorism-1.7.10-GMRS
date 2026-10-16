@@ -1,6 +1,6 @@
-{
+﻿{
   "textures": {
-    "particle": "minecraft:block/spruce_planks"
+    "particle": "neorism:block/coffin_base"
   },
   "elements": [
   ]

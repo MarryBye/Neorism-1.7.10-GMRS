@@ -1,9 +1,9 @@
-{
+﻿{
 	"credit": "Designed by Oreo365",
 	"parent": "block/block",
 	"textures": {
-		"particle": "block/cracked_stone_bricks",
-		"stone": "block/cracked_stone_bricks"
+		"particle": "stonebrick_cracked",
+		"stone": "stonebrick_cracked"
 	},
 	"elements": [
 		{

@@ -1,10 +1,10 @@
-﻿{
+{
 	"credit": "Designed by Zozozrob",
 	"parent": "block/block",
 	"textures": {
 		"top": "neorism:block/altar_pillar_top",
 		"side": "neorism:block/altar_pillar",
-		"particle": "block/stone"
+		"particle": "neorism:block/altar_pillar"
 	},
 	"elements": [
 		{

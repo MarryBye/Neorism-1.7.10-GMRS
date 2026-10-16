@@ -1,9 +1,9 @@
-{
+﻿{
   "credit": "Made by Cheaterpaul",
   "textures": {
-    "0": "block/dark_oak_log",
-    "3": "block/basalt_top",
-    "particle": "block/basalt_top"
+    "0": "log_big_oak",
+    "3": "neorism:block/dark_stone",
+    "particle": "neorism:block/dark_stone"
   },
   "render_type": "minecraft:cutout",
   "elements": [

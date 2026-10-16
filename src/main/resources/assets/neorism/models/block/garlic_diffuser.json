@@ -6,7 +6,7 @@
   "textures": {
     "diffuser": "neorism:block/garlic_diffuser",
     "core": "neorism:block/garlic_diffuser_core",
-    "particle": "block/obsidian"
+    "particle": "neorism:block/dark_stone"
   },
   "elements": [
     {

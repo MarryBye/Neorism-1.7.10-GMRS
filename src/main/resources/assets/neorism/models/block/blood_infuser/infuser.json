@@ -1,9 +1,9 @@
-{
+﻿{
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "block/gilded_blackstone",
-		"3": "block/gold_block",
-		"particle": "block/gold_block"
+		"1": "neorism:block/dark_stone_bricks",
+		"3": "gold_block",
+		"particle": "gold_block"
 	},
 	"elements": [
 		{

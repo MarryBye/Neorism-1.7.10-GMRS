@@ -1,11 +1,11 @@
-﻿{
+{
   "__comment": "Designed by Maxanier with Cubik Studio",
   "textures": {
     "particle": "neorism:block/dark_steel",
     "texture": "neorism:block/dark_steel",
-    "coal": "block/coal_block",
-    "wood": "block/oak_log",
-    "stone": "block/stone_bricks"
+    "coal": "coal_block",
+    "wood": "log_oak",
+    "stone": "stonebrick"
   },
   "render_type": "minecraft:cutout",
   "elements": [

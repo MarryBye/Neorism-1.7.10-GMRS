@@ -229,6 +229,7 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
     - Zero missing parent models across all JSON models (`blood_container`, `totem_top`, `totem_base`).
     - Every texture referenced in models exists in both singular `textures/block/` and legacy `textures/blocks/`.
     - Every 3D modeled block registers `ModelISBRH` as `IItemRenderer` for inventory / hand rendering.
+    - [x] Fix block break & hit particle textures: implement `BlockParticleHelper` and Forge `addDestroyEffects`/`addHitEffects` in `BlockNeorism` to resolve model/quad textures directly and bypass GTNHLib's air-block destruction query bug.
     - Full step-by-step methodology documented in `docs/MODEL_TEXTURE_PORTING_GUIDE.md` and `.agents/skills/port-vampirism-feature/SKILL.md`.
 - [ ] **8.1. Altar of Inspiration**
   - [ ] Block, TileEntity, and multiblock blood basin.

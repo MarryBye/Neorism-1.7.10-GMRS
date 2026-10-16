@@ -5,7 +5,7 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"cage": "neorism:block/bat_cage",
-		"particle": "block/gold_block"
+		"particle": "gold_block"
 	},
 	"elements": [
 		{

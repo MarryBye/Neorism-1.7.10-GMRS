@@ -1,8 +1,8 @@
-{
+﻿{
   "__comment": "Designed by Maxanier",
   "textures": {
-    "particle": "block/lava_still",
-    "lava": "block/lava_still"
+    "particle": "lava_still",
+    "lava": "lava_still"
   },
   "render_type": "minecraft:cutout",
   "elements": [

@@ -3,7 +3,7 @@
 	"parent": "block/block",
 	"textures": {
 		"lantern": "neorism:block/spirit_lantern",
-		"particle": "block/gold_block"
+		"particle": "gold_block"
 	},
 	"render_type": "minecraft:cutout",
 	"elements": [

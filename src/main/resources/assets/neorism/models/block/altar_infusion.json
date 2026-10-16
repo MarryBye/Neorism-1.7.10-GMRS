@@ -1,11 +1,11 @@
-﻿{
+{
 	"credit": "Designed by Zozozrob",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout",
 	"texture_size": [32, 32],
 	"textures": {
 		"altar": "neorism:block/altar_infusion",
-		"particle": "block/obsidian"
+		"particle": "neorism:block/altar_infusion"
 	},
 	"elements": [
 		{

@@ -118,14 +118,43 @@
 
 ---
 
-## 5. Чек-лист портирования новой модели/блока
+---
+
+## 5. Частицы разрушения и ударов блоков (Digging / Break Particles)
+
+### 5.1. Причина бага ванильного рендерера и GTNHLib
+* В Minecraft 1.7.10 при разрушении блока (`ItemInWorldManager.tryHarvestBlock`) блок удаляется из мира (`world.setBlockToAir`) **до** вызова эффектов разрушения (`EffectRenderer.addBlockDestroyEffects`).
+* Миксин GTNHLib (`MixinEffectRenderer.nhlib$fixBreakIcon`) пытается разрешить текстуру частиц через `ModelISBRH.getParticleIcon(world, x, y, z)`, обращаясь к `world.getBlock(x, y, z)`. Так как блок уже стал воздухом (`Blocks.air`), GTNHLib возвращает `MISSING_MODEL` &rarr; `missingno` (чёрно-фиолетовая сетка).
+* Кроме того, `BlockIconTransformer` в GTNHLib принудительно заменяет `Block.getIcon(side, meta)` на `missingno` для всех блоков со стейтами.
+* В портированных моделях поле `"particle"` часто ссылалось на пути modern MC (`"block/stone"`, `"block/dark_oak_planks"`), не существующие в ванильном 1.7.10.
+
+### 5.2. Архитектурное решение в Neorism
+1. **Кастомные Forge-хуки в `BlockNeorism`:**
+   В базовом классе `BlockNeorism` (от которого наследуются все блоки, включая `BlockModeled`) переопределены клиентские методы Forge:
+   - `@SideOnly(Side.CLIENT) public boolean addDestroyEffects(World, int, int, int, int, EffectRenderer)`
+   - `@SideOnly(Side.CLIENT) public boolean addHitEffects(World, MovingObjectPosition, EffectRenderer)`
+   Возврат `true` полностью отключает ванильный код и дефектный миксин GTNHLib.
+2. **Многоуровневый резолвер `BlockParticleHelper`:**
+   - Шаг 1: Берёт `BlockState` напрямую из `(Block, meta)` без обращения к блоку в мире.
+   - Шаг 2: Извлекает `BakedModel.getParticle(null)`.
+   - Шаг 3: Если иконка невалидна/`missingno`, сканирует квады модели (`model.getQuads(...)`) и берёт первую валидную текстуру (`quad.celeritas$getSprite()`).
+   - Шаг 4: Проверяет зарегистрированный `this.blockIcon` блока.
+   - Шаг 5: Фоллбэк на базовые ванильные текстуры по `Material` (камень, дерево, земля, железо, шерсть). Блок **ни при каких условиях** не вызовет фиолетово-чёрных частиц.
+3. **Нормализация поля `"particle"` в JSON-моделях:**
+   - Для блоков мода указывать `"particle": "neorism:block/<texture_name>"`.
+   - Для ванильных текстур указывать легаси 1.7.10 имена (`"stone"`, `"planks_spruce"`, `"log_oak"`), а не modern пути `"block/..."`.
+
+---
+
+## 6. Чек-лист портирования новой модели/блока
 
 Перед добавлением нового моделируемого блока выполнить:
 - [ ] Проверить, что в `models/block/<name>.json` все ссылки используют namespace `neorism:` вместо `vampirism:`.
+- [ ] Убедиться, что поле `"particle"` задано корректно (`neorism:block/...` или ванильное имя 1.7.10 без префикса `"block/"`).
 - [ ] Убедиться, что все используемые текстуры лежат в обоих каталогах: `textures/block/` и `textures/blocks/`.
 - [ ] Если модель использует ванильные текстуры, убедиться, что они присутствуют в `assets/minecraft/textures/block/`.
 - [ ] В `blockstates/<name>.json` обязательно предусмотреть вариант `""` (или `"normal"`), не использовать bare-words без `=`.
-- [ ] Класс блока унаследовать от `BlockModeled`.
+- [ ] Класс блока унаследовать от `BlockModeled` (или `BlockNeorism`).
 - [ ] В `ClientProxy.init` зарегистрировать `MinecraftForgeClient.registerItemRenderer(item, ModelISBRH.INSTANCE.get())`.
 - [ ] Добавить ключи локализации в `ru_RU.lang` и `en_US.lang` (`tile.neorism.<name>.name=...`).
 - [ ] Собрать через `.\gradlew assemble` и проверить логи на отсутствие `JsonParseException` и `FileNotFoundException`.
