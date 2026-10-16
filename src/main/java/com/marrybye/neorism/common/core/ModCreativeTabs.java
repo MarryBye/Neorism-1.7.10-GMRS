@@ -24,6 +24,19 @@ public class ModCreativeTabs {
             }
             return new ItemStack(Items.glass_bottle);
         }
+        @Override
+        @SideOnly(Side.CLIENT)
+        public String getTranslatedTabLabel() {
+            String key = "itemGroup." + this.getTabLabel();
+            String trans = net.minecraft.util.StatCollector.translateToLocal(key);
+            if (trans != null && !trans.equals(key)) {
+                return trans;
+            }
+            if (net.minecraft.util.StatCollector.canTranslate("itemGroup.neorism")) {
+                return net.minecraft.util.StatCollector.translateToLocal("itemGroup.neorism");
+            }
+            return super.getTranslatedTabLabel();
+        }
     };
 
     public static final CreativeTabs tabBooks = new CreativeTabs("neorism.books") {
@@ -31,6 +44,20 @@ public class ModCreativeTabs {
         @SideOnly(Side.CLIENT)
         public Item getTabIconItem() {
             return Items.book;
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public String getTranslatedTabLabel() {
+            String key = "itemGroup." + this.getTabLabel();
+            String trans = net.minecraft.util.StatCollector.translateToLocal(key);
+            if (trans != null && !trans.equals(key)) {
+                return trans;
+            }
+            if (net.minecraft.util.StatCollector.canTranslate("itemGroup.vampirism.books")) {
+                return net.minecraft.util.StatCollector.translateToLocal("itemGroup.vampirism.books");
+            }
+            return super.getTranslatedTabLabel();
         }
     };
 }

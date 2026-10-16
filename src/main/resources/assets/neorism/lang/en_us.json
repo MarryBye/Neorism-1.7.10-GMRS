@@ -42,8 +42,15 @@
   "marshall_title.vampirism.short": "Mrh",
 
   "itemGroup.vampirism": "Vampirism",
+  "itemGroup.neorism": "Vampirism",
+  "itemGroup.neorism.main": "Vampirism",
+  "itemGroup.neorism.books": "Vampire Books",
+  "itemGroup.vampirism.main": "Vampirism",
+  "itemGroup.vampirism.books": "Vampire Books",
   "itemGroup.vampirism.vampire": "Vampirism: Vampire",
+  "itemGroup.neorism.vampire": "Vampirism: Vampire",
   "itemGroup.vampirism.hunter": "Vampirism: Hunter",
+  "itemGroup.neorism.hunter": "Vampirism: Hunter",
 
   "biome.vampirism.vampire_forest": "Vampire Forest",
 
