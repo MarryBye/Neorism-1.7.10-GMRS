@@ -20,6 +20,10 @@ public class SundamageRegistry {
         return INSTANCE;
     }
 
+    public static boolean isEntityInSunlight(EntityLivingBase entity) {
+        return INSTANCE.isGettingSundamage(entity);
+    }
+
     /**
      * Checks if a world coordinate is vulnerable to sun damage.
      */

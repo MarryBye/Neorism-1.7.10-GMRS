@@ -5382,3 +5382,6 @@ item.neorism.hunter_intel.6.name=Данные охотников (Уровень
 item.neorism.hunter_intel.7.name=Данные охотников (Уровень 8)
 item.neorism.hunter_intel.8.name=Данные охотников (Уровень 9)
 item.neorism.hunter_intel.9.name=Данные охотников (Уровень 10)
+key.neorism.action1=Основное действие
+key.neorism.action2=Вторичное действие
+chat.neorism.hunter_awareness_detected=Чутьё: Обнаружено %d сверхъестественных угроз поблизости!

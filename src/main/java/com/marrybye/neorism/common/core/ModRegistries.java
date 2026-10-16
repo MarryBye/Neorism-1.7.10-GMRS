@@ -26,6 +26,7 @@ public class ModRegistries {
         ModLogger.debug("Beginning Neorism init registries");
         ModAchievements.init();
         ModRecipes.init();
+        com.marrybye.neorism.common.action.ActionRegistry.init();
 
         // Register event handlers
         com.marrybye.neorism.common.events.PlayerCapabilityEventHandler playerCapHandler =

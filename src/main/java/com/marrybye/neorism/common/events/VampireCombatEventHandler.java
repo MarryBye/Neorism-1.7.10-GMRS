@@ -45,6 +45,20 @@ public class VampireCombatEventHandler {
             }
         }
 
+        // Crossbow Technique Hunter skill bonus damage
+        if (source.getSourceOfDamage() instanceof net.minecraft.entity.projectile.EntityArrow && source.getEntity() instanceof EntityPlayer) {
+            EntityPlayer shooter = (EntityPlayer) source.getEntity();
+            if (Helper.isHunter(shooter)) {
+                com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get(shooter);
+                if (sh != null && sh.isSkillUnlocked("crossbow_technique")) {
+                    float oldAmt = event.ammount;
+                    event.ammount *= 1.25F;
+                    ModLogger.combat("Hunter %s hit %s with Crossbow Technique (+25%% damage: %.1f -> %.1f)",
+                        shooter.getCommandSenderName(), target.getCommandSenderName(), oldAmt, event.ammount);
+                }
+            }
+        }
+
         // 2. Sanguinare Vampiris infection transmission to neutral players
         if (target instanceof EntityPlayer && source.getEntity() instanceof EntityLivingBase) {
             EntityPlayer targetPlayer = (EntityPlayer) target;

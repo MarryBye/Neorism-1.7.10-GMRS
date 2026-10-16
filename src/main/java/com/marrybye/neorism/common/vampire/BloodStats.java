@@ -120,6 +120,11 @@ public class BloodStats implements IBloodStats {
     }
 
     @Override
+    public boolean consumeBlood(int amount) {
+        return removeBlood(amount, false);
+    }
+
+    @Override
     public void addExhaustion(float amount) {
         double mod = 1.0D;
         if (player.getAttributeMap().getAttributeInstance(ModAttributes.BLOOD_EXHAUSTION) != null) {

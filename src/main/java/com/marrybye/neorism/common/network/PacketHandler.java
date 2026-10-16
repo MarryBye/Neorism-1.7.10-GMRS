@@ -27,6 +27,10 @@ public class PacketHandler {
         registerMessage(SyncFactionPacket.Handler.class, SyncFactionPacket.class, Side.CLIENT);
         registerMessage(com.marrybye.neorism.common.network.packets.SyncBloodPacket.Handler.class, com.marrybye.neorism.common.network.packets.SyncBloodPacket.class, Side.CLIENT);
         registerMessage(com.marrybye.neorism.common.network.packets.BiteRequestPacket.Handler.class, com.marrybye.neorism.common.network.packets.BiteRequestPacket.class, Side.SERVER);
+        registerMessage(com.marrybye.neorism.common.network.packets.ActionKeyPacket.Handler.class, com.marrybye.neorism.common.network.packets.ActionKeyPacket.class, Side.SERVER);
+        registerMessage(com.marrybye.neorism.common.network.packets.SyncActionsPacket.Handler.class, com.marrybye.neorism.common.network.packets.SyncActionsPacket.class, Side.CLIENT);
+        registerMessage(com.marrybye.neorism.common.network.packets.UnlockSkillPacket.Handler.class, com.marrybye.neorism.common.network.packets.UnlockSkillPacket.class, Side.SERVER);
+        registerMessage(com.marrybye.neorism.common.network.packets.SyncSkillsPacket.Handler.class, com.marrybye.neorism.common.network.packets.SyncSkillsPacket.class, Side.CLIENT);
     }
 
     public static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(

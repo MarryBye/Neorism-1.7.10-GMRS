@@ -24,6 +24,8 @@ public class PlayerCapabilityEventHandler {
             FactionPlayerHandler.register((EntityPlayer) event.entity);
             VampirePlayer.register((EntityPlayer) event.entity);
             com.marrybye.neorism.common.hunter.HunterPlayer.register((EntityPlayer) event.entity);
+            com.marrybye.neorism.common.action.ActionHandler.register((EntityPlayer) event.entity);
+            com.marrybye.neorism.common.skills.SkillHandler.register((EntityPlayer) event.entity);
         } else if (event.entity instanceof EntityLivingBase) {
             ExtendedCreature.register((EntityLivingBase) event.entity);
         }
@@ -50,6 +52,18 @@ public class PlayerCapabilityEventHandler {
         if (oldHp != null && newHp != null) {
             newHp.copyFrom(oldHp);
         }
+
+        com.marrybye.neorism.common.action.ActionHandler oldAh = com.marrybye.neorism.common.action.ActionHandler.get(event.original);
+        com.marrybye.neorism.common.action.ActionHandler newAh = com.marrybye.neorism.common.action.ActionHandler.get(event.entityPlayer);
+        if (oldAh != null && newAh != null) {
+            newAh.copyFrom(oldAh);
+        }
+
+        com.marrybye.neorism.common.skills.SkillHandler oldSh = com.marrybye.neorism.common.skills.SkillHandler.get(event.original);
+        com.marrybye.neorism.common.skills.SkillHandler newSh = com.marrybye.neorism.common.skills.SkillHandler.get(event.entityPlayer);
+        if (oldSh != null && newSh != null) {
+            newSh.copyFrom(oldSh);
+        }
     }
 
     @SubscribeEvent
@@ -63,6 +77,14 @@ public class PlayerCapabilityEventHandler {
             VampirePlayer vp = VampirePlayer.get(player);
             if (vp != null) {
                 vp.syncBlood();
+            }
+            com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(player);
+            if (ah != null) {
+                ah.sync();
+            }
+            com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get(player);
+            if (sh != null) {
+                sh.sync();
             }
         }
     }
@@ -79,6 +101,14 @@ public class PlayerCapabilityEventHandler {
         if (vp != null) {
             vp.syncBlood();
         }
+        com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(event.player);
+        if (ah != null) {
+            ah.sync();
+        }
+        com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get(event.player);
+        if (sh != null) {
+            sh.sync();
+        }
     }
 
     @SubscribeEvent
@@ -90,6 +120,14 @@ public class PlayerCapabilityEventHandler {
         VampirePlayer vp = VampirePlayer.get(event.player);
         if (vp != null) {
             vp.syncBlood();
+        }
+        com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(event.player);
+        if (ah != null) {
+            ah.sync();
+        }
+        com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get(event.player);
+        if (sh != null) {
+            sh.sync();
         }
     }
 
@@ -104,6 +142,10 @@ public class PlayerCapabilityEventHandler {
             com.marrybye.neorism.common.hunter.HunterPlayer hp = com.marrybye.neorism.common.hunter.HunterPlayer.get(player);
             if (hp != null) {
                 hp.onUpdate();
+            }
+            com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(player);
+            if (ah != null) {
+                ah.onUpdate();
             }
         } else {
             ExtendedCreature creature = ExtendedCreature.get(event.entityLiving);

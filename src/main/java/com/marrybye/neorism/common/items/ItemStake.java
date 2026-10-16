@@ -57,8 +57,21 @@ public class ItemStake extends ItemSword {
             float curHp = target.getHealth();
             float hpPercent = maxHp > 0.0F ? curHp / maxHp : 1.0F;
 
-            // Instant kill condition: from behind and (<= 40% health or <= 8.0 HP)
-            if (fromBehind && (hpPercent <= 0.40F || curHp <= 8.0F)) {
+            float thresholdPercent = 0.40F;
+            float thresholdHp = 8.0F;
+            float frontalBonus = 3.0F;
+
+            if (attacker instanceof EntityPlayer) {
+                com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get((EntityPlayer) attacker);
+                if (sh != null && sh.isSkillUnlocked("stake_mastery")) {
+                    thresholdPercent = 0.60F;
+                    thresholdHp = 14.0F;
+                    frontalBonus = 6.0F;
+                }
+            }
+
+            // Instant kill condition: from behind and (<= threshold health)
+            if (fromBehind && (hpPercent <= thresholdPercent || curHp <= thresholdHp)) {
                 if (!target.worldObj.isRemote) {
                     target.attackEntityFrom(ModDamageSource.STAKE, curHp + 100.0F);
                     ModSounds.playAtEntity(target, ModSounds.STAKE, 1.2F, 0.9F);
@@ -83,7 +96,7 @@ public class ItemStake extends ItemSword {
             } else {
                 // Frontal or non-lethal strike: bonus damage against vampires
                 if (!target.worldObj.isRemote) {
-                    target.attackEntityFrom(ModDamageSource.STAKE, 3.0F);
+                    target.attackEntityFrom(ModDamageSource.STAKE, frontalBonus);
                     ModSounds.playAtEntity(target, ModSounds.STAKE, 0.7F, 1.2F);
                 }
             }

@@ -55,6 +55,16 @@ public interface IBloodStats {
     boolean removeBlood(int amount, boolean allowPartial);
 
     /**
+     * Consumes exact blood amount.
+     *
+     * @param amount Units of blood to consume.
+     * @return True if player had enough blood and it was consumed.
+     */
+    default boolean consumeBlood(int amount) {
+        return removeBlood(amount, false);
+    }
+
+    /**
      * @return True if current blood is less than maximum.
      */
     boolean needsBlood();

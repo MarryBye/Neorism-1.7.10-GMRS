@@ -141,7 +141,15 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
 
     public void setLevel(int level) {
         int max = currentFaction.getMaxLevel();
+        int oldLevel = this.currentLevel;
         this.currentLevel = Math.max(0, Math.min(level, max));
+        if (this.currentLevel > oldLevel) {
+            com.marrybye.neorism.common.skills.SkillHandler sh =
+                com.marrybye.neorism.common.skills.SkillHandler.get(player);
+            if (sh != null) {
+                sh.addSkillPoints(this.currentLevel - oldLevel);
+            }
+        }
         ModLogger.leveling("Player %s level updated to %d (faction: %s)",
             player.getCommandSenderName(), this.currentLevel, this.currentFaction.getId());
         com.marrybye.neorism.common.vampire.VampirePlayer vp =

@@ -5460,3 +5460,7 @@ item.neorism.hunter_intel.6.name=Hunter Intel (Tier 7)
 item.neorism.hunter_intel.7.name=Hunter Intel (Tier 8)
 item.neorism.hunter_intel.8.name=Hunter Intel (Tier 9)
 item.neorism.hunter_intel.9.name=Hunter Intel (Tier 10)
+
+key.neorism.action1=Primary Action
+key.neorism.action2=Secondary Action
+chat.neorism.hunter_awareness_detected=Awareness: Detected %d supernatural threat(s) nearby!

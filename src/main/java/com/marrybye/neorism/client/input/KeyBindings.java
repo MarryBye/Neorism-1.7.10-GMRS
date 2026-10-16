@@ -23,11 +23,21 @@ import org.lwjgl.input.Keyboard;
 public class KeyBindings {
 
     public static KeyBinding keyBite;
+    public static KeyBinding keyAction1;
+    public static KeyBinding keyAction2;
     private static boolean wasBiteKeyDown = false;
+    private static boolean wasAction1KeyDown = false;
+    private static boolean wasAction2KeyDown = false;
 
     public static void init() {
         keyBite = new KeyBinding("key.neorism.suck_blood", Keyboard.KEY_V, "key.category.neorism.main");
         ClientRegistry.registerKeyBinding(keyBite);
+
+        keyAction1 = new KeyBinding("key.neorism.action1", Keyboard.KEY_R, "key.category.neorism.main");
+        ClientRegistry.registerKeyBinding(keyAction1);
+
+        keyAction2 = new KeyBinding("key.neorism.action2", Keyboard.KEY_Z, "key.category.neorism.main");
+        ClientRegistry.registerKeyBinding(keyAction2);
     }
 
     @SubscribeEvent
@@ -37,6 +47,8 @@ public class KeyBindings {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null || mc.theWorld == null) {
             wasBiteKeyDown = false;
+            wasAction1KeyDown = false;
+            wasAction2KeyDown = false;
             return;
         }
 
@@ -65,5 +77,19 @@ public class KeyBindings {
         }
 
         wasBiteKeyDown = isKeyDown;
+
+        // Action 1 Key (Primary Action)
+        boolean isAction1Down = keyAction1.getIsKeyPressed();
+        if (isAction1Down && !wasAction1KeyDown) {
+            PacketHandler.sendToServer(new com.marrybye.neorism.common.network.packets.ActionKeyPacket(0));
+        }
+        wasAction1KeyDown = isAction1Down;
+
+        // Action 2 Key (Secondary Action)
+        boolean isAction2Down = keyAction2.getIsKeyPressed();
+        if (isAction2Down && !wasAction2KeyDown) {
+            PacketHandler.sendToServer(new com.marrybye.neorism.common.network.packets.ActionKeyPacket(1));
+        }
+        wasAction2KeyDown = isAction2Down;
     }
 }

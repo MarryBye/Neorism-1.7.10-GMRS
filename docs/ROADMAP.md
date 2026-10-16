@@ -163,32 +163,32 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 6: Action Engine & Skill Tree Subsystems
 *Active abilities, keybindings, cooldowns, and branching progression.*
 
-- [ ] **6.1. Action Core Framework (`ActionHandler`)**
-  - [ ] `IAction` interface: cooldown, duration, validation, onActivated, onDeactivated, isUnlocked.
-  - [ ] Network packet: `ActionKeyPacket` (handles client hotkey triggers: active skill 1, active skill 2, bat mode, bite).
-  - [ ] Sync packet: `SyncActionsPacket` (syncs cooldowns and active timers to client).
-- [ ] **6.2. Vampire Skill Tree Implementation (`VampireSkills`)**
-  - [ ] `NightVision`: Night vision toggle without vanilla potion green tint.
-  - [ ] `VampireRegeneration`: Active health burst consuming large blood saturation.
-  - [ ] `VampireRage`: Damage boost, increased speed, increased blood consumption.
-  - [ ] `BatForm`: Shrinks player bounding box to 0.6x0.6, enables creative-like flight, restricts inventory, burns rapidly in sun.
-  - [ ] `Teleport`: Blink forwards up to 16 blocks through air/glass.
-  - [ ] `Freeze`: Area freeze spell immobilizing target entities.
-  - [ ] `DarkBloodProjectile`: Ranged life-stealing blood orb.
-  - [ ] `SunscreenSkill`: Temporary passive sunlight resistance.
-  - [ ] `Invisibility`: Complete stealth from mobs and players.
-  - [ ] `SummonBats`: Spawns swarm of blood bats attacking the target.
-- [ ] **6.3. Hunter Skill Tree Implementation (`HunterSkills`)**
-  - [ ] `HunterAwareness`: Highlights nearby vampires through blocks.
-  - [ ] `CrossbowTechnique`: Faster reload, higher quarrel velocity.
-  - [ ] `StakeMastery`: Increases instant-kill threshold and frontal stake damage.
-  - [ ] `PotionResistance`: Immunity to negative potion effects from vampires.
-  - [ ] `MasterBrewer`: Unlocks advanced cauldron infusion recipes.
-  - [ ] `WeaponCrafting`: Unlocks advanced weapon table blueprints.
-- [ ] **6.4. Skill Points & Tree GUI Engine**
-  - [ ] Skill points awarded per level-up.
-  - [ ] Skill unlocking validation (parent skills required, mutually exclusive branches).
-  - [ ] Persistent NBT save/load in player properties.
+- [x] **6.1. Action Core Framework (`ActionHandler`)**
+  - [x] `IAction` interface: cooldown, duration, validation, onActivated, onDeactivated, isUnlocked.
+  - [x] Network packet: `ActionKeyPacket` (handles client hotkey triggers: active skill 1, active skill 2, bat mode, bite).
+  - [x] Sync packet: `SyncActionsPacket` (syncs cooldowns and active timers to client).
+- [x] **6.2. Vampire Skill Tree Implementation (`VampireSkills`)**
+  - [x] `NightVision`: Night vision toggle without vanilla potion green tint.
+  - [x] `VampireRegeneration`: Active health burst consuming large blood saturation.
+  - [x] `VampireRage`: Damage boost, increased speed, increased blood consumption.
+  - [x] `BatForm`: Shrinks player bounding box to 0.6x0.6, enables creative-like flight, restricts inventory, burns rapidly in sun.
+  - [x] `Teleport`: Blink forwards up to 16 blocks through air/glass.
+  - [x] `Freeze`: Area freeze spell immobilizing target entities.
+  - [x] `DarkBloodProjectile`: Ranged life-stealing blood orb.
+  - [x] `SunscreenSkill`: Temporary passive sunlight resistance.
+  - [x] `Invisibility`: Complete stealth from mobs and players.
+  - [x] `SummonBats`: Spawns swarm of blood bats attacking the target.
+- [x] **6.3. Hunter Skill Tree Implementation (`HunterSkills`)**
+  - [x] `HunterAwareness`: Highlights nearby vampires through blocks.
+  - [x] `CrossbowTechnique`: Faster reload, higher quarrel velocity.
+  - [x] `StakeMastery`: Increases instant-kill threshold and frontal stake damage.
+  - [x] `PotionResistance`: Immunity to negative potion effects from vampires.
+  - [x] `MasterBrewer`: Unlocks advanced cauldron infusion recipes.
+  - [x] `WeaponCrafting`: Unlocks advanced weapon table blueprints.
+- [x] **6.4. Skill Points & Tree GUI Engine**
+  - [x] Skill points awarded per level-up.
+  - [x] Skill unlocking validation (parent skills required, mutually exclusive branches).
+  - [x] Persistent NBT save/load in player properties.
 
 ---
 
