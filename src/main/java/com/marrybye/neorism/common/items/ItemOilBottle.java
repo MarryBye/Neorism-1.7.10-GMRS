@@ -34,6 +34,41 @@ public class ItemOilBottle extends Item {
     public static final int TYPES = OIL_NAMES.length;
     public static final int CHARGES_PER_BOTTLE = 32;
 
+    public static final int[] OIL_COLORS = {
+        0x7E6D27, // plant
+        0xB1096B, // vampire_blood
+        0xFF1785, // sovereign_blood
+        0x4E9331, // poison
+        0x484D48, // weakness
+        0x5A6C81, // slowness
+        0xF82423, // healing
+        0xE49A3A, // fire_resistance
+        0x7CAFC6, // swiftness
+        0xCD5CAB, // regeneration
+        0x1F1FA1, // night_vision
+        0x932423, // strength
+        0x22FF4C, // jump
+        0x2E5299, // water_breathing
+        0x7F8392, // invisibility
+        0xF6D7B7, // slow_falling
+        0x339900, // luck
+        0x430A09, // harm
+        0xEB5E28, // smelt
+        0x0B4D42, // teleport
+        0x888800, // evasion
+        0xFFFFFF, // garlic
+        0xFF2211, // spitfire
+        0x7A0073, // vampire_killer
+        0xAA0000  // bleeding
+    };
+
+    public static int getOilColor(int meta) {
+        if (meta >= 0 && meta < OIL_COLORS.length) {
+            return OIL_COLORS[meta];
+        }
+        return 0xFFFFFF;
+    }
+
     @SideOnly(Side.CLIENT)
     private IIcon iconBottle;
     @SideOnly(Side.CLIENT)
@@ -111,6 +146,32 @@ public class ItemOilBottle extends Item {
         iconBottle = register.registerIcon(Neorism.MODID + ":oil_bottle");
         iconOverlay = register.registerIcon(Neorism.MODID + ":oil_bottle_overlay");
         itemIcon = iconBottle;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean requiresMultipleRenderPasses() {
+        return true;
+    }
+
+    @Override
+    public int getRenderPasses(int metadata) {
+        return 2;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconFromDamageForRenderPass(int damage, int pass) {
+        return pass == 1 ? iconOverlay : iconBottle;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getColorFromItemStack(ItemStack stack, int pass) {
+        if (pass == 1) {
+            return getOilColor(stack.getItemDamage());
+        }
+        return 0xFFFFFF;
     }
 
     @Override

@@ -1,8 +1,10 @@
-﻿{
+{
   "variants": {
-    "facing=east": {
-      "model": "neorism:block/injection_chair",
-      "y": 90
+    "": {
+      "model": "neorism:block/injection_chair"
+    },
+    "normal": {
+      "model": "neorism:block/injection_chair"
     },
     "facing=north": {
       "model": "neorism:block/injection_chair"
@@ -14,6 +16,10 @@
     "facing=west": {
       "model": "neorism:block/injection_chair",
       "y": 270
+    },
+    "facing=east": {
+      "model": "neorism:block/injection_chair",
+      "y": 90
     }
   }
 }

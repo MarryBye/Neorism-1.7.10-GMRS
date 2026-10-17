@@ -22,8 +22,8 @@ import net.minecraftforge.client.IItemRenderer;
 
 /**
  * High-performance 3D JSON Model Item Renderer for Forge 1.7.10.
- * Parses Blockbench / modern Minecraft item models with full display transformations
- * and compiles them into cached OpenGL Display Lists.
+ * Parses Blockbench / modern Minecraft item models with full display transformations,
+ * parent model inheritance, and compiles them into cached OpenGL Display Lists.
  */
 public class JsonModelItemRenderer implements IItemRenderer {
 
@@ -109,7 +109,7 @@ public class JsonModelItemRenderer implements IItemRenderer {
             case ENTITY_BOBBING:
                 return true;
             case EQUIPPED_BLOCK:
-                return type == ItemRenderType.EQUIPPED_FIRST_PERSON;
+                return false;
             default:
                 return false;
         }
@@ -137,6 +137,8 @@ public class JsonModelItemRenderer implements IItemRenderer {
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
+        boolean isUmbrella = modelPath.contains("umbrella");
+
         switch (type) {
             case INVENTORY:
                 GL11.glTranslatef(8.0F, 8.0F, 0.0F);
@@ -144,27 +146,37 @@ public class JsonModelItemRenderer implements IItemRenderer {
                 if (model.gui != null) {
                     model.gui.apply();
                 } else {
-                    GL11.glRotatef(30.0F, 1.0F, 0.0F, 0.0F);
-                    GL11.glRotatef(225.0F, 0.0F, 1.0F, 0.0F);
-                    GL11.glScalef(0.625F, 0.625F, 0.625F);
+                    GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
+                    GL11.glScalef(0.65F, 0.65F, 0.65F);
                 }
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                 break;
             case EQUIPPED:
-                if (model.thirdPerson != null) {
+                if (isUmbrella) {
+                    GL11.glTranslatef(0.3F, 0.6F, 0.0F);
+                    GL11.glRotatef(-15.0F, 0.0F, 0.0F, 1.0F);
+                    GL11.glScalef(1.0F, 1.0F, 1.0F);
+                } else if (model.thirdPerson != null) {
                     model.thirdPerson.apply();
                 } else {
                     GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
+                    GL11.glTranslatef(0.2F, -0.1F, 0.0F);
                     GL11.glScalef(0.7F, 0.7F, 0.7F);
                 }
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-                GL11.glRotatef(-45.0F, 0.0F, 1.0F, 0.0F);
-                if (model.firstPerson != null) {
+                if (isUmbrella) {
+                    // Position umbrella high overhead shading the player
+                    GL11.glTranslatef(0.35F, 0.9F, -0.2F);
+                    GL11.glRotatef(15.0F, 1.0F, 0.0F, 0.0F);
+                    GL11.glRotatef(-75.0F, 0.0F, 1.0F, 0.0F);
+                    GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
+                    GL11.glScalef(1.3F, 1.3F, 1.3F);
+                } else if (model.firstPerson != null) {
                     model.firstPerson.apply();
                 } else {
+                    GL11.glTranslatef(0.5F, 0.2F, 0.0F);
                     GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
                     GL11.glRotatef(35.0F, 0.0F, 0.0F, 1.0F);
                     GL11.glScalef(0.8F, 0.8F, 0.8F);
@@ -188,6 +200,71 @@ public class JsonModelItemRenderer implements IItemRenderer {
         GL11.glPopMatrix();
     }
 
+    private JsonObject loadJson(String path) {
+        try {
+            InputStream stream = getClass().getResourceAsStream(path);
+            if (stream == null && !path.startsWith("/")) {
+                stream = getClass().getResourceAsStream("/" + path);
+            }
+            if (stream != null) {
+                return new JsonParser().parse(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
+            }
+        } catch (Throwable t) {
+            ModLogger.debug("JsonModelItemRenderer: Failed to load json %s: %s", path, t.getMessage());
+        }
+        return null;
+    }
+
+    private String convertModelPath(String modelRef) {
+        // e.g. "neorism:item/crucifix" -> "/assets/neorism/models/item/crucifix.json"
+        String domain = "neorism";
+        String path = modelRef;
+        int colon = modelRef.indexOf(':');
+        if (colon != -1) {
+            domain = modelRef.substring(0, colon);
+            path = modelRef.substring(colon + 1);
+        }
+        return "/assets/" + domain + "/models/" + path + ".json";
+    }
+
+    private ResourceLocation resolveResource(String rawTex) {
+        if (rawTex == null || rawTex.isEmpty()) return null;
+        String domain = "neorism";
+        String path = rawTex;
+        int colon = rawTex.indexOf(':');
+        if (colon != -1) {
+            domain = rawTex.substring(0, colon);
+            path = rawTex.substring(colon + 1);
+        }
+        if (!path.startsWith("textures/")) {
+            if (path.startsWith("item/")) {
+                String sub = path.substring(5);
+                if (getClass().getResourceAsStream("/assets/" + domain + "/textures/item/" + sub + ".png") != null) {
+                    path = "textures/item/" + sub;
+                } else {
+                    path = "textures/items/" + sub;
+                }
+            } else if (path.startsWith("items/")) {
+                path = "textures/items/" + path.substring(6);
+            } else if (path.startsWith("block/")) {
+                String sub = path.substring(6);
+                if (getClass().getResourceAsStream("/assets/" + domain + "/textures/block/" + sub + ".png") != null) {
+                    path = "textures/block/" + sub;
+                } else {
+                    path = "textures/blocks/" + sub;
+                }
+            } else if (path.startsWith("blocks/")) {
+                path = "textures/blocks/" + path.substring(7);
+            } else {
+                path = "textures/" + path;
+            }
+        }
+        if (!path.endsWith(".png")) {
+            path = path + ".png";
+        }
+        return new ResourceLocation(domain, path);
+    }
+
     private CompiledModel getOrCompile(String modelResourcePath) {
         CompiledModel model = modelCache.get(modelResourcePath);
         if (model != null) return model;
@@ -196,29 +273,62 @@ public class JsonModelItemRenderer implements IItemRenderer {
         modelCache.put(modelResourcePath, model);
 
         try {
-            InputStream stream = getClass().getResourceAsStream(modelResourcePath);
-            if (stream == null) {
-                String path = modelResourcePath.startsWith("/") ? modelResourcePath : "/" + modelResourcePath;
-                stream = getClass().getResourceAsStream(path);
-            }
-
-            if (stream == null) {
+            JsonObject root = loadJson(modelResourcePath);
+            if (root == null) {
                 ModLogger.debug("JsonModelItemRenderer: Could not find model resource: %s", modelResourcePath);
                 return model;
             }
 
-            JsonObject root = new JsonParser().parse(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
+            Map<String, ResourceLocation> textureMap = new HashMap<String, ResourceLocation>();
             
+            // Handle parent resolution
+            JsonObject cur = root;
+            while (cur != null && cur.has("parent")) {
+                String parentRef = cur.get("parent").getAsString();
+                if (parentRef.startsWith("builtin/")) break;
+                String parentPath = convertModelPath(parentRef);
+                JsonObject parentObj = loadJson(parentPath);
+                if (parentObj == null) break;
+
+                // Inherit elements if not present
+                if (!root.has("elements") && parentObj.has("elements")) {
+                    root.add("elements", parentObj.get("elements"));
+                }
+                // Inherit display if not present
+                if (!root.has("display") && parentObj.has("display")) {
+                    root.add("display", parentObj.get("display"));
+                }
+                // Record parent textures (lower priority than child textures)
+                if (parentObj.has("textures")) {
+                    JsonObject pt = parentObj.getAsJsonObject("textures");
+                    for (Map.Entry<String, JsonElement> entry : pt.entrySet()) {
+                        String key = entry.getKey();
+                        if (!textureMap.containsKey(key)) {
+                            textureMap.put(key, resolveResource(entry.getValue().getAsString()));
+                        }
+                    }
+                }
+                cur = parentObj;
+            }
+
+            // Child textures have highest priority
+            if (root.has("textures")) {
+                JsonObject ct = root.getAsJsonObject("textures");
+                for (Map.Entry<String, JsonElement> entry : ct.entrySet()) {
+                    textureMap.put(entry.getKey(), resolveResource(entry.getValue().getAsString()));
+                }
+            }
+
             // Parse display transforms
             if (root.has("display")) {
                 JsonObject display = root.getAsJsonObject("display");
                 if (display.has("gui")) model.gui = parseTransform(display.getAsJsonObject("gui"));
                 if (display.has("firstperson_righthand")) model.firstPerson = parseTransform(display.getAsJsonObject("firstperson_righthand"));
                 else if (display.has("firstperson")) model.firstPerson = parseTransform(display.getAsJsonObject("firstperson"));
-                
+
                 if (display.has("thirdperson_righthand")) model.thirdPerson = parseTransform(display.getAsJsonObject("thirdperson_righthand"));
                 else if (display.has("thirdperson")) model.thirdPerson = parseTransform(display.getAsJsonObject("thirdperson"));
-                
+
                 if (display.has("ground")) model.ground = parseTransform(display.getAsJsonObject("ground"));
             }
 
@@ -262,7 +372,7 @@ public class JsonModelItemRenderer implements IItemRenderer {
 
                 JsonObject faces = elem.getAsJsonObject("faces");
                 if (faces != null) {
-                    renderFaces(tess, faces, x1, y1, z1, x2, y2, z2);
+                    renderFaces(tess, faces, textureMap, x1, y1, z1, x2, y2, z2);
                 }
 
                 if (hasRot) {
@@ -304,10 +414,26 @@ public class JsonModelItemRenderer implements IItemRenderer {
         return t;
     }
 
-    private void renderFaces(Tessellator tess, JsonObject faces, float x1, float y1, float z1, float x2, float y2, float z2) {
+    private void bindFaceTexture(JsonObject face, Map<String, ResourceLocation> textures) {
+        if (face.has("texture")) {
+            String texRef = face.get("texture").getAsString();
+            if (texRef.startsWith("#")) {
+                texRef = texRef.substring(1);
+            }
+            ResourceLocation loc = textures.get(texRef);
+            if (loc != null) {
+                Minecraft.getMinecraft().renderEngine.bindTexture(loc);
+            }
+        }
+    }
+
+    private void renderFaces(Tessellator tess, JsonObject faces, Map<String, ResourceLocation> textures,
+                             float x1, float y1, float z1, float x2, float y2, float z2) {
         // North (Z-)
         if (faces.has("north")) {
-            float[] uv = getUV(faces.getAsJsonObject("north"));
+            JsonObject f = faces.getAsJsonObject("north");
+            bindFaceTexture(f, textures);
+            float[] uv = getUV(f);
             tess.startDrawingQuads();
             tess.setNormal(0.0F, 0.0F, -1.0F);
             tess.addVertexWithUV(x1, y1, z1, uv[0], uv[3]);
@@ -318,7 +444,9 @@ public class JsonModelItemRenderer implements IItemRenderer {
         }
         // South (Z+)
         if (faces.has("south")) {
-            float[] uv = getUV(faces.getAsJsonObject("south"));
+            JsonObject f = faces.getAsJsonObject("south");
+            bindFaceTexture(f, textures);
+            float[] uv = getUV(f);
             tess.startDrawingQuads();
             tess.setNormal(0.0F, 0.0F, 1.0F);
             tess.addVertexWithUV(x2, y1, z2, uv[2], uv[3]);
@@ -329,7 +457,9 @@ public class JsonModelItemRenderer implements IItemRenderer {
         }
         // West (X-)
         if (faces.has("west")) {
-            float[] uv = getUV(faces.getAsJsonObject("west"));
+            JsonObject f = faces.getAsJsonObject("west");
+            bindFaceTexture(f, textures);
+            float[] uv = getUV(f);
             tess.startDrawingQuads();
             tess.setNormal(-1.0F, 0.0F, 0.0F);
             tess.addVertexWithUV(x1, y1, z2, uv[2], uv[3]);
@@ -340,7 +470,9 @@ public class JsonModelItemRenderer implements IItemRenderer {
         }
         // East (X+)
         if (faces.has("east")) {
-            float[] uv = getUV(faces.getAsJsonObject("east"));
+            JsonObject f = faces.getAsJsonObject("east");
+            bindFaceTexture(f, textures);
+            float[] uv = getUV(f);
             tess.startDrawingQuads();
             tess.setNormal(1.0F, 0.0F, 0.0F);
             tess.addVertexWithUV(x2, y1, z1, uv[2], uv[3]);
@@ -351,7 +483,9 @@ public class JsonModelItemRenderer implements IItemRenderer {
         }
         // Up (Y+)
         if (faces.has("up")) {
-            float[] uv = getUV(faces.getAsJsonObject("up"));
+            JsonObject f = faces.getAsJsonObject("up");
+            bindFaceTexture(f, textures);
+            float[] uv = getUV(f);
             tess.startDrawingQuads();
             tess.setNormal(0.0F, 1.0F, 0.0F);
             tess.addVertexWithUV(x1, y2, z2, uv[0], uv[3]);
@@ -362,7 +496,9 @@ public class JsonModelItemRenderer implements IItemRenderer {
         }
         // Down (Y-)
         if (faces.has("down")) {
-            float[] uv = getUV(faces.getAsJsonObject("down"));
+            JsonObject f = faces.getAsJsonObject("down");
+            bindFaceTexture(f, textures);
+            float[] uv = getUV(f);
             tess.startDrawingQuads();
             tess.setNormal(0.0F, -1.0F, 0.0F);
             tess.addVertexWithUV(x1, y1, z1, uv[0], uv[1]);

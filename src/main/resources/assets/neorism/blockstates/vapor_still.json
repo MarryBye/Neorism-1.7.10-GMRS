@@ -1,8 +1,10 @@
-﻿{
+{
   "variants": {
-    "facing=east": {
-      "model": "neorism:block/vapor_still",
-      "y": 90
+    "": {
+      "model": "neorism:block/vapor_still"
+    },
+    "normal": {
+      "model": "neorism:block/vapor_still"
     },
     "facing=north": {
       "model": "neorism:block/vapor_still"
@@ -14,6 +16,10 @@
     "facing=west": {
       "model": "neorism:block/vapor_still",
       "y": 270
+    },
+    "facing=east": {
+      "model": "neorism:block/vapor_still",
+      "y": 90
     }
   }
 }

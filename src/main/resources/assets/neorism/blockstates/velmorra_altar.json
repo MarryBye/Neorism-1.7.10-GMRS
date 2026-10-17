@@ -1,10 +1,8 @@
-﻿{
+{
   "variants": {
-    "has_blood=false": {
-      "model": "neorism:block/velmorra_altar"
-    },
-    "has_blood=true": {
-      "model": "neorism:block/velmorra_altarbloody"
-    }
+    "": { "model": "neorism:block/velmorra_altar" },
+    "normal": { "model": "neorism:block/velmorra_altar" },
+    "meta=0": { "model": "neorism:block/velmorra_altar" },
+    "meta=1": { "model": "neorism:block/velmorra_altarbloody" }
   }
 }

@@ -130,22 +130,53 @@ public class ClientProxy extends CommonProxy {
             new com.marrybye.neorism.client.render.entity.RenderConvertedVillager()
         );
 
-        net.minecraft.block.Block[] modeledBlocks = new net.minecraft.block.Block[]{
-            com.marrybye.neorism.common.core.ModBlocks.bloodPedestal,
-            com.marrybye.neorism.common.core.ModBlocks.altarInfusion,
-            com.marrybye.neorism.common.core.ModBlocks.altarInspiration,
-            com.marrybye.neorism.common.core.ModBlocks.altarPillar,
-            com.marrybye.neorism.common.core.ModBlocks.altarTip,
-            com.marrybye.neorism.common.core.ModBlocks.bloodContainer,
-            com.marrybye.neorism.common.core.ModBlocks.fogDiffuser,
-            com.marrybye.neorism.common.core.ModBlocks.garlicDiffuser,
-            com.marrybye.neorism.common.core.ModBlocks.totem,
-            com.marrybye.neorism.common.core.ModBlocks.totemTop,
-            com.marrybye.neorism.common.core.ModBlocks.hunterTable,
-            com.marrybye.neorism.common.core.ModBlocks.alchemicalCauldron,
-            com.marrybye.neorism.common.core.ModBlocks.coffin
-        };
-        for (net.minecraft.block.Block block : modeledBlocks) {
+        java.util.List<net.minecraft.block.Block> modeledList = new java.util.ArrayList<net.minecraft.block.Block>();
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.bloodPedestal);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.altarInfusion);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.altarInspiration);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.altarPillar);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.altarTip);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.bloodContainer);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.fogDiffuser);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.garlicDiffuser);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.garlicDiffuserLong);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.garlicDiffuserStrong);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.totem);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.totemTop);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.hunterTable);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.hunterWeaponTable);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.alchemicalCauldron);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.candlestick);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.candelabra);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.chandelier);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.vampireSoulLantern);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.cross);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.tombstoneShort);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.tombstoneMedium);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.tombstoneCross);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.graveCage);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.vampireRack);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.throne);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.batCage);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.ancientTrophy);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.velmorraAltar);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.vaporStill);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.alchemyTable);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.injectionChair);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.altarCleansing);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.sunscreenBeacon);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.chalice);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.bloodGrinder);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.bloodSieve);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.infuser);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.vampireBeacon);
+        modeledList.add(com.marrybye.neorism.common.core.ModBlocks.coffin);
+        if (com.marrybye.neorism.common.core.ModBlocks.coffins != null) {
+            for (net.minecraft.block.Block c : com.marrybye.neorism.common.core.ModBlocks.coffins) {
+                if (c != null) modeledList.add(c);
+            }
+        }
+        for (net.minecraft.block.Block block : modeledList) {
             if (block != null) {
                 net.minecraft.item.Item item = net.minecraft.item.Item.getItemFromBlock(block);
                 if (item != null) {
@@ -186,9 +217,107 @@ public class ClientProxy extends CommonProxy {
             )
         );
 
-        // Weapons (Crossbows, Crucifixes, Heart Seeker, Heart Striker, Hunter Axes, Pitchforks)
-        // are rendered via standard Minecraft 2D item extrusion, ensuring zero transparent glitches,
-        // perfect vanilla hand alignments, and flawless rendering for both players and mob biped hands.
+        // Pitchfork - 3D JSON model
+        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
+            com.marrybye.neorism.common.core.ModItems.pitchfork,
+            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
+                "/assets/neorism/models/item/pitchfork.json",
+                new net.minecraft.util.ResourceLocation("neorism", "textures/item/pitchfork.png")
+            )
+        );
+
+        // Crucifixes (Wooden, Iron, Golden) - 3D JSON models
+        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
+            com.marrybye.neorism.common.core.ModItems.crucifix,
+            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
+                new com.marrybye.neorism.client.render.item.JsonModelItemRenderer.IModelResolver() {
+                    @Override
+                    public String resolveModel(net.minecraft.item.ItemStack stack) {
+                        int dmg = stack != null ? stack.getItemDamage() : 0;
+                        switch (dmg) {
+                            case 1: return "/assets/neorism/models/item/crucifix_enhanced.json";
+                            case 2: return "/assets/neorism/models/item/crucifix_ultimate.json";
+                            default: return "/assets/neorism/models/item/crucifix_normal.json";
+                        }
+                    }
+                }, null
+            )
+        );
+
+        // Hunter Axes (Normal, Enhanced, Ultimate) - 3D JSON models
+        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
+            com.marrybye.neorism.common.core.ModItems.hunterAxe,
+            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
+                new com.marrybye.neorism.client.render.item.JsonModelItemRenderer.IModelResolver() {
+                    @Override
+                    public String resolveModel(net.minecraft.item.ItemStack stack) {
+                        int dmg = stack != null ? stack.getItemDamage() : 0;
+                        switch (dmg) {
+                            case 1: return "/assets/neorism/models/item/hunter_axe_enhanced.json";
+                            case 2: return "/assets/neorism/models/item/hunter_axe_ultimate.json";
+                            default: return "/assets/neorism/models/item/hunter_axe_normal.json";
+                        }
+                    }
+                }, null
+            )
+        );
+
+        // Heart Striker (Normal, Enhanced, Ultimate) - 3D JSON models
+        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
+            com.marrybye.neorism.common.core.ModItems.heartStriker,
+            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
+                new com.marrybye.neorism.client.render.item.JsonModelItemRenderer.IModelResolver() {
+                    @Override
+                    public String resolveModel(net.minecraft.item.ItemStack stack) {
+                        int dmg = stack != null ? stack.getItemDamage() : 0;
+                        switch (dmg) {
+                            case 1: return "/assets/neorism/models/item/diamond_heart_striker.json";
+                            case 2: return "/assets/neorism/models/item/netherite_heart_striker.json";
+                            default: return "/assets/neorism/models/item/iron_heart_striker.json";
+                        }
+                    }
+                }, null
+            )
+        );
+
+        // Heart Seeker (Normal, Enhanced, Ultimate) - 3D JSON models
+        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
+            com.marrybye.neorism.common.core.ModItems.heartSeeker,
+            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
+                new com.marrybye.neorism.client.render.item.JsonModelItemRenderer.IModelResolver() {
+                    @Override
+                    public String resolveModel(net.minecraft.item.ItemStack stack) {
+                        int dmg = stack != null ? stack.getItemDamage() : 0;
+                        switch (dmg) {
+                            case 1: return "/assets/neorism/models/item/diamond_heart_seeker.json";
+                            case 2: return "/assets/neorism/models/item/netherite_heart_seeker.json";
+                            default: return "/assets/neorism/models/item/iron_heart_seeker.json";
+                        }
+                    }
+                }, null
+            )
+        );
+
+        // Crossbows (6 variants) - 3D JSON models
+        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
+            com.marrybye.neorism.common.core.ModItems.crossbow,
+            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
+                new com.marrybye.neorism.client.render.item.JsonModelItemRenderer.IModelResolver() {
+                    @Override
+                    public String resolveModel(net.minecraft.item.ItemStack stack) {
+                        int dmg = stack != null ? stack.getItemDamage() : 0;
+                        switch (dmg) {
+                            case 1: return "/assets/neorism/models/item/basic_double_crossbow.json";
+                            case 2: return "/assets/neorism/models/item/enhanced_crossbow.json";
+                            case 3: return "/assets/neorism/models/item/enhanced_double_crossbow.json";
+                            case 4: return "/assets/neorism/models/item/basic_tech_crossbow.json";
+                            case 5: return "/assets/neorism/models/item/enhanced_tech_crossbow.json";
+                            default: return "/assets/neorism/models/item/basic_crossbow.json";
+                        }
+                    }
+                }, null
+            )
+        );
     }
 
     @Override

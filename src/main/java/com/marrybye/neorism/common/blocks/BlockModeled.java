@@ -17,6 +17,10 @@ public class BlockModeled extends BlockNeorism {
         super(name, textureName, material);
     }
 
+    public BlockModeled(String name, String textureName, Material material, net.minecraft.creativetab.CreativeTabs tab) {
+        super(name, textureName, material, tab);
+    }
+
     @Override
     public boolean isOpaqueCube() {
         return false;

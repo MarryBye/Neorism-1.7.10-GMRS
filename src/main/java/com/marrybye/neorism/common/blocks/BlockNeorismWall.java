@@ -22,6 +22,19 @@ public class BlockNeorismWall extends BlockWall {
         this.modelBlock = modelBlock;
         setBlockName("neorism." + name);
         setCreativeTab(tab != null ? tab : ModCreativeTabs.tabVampirism);
+        setHardness(2.0F);
+        setResistance(10.0F);
+        setStepSound(soundTypeStone);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister register) {
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getFallbackParticleIcon() {
+        return modelBlock != null ? modelBlock.getIcon(0, 0) : null;
     }
 
     @SideOnly(Side.CLIENT)

@@ -1,6 +1,9 @@
-﻿{
+{
   "variants": {
     "": {
+      "model": "neorism:block/mother_trophy"
+    },
+    "normal": {
       "model": "neorism:block/mother_trophy"
     }
   }

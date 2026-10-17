@@ -1,8 +1,10 @@
-﻿{
+{
   "variants": {
-    "facing=east": {
-      "model": "neorism:block/throne",
-      "y": 90
+    "": {
+      "model": "neorism:block/throne"
+    },
+    "normal": {
+      "model": "neorism:block/throne"
     },
     "facing=north": {
       "model": "neorism:block/throne"
@@ -14,6 +16,10 @@
     "facing=west": {
       "model": "neorism:block/throne",
       "y": 270
+    },
+    "facing=east": {
+      "model": "neorism:block/throne",
+      "y": 90
     }
   }
 }

@@ -35,13 +35,29 @@ public class BlockCoffin extends BlockModeled implements ITileEntityProvider {
         this.color = color;
         setHardness(2.0F);
         setStepSound(soundTypeWood);
-        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.65F, 1.0F);
-        setCreativeTab(ModCreativeTabs.tabHunter);
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5625F, 1.0F);
+        setCreativeTab(ModCreativeTabs.tabVampire);
+        this.useNeighborBrightness = true;
     }
 
     @Override
     public void setBlockBoundsBasedOnState(net.minecraft.world.IBlockAccess world, int x, int y, int z) {
-        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.65F, 1.0F);
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5625F, 1.0F);
+    }
+
+    @Override
+    public void setBlockBoundsForItemRender() {
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5625F, 1.0F);
+    }
+
+    @Override
+    public net.minecraft.util.AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+        return net.minecraft.util.AxisAlignedBB.getBoundingBox(x, y, z, x + 1.0D, y + 0.5625D, z + 1.0D);
+    }
+
+    @Override
+    public net.minecraft.util.AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+        return net.minecraft.util.AxisAlignedBB.getBoundingBox(x, y, z, x + 1.0D, y + 0.5625D, z + 1.0D);
     }
 
 

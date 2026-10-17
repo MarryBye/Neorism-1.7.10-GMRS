@@ -1,19 +1,11 @@
-﻿{
+{
   "variants": {
-    "facing=east": {
-      "model": "neorism:block/candle_stick",
-      "y": 90
-    },
-    "facing=north": {
-      "model": "neorism:block/candle_stick"
-    },
-    "facing=south": {
-      "model": "neorism:block/candle_stick",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "neorism:block/candle_stick",
-      "y": 270
-    }
+    "": { "model": "neorism:block/candle_stick" },
+    "normal": { "model": "neorism:block/candle_stick" },
+    "meta=0": { "model": "neorism:block/candle_stick" },
+    "facing=north": { "model": "neorism:block/candle_stick" },
+    "facing=east": { "model": "neorism:block/candle_stick", "y": 90 },
+    "facing=south": { "model": "neorism:block/candle_stick", "y": 180 },
+    "facing=west": { "model": "neorism:block/candle_stick", "y": 270 }
   }
 }

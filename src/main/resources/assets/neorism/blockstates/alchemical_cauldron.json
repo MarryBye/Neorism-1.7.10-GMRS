@@ -1,33 +1,10 @@
-﻿{
-  "multipart": [
-    {
-      "apply": {
-        "model": "neorism:block/alchemy_cauldron"
-      }
+{
+  "variants": {
+    "": {
+      "model": "neorism:block/alchemy_cauldron"
     },
-    {
-      "apply": {
-        "model": "neorism:block/alchemy_cauldron_fire"
-      },
-      "when": {
-        "lit": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "neorism:block/alchemy_cauldron_liquid"
-      },
-      "when": {
-        "liquid": "filled"
-      }
-    },
-    {
-      "apply": {
-        "model": "neorism:block/alchemical_cauldron_boiling"
-      },
-      "when": {
-        "liquid": "boiling"
-      }
+    "normal": {
+      "model": "neorism:block/alchemy_cauldron"
     }
-  ]
+  }
 }

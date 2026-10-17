@@ -1,34 +1,25 @@
-﻿{
+{
   "variants": {
-    "facing=east,has_filter=false": {
-      "model": "neorism:block/blood_sieve_empty",
-      "y": 90
-    },
-    "facing=east,has_filter=true": {
-      "model": "neorism:block/blood_sieve",
-      "y": 90
-    },
-    "facing=north,has_filter=false": {
-      "model": "neorism:block/blood_sieve_empty"
-    },
-    "facing=north,has_filter=true": {
+    "": {
       "model": "neorism:block/blood_sieve"
     },
-    "facing=south,has_filter=false": {
-      "model": "neorism:block/blood_sieve_empty",
-      "y": 180
+    "normal": {
+      "model": "neorism:block/blood_sieve"
     },
-    "facing=south,has_filter=true": {
+    "facing=north": {
+      "model": "neorism:block/blood_sieve"
+    },
+    "facing=south": {
       "model": "neorism:block/blood_sieve",
       "y": 180
     },
-    "facing=west,has_filter=false": {
-      "model": "neorism:block/blood_sieve_empty",
-      "y": 270
-    },
-    "facing=west,has_filter=true": {
+    "facing=west": {
       "model": "neorism:block/blood_sieve",
       "y": 270
+    },
+    "facing=east": {
+      "model": "neorism:block/blood_sieve",
+      "y": 90
     }
   }
 }

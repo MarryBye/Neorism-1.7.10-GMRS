@@ -32,6 +32,7 @@ import com.marrybye.neorism.common.blocks.BlockNeorismLog;
 import com.marrybye.neorism.common.blocks.BlockNeorismPressurePlate;
 import com.marrybye.neorism.common.blocks.BlockNeorismButton;
 import com.marrybye.neorism.common.blocks.BlockNeorismDecor;
+import com.marrybye.neorism.common.blocks.BlockModeled;
 import com.marrybye.neorism.common.blocks.BlockModDoor;
 import com.marrybye.neorism.common.blocks.BlockCursedEarthPath;
 import com.marrybye.neorism.common.util.ModLogger;
@@ -268,7 +269,7 @@ public class ModBlocks {
 
         // Category 2: Hunter Functional Blocks & 16 Coffins
         hunterTable = register("hunter_table", new com.marrybye.neorism.common.blocks.BlockHunterTable());
-        hunterWeaponTable = register("weapon_table", new BlockNeorism("weapon_table", "weapon_table_hammer", Material.iron, ModCreativeTabs.tabHunter).setHardness(3.0F));
+        hunterWeaponTable = register("weapon_table", new BlockModeled("weapon_table", "weapon_table_hammer", Material.iron, ModCreativeTabs.tabHunter).setHardness(3.0F));
         alchemicalCauldron = register("alchemical_cauldron", new com.marrybye.neorism.common.blocks.BlockAlchemicalCauldron());
         vaporStill = register("vapor_still", new BlockNeorismDecor("vapor_still", "vapor_still", Material.iron, ModCreativeTabs.tabHunter, 0.1F, 0.0F, 0.1F, 0.9F, 0.9F, 0.9F, true));
         alchemyTable = register("alchemy_table", new BlockNeorismDecor("alchemy_table", "alchemical_cauldron_side", Material.iron, ModCreativeTabs.tabHunter, 0.0F, 0.0F, 0.0F, 1.0F, 0.9F, 1.0F, true).setLightLevel(0.2F));
@@ -297,9 +298,9 @@ public class ModBlocks {
         totem = register("totem_base", new BlockTotem());
         totemTop = register("totem_top", new com.marrybye.neorism.common.blocks.BlockTotemTop());
         chalice = register("chalice", new BlockNeorismDecor("chalice", "chalice", Material.iron, ModCreativeTabs.tabVampire, 0.25F, 0.0F, 0.25F, 0.75F, 0.7F, 0.75F, false));
-        bloodGrinder = register("blood_grinder", new BlockNeorism("blood_grinder", "blood_grinder_top", Material.wood, ModCreativeTabs.tabVampire).setHardness(3.0F));
-        bloodSieve = register("blood_sieve", new BlockNeorism("blood_sieve", "blood_sieve_top", Material.wood, ModCreativeTabs.tabVampire).setHardness(3.0F));
-        infuser = register("blood_infuser", new BlockNeorism("blood_infuser", "infuser", Material.iron, ModCreativeTabs.tabVampire).setHardness(3.0F));
+        bloodGrinder = register("blood_grinder", new BlockModeled("blood_grinder", "blood_grinder_top", Material.wood, ModCreativeTabs.tabVampire).setHardness(3.0F));
+        bloodSieve = register("blood_sieve", new BlockModeled("blood_sieve", "blood_sieve_top", Material.wood, ModCreativeTabs.tabVampire).setHardness(3.0F));
+        infuser = register("blood_infuser", new BlockModeled("blood_infuser", "infuser", Material.iron, ModCreativeTabs.tabVampire).setHardness(3.0F));
         vampireBeacon = register("vampire_beacon", new BlockNeorismDecor("vampire_beacon", "vampire_beacon", Material.iron, ModCreativeTabs.tabVampire).setLightLevel(1.0F));
 
         // TileEntity Registration

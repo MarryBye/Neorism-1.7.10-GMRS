@@ -1,7 +1,10 @@
-﻿{
+{
   "variants": {
     "": {
-      "model": "neorism:block/coffin_empty"
+      "model": "neorism:block/coffin_pink"
+    },
+    "normal": {
+      "model": "neorism:block/coffin_pink"
     }
   }
 }

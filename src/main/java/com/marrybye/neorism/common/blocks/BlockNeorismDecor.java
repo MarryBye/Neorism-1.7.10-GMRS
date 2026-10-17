@@ -9,7 +9,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public class BlockNeorismDecor extends Block {
+public class BlockNeorismDecor extends BlockModeled {
 
     private final boolean solidCollision;
 
@@ -20,13 +20,8 @@ public class BlockNeorismDecor extends Block {
     public BlockNeorismDecor(String name, String texture, Material material, CreativeTabs tab,
                              float minX, float minY, float minZ, float maxX, float maxY, float maxZ,
                              boolean solidCollision) {
-        super(material);
+        super(name, texture, material, tab);
         this.solidCollision = solidCollision;
-        setBlockName("neorism." + name);
-        if (texture != null && !texture.isEmpty()) {
-            setBlockTextureName(Neorism.MODID + ":" + texture);
-        }
-        setCreativeTab(tab != null ? tab : ModCreativeTabs.tabVampirism);
         setHardness(1.5F);
         setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ);
         this.useNeighborBrightness = true;

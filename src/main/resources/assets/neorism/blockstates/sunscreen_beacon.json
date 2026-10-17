@@ -1,6 +1,9 @@
-﻿{
+{
   "variants": {
     "": {
+      "model": "neorism:block/sunscreen_beacon"
+    },
+    "normal": {
       "model": "neorism:block/sunscreen_beacon"
     }
   }

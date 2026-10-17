@@ -1,8 +1,10 @@
-﻿{
+{
   "variants": {
-    "facing=east": {
-      "model": "neorism:block/tombstone_cross",
-      "y": 90
+    "": {
+      "model": "neorism:block/tombstone_cross"
+    },
+    "normal": {
+      "model": "neorism:block/tombstone_cross"
     },
     "facing=north": {
       "model": "neorism:block/tombstone_cross"
@@ -14,6 +16,10 @@
     "facing=west": {
       "model": "neorism:block/tombstone_cross",
       "y": 270
+    },
+    "facing=east": {
+      "model": "neorism:block/tombstone_cross",
+      "y": 90
     }
   }
 }

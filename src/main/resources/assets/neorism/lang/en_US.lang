@@ -5835,3 +5835,5 @@ gui.neorism.appearance.wings_style=Wings Style
 gui.neorism.appearance.wings_enabled=Wings: Enabled
 gui.neorism.appearance.wings_disabled=Wings: Disabled
 gui.neorism.appearance.done=Done
+item.neorism.case_file_144.name=Case File #144
+tile.neorism.direct_cursed_bark.name=Direct Cursed Bark

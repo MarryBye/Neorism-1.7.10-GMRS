@@ -5756,3 +5756,5 @@ gui.neorism.appearance.wings_style=Стиль крыльев
 gui.neorism.appearance.wings_enabled=Крылья: Вкл
 gui.neorism.appearance.wings_disabled=Крылья: Выкл
 gui.neorism.appearance.done=Готово
+item.neorism.case_file_144.name=Дело #144
+tile.neorism.direct_cursed_bark.name=Прямая проклятая кора

@@ -1,6 +1,9 @@
-﻿{
+{
   "variants": {
     "": {
+      "model": "neorism:block/vampire_beacon"
+    },
+    "normal": {
       "model": "neorism:block/vampire_beacon"
     }
   }

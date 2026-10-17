@@ -1,10 +1,8 @@
-﻿{
+{
   "variants": {
-    "filled=false": {
-      "model": "neorism:block/chalice"
-    },
-    "filled=true": {
-      "model": "neorism:block/chalice_filled"
-    }
+    "": { "model": "neorism:block/chalice" },
+    "normal": { "model": "neorism:block/chalice" },
+    "meta=0": { "model": "neorism:block/chalice" },
+    "meta=1": { "model": "neorism:block/chalice_filled" }
   }
 }

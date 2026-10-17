@@ -34,13 +34,13 @@ public class BlockTent extends BlockContainer {
     // Offsets from pos 0 (Right-Front) for pos 1 (Left-Front), pos 2 (Left-Back), pos 3 (Right-Back): {dx, dz}
     private static final int[][][] OFFSETS_FROM_ZERO = new int[][][] {
         // SOUTH (0):
-        { {-1, 0}, {-1, -1}, {0, -1} },
-        // WEST (1):
-        { {0, -1}, {1, -1}, {1, 0} },
-        // NORTH (2):
         { {1, 0}, {1, 1}, {0, 1} },
+        // WEST (1):
+        { {0, 1}, {-1, 1}, {-1, 0} },
+        // NORTH (2):
+        { {-1, 0}, {-1, -1}, {0, -1} },
         // EAST (3):
-        { {0, 1}, {-1, 1}, {-1, 0} }
+        { {0, -1}, {1, -1}, {1, 0} }
     };
 
     @SideOnly(Side.CLIENT)

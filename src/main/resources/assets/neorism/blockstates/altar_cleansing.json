@@ -1,8 +1,10 @@
-﻿{
+{
   "variants": {
-    "facing=east": {
-      "model": "neorism:block/altar_cleansing",
-      "y": 90
+    "": {
+      "model": "neorism:block/altar_cleansing"
+    },
+    "normal": {
+      "model": "neorism:block/altar_cleansing"
     },
     "facing=north": {
       "model": "neorism:block/altar_cleansing"
@@ -14,6 +16,10 @@
     "facing=west": {
       "model": "neorism:block/altar_cleansing",
       "y": 270
+    },
+    "facing=east": {
+      "model": "neorism:block/altar_cleansing",
+      "y": 90
     }
   }
 }

@@ -1,8 +1,10 @@
-﻿{
+{
   "variants": {
-    "facing=east": {
-      "model": "neorism:block/tombstone_medium",
-      "y": 90
+    "": {
+      "model": "neorism:block/tombstone_medium"
+    },
+    "normal": {
+      "model": "neorism:block/tombstone_medium"
     },
     "facing=north": {
       "model": "neorism:block/tombstone_medium"
@@ -14,6 +16,10 @@
     "facing=west": {
       "model": "neorism:block/tombstone_medium",
       "y": 270
+    },
+    "facing=east": {
+      "model": "neorism:block/tombstone_medium",
+      "y": 90
     }
   }
 }

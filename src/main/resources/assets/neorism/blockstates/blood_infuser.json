@@ -1,17 +1,10 @@
-﻿{
-  "multipart": [
-    {
-      "apply": {
-        "model": "neorism:block/blood_infuser/infuser"
-      }
+{
+  "variants": {
+    "": {
+      "model": "neorism:block/blood_infuser/infuser"
     },
-    {
-      "apply": {
-        "model": "neorism:block/blood_infuser/infuser_blood"
-      },
-      "when": {
-        "active": "true"
-      }
+    "normal": {
+      "model": "neorism:block/blood_infuser/infuser"
     }
-  ]
+  }
 }
