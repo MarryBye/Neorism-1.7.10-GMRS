@@ -106,18 +106,23 @@ public class VampirePlayerAppearanceScreen extends GuiScreen {
     protected void actionPerformed(GuiButton btn) {
         if (btn.id == 1) { // Cycle fangs 0..6
             fangType = (fangType + 1) % 7;
+            if (fph != null) fph.setFangType(fangType);
             btn.displayString = getFangText();
         } else if (btn.id == 2) { // Cycle eyes 0..18
             eyeType = (eyeType + 1) % 19;
+            if (fph != null) fph.setEyeType(eyeType);
             btn.displayString = getEyeText();
         } else if (btn.id == 3) { // Toggle glowing eyes
             glowingEyes = !glowingEyes;
+            if (fph != null) fph.setGlowingEyes(glowingEyes);
             btn.displayString = getGlowingText();
         } else if (btn.id == 4) { // Toggle wings
             wings = !wings;
+            if (fph != null) fph.setWings(wings);
             btn.displayString = getWingsText();
         } else if (btn.id == 5) { // Cycle wings style 0..2
             wingsType = (wingsType + 1) % WINGS_STYLES.length;
+            if (fph != null) fph.setWingsType(wingsType);
             btn.displayString = getWingsStyleText();
         } else if (btn.id == 6) { // Done
             saveAndClose();

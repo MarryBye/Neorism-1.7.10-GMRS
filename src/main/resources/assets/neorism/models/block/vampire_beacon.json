@@ -3,8 +3,8 @@
   "textures": {
     "particle": "neorism:block/vampire_beacon",
     "beacon": "neorism:block/vampire_beacon",
-    "glass": "minecraft:glass",
-    "obsidian": "minecraft:obsidian"
+    "glass": "neorism:block/glass",
+    "obsidian": "neorism:block/obsidian"
   },
   "render_type": "minecraft:cutout",
   "elements": [

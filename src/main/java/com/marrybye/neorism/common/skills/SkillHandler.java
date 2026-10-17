@@ -125,17 +125,26 @@ public class SkillHandler implements IExtendedEntityProperties {
         if ("hunter_lord_root".equals(skillId) || "hunter_lord".equals(skillId)) {
             return Helper.isHunter(player) && Helper.getLordLevel(player) > 0;
         }
+        ISkill skill = SkillRegistry.getSkill(skillId);
+        if (skill != null && skill.getFaction() != null) {
+            FactionPlayerHandler fph = FactionPlayerHandler.get(player);
+            if (fph == null || fph.getCurrentFaction() == null || !fph.getCurrentFaction().equals(skill.getFaction())) {
+                return false;
+            }
+        }
         return unlockedSkills.contains(skillId);
     }
 
     public boolean canSkillBeEnabled(ISkill skill) {
         if (skill == null) return false;
+        FactionPlayerHandler fph = FactionPlayerHandler.get(player);
+        if (fph == null) return false;
+        if (skill.getFaction() != null && !skill.getFaction().equals(fph.getCurrentFaction())) {
+            return false;
+        }
         if (isSkillUnlocked(skill.getSkillId())) return false;
         if (skillPoints < skill.getSkillPointCost()) return false;
         if (Helper.getLevel(player) < skill.getRequiredLevel()) return false;
-
-        FactionPlayerHandler fph = FactionPlayerHandler.get(player);
-        if (fph == null) return false;
 
         for (ISkillTree tree : SkillRegistry.getTreesForFaction(fph.getCurrentFaction())) {
             for (ISkillSegment iseg : tree.getAllSegments()) {
@@ -171,31 +180,31 @@ public class SkillHandler implements IExtendedEntityProperties {
         if (actionId == null || actionId.isEmpty()) return false;
         if ("night_vision".equals(actionId)) return Helper.isVampire(player);
         if ("regen".equals(actionId) || "vampire_regen".equals(actionId)) {
-            return Helper.getLevel(player) >= 2 || isSkillUnlocked("vampire_regen") || isSkillUnlocked("vampire_regeneration");
+            return Helper.isVampire(player) && (Helper.getLevel(player) >= 2 || isSkillUnlocked("vampire_regen") || isSkillUnlocked("vampire_regeneration"));
         }
         if ("bat".equals(actionId) || "bat_form".equals(actionId)) {
-            return isSkillUnlocked("bat_form") || isSkillUnlocked("fledgling") || isSkillUnlocked("vampire_disguise") || Helper.getLevel(player) >= 6;
+            return Helper.isVampire(player) && (isSkillUnlocked("bat_form") || isSkillUnlocked("fledgling") || isSkillUnlocked("vampire_disguise") || Helper.getLevel(player) >= 6);
         }
         if ("vampire_rage".equals(actionId)) {
-            return isSkillUnlocked("vampire_rage") || Helper.getLevel(player) >= 4;
+            return Helper.isVampire(player) && (isSkillUnlocked("vampire_rage") || Helper.getLevel(player) >= 4);
         }
         if ("teleport".equals(actionId)) {
-            return isSkillUnlocked("teleport") || Helper.getLevel(player) >= 8;
+            return Helper.isVampire(player) && (isSkillUnlocked("teleport") || Helper.getLevel(player) >= 8);
         }
         if ("freeze".equals(actionId)) {
-            return isSkillUnlocked("freeze") || Helper.getLevel(player) >= 10;
+            return Helper.isVampire(player) && (isSkillUnlocked("freeze") || Helper.getLevel(player) >= 10);
         }
         if ("dark_blood_projectile".equals(actionId)) {
-            return isSkillUnlocked("dark_blood_projectile") || Helper.getLevel(player) >= 5;
+            return Helper.isVampire(player) && (isSkillUnlocked("dark_blood_projectile") || Helper.getLevel(player) >= 5);
         }
         if ("sunscreen".equals(actionId)) {
-            return isSkillUnlocked("sunscreen") || Helper.getLevel(player) >= 7;
+            return Helper.isVampire(player) && (isSkillUnlocked("sunscreen") || Helper.getLevel(player) >= 7);
         }
         if ("invisibility".equals(actionId) || "vampire_invisibility".equals(actionId)) {
-            return isSkillUnlocked("invisibility") || isSkillUnlocked("vampire_invisibility") || Helper.getLevel(player) >= 9;
+            return Helper.isVampire(player) && (isSkillUnlocked("invisibility") || isSkillUnlocked("vampire_invisibility") || Helper.getLevel(player) >= 9);
         }
         if ("summon_bat".equals(actionId) || "summon_bats".equals(actionId)) {
-            return isSkillUnlocked("summon_bats") || isSkillUnlocked("summon_bat") || Helper.getLevel(player) >= 11;
+            return Helper.isVampire(player) && (isSkillUnlocked("summon_bats") || isSkillUnlocked("summon_bat") || Helper.getLevel(player) >= 11);
         }
         if ("awareness_hunter".equals(actionId) || "hunter_awareness".equals(actionId)) {
             return Helper.isHunter(player) && (isSkillUnlocked("hunter_awareness") || isSkillUnlocked("awareness_hunter") || Helper.getLevel(player) >= 2);
@@ -245,10 +254,12 @@ public class SkillHandler implements IExtendedEntityProperties {
     }
 
     public String getPrimaryAction() {
-        if (primaryAction == null || primaryAction.isEmpty()) {
-            return Helper.isVampire(player) ? "vampire_rage" : (Helper.isHunter(player) ? "awareness_hunter" : "");
+        if (primaryAction != null && !primaryAction.isEmpty()) {
+            if (isActionUnlocked(primaryAction)) {
+                return primaryAction;
+            }
         }
-        return primaryAction;
+        return Helper.isVampire(player) ? "vampire_rage" : (Helper.isHunter(player) ? "awareness_hunter" : "");
     }
 
     public void setPrimaryAction(String action) {
@@ -257,10 +268,12 @@ public class SkillHandler implements IExtendedEntityProperties {
     }
 
     public String getSecondaryAction() {
-        if (secondaryAction == null || secondaryAction.isEmpty()) {
-            return Helper.isVampire(player) ? "bat" : (Helper.isHunter(player) ? "potion_resistance_hunter" : "");
+        if (secondaryAction != null && !secondaryAction.isEmpty()) {
+            if (isActionUnlocked(secondaryAction)) {
+                return secondaryAction;
+            }
         }
-        return secondaryAction;
+        return Helper.isVampire(player) ? "bat" : (Helper.isHunter(player) ? "potion_resistance_hunter" : "");
     }
 
     public void setSecondaryAction(String action) {

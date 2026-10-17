@@ -3,8 +3,8 @@
   "textures": {
     "particle": "neorism:block/dark_stone_bricks",
     "stone": "neorism:block/dark_stone_bricks",
-    "gold": "minecraft:gold_block",
-    "redstone": "minecraft:redstone_block"
+    "gold": "neorism:block/gold_block",
+    "redstone": "neorism:block/redstone_block"
   },
   "render_type": "minecraft:cutout",
   "elements": [

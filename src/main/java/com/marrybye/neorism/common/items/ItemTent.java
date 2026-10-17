@@ -23,7 +23,7 @@ public class ItemTent extends ItemNeorism {
         this.spawner = spawner;
         setMaxStackSize(1);
         setTextureName(com.marrybye.neorism.Neorism.MODID + ":item_tent");
-        setCreativeTab(ModCreativeTabs.tabVampirism);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     public ItemTent(boolean spawner) {

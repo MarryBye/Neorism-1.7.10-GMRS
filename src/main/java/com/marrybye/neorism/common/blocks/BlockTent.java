@@ -58,7 +58,7 @@ public class BlockTent extends BlockContainer {
         setHardness(1.0F);
         setResistance(2.0F);
         setStepSound(soundTypeCloth);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab((net.minecraft.creativetab.CreativeTabs) null);
     }
 
     @Override
@@ -80,14 +80,15 @@ public class BlockTent extends BlockContainer {
         int x3 = x + offs[2][0], z3 = z + offs[2][1];
 
         if (canReplace(world, x1, y, z1) && canReplace(world, x2, y, z2) && canReplace(world, x3, y, z3)) {
-            world.setBlockMetadataWithNotify(x, y, z, (0 << 2) | dir, 3);
+            int oppDir = (dir + 2) & 3;
+            world.setBlockMetadataWithNotify(x, y, z, (0 << 2) | oppDir, 3);
             world.setBlock(x1, y, z1, this, (1 << 2) | dir, 3);
             world.setBlock(x2, y, z2, this, (2 << 2) | dir, 3);
-            world.setBlock(x3, y, z3, this, (3 << 2) | dir, 3);
+            world.setBlock(x3, y, z3, this, (3 << 2) | oppDir, 3);
         } else {
             world.setBlockToAir(x, y, z);
             if (placer instanceof EntityPlayer && !((EntityPlayer) placer).capabilities.isCreativeMode) {
-                dropBlockAsItem(world, x, y, z, new ItemStack(this));
+                dropBlockAsItem(world, x, y, z, new ItemStack(com.marrybye.neorism.common.core.ModItems.itemTent));
             }
         }
     }
@@ -102,10 +103,11 @@ public class BlockTent extends BlockContainer {
 
     public static void placeTent(World world, int x, int y, int z, int dir) {
         int[][] offs = OFFSETS_FROM_ZERO[dir];
-        world.setBlock(x, y, z, com.marrybye.neorism.common.core.ModBlocks.tent, (0 << 2) | dir, 3);
+        int oppDir = (dir + 2) & 3;
+        world.setBlock(x, y, z, com.marrybye.neorism.common.core.ModBlocks.tent, (0 << 2) | oppDir, 3);
         world.setBlock(x + offs[0][0], y, z + offs[0][1], com.marrybye.neorism.common.core.ModBlocks.tent, (1 << 2) | dir, 3);
         world.setBlock(x + offs[1][0], y, z + offs[1][1], com.marrybye.neorism.common.core.ModBlocks.tent, (2 << 2) | dir, 3);
-        world.setBlock(x + offs[2][0], y, z + offs[2][1], com.marrybye.neorism.common.core.ModBlocks.tent, (3 << 2) | dir, 3);
+        world.setBlock(x + offs[2][0], y, z + offs[2][1], com.marrybye.neorism.common.core.ModBlocks.tent, (3 << 2) | oppDir, 3);
     }
 
     private static boolean canReplaceAt(World world, int x, int y, int z) {
@@ -123,14 +125,15 @@ public class BlockTent extends BlockContainer {
             try {
                 int pos = (meta >> 2) & 3;
                 int dir = meta & 3;
-                int x0 = (pos == 0) ? x : x - OFFSETS_FROM_ZERO[dir][pos - 1][0];
-                int z0 = (pos == 0) ? z : z - OFFSETS_FROM_ZERO[dir][pos - 1][1];
+                int baseDir = (pos == 0 || pos == 3) ? (dir + 2) & 3 : dir;
+                int x0 = (pos == 0) ? x : x - OFFSETS_FROM_ZERO[baseDir][pos - 1][0];
+                int z0 = (pos == 0) ? z : z - OFFSETS_FROM_ZERO[baseDir][pos - 1][1];
 
                 int[][] allPos = new int[][] {
                     { x0, z0 },
-                    { x0 + OFFSETS_FROM_ZERO[dir][0][0], z0 + OFFSETS_FROM_ZERO[dir][0][1] },
-                    { x0 + OFFSETS_FROM_ZERO[dir][1][0], z0 + OFFSETS_FROM_ZERO[dir][1][1] },
-                    { x0 + OFFSETS_FROM_ZERO[dir][2][0], z0 + OFFSETS_FROM_ZERO[dir][2][1] }
+                    { x0 + OFFSETS_FROM_ZERO[baseDir][0][0], z0 + OFFSETS_FROM_ZERO[baseDir][0][1] },
+                    { x0 + OFFSETS_FROM_ZERO[baseDir][1][0], z0 + OFFSETS_FROM_ZERO[baseDir][1][1] },
+                    { x0 + OFFSETS_FROM_ZERO[baseDir][2][0], z0 + OFFSETS_FROM_ZERO[baseDir][2][1] }
                 };
 
                 for (int[] p : allPos) {
@@ -152,6 +155,11 @@ public class BlockTent extends BlockContainer {
     }
 
     @Override
+    public net.minecraft.item.Item getItemDropped(int meta, Random random, int fortune) {
+        return ((meta >> 2) & 3) == 0 ? com.marrybye.neorism.common.core.ModItems.itemTent : null;
+    }
+
+    @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         if (world.isRemote) {
             return true;
@@ -160,11 +168,12 @@ public class BlockTent extends BlockContainer {
         int meta = world.getBlockMetadata(x, y, z);
         int pos = (meta >> 2) & 3;
         int dir = meta & 3;
+        int baseDir = (pos == 0 || pos == 3) ? (dir + 2) & 3 : dir;
 
         // Delegate to position 0 if activated on another part
         if (pos != 0) {
-            int x0 = x - OFFSETS_FROM_ZERO[dir][pos - 1][0];
-            int z0 = z - OFFSETS_FROM_ZERO[dir][pos - 1][1];
+            int x0 = x - OFFSETS_FROM_ZERO[baseDir][pos - 1][0];
+            int z0 = z - OFFSETS_FROM_ZERO[baseDir][pos - 1][1];
             if (world.getBlock(x0, y, z0) == this) {
                 return onBlockActivated(world, x0, y, z0, player, side, hitX, hitY, hitZ);
             }

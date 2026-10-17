@@ -70,7 +70,10 @@ public abstract class ActionBase implements IAction {
         // Garlic debuff prevents using vampire skills
         if (player.isPotionActive(ModPotions.garlic)) return false;
 
-        if (bloodCost > 0 && Helper.isVampire(player)) {
+        if (bloodCost > 0) {
+            if (!Helper.isVampire(player)) {
+                return false;
+            }
             VampirePlayer vp = VampirePlayer.get(player);
             if (vp == null || vp.getBloodStats().getBloodLevel() < bloodCost) {
                 return false;

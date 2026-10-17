@@ -5758,3 +5758,61 @@ gui.neorism.appearance.wings_disabled=Крылья: Выкл
 gui.neorism.appearance.done=Готово
 item.neorism.case_file_144.name=Дело #144
 tile.neorism.direct_cursed_bark.name=Прямая проклятая кора
+
+# Зелья и эффекты
+potion.sanguinare=Сангвинаре Вампирис
+potion.sunscreen=Защита от солнца
+potion.garlic=Чеснок
+potion.no_blood=Истощение крови
+potion.freeze=Заморозка
+potion.bleeding=Кровотечение
+effect.factionapi.oblivion=Забвение
+potion.oblivion=Забвение
+
+# Зелье забвения
+item.neorism.oblivion_potion.name=Зелье забвения
+item.neorism.potion_of_oblivion.name=Зелье забвения
+item.factionapi.oblivion_potion.name=Зелье забвения
+tooltip.factionapi.oblivion_potion.desc=Сбрасывает все очки навыков при употреблении
+tooltip.neorism.oblivion_potion.desc=Сбрасывает все очки навыков при употреблении
+
+# Палатки
+item.neorism.tent_item.name=Палатка охотников
+item.neorism.tent_spawner_item.name=Палатка охотников (спавнер)
+item.neorism:tent_item.name=Палатка охотников
+item.neorism:tent_spawner_item.name=Палатка охотников (спавнер)
+
+# Деревянные предметы (Лодки, Двери, Таблички)
+item.neorism.dark_spruce_boat.name=Лодка из тёмной ели
+item.neorism.cursed_spruce_boat.name=Лодка из проклятой ели
+item.neorism.dark_spruce_chest_boat.name=Лодка из тёмной ели с сундуком
+item.neorism.cursed_spruce_chest_boat.name=Лодка из проклятой ели с сундуком
+item.neorism.dark_spruce_door.name=Дверь из тёмной ели
+item.neorism.cursed_spruce_door.name=Дверь из проклятой ели
+item.neorism.item_dark_spruce_door.name=Дверь из тёмной ели
+item.neorism.item_cursed_spruce_door.name=Дверь из проклятой ели
+item.neorism.dark_spruce_sign.name=Табличка из тёмной ели
+item.neorism.cursed_spruce_sign.name=Табличка из проклятой ели
+item.neorism.item_dark_spruce_sign.name=Табличка из тёмной ели
+item.neorism.item_cursed_spruce_sign.name=Табличка из проклятой ели
+item.neorism.dark_spruce_hanging_sign.name=Подвесная табличка из тёмной ели
+item.neorism.cursed_spruce_hanging_sign.name=Подвесная табличка из проклятой ели
+item.neorism.item_dark_spruce_hanging_sign.name=Подвесная табличка из тёмной ели
+item.neorism.item_cursed_spruce_hanging_sign.name=Подвесная табличка из проклятой ели
+
+# Блоки: Двери, Таблички, Подвесные таблички, Тропинки
+tile.neorism.dark_spruce_door.name=Дверь из тёмной ели
+tile.neorism.cursed_spruce_door.name=Дверь из проклятой ели
+tile.neorism.dark_spruce_sign.name=Табличка из тёмной ели
+tile.neorism.cursed_spruce_sign.name=Табличка из проклятой ели
+tile.neorism.dark_spruce_hanging_sign.name=Подвесная табличка из тёмной ели
+tile.neorism.cursed_spruce_hanging_sign.name=Подвесная табличка из проклятой ели
+tile.neorism.cursed_earth_path.name=Тропинка из проклятой земли
+
+# Типографические ошибки
+item.neorism.dark_sprice_door.name=Дверь из тёмной ели
+item.neorism.cursed_sprice_door.name=Дверь из проклятой ели
+item.neorism.dark_sprice_sign.name=Табличка из тёмной ели
+item.neorism.cursed_sprice_sign.name=Табличка из проклятой ели
+item.neorism.dark_sprice_boat.name=Лодка из тёмной ели
+item.neorism.cursed_sprice_boat.name=Лодка из проклятой ели

@@ -36,8 +36,8 @@ public class PacketHandler {
         registerMessage(com.marrybye.neorism.common.network.packets.ResetAllSkillsPacket.Handler.class, com.marrybye.neorism.common.network.packets.ResetAllSkillsPacket.class, Side.SERVER);
         registerMessage(com.marrybye.neorism.common.network.packets.ToggleActionPacket.Handler.class, com.marrybye.neorism.common.network.packets.ToggleActionPacket.class, Side.SERVER);
         registerMessage(com.marrybye.neorism.common.network.packets.SelectMinionTaskPacket.Handler.class, com.marrybye.neorism.common.network.packets.SelectMinionTaskPacket.class, Side.SERVER);
-        registerMessage(com.marrybye.neorism.common.network.packets.ToggleMinionTaskLockPacket.Handler.class, com.marrybye.neorism.common.network.packets.ToggleMinionTaskLockPacket.class, Side.SERVER);
-        registerMessage(com.marrybye.neorism.common.network.packets.AppearancePacket.Handler.class, com.marrybye.neorism.common.network.packets.AppearancePacket.class, Side.SERVER);
+        registerMessage(com.marrybye.neorism.common.network.packets.AppearancePacket.ServerHandler.class, com.marrybye.neorism.common.network.packets.AppearancePacket.class, Side.SERVER);
+        registerMessage(com.marrybye.neorism.common.network.packets.AppearancePacket.ClientHandler.class, com.marrybye.neorism.common.network.packets.AppearancePacket.class, Side.CLIENT);
     }
 
     public static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(

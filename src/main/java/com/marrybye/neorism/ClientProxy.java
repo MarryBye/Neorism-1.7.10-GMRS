@@ -40,6 +40,9 @@ public class ClientProxy extends CommonProxy {
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new com.marrybye.neorism.client.events.VampireAtmosphereHandler()
         );
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new com.marrybye.neorism.client.render.VampireAppearanceRenderHandler()
+        );
 
         cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
             com.marrybye.neorism.common.entity.EntityHolyWaterBottle.class,

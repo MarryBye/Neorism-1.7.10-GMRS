@@ -129,7 +129,7 @@ public class WorldGenHunterCamp extends WorldGenerator {
 
     private void placeTent(World world, int tx, int ty, int tz, boolean advanced) {
         if (ModBlocks.tent != null) {
-            world.setBlock(tx, ty, tz, ModBlocks.tent, 0, 2);
+            com.marrybye.neorism.common.blocks.BlockTent.placeTent(world, tx, ty, tz, 0);
             TileEntityTent tentTile = (TileEntityTent) world.getTileEntity(tx, ty, tz);
             if (tentTile != null) {
                 tentTile.setSpawn(true);

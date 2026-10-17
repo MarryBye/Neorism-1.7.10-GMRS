@@ -21,6 +21,9 @@ public class BlockNeorismWall extends BlockWall {
         super(modelBlock);
         this.modelBlock = modelBlock;
         setBlockName("neorism." + name);
+        if (modelBlock != null && modelBlock.getItemIconName() != null) {
+            setBlockTextureName(modelBlock.getItemIconName());
+        }
         setCreativeTab(tab != null ? tab : ModCreativeTabs.tabVampirism);
         setHardness(2.0F);
         setResistance(10.0F);
@@ -30,17 +33,25 @@ public class BlockNeorismWall extends BlockWall {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister register) {
+        String tex = getTextureName();
+        if (tex == null && modelBlock != null) {
+            tex = modelBlock.getItemIconName();
+        }
+        if (tex != null) {
+            this.blockIcon = register.registerIcon(tex);
+        }
     }
 
     @SideOnly(Side.CLIENT)
     public IIcon getFallbackParticleIcon() {
-        return modelBlock != null ? modelBlock.getIcon(0, 0) : null;
+        return this.blockIcon != null ? this.blockIcon : (modelBlock != null ? modelBlock.getIcon(0, 0) : null);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        return modelBlock.getIcon(side, 0);
+        if (this.blockIcon != null) return this.blockIcon;
+        return modelBlock != null ? modelBlock.getIcon(side, 0) : null;
     }
 
     @SideOnly(Side.CLIENT)

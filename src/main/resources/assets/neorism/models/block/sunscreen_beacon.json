@@ -1,10 +1,10 @@
 {
   "parent": "block/block",
   "textures": {
-    "particle": "neorism:block/vampire_beacon",
-    "beacon": "neorism:block/vampire_beacon",
-    "glass": "minecraft:glass",
-    "obsidian": "minecraft:obsidian"
+    "particle": "neorism:block/cursed_earth",
+    "beacon": "neorism:block/cursed_earth",
+    "glass": "neorism:block/glass",
+    "obsidian": "neorism:block/obsidian"
   },
   "render_type": "minecraft:cutout",
   "elements": [

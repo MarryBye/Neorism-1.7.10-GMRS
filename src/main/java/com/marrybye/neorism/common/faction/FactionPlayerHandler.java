@@ -5,6 +5,7 @@ import com.marrybye.neorism.api.faction.IFactionPlayer;
 import com.marrybye.neorism.api.faction.IPlayableFaction;
 import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.network.PacketHandler;
+import com.marrybye.neorism.common.network.packets.AppearancePacket;
 import com.marrybye.neorism.common.network.packets.SyncFactionPacket;
 import com.marrybye.neorism.common.util.ModLogger;
 
@@ -242,17 +243,24 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
 
     public void setFaction(IPlayableFaction faction, int level) {
         int oldLevel = this.currentLevel;
+        IPlayableFaction oldFaction = this.currentFaction;
         this.currentFaction = faction != null ? faction : ModFactions.NEUTRAL;
         this.currentLevel = level;
+
+        com.marrybye.neorism.common.skills.SkillHandler sh =
+            com.marrybye.neorism.common.skills.SkillHandler.get(player);
+        if (oldFaction != null && !oldFaction.equals(this.currentFaction) && sh != null) {
+            sh.resetSkills();
+            sh.setPrimaryAction("");
+            sh.setSecondaryAction("");
+            sh.setSkillPoints(this.currentFaction.isNeutral() ? 0 : this.currentLevel);
+        } else if (this.currentLevel > oldLevel && sh != null) {
+            sh.addSkillPoints(this.currentLevel - oldLevel);
+        }
+
         if (this.currentFaction.isNeutral()) {
             this.lordLevel = 0;
             this.disguised = false;
-        } else if (this.currentLevel > oldLevel) {
-            com.marrybye.neorism.common.skills.SkillHandler sh =
-                com.marrybye.neorism.common.skills.SkillHandler.get(player);
-            if (sh != null) {
-                sh.addSkillPoints(this.currentLevel - oldLevel);
-            }
         }
         ModLogger.leveling("Player %s faction changed to %s (level %d)",
             player.getCommandSenderName(), this.currentFaction.getId(), this.currentLevel);
@@ -347,6 +355,18 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
             PacketHandler.sendTo(packet, (EntityPlayerMP) player);
             // Send to tracking players nearby
             PacketHandler.sendToAllAround(packet, new NetworkRegistry.TargetPoint(
+                player.dimension, player.posX, player.posY, player.posZ, 64.0D
+            ));
+            AppearancePacket appPacket = new AppearancePacket(
+                player.getEntityId(),
+                fangType,
+                eyeType,
+                glowingEyes,
+                wings,
+                wingsType
+            );
+            PacketHandler.sendTo(appPacket, (EntityPlayerMP) player);
+            PacketHandler.sendToAllAround(appPacket, new NetworkRegistry.TargetPoint(
                 player.dimension, player.posX, player.posY, player.posZ, 64.0D
             ));
         }

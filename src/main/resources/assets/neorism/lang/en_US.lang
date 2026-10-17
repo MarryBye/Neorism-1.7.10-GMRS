@@ -5837,3 +5837,61 @@ gui.neorism.appearance.wings_disabled=Wings: Disabled
 gui.neorism.appearance.done=Done
 item.neorism.case_file_144.name=Case File #144
 tile.neorism.direct_cursed_bark.name=Direct Cursed Bark
+
+# Potions and Effects
+potion.sanguinare=Sanguinare Vampiris
+potion.sunscreen=Sunscreen
+potion.garlic=Garlic
+potion.no_blood=No Blood
+potion.freeze=Freeze
+potion.bleeding=Bleeding
+effect.factionapi.oblivion=Oblivion
+potion.oblivion=Oblivion
+
+# Oblivion Potion
+item.neorism.oblivion_potion.name=Potion of Oblivion
+item.neorism.potion_of_oblivion.name=Potion of Oblivion
+item.factionapi.oblivion_potion.name=Potion of Oblivion
+tooltip.factionapi.oblivion_potion.desc=Resets all skills on consume
+tooltip.neorism.oblivion_potion.desc=Resets all skills on consume
+
+# Tents
+item.neorism.tent_item.name=Hunter Tent
+item.neorism.tent_spawner_item.name=Hunter Tent (Spawner)
+item.neorism:tent_item.name=Hunter Tent
+item.neorism:tent_spawner_item.name=Hunter Tent (Spawner)
+
+# Wood Items (Boats, Signs, Doors, Hanging Signs)
+item.neorism.dark_spruce_boat.name=Dark Spruce Boat
+item.neorism.cursed_spruce_boat.name=Cursed Spruce Boat
+item.neorism.dark_spruce_chest_boat.name=Dark Spruce Boat with Chest
+item.neorism.cursed_spruce_chest_boat.name=Cursed Spruce Boat with Chest
+item.neorism.dark_spruce_door.name=Dark Spruce Door
+item.neorism.cursed_spruce_door.name=Cursed Spruce Door
+item.neorism.item_dark_spruce_door.name=Dark Spruce Door
+item.neorism.item_cursed_spruce_door.name=Cursed Spruce Door
+item.neorism.dark_spruce_sign.name=Dark Spruce Sign
+item.neorism.cursed_spruce_sign.name=Cursed Spruce Sign
+item.neorism.item_dark_spruce_sign.name=Dark Spruce Sign
+item.neorism.item_cursed_spruce_sign.name=Cursed Spruce Sign
+item.neorism.dark_spruce_hanging_sign.name=Dark Spruce Hanging Sign
+item.neorism.cursed_spruce_hanging_sign.name=Cursed Spruce Hanging Sign
+item.neorism.item_dark_spruce_hanging_sign.name=Dark Spruce Hanging Sign
+item.neorism.item_cursed_spruce_hanging_sign.name=Cursed Spruce Hanging Sign
+
+# Blocks: Doors, Signs, Hanging Signs, and Blocks
+tile.neorism.dark_spruce_door.name=Dark Spruce Door
+tile.neorism.cursed_spruce_door.name=Cursed Spruce Door
+tile.neorism.dark_spruce_sign.name=Dark Spruce Sign
+tile.neorism.cursed_spruce_sign.name=Cursed Spruce Sign
+tile.neorism.dark_spruce_hanging_sign.name=Dark Spruce Hanging Sign
+tile.neorism.cursed_spruce_hanging_sign.name=Cursed Spruce Hanging Sign
+tile.neorism.cursed_earth_path.name=Cursed Earth Path
+
+# Fallback typos
+item.neorism.dark_sprice_door.name=Dark Spruce Door
+item.neorism.cursed_sprice_door.name=Cursed Spruce Door
+item.neorism.dark_sprice_sign.name=Dark Spruce Sign
+item.neorism.cursed_sprice_sign.name=Cursed Spruce Sign
+item.neorism.dark_sprice_boat.name=Dark Spruce Boat
+item.neorism.cursed_sprice_boat.name=Cursed Spruce Boat
