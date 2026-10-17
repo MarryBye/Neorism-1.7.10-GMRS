@@ -5482,6 +5482,14 @@ tile.neorism.coffin_red.name=Гроб вампира
 tile.neorism.fog_diffuser.name=Генератор тумана
 tile.neorism.garlic_diffuser_normal.name=Чесночный распылитель
 tile.neorism.totem_base.name=Тотем фракции
+tile.neorism.totem_top.name=Вершина тотема фракции
+chat.neorism.totem_raid_in_progress=Осада деревни фракцией %s! Прогресс захвата: %d%%
+chat.neorism.totem_status=Тотем деревни под контролем фракции %s (%s)
+chat.neorism.totem_raid_started=Фракция %s начала осаду деревни, защищаемой фракцией %s!
+chat.neorism.totem_raid_captured=Деревня успешно захвачена фракцией %s!
+chat.neorism.totem_raid_defended=Защитники деревни успешно отбили нападение!
+chat.neorism.peaceful_feed=Вы мирно пьёте кровь у покорного жителя.
+chat.neorism.villager_hunter_greeting=Приветствуем, Охотник! Наша деревня в безопасности благодаря вашей гильдии.
 
 entity.neorism.vampire.name=Вампир
 entity.neorism.advanced_vampire.name=Высший вампир

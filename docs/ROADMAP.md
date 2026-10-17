@@ -397,19 +397,19 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 - Village Banners: `reference/vampirism/src/main/java/de/teamlapen/faction/api/factions/village/VillageBanner.java`
 - Capture Entity: `reference/vampirism/src/main/java/de/teamlapen/faction/api/world/entities/IVillageCaptureEntity.java`
 
-- [ ] **13.1. Village Faction Territory Subsystem (`FactionVillage.java`)**
-  - [ ] Track village boundaries, controlling faction, and capture status.
-  - [ ] Village faction state machine: Neutral, Vampire Controlled, Hunter Controlled.
-- [ ] **13.2. Faction Totem Multiblock (`TotemBlockEntity.java`)**
-  - [ ] Central totem block structure (`TotemBase` + `TotemTop`).
-  - [ ] Right-click interaction to view defense level, garrison health, and initiate capture.
-- [ ] **13.3. Village Raid & Capture Mechanics (`IVillageCaptureEntity.java`)**
-  - [ ] Attacking players trigger village siege raid.
-  - [ ] Capture progress bar: players must hold territory near the totem and defeat defenders.
-  - [ ] Capture completion flips village control, spawns faction-specific guards, and replaces banners (`VillageBanner.java`).
-- [ ] **13.4. Faction Villagers & Trades**
-  - [ ] Villagers in vampire-controlled villages provide blood peacefully or become thralls.
-  - [ ] Hunter-controlled villages spawn additional Hunter patrols and discount trades.
+- [x] **13.1. Village Faction Territory Subsystem (`FactionVillage.java`)**
+  - [x] Track village boundaries, controlling faction, and capture status.
+  - [x] Village faction state machine: Neutral, Vampire Controlled, Hunter Controlled.
+- [x] **13.2. Faction Totem Multiblock (`TotemBlockEntity.java`)**
+  - [x] Central totem block structure (`TotemBase` + `TotemTop`).
+  - [x] Right-click interaction to view defense level, garrison health, and initiate capture.
+- [x] **13.3. Village Raid & Capture Mechanics (`IVillageCaptureEntity.java`)**
+  - [x] Attacking players trigger village siege raid.
+  - [x] Capture progress bar: players must hold territory near the totem and defeat defenders.
+  - [x] Capture completion flips village control, spawns faction-specific guards, and replaces banners (`VillageBanner.java`).
+- [x] **13.4. Faction Villagers & Trades**
+  - [x] Villagers in vampire-controlled villages provide blood peacefully or become thralls.
+  - [x] Hunter-controlled villages spawn additional Hunter patrols and discount trades.
 
 ---
 

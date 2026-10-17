@@ -45,6 +45,10 @@ public class ModRegistries {
         com.marrybye.neorism.common.events.WeaponOilEventHandler oilHandler =
             new com.marrybye.neorism.common.events.WeaponOilEventHandler();
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(oilHandler);
+
+        com.marrybye.neorism.common.events.VillageFactionHandler villageHandler =
+            new com.marrybye.neorism.common.events.VillageFactionHandler();
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(villageHandler);
     }
 
     public static void postInit(FMLPostInitializationEvent event) {

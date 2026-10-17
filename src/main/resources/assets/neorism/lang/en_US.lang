@@ -5561,6 +5561,14 @@ tile.neorism.coffin_red.name=Vampire Coffin
 tile.neorism.fog_diffuser.name=Fog Diffuser
 tile.neorism.garlic_diffuser_normal.name=Garlic Diffuser
 tile.neorism.totem_base.name=Faction Totem
+tile.neorism.totem_top.name=Faction Totem Top
+chat.neorism.totem_raid_in_progress=A %s raid is currently in progress! Capture Progress: %d%%
+chat.neorism.totem_status=Village Totem controlled by %s faction (%s)
+chat.neorism.totem_raid_started=A %s raid has begun on this village defended by %s!
+chat.neorism.totem_raid_captured=The village has been conquered by the %s!
+chat.neorism.totem_raid_defended=The village defenders successfully repelled the invaders!
+chat.neorism.peaceful_feed=You drink blood peacefully from the cooperative villager.
+chat.neorism.villager_hunter_greeting=Greetings, Hunter! Our village is safe thanks to your guild.
 
 entity.neorism.vampire.name=Vampire
 entity.neorism.advanced_vampire.name=Advanced Vampire

@@ -140,6 +140,7 @@ public class ClientProxy extends CommonProxy {
             com.marrybye.neorism.common.core.ModBlocks.fogDiffuser,
             com.marrybye.neorism.common.core.ModBlocks.garlicDiffuser,
             com.marrybye.neorism.common.core.ModBlocks.totem,
+            com.marrybye.neorism.common.core.ModBlocks.totemTop,
             com.marrybye.neorism.common.core.ModBlocks.hunterTable,
             com.marrybye.neorism.common.core.ModBlocks.alchemicalCauldron
         };
@@ -167,6 +168,10 @@ public class ClientProxy extends CommonProxy {
         cpw.mods.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(
             com.marrybye.neorism.common.tileentity.TileEntityCoffin.class,
             new com.marrybye.neorism.client.render.tileentity.TileEntityCoffinRenderer()
+        );
+        cpw.mods.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(
+            com.marrybye.neorism.common.tileentity.TileEntityTotem.class,
+            new com.marrybye.neorism.client.render.tileentity.TileEntityTotemRenderer()
         );
     }
 

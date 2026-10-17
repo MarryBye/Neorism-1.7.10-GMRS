@@ -6,19 +6,26 @@ import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.entity.ai.EntityAIAttackFaction;
 import com.marrybye.neorism.common.util.ModLogger;
 
+import de.teamlapen.faction.api.world.ICaptureAttributes;
+import de.teamlapen.faction.api.world.entities.IVillageCaptureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 /**
  * Base class for all vampire hunter NPCs and patrol mobs.
- * Allied with human hunters, attacks vampires on sight.
+ * Allied with human hunters, attacks vampires on sight, participates in village capture raids.
  */
-public abstract class EntityHunterBase extends EntityCreature implements IHunterEntity {
+public abstract class EntityHunterBase extends EntityCreature implements IHunterEntity, IVillageCaptureEntity {
+
+    private ICaptureAttributes captureInfo;
+    private boolean isAttackingVillage;
+    private boolean isDefendingVillage;
 
     public EntityHunterBase(World world) {
         super(world);
@@ -81,5 +88,46 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void attackVillage(ICaptureAttributes totem) {
+        this.captureInfo = totem;
+        this.isAttackingVillage = true;
+        this.isDefendingVillage = false;
+    }
+
+    @Override
+    public void defendVillage(ICaptureAttributes totem) {
+        this.captureInfo = totem;
+        this.isDefendingVillage = true;
+        this.isAttackingVillage = false;
+    }
+
+    @Override
+    public ICaptureAttributes getCaptureInfo() {
+        return this.captureInfo;
+    }
+
+    @Override
+    public AxisAlignedBB getTargetVillageArea() {
+        return this.captureInfo != null ? this.captureInfo.getVillageArea() : null;
+    }
+
+    @Override
+    public boolean isAttackingVillage() {
+        return this.isAttackingVillage;
+    }
+
+    @Override
+    public boolean isDefendingVillage() {
+        return this.isDefendingVillage;
+    }
+
+    @Override
+    public void stopVillageAttackDefense() {
+        this.captureInfo = null;
+        this.isAttackingVillage = false;
+        this.isDefendingVillage = false;
     }
 }

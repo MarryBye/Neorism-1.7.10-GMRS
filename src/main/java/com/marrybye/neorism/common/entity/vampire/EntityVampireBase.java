@@ -17,19 +17,25 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import de.teamlapen.faction.api.world.ICaptureAttributes;
+import de.teamlapen.faction.api.world.entities.IVillageCaptureEntity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 /**
  * Base class for all vampire mobs in Neorism.
- * Implements sunlight burning, dark vision, blood thirst, and faction hostility towards hunters.
+ * Implements sunlight burning, dark vision, blood thirst, faction hostility, and village capture raids.
  */
-public abstract class EntityVampireBase extends EntityCreature implements IVampireEntity, IMob {
+public abstract class EntityVampireBase extends EntityCreature implements IVampireEntity, IMob, IVillageCaptureEntity {
 
     private boolean ignoringSundamage = false;
     private int bloodLevel = 20;
     private int maxBloodLevel = 20;
+    private ICaptureAttributes captureInfo;
+    private boolean isAttackingVillage;
+    private boolean isDefendingVillage;
 
     public EntityVampireBase(World world) {
         super(world);
@@ -155,5 +161,46 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
         }
         int light = this.worldObj.getBlockLightValue(x, y, z);
         return light <= 7;
+    }
+
+    @Override
+    public void attackVillage(ICaptureAttributes totem) {
+        this.captureInfo = totem;
+        this.isAttackingVillage = true;
+        this.isDefendingVillage = false;
+    }
+
+    @Override
+    public void defendVillage(ICaptureAttributes totem) {
+        this.captureInfo = totem;
+        this.isDefendingVillage = true;
+        this.isAttackingVillage = false;
+    }
+
+    @Override
+    public ICaptureAttributes getCaptureInfo() {
+        return this.captureInfo;
+    }
+
+    @Override
+    public AxisAlignedBB getTargetVillageArea() {
+        return this.captureInfo != null ? this.captureInfo.getVillageArea() : null;
+    }
+
+    @Override
+    public boolean isAttackingVillage() {
+        return this.isAttackingVillage;
+    }
+
+    @Override
+    public boolean isDefendingVillage() {
+        return this.isDefendingVillage;
+    }
+
+    @Override
+    public void stopVillageAttackDefense() {
+        this.captureInfo = null;
+        this.isAttackingVillage = false;
+        this.isDefendingVillage = false;
     }
 }
