@@ -1,5 +1,11 @@
-﻿{
+{
   "variants": {
+    "": {
+      "model": "neorism:block/cursed_grass"
+    },
+    "normal": {
+      "model": "neorism:block/cursed_grass"
+    },
     "snowy=false": [
       {
         "model": "neorism:block/cursed_grass"

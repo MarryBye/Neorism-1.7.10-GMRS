@@ -30,6 +30,17 @@ public class BlockDarkSpruceLog extends BlockRotatedPillar {
     public void registerBlockIcons(IIconRegister register) {
         sideIcon = register.registerIcon(Neorism.MODID + ":dark_spruce_log");
         topIcon = register.registerIcon(Neorism.MODID + ":dark_spruce_log_top");
+        blockIcon = sideIcon;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta) {
+        int axis = meta & 12;
+        if (axis == 0 && (side == 0 || side == 1)) return topIcon;
+        if (axis == 4 && (side == 4 || side == 5)) return topIcon;
+        if (axis == 8 && (side == 2 || side == 3)) return topIcon;
+        return sideIcon;
     }
 
     @Override

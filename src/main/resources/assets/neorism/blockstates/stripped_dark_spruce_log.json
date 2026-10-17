@@ -1,5 +1,11 @@
-﻿{
+{
   "variants": {
+    "": {
+      "model": "neorism:block/stripped_dark_spruce_log"
+    },
+    "normal": {
+      "model": "neorism:block/stripped_dark_spruce_log"
+    },
     "axis=x": {
       "model": "neorism:block/stripped_dark_spruce_log_horizontal",
       "x": 90,

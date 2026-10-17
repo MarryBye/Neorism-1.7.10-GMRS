@@ -80,6 +80,12 @@ public class BlockTent extends BlockContainer {
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getRenderType() {
+        return com.gtnewhorizon.gtnhlib.client.model.ModelISBRH.JSON_ISBRH_ID;
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
