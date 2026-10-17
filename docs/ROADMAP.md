@@ -342,22 +342,22 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 - Vampire Altar Ruins: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/structures/vampirealtar/VampireAltarStructure.java`
 - Dracula Castle: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/structures/draculacastle/DraculaCastleStructure.java`
 
-- [ ] **11.1. Vampire Forest Biome**
-  - [ ] Biome registration (`BiomeGenVampireForest` / `VampirismBiomes.java`).
-  - [ ] Dark purple sky fog color (`0x1b002c`), blood-red water color (`0x4a0000`), dead grass color.
-  - [ ] Dense dark spruce trees with Spanish moss / cursed roots (`ModFeatures.java`).
-  - [ ] Vampire mob spawn weights enabled during both day and night (under tree canopy).
-- [ ] **11.2. Underground Vampire Crypt Structure (`CryptStructure.java`)**
-  - [ ] Procedural multiblock underground crypt rooms.
-  - [ ] Coffin chambers, Vampire Barons spawners, rare loot chests (Vampire Books, Pure Blood).
-- [ ] **11.3. Hunter Camps & Outposts (`HunterCampStructure.java`, `HunterOutpostStructure.java`)**
-  - [ ] Surface tents, watchtowers, training dummies, Hunter Trainers, weapon benches.
-- [ ] **11.4. Altar Ruins in Overworld (`VampireAltarStructure.java`)**
-  - [ ] Ancient abandoned Altar of Inspiration structures in deep forests.
-- [ ] **11.5. Dracula Castle Boss Arena (`DraculaCastleStructure.java`)**
-  - [ ] Gothic castle structure in Vampire Forest with throne room, bat roosts, and boss summon altar.
-- [ ] **11.6. Dimension & Ambient Audio Normalization**
-  - [ ] Adapt dimension ambient sound events (`ambient.velmorra_rumble`) with 1.7.10 sound loops.
+- [x] **11.1. Vampire Forest Biome**
+  - [x] Biome registration (`BiomeGenVampireForest` / `VampirismBiomes.java`).
+  - [x] Dark purple sky fog color (`0x1b002c`), blood-red water color (`0x4a0000`), dead grass color.
+  - [x] Dense dark spruce trees with Spanish moss / cursed roots (`ModFeatures.java`).
+  - [x] Vampire mob spawn weights enabled during both day and night (under tree canopy).
+- [x] **11.2. Underground Vampire Crypt Structure (`CryptStructure.java`)**
+  - [x] Procedural multiblock underground crypt rooms.
+  - [x] Coffin chambers, Vampire Barons spawners, rare loot chests (Vampire Books, Pure Blood).
+- [x] **11.3. Hunter Camps & Outposts (`HunterCampStructure.java`, `HunterOutpostStructure.java`)**
+  - [x] Surface tents, watchtowers, training dummies, Hunter Trainers, weapon benches.
+- [x] **11.4. Altar Ruins in Overworld (`VampireAltarStructure.java`)**
+  - [x] Ancient abandoned Altar of Inspiration structures in deep forests.
+- [x] **11.5. Dracula Castle Boss Arena (`DraculaCastleStructure.java`)**
+  - [x] Gothic castle structure in Vampire Forest with throne room, bat roosts, and boss summon altar.
+- [x] **11.6. Dimension & Ambient Audio Normalization**
+  - [x] Adapt dimension ambient sound events (`ambient.velmorra_rumble`) with 1.7.10 sound loops.
 
 ---
 

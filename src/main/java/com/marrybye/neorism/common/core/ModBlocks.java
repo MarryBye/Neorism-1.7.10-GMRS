@@ -34,6 +34,17 @@ import net.minecraft.block.material.Material;
 public class ModBlocks {
 
     public static Block cursedEarth;
+    public static Block cursedGrass;
+    public static Block darkStone;
+    public static Block darkStoneBricks;
+    public static Block cobbledDarkStone;
+    public static Block polishedDarkStone;
+    public static Block chiseledDarkStoneBricks;
+    public static Block crackedDarkStoneBricks;
+    public static Block vampireOrchid;
+    public static Block cursedRoots;
+    public static Block tent;
+
     public static Block darkSprucePlanks;
     public static Block darkSpruceLog;
     public static Block darkSpruceLeaves;
@@ -52,6 +63,17 @@ public class ModBlocks {
 
     public static void init() {
         cursedEarth = register("cursed_earth", new BlockCursedEarth());
+        cursedGrass = register("cursed_grass", new com.marrybye.neorism.common.blocks.BlockCursedGrass());
+        darkStone = register("dark_stone", new com.marrybye.neorism.common.blocks.BlockDarkStone("dark_stone"));
+        darkStoneBricks = register("dark_stone_bricks", new com.marrybye.neorism.common.blocks.BlockDarkStone("dark_stone_bricks"));
+        cobbledDarkStone = register("cobbled_dark_stone", new com.marrybye.neorism.common.blocks.BlockDarkStone("cobbled_dark_stone"));
+        polishedDarkStone = register("polished_dark_stone", new com.marrybye.neorism.common.blocks.BlockDarkStone("polished_dark_stone"));
+        chiseledDarkStoneBricks = register("chiseled_dark_stone_bricks", new com.marrybye.neorism.common.blocks.BlockDarkStone("chiseled_dark_stone_bricks"));
+        crackedDarkStoneBricks = register("cracked_dark_stone_bricks", new com.marrybye.neorism.common.blocks.BlockDarkStone("cracked_dark_stone_bricks"));
+        vampireOrchid = register("vampire_orchid", new com.marrybye.neorism.common.blocks.BlockVampireOrchid());
+        cursedRoots = register("cursed_roots", new com.marrybye.neorism.common.blocks.BlockCursedRoots());
+        tent = register("tent", new com.marrybye.neorism.common.blocks.BlockTent());
+
         darkSprucePlanks = register("dark_spruce_planks", new BlockNeorism("dark_spruce_planks", Material.wood).setHardness(2.0F));
         darkSpruceLog = register("dark_spruce_log", new BlockDarkSpruceLog());
         darkSpruceLeaves = register("dark_spruce_leaves", new BlockDarkSpruceLeaves());
@@ -76,6 +98,7 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(TileEntityCoffin.class, "neorism:coffin");
         GameRegistry.registerTileEntity(TileEntityFogDiffuser.class, "neorism:fog_diffuser");
         GameRegistry.registerTileEntity(TileEntityGarlicDiffuser.class, "neorism:garlic_diffuser");
+        GameRegistry.registerTileEntity(com.marrybye.neorism.common.tileentity.TileEntityTent.class, "neorism:tent");
 
         ModLogger.debug("Initialized core Neorism blocks and TileEntities");
     }

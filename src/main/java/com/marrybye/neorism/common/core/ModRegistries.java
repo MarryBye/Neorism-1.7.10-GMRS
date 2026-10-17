@@ -20,6 +20,7 @@ public class ModRegistries {
         ModItems.init();
         ModBlocks.init();
         ModEntities.init();
+        ModBiomes.init();
         PacketHandler.init();
     }
 
@@ -27,6 +28,7 @@ public class ModRegistries {
         ModLogger.debug("Beginning Neorism init registries");
         ModAchievements.init();
         ModRecipes.init();
+        com.marrybye.neorism.common.world.gen.ModWorldGen.init();
         com.marrybye.neorism.common.action.ActionRegistry.init();
         com.marrybye.neorism.common.skills.SkillRegistry.init();
 

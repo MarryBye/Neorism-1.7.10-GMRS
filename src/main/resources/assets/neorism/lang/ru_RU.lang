@@ -5679,3 +5679,19 @@ minion_task.neorism.stay=Ждать
 minion_task.neorism.defend_area=Охранять область
 minion_task.neorism.protect_lord=Защищать лорда
 minion_task.neorism.collect.start=Миньон отправился на сбор ресурсов
+
+# Phase 11: Генерация мира и биом вампиров
+tile.neorism.cursed_grass.name=Проклятая трава
+tile.neorism.dark_stone.name=Тёмный камень
+tile.neorism.dark_stone_bricks.name=Тёмнокаменные кирпичи
+tile.neorism.cobbled_dark_stone.name=Тёмный булыжник
+tile.neorism.polished_dark_stone.name=Полированный тёмный камень
+tile.neorism.chiseled_dark_stone_bricks.name=Резные тёмнокаменные кирпичи
+tile.neorism.cracked_dark_stone_bricks.name=Потрескавшиеся тёмнокаменные кирпичи
+tile.neorism.vampire_orchid.name=Вампирская орхидея
+tile.neorism.cursed_roots.name=Проклятые корни
+tile.neorism.tent.name=Палатка охотников
+message.vampirism.tent.cant_use=Это укрытие отторгает ваше вампирское присутствие!
+message.vampirism.tent.rested=Вы отдохнули в палатке и восстановили силы.
+message.vampirism.tent.occupied=Эта палатка уже занята.
+biome.vampire_forest=Вампирский лес

@@ -39,25 +39,10 @@ public class BlockDarkSpruceSapling extends BlockBush implements IGrowable {
 
     public void growTree(World world, int x, int y, int z, Random rand) {
         world.setBlock(x, y, z, Blocks.air, 0, 4);
-
-        int height = 5 + rand.nextInt(3);
-        for (int dy = 0; dy < height; dy++) {
-            world.setBlock(x, y + dy, z, ModBlocks.darkSpruceLog, 0, 3);
+        com.marrybye.neorism.common.world.gen.WorldGenDarkSpruceTree treeGen = new com.marrybye.neorism.common.world.gen.WorldGenDarkSpruceTree(true);
+        if (!treeGen.generate(world, rand, x, y, z)) {
+            world.setBlock(x, y, z, this, 0, 4);
         }
-
-        for (int dy = height - 3; dy <= height; dy++) {
-            int radius = dy == height ? 1 : 2;
-            for (int dx = -radius; dx <= radius; dx++) {
-                for (int dz = -radius; dz <= radius; dz++) {
-                    if (Math.abs(dx) != radius || Math.abs(dz) != radius || rand.nextInt(2) == 0) {
-                        if (world.getBlock(x + dx, y + dy, z + dz) == Blocks.air) {
-                            world.setBlock(x + dx, y + dy, z + dz, ModBlocks.darkSpruceLeaves, 0, 3);
-                        }
-                    }
-                }
-            }
-        }
-        world.setBlock(x, y + height + 1, z, ModBlocks.darkSpruceLeaves, 0, 3);
     }
 
     @Override

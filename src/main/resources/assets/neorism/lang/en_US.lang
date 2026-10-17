@@ -5758,3 +5758,19 @@ minion_task.neorism.stay=Stay
 minion_task.neorism.defend_area=Defend Area
 minion_task.neorism.protect_lord=Protect Lord
 minion_task.neorism.collect.start=Minion started collecting resources
+
+# Phase 11: World Generation & Vampire Biome
+tile.neorism.cursed_grass.name=Cursed Grass
+tile.neorism.dark_stone.name=Dark Stone
+tile.neorism.dark_stone_bricks.name=Dark Stone Bricks
+tile.neorism.cobbled_dark_stone.name=Cobbled Dark Stone
+tile.neorism.polished_dark_stone.name=Polished Dark Stone
+tile.neorism.chiseled_dark_stone_bricks.name=Chiseled Dark Stone Bricks
+tile.neorism.cracked_dark_stone_bricks.name=Cracked Dark Stone Bricks
+tile.neorism.vampire_orchid.name=Vampire Orchid
+tile.neorism.cursed_roots.name=Cursed Roots
+tile.neorism.tent.name=Hunter Tent
+message.vampirism.tent.cant_use=This shelter repels your vampiric presence!
+message.vampirism.tent.rested=You rested inside the tent and recovered vitality.
+message.vampirism.tent.occupied=This tent is already occupied.
+biome.vampire_forest=Vampire Forest

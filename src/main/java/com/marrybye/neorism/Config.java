@@ -18,9 +18,58 @@ public class Config {
     public static boolean debugTrading = true;
     public static boolean debugRituals = true;
 
+    // --- World Generation ---
+    public static final String CATEGORY_WORLD = "world";
+    public static int biomeVampireForestId = 115;
+    public static boolean generateVampireForest = true;
+    public static boolean generateVampireCrypt = true;
+    public static boolean generateHunterCamp = true;
+    public static boolean generateAltarRuins = true;
+    public static boolean generateDraculaCastle = true;
+
     public static void synchronizeConfiguration(File configFile) {
         configuration = new Configuration(configFile);
         configuration.load();
+
+        // World settings
+        biomeVampireForestId = configuration.getInt(
+            "biomeVampireForestId",
+            CATEGORY_WORLD,
+            115,
+            40,
+            255,
+            "Biome ID for the Vampire Forest"
+        );
+        generateVampireForest = configuration.getBoolean(
+            "generateVampireForest",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of Vampire Forest biome in the overworld"
+        );
+        generateVampireCrypt = configuration.getBoolean(
+            "generateVampireCrypt",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of subterranean Vampire Crypt dungeons"
+        );
+        generateHunterCamp = configuration.getBoolean(
+            "generateHunterCamp",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of surface Hunter Camps and Outposts"
+        );
+        generateAltarRuins = configuration.getBoolean(
+            "generateAltarRuins",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of ancient Vampire Altar Ruins"
+        );
+        generateDraculaCastle = configuration.getBoolean(
+            "generateDraculaCastle",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of Dracula Castle boss arenas in Vampire Forests"
+        );
 
         // Debug settings
         debugLogging = configuration.getBoolean(
