@@ -18,8 +18,24 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getMinecraft();
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
-            new com.marrybye.neorism.client.gui.overlay.BloodBarOverlay(net.minecraft.client.Minecraft.getMinecraft())
+            new com.marrybye.neorism.client.gui.overlay.BloodBarOverlay(mc)
+        );
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new com.marrybye.neorism.client.gui.overlay.SunOverlay(mc)
+        );
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new com.marrybye.neorism.client.gui.overlay.RageOverlay(mc)
+        );
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new com.marrybye.neorism.client.gui.overlay.BatOverlay(mc)
+        );
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new com.marrybye.neorism.client.gui.overlay.ActionCooldownOverlay(mc)
+        );
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new com.marrybye.neorism.client.events.BloodVisionHandler()
         );
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new com.marrybye.neorism.client.events.VampireAtmosphereHandler()
@@ -123,7 +139,9 @@ public class ClientProxy extends CommonProxy {
             com.marrybye.neorism.common.core.ModBlocks.bloodContainer,
             com.marrybye.neorism.common.core.ModBlocks.fogDiffuser,
             com.marrybye.neorism.common.core.ModBlocks.garlicDiffuser,
-            com.marrybye.neorism.common.core.ModBlocks.totem
+            com.marrybye.neorism.common.core.ModBlocks.totem,
+            com.marrybye.neorism.common.core.ModBlocks.hunterTable,
+            com.marrybye.neorism.common.core.ModBlocks.alchemicalCauldron
         };
         for (net.minecraft.block.Block block : modeledBlocks) {
             if (block != null) {

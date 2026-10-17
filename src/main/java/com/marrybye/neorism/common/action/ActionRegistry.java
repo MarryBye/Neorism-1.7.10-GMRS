@@ -29,6 +29,7 @@ public class ActionRegistry {
         register(new SunscreenAction());
         register(new InvisibilityAction());
         register(new SummonBatsAction());
+        register(new BloodVisionAction());
 
         register(new HunterAwarenessAction());
         register(new PotionResistanceAction());

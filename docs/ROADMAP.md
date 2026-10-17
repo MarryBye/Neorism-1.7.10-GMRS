@@ -370,20 +370,20 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 - HUD Overlays: `reference/vampirism/src/main/java/de/teamlapen/vampirism/client/gui/overlay/`
 - Blood Vision: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/entity/player/vampire/vision/BloodVision.java`
 
-- [ ] **12.1. In-Game HUD Overlays**
-  - [ ] Blood Bar overlay (`BloodBarOverlay.java`): replaces vanilla hunger bar when Vampire, with blood drop icons, saturation halo, thirst warnings.
-  - [ ] Sun exposure warning vignette (`SunOverlay.java`, `SunBlindOverlay.java`).
-  - [ ] Rage effect vignette (`RageOverlay.java`) and Bat flight overlay (`BatOverlay.java`).
-  - [ ] Active action cooldown badges on hotbar.
-- [ ] **12.2. Interactive GUIs (FactionAPI Port)**
-  - [ ] `FactionMenuScreen` on `[P]`: Main player dashboard with overview, skills, tasks, and refinement slots.
-  - [ ] `SkillsScreen`: Smooth zooming and dragging canvas showing skill nodes, lines, and tooltips.
-  - [ ] `SelectActionRadialScreen`: Radial pop-up selector for triggering skills via hotkey `[R]`.
-  - [ ] `AltarInfusionScreen`, `HunterTableScreen`, `AlchemicalCauldronScreen`.
-- [ ] **12.3. Angelica Shader Compatibility & Post-Processing**
-  - [ ] `BloodVision`: Highlights living warm-blooded creatures through blocks in red/gold glow without breaking Angelica/Sodium pipelines.
-  - [ ] Night Vision tone mapping (no bright green wash-out).
-  - [ ] Fog Diffuser volumetric fog rendering.
+- [x] **12.1. In-Game HUD Overlays**
+  - [x] Blood Bar overlay (`BloodBarOverlay.java`): replaces vanilla hunger bar when Vampire, with blood drop icons, saturation halo, thirst warnings.
+  - [x] Sun exposure warning vignette (`SunOverlay.java`, `SunBlindOverlay.java`).
+  - [x] Rage effect vignette (`RageOverlay.java`) and Bat flight overlay (`BatOverlay.java`).
+  - [x] Active action cooldown badges on hotbar (`ActionCooldownOverlay.java`).
+- [x] **12.2. Interactive GUIs (FactionAPI Port)**
+  - [x] `FactionMenuScreen` on `[P]`: Main player dashboard with overview, skills, tasks, and refinement slots.
+  - [x] `SkillsScreen`: Smooth zooming and dragging canvas showing skill nodes, lines, and tooltips.
+  - [x] `SelectActionRadialScreen`: Radial pop-up selector for triggering skills via hotkey `[R]`.
+  - [x] `AltarInfusionScreen`, `HunterTableScreen`, `AlchemicalCauldronScreen`.
+- [x] **12.3. Angelica Shader Compatibility & Post-Processing**
+  - [x] `BloodVision`: Highlights living warm-blooded creatures through blocks in red/gold glow without breaking Angelica/Sodium pipelines.
+  - [x] Night Vision tone mapping (no bright green wash-out).
+  - [x] Fog Diffuser volumetric fog rendering.
 
 ---
 

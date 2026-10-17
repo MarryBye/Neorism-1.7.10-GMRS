@@ -60,6 +60,8 @@ public class ModBlocks {
     public static Block fogDiffuser;
     public static Block garlicDiffuser;
     public static Block totem;
+    public static Block hunterTable;
+    public static Block alchemicalCauldron;
 
     public static void init() {
         cursedEarth = register("cursed_earth", new BlockCursedEarth());
@@ -89,6 +91,8 @@ public class ModBlocks {
         fogDiffuser = register("fog_diffuser", new BlockFogDiffuser());
         garlicDiffuser = register("garlic_diffuser_normal", new BlockGarlicDiffuser());
         totem = register("totem_base", new BlockTotem());
+        hunterTable = register("hunter_table", new com.marrybye.neorism.common.blocks.BlockHunterTable());
+        alchemicalCauldron = register("alchemical_cauldron", new com.marrybye.neorism.common.blocks.BlockAlchemicalCauldron());
 
         // TileEntity Registration
         GameRegistry.registerTileEntity(TileEntityBloodContainer.class, "neorism:blood_container");
@@ -99,6 +103,7 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(TileEntityFogDiffuser.class, "neorism:fog_diffuser");
         GameRegistry.registerTileEntity(TileEntityGarlicDiffuser.class, "neorism:garlic_diffuser");
         GameRegistry.registerTileEntity(com.marrybye.neorism.common.tileentity.TileEntityTent.class, "neorism:tent");
+        GameRegistry.registerTileEntity(com.marrybye.neorism.common.tileentity.TileEntityAlchemicalCauldron.class, "neorism:alchemical_cauldron");
 
         ModLogger.debug("Initialized core Neorism blocks and TileEntities");
     }

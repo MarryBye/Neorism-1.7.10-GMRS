@@ -73,6 +73,47 @@ public class HunterLeveling {
         new AdvancedTrainingRequirement(14, 9, 40, 40, 2)
     };
 
+    public static class HunterTableRequirement {
+        public final int requiredTableTier;
+        public final int bookQuantity;
+        public final int vampireFangQuantity;
+        public final int pureBloodQuantity;
+        public final int pureBloodLevel; // -1 if not required, 0-4 for pure blood tiers 1-5
+        public final int vampireBookQuantity;
+        public final int resultIntelTier; // 0-9
+
+        public HunterTableRequirement(int requiredTableTier, int fangs, int pureBlood, int pureBloodLevel, int vampireBook, int resultIntelTier) {
+            this.requiredTableTier = requiredTableTier;
+            this.bookQuantity = 1;
+            this.vampireFangQuantity = fangs;
+            this.pureBloodQuantity = pureBlood;
+            this.pureBloodLevel = pureBloodLevel;
+            this.vampireBookQuantity = vampireBook;
+            this.resultIntelTier = resultIntelTier;
+        }
+    }
+
+    private static final HunterTableRequirement[] TABLE_REQUIREMENTS = {
+        null, null, null, null, null,
+        new HunterTableRequirement(0, 10, 0, -1, 1, 0), // Level 5 -> Intel 0
+        new HunterTableRequirement(0, 0, 1, 0, 1, 1),  // Level 6 -> Intel 1
+        new HunterTableRequirement(0, 10, 1, 0, 1, 2), // Level 7 -> Intel 2
+        new HunterTableRequirement(1, 0, 1, 1, 1, 3),  // Level 8 -> Intel 3
+        new HunterTableRequirement(1, 15, 1, 1, 1, 4), // Level 9 -> Intel 4
+        new HunterTableRequirement(2, 20, 1, 2, 1, 5), // Level 10 -> Intel 5
+        new HunterTableRequirement(2, 20, 1, 2, 1, 6), // Level 11 -> Intel 6
+        new HunterTableRequirement(3, 20, 1, 3, 1, 7), // Level 12 -> Intel 7
+        new HunterTableRequirement(3, 25, 2, 3, 1, 8), // Level 13 -> Intel 8
+        new HunterTableRequirement(3, 25, 2, 4, 1, 9)  // Level 14 -> Intel 9
+    };
+
+    public static HunterTableRequirement getTableRequirement(int targetLevel) {
+        if (targetLevel >= 5 && targetLevel <= 14) {
+            return TABLE_REQUIREMENTS[targetLevel];
+        }
+        return null;
+    }
+
     public static BasicTrainingRequirement getBasicRequirement(int targetLevel) {
         if (targetLevel >= 2 && targetLevel <= 4) {
             return BASIC_REQUIREMENTS[targetLevel];
