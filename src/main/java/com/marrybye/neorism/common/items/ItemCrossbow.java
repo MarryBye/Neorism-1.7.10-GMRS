@@ -284,5 +284,6 @@ public class ItemCrossbow extends ItemBow {
                 tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.tech_crossbow.empty"));
             }
         }
+        tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.hunter"));
     }
 }

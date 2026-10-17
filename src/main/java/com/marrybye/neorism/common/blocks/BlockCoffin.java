@@ -27,7 +27,12 @@ public class BlockCoffin extends BlockModeled implements ITileEntityProvider {
         super("coffin_red", "coffin_base", Material.wood);
         setHardness(2.0F);
         setStepSound(soundTypeWood);
-        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.6F, 1.0F);
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.65F, 1.0F);
+    }
+
+    @Override
+    public void setBlockBoundsBasedOnState(net.minecraft.world.IBlockAccess world, int x, int y, int z) {
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.65F, 1.0F);
     }
 
     @Override
@@ -116,6 +121,6 @@ public class BlockCoffin extends BlockModeled implements ITileEntityProvider {
     @SideOnly(Side.CLIENT)
     @Override
     public int getRenderType() {
-        return com.gtnewhorizon.gtnhlib.client.model.ModelISBRH.JSON_ISBRH_ID;
+        return -1;
     }
 }

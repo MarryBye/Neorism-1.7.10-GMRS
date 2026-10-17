@@ -5658,3 +5658,13 @@ tooltip.neorism.oil.charges=Зарядов
 tooltip.neorism.oil.apply_hint=Нажмите ПКМ, чтобы нанести масло на оружие в панели быстрого доступа.
 tooltip.neorism.oil.coated=Покрытие лезвия
 
+# Faction Restrictions
+tooltip.neorism.faction_restriction.hunter=Фракция: Охотники на вампиров
+tooltip.neorism.faction_restriction.vampire=Фракция: Вампиры
+chat.neorism.armor_hunter_reject_vampire=Святая сталь и чеснок обжигают вашу проклятую плоть!
+chat.neorism.armor_vampire_reject_hunter=Тёмная магия вампирских одежд отравляет душу смертного!
+chat.neorism.coffin_only_vampires=Только вампиры могут покоиться в гробу.
+chat.neorism.coffin_only_day=Вампиры спят в гробу лишь при свете солнца. Ночью пора охотиться!
+chat.neorism.coffin_woke_up=Вы восстановили силы и пробудились с наступлением сумерек.
+
+

@@ -140,5 +140,6 @@ public class ItemHunterArmor extends ItemArmor {
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.hunter_armor.desc"));
         tooltip.add(EnumChatFormatting.BLUE + "+" + ((tier + 1) * 3) + "% " +
             StatCollector.translateToLocal("tooltip.neorism.movement_speed"));
+        tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.hunter"));
     }
 }

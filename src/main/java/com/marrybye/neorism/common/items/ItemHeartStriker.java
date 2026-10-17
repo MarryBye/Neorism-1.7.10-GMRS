@@ -141,5 +141,6 @@ public class ItemHeartStriker extends ItemSword {
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.heart_striker.desc"));
         tooltip.add(EnumChatFormatting.DARK_RED + "+" + (int) (LIFESTEAL_RATIO[tier] * 100) + "% " +
             StatCollector.translateToLocal("tooltip.neorism.lifesteal"));
+        tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.vampire"));
     }
 }

@@ -129,5 +129,6 @@ public class ItemHunterAxe extends ItemSword {
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.hunter_axe.desc"));
         tooltip.add(EnumChatFormatting.GOLD + "+" + VAMPIRE_BONUS[tier] + " " +
             StatCollector.translateToLocal("tooltip.neorism.vampire_bonus_damage"));
+        tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.hunter"));
     }
 }

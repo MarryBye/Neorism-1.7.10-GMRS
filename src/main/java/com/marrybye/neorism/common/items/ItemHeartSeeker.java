@@ -136,5 +136,6 @@ public class ItemHeartSeeker extends ItemSword {
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.heart_seeker.desc"));
         tooltip.add(EnumChatFormatting.YELLOW + "+" + BONUS_DAMAGE[tier] + " " +
             StatCollector.translateToLocal("tooltip.neorism.unholy_bonus_damage"));
+        tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.vampire"));
     }
 }

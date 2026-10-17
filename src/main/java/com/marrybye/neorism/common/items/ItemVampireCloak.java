@@ -93,8 +93,20 @@ public class ItemVampireCloak extends ItemArmor {
     }
 
     @Override
+    public void onArmorTick(net.minecraft.world.World world, EntityPlayer player, ItemStack itemStack) {
+        if (!world.isRemote && com.marrybye.neorism.common.util.Helper.isHunter(player)) {
+            if (world.getTotalWorldTime() % 40 == 0) {
+                player.attackEntityFrom(net.minecraft.util.DamageSource.magic, 1.0F);
+                player.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.confusion.id, 60, 0));
+                com.marrybye.neorism.common.core.ModSounds.playAtEntity(player, com.marrybye.neorism.common.core.ModSounds.SIZZLE, 0.5F, 1.0F);
+            }
+        }
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
         tooltip.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.neorism.vampire_cloak.desc"));
+        tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.vampire"));
     }
 }

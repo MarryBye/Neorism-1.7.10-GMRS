@@ -5737,3 +5737,13 @@ tooltip.neorism.oil.charges=Charges
 tooltip.neorism.oil.apply_hint=Right-click to apply to weapons on your hotbar.
 tooltip.neorism.oil.coated=Blade Coating
 
+# Faction Restrictions
+tooltip.neorism.faction_restriction.hunter=Faction: Vampire Hunters
+tooltip.neorism.faction_restriction.vampire=Faction: Vampires
+chat.neorism.armor_hunter_reject_vampire=Holy steel and garlic sear your cursed flesh!
+chat.neorism.armor_vampire_reject_hunter=The dark magic of vampire robes poisons the mortal soul!
+chat.neorism.coffin_only_vampires=Only vampires can rest inside a coffin.
+chat.neorism.coffin_only_day=Vampires only sleep in coffins during daytime. Night is the time to hunt!
+chat.neorism.coffin_woke_up=You restored your vitality and awoken at dusk.
+
+

@@ -110,7 +110,6 @@ public class ClientProxy extends CommonProxy {
             com.marrybye.neorism.common.core.ModBlocks.altarPillar,
             com.marrybye.neorism.common.core.ModBlocks.altarTip,
             com.marrybye.neorism.common.core.ModBlocks.bloodContainer,
-            com.marrybye.neorism.common.core.ModBlocks.coffin,
             com.marrybye.neorism.common.core.ModBlocks.fogDiffuser,
             com.marrybye.neorism.common.core.ModBlocks.garlicDiffuser,
             com.marrybye.neorism.common.core.ModBlocks.totem
@@ -135,6 +134,10 @@ public class ClientProxy extends CommonProxy {
         cpw.mods.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(
             com.marrybye.neorism.common.tileentity.TileEntityBloodPedestal.class,
             new com.marrybye.neorism.client.render.tileentity.TileEntityBloodPedestalRenderer()
+        );
+        cpw.mods.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(
+            com.marrybye.neorism.common.tileentity.TileEntityCoffin.class,
+            new com.marrybye.neorism.client.render.tileentity.TileEntityCoffinRenderer()
         );
     }
 
@@ -244,6 +247,12 @@ public class ClientProxy extends CommonProxy {
                     }
                 }
             )
+        );
+
+        // Coffin
+        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
+            net.minecraft.item.Item.getItemFromBlock(com.marrybye.neorism.common.core.ModBlocks.coffin),
+            new com.marrybye.neorism.client.render.item.ItemCoffinRenderer()
         );
     }
 

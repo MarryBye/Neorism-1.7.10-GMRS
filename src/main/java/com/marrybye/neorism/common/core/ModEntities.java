@@ -87,26 +87,21 @@ public class ModEntities {
         int modId = ++nextEntityId;
         EntityRegistry.registerModEntity(entityClass, name, modId, Neorism.instance, 80, 3, true);
 
-        // Map vanilla /summon strings
+        try {
+            int globalId = EntityRegistry.findGlobalUniqueEntityId();
+            EntityRegistry.registerGlobalEntityID(entityClass, "neorism." + name, globalId, primaryEgg, secondaryEgg);
+        } catch (Throwable t) {
+            ModLogger.warn("Failed to register global entity ID for %s: %s", name, t.getMessage());
+        }
+
+        // Map all vanilla /summon strings and aliases
         EntityList.stringToClassMapping.put(name, entityClass);
+        EntityList.stringToClassMapping.put(name.toLowerCase(), entityClass);
         EntityList.stringToClassMapping.put("neorism." + name, entityClass);
         EntityList.stringToClassMapping.put("neorism:" + name, entityClass);
-        EntityList.classToStringMapping.put(entityClass, "neorism." + name);
 
-        // Global egg ID for creative spawn eggs & ItemMonsterPlacer
-        int eggId = 400 + modId;
-        EntityList.IDtoClassMapping.put(Integer.valueOf(eggId), entityClass);
-        EntityList.entityEggs.put(Integer.valueOf(eggId), new EntityList.EntityEggInfo(eggId, primaryEgg, secondaryEgg));
-        try {
-            java.lang.reflect.Field c2id = EntityList.class.getDeclaredField("classToIDMapping");
-            c2id.setAccessible(true);
-            ((java.util.Map) c2id.get(null)).put(entityClass, Integer.valueOf(eggId));
-        } catch (Throwable ignored) {}
-        try {
-            java.lang.reflect.Field s2id = EntityList.class.getDeclaredField("stringToIDMapping");
-            s2id.setAccessible(true);
-            ((java.util.Map) s2id.get(null)).put("neorism." + name, Integer.valueOf(eggId));
-            ((java.util.Map) s2id.get(null)).put(name, Integer.valueOf(eggId));
-        } catch (Throwable ignored) {}
+        String capitalized = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+        EntityList.stringToClassMapping.put(capitalized, entityClass);
+        EntityList.classToStringMapping.put(entityClass, "neorism." + name);
     }
 }

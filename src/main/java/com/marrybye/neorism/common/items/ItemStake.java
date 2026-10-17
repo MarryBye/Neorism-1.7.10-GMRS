@@ -123,5 +123,6 @@ public class ItemStake extends ItemSword {
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.stake"));
         tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.neorism.stake.backstab_hint"));
+        tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.hunter"));
     }
 }
