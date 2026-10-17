@@ -131,15 +131,18 @@ public class SkillsTabComponent {
     private void drawTiledBackground(int x, int y, int w, int h) {
         Minecraft mc = Minecraft.getMinecraft();
         ResourceLocation bg = tree.getBackground();
+        if (bg == null) {
+            bg = new ResourceLocation("factionapi", "textures/gui/skills/backgrounds/level.png");
+        }
         mc.getTextureManager().bindTexture(bg);
-        GL11.glColor4f(0.25f, 0.25f, 0.25f, 1.0f); // Dimmed background so nodes pop out
+        GL11.glColor4f(0.5f, 0.5f, 0.5f, 1.0f); // Balanced dimming so nodes pop out
 
         Tessellator tess = Tessellator.instance;
         tess.startDrawingQuads();
-        float u1 = 0;
-        float v1 = 0;
-        float u2 = w / 16.0f;
-        float v2 = h / 16.0f;
+        float u1 = -scrollX / 16.0f;
+        float v1 = -scrollY / 16.0f;
+        float u2 = u1 + w / 16.0f;
+        float v2 = v1 + h / 16.0f;
         tess.addVertexWithUV(x, y + h, 0, u1, v2);
         tess.addVertexWithUV(x + w, y + h, 0, u2, v2);
         tess.addVertexWithUV(x + w, y, 0, u2, v1);

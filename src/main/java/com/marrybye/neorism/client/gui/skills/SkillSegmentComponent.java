@@ -162,14 +162,19 @@ public class SkillSegmentComponent {
 
         // 2. Draw skill icon
         ISkill skill = getSkill();
-        if (skill != null && skill.getIcon() != null) {
-            mc.getTextureManager().bindTexture(skill.getIcon());
+        if (skill != null) {
+            ResourceLocation icon = skill.getIcon();
+            if (icon == null) {
+                icon = new ResourceLocation("neorism", "textures/skills/vampire.png");
+            }
+            mc.getTextureManager().bindTexture(icon);
             if (unlocked || available) {
                 GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
             } else {
                 GL11.glColor4f(0.4f, 0.4f, 0.4f, 0.7f);
             }
             Gui.func_146110_a(drawX + 5, drawY + 5, 0, 0, 16, 16, 16, 16);
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         }
 
         // 3. Draw hold progress indicator

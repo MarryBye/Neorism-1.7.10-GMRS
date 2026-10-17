@@ -47,7 +47,7 @@ public class SkillRegistry {
             "vampire_level",
             vampireFaction,
             new ItemStack(ModItems.vampireFang != null ? ModItems.vampireFang : Items.apple),
-            new ResourceLocation("minecraft", "textures/blocks/dirt.png")
+            new ResourceLocation("factionapi", "textures/gui/skills/backgrounds/level.png")
         );
 
         // Core Skills
@@ -129,7 +129,7 @@ public class SkillRegistry {
             "vampire_lord",
             vampireFaction,
             new ItemStack(ModItems.vampireCrown != null ? ModItems.vampireCrown : Items.gold_ingot),
-            new ResourceLocation("minecraft", "textures/blocks/obsidian.png")
+            new ResourceLocation("factionapi", "textures/gui/skills/backgrounds/level.png")
         );
         Skill sLordRoot = regSkill(new Skill("vampire_lord_root", vampireFaction, 1, 0, true, "vampire_lord"));
         Skill sBetterMinions = regSkill(new Skill("vampire_minion_stats_increase", vampireFaction, 1, 1, true, "vampire_minion_stats_increase"));
@@ -154,7 +154,7 @@ public class SkillRegistry {
             "hunter_level",
             hunterFaction,
             new ItemStack(ModItems.stake != null ? ModItems.stake : Items.stick),
-            new ResourceLocation("minecraft", "textures/blocks/planks_oak.png")
+            new ResourceLocation("factionapi", "textures/gui/skills/backgrounds/level.png")
         );
 
         Skill sHunterRoot = regSkill(new Skill("hunter_level_root", hunterFaction, 1, 0, true, "hunter"));
@@ -206,7 +206,7 @@ public class SkillRegistry {
             "hunter_lord",
             hunterFaction,
             new ItemStack(ModItems.stake != null ? ModItems.stake : Items.iron_ingot),
-            new ResourceLocation("minecraft", "textures/blocks/iron_block.png")
+            new ResourceLocation("factionapi", "textures/gui/skills/backgrounds/level.png")
         );
         Skill sHunterLordRoot = regSkill(new Skill("hunter_lord_root", hunterFaction, 1, 0, true, "hunter_lord"));
         Skill sHunterMinionStats = regSkill(new Skill("hunter_minion_stats_increase", hunterFaction, 1, 1, true, "hunter_minion_stats_increase"));

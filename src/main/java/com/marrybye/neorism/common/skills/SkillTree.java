@@ -31,7 +31,7 @@ public class SkillTree implements ISkillTree {
         this.treeId = treeId;
         this.faction = faction;
         this.displayStack = displayStack;
-        this.background = background != null ? background : new ResourceLocation("minecraft", "textures/blocks/dirt.png");
+        this.background = background != null ? background : new ResourceLocation("factionapi", "textures/gui/skills/backgrounds/level.png");
         this.titleTranslationKey = "skill_tree.neorism." + treeId;
     }
 
