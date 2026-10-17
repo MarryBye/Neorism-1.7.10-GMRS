@@ -52,12 +52,14 @@ public class ModEntities {
         registerMob(EntityBloodBat.class, "blood_bat", 0x200000, 0xdd0000);
         registerMob(EntityDracula.class, "dracula", 0x050000, 0xff0000);
         registerMob(EntityVampireMother.class, "vampire_mother", 0x0a0005, 0xee0055);
+        registerMob(com.marrybye.neorism.common.entity.minion.EntityVampireMinion.class, "vampire_minion", 0x330000, 0x660000);
 
         // Hunters
         registerMob(EntityHunter.class, "hunter", 0x5a452d, 0x2e6b9e);
         registerMob(EntityAdvancedHunter.class, "advanced_hunter", 0x3d2e1e, 0x1e88e5);
         registerMob(EntityHunterTrainer.class, "hunter_trainer", 0x8d6e63, 0xffb300);
         registerMob(EntityTaskmaster.class, "hunter_taskmaster", 0x546e7a, 0x00acc1);
+        registerMob(com.marrybye.neorism.common.entity.minion.EntityHunterMinion.class, "hunter_minion", 0x4a3c28, 0x1976d2);
 
         // Converted Mobs
         registerMob(EntityConvertedCow.class, "converted_cow", 0x443625, 0x8b0000);

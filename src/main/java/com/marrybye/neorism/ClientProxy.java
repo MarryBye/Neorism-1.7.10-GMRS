@@ -84,6 +84,14 @@ public class ClientProxy extends CommonProxy {
             com.marrybye.neorism.common.entity.hunter.EntityTaskmaster.class,
             new com.marrybye.neorism.client.render.entity.RenderHunter()
         );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.minion.EntityVampireMinion.class,
+            new com.marrybye.neorism.client.render.entity.RenderVampireMinion()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.minion.EntityHunterMinion.class,
+            new com.marrybye.neorism.client.render.entity.RenderHunterMinion()
+        );
 
         // Converted Mobs
         cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(

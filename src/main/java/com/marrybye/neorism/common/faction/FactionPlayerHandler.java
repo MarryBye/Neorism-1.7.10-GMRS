@@ -24,7 +24,8 @@ import net.minecraftforge.common.IExtendedEntityProperties;
  */
 public class FactionPlayerHandler implements IExtendedEntityProperties, IFactionPlayer,
         de.teamlapen.faction.api.factions.IFactionPlayerHandler,
-        de.teamlapen.faction.api.factions.IFactionPlayer {
+        de.teamlapen.faction.api.factions.IFactionPlayer,
+        de.teamlapen.faction.api.factions.lord.ILordPlayer {
 
     public static final String PROPERTY_ID = "neorism:faction_player";
 
@@ -33,6 +34,8 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
     private int currentLevel = 0;
     private int lordLevel = 0;
     private boolean disguised = false;
+    private de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender titleGender =
+        de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender.UNKNOWN;
 
     public FactionPlayerHandler(EntityPlayer player) {
         this.player = player;
@@ -60,6 +63,7 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
         tag.setInteger("level", currentLevel);
         tag.setInteger("lordLevel", lordLevel);
         tag.setBoolean("disguised", disguised);
+        tag.setString("titleGender", titleGender.getName());
         compound.setTag("NeorismFaction", tag);
     }
 
@@ -71,6 +75,9 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
             this.currentLevel = tag.getInteger("level");
             this.lordLevel = tag.getInteger("lordLevel");
             this.disguised = tag.getBoolean("disguised");
+            if (tag.hasKey("titleGender")) {
+                this.titleGender = de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender.byName(tag.getString("titleGender"));
+            }
         }
     }
 
@@ -80,6 +87,7 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
             this.currentLevel = oldHandler.currentLevel;
             this.lordLevel = oldHandler.lordLevel;
             this.disguised = oldHandler.disguised;
+            this.titleGender = oldHandler.titleGender;
         }
     }
 
@@ -217,8 +225,10 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
     }
 
     public void setLordLevel(int lordLevel) {
-        int max = currentFaction.getMaxLordLevel();
+        int max = getMaxLordLevel();
         this.lordLevel = Math.max(0, Math.min(lordLevel, max));
+        com.marrybye.neorism.common.util.ScoreboardUtil.updateScore(player, com.marrybye.neorism.common.util.ScoreboardUtil.CRITERIA_LORD, this.lordLevel);
+        player.refreshDisplayName();
         ModLogger.leveling("Player %s lord rank updated to %d (faction: %s)",
             player.getCommandSenderName(), this.lordLevel, this.currentFaction.getId());
         sync();
@@ -227,14 +237,25 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
     public void setDisguised(boolean disguised) {
         this.disguised = disguised;
         ModLogger.debug("Player %s disguise state: %b", player.getCommandSenderName(), disguised);
+        player.refreshDisplayName();
         sync();
     }
 
     public void setClientData(IPlayableFaction faction, int level, int lordLevel, boolean disguised) {
+        setClientData(faction, level, lordLevel, disguised, (byte) 0);
+    }
+
+    public void setClientData(IPlayableFaction faction, int level, int lordLevel, boolean disguised, byte genderOrdinal) {
         this.currentFaction = faction;
         this.currentLevel = level;
         this.lordLevel = lordLevel;
         this.disguised = disguised;
+        de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender[] genders =
+            de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender.values();
+        if (genderOrdinal >= 0 && genderOrdinal < genders.length) {
+            this.titleGender = genders[genderOrdinal];
+        }
+        player.refreshDisplayName();
     }
 
     public void sync() {
@@ -244,7 +265,8 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
                 currentFaction.getId(),
                 currentLevel,
                 lordLevel,
-                disguised
+                disguised,
+                (byte) this.titleGender.ordinal()
             );
             // Send to the player
             PacketHandler.sendTo(packet, (EntityPlayerMP) player);
@@ -253,6 +275,83 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
                 player.dimension, player.posX, player.posY, player.posZ, 64.0D
             ));
         }
+    }
+
+    @Override
+    public de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender titleGender() {
+        return this.titleGender;
+    }
+
+    @Override
+    public boolean setTitleGender(de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender gender) {
+        this.titleGender = gender != null ? gender : de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender.UNKNOWN;
+        player.refreshDisplayName();
+        sync();
+        return true;
+    }
+
+    @Override
+    public boolean setTitleGender(boolean female) {
+        return setTitleGender(female ? de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender.FEMALE
+                                     : de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender.MALE);
+    }
+
+    @Override
+    public int getMaxLordLevel() {
+        return currentFaction != null ? currentFaction.getMaxLordLevel() : 0;
+    }
+
+    @Override
+    public int getMaxMinions() {
+        return getLordLevel() * 2;
+    }
+
+    @Override
+    public net.minecraft.util.IChatComponent getLordTitle() {
+        if (getLordLevel() <= 0 || currentFaction == null) return null;
+        if (isVampire()) {
+            return com.marrybye.neorism.common.util.LordTitles.VAMPIRE.getLordTitle(getLordLevel(), titleGender());
+        } else if (isHunter()) {
+            return com.marrybye.neorism.common.util.LordTitles.HUNTER.getLordTitle(getLordLevel(), titleGender());
+        }
+        return null;
+    }
+
+    @Override
+    public net.minecraft.util.IChatComponent getLordTitleShort() {
+        if (getLordLevel() <= 0 || currentFaction == null) return null;
+        if (isVampire()) {
+            return com.marrybye.neorism.common.util.LordTitles.VAMPIRE.getShort(getLordLevel(), titleGender());
+        } else if (isHunter()) {
+            return com.marrybye.neorism.common.util.LordTitles.HUNTER.getShort(getLordLevel(), titleGender());
+        }
+        return null;
+    }
+
+    public com.marrybye.neorism.common.entity.minion.PlayerMinionController getMinionController() {
+        if (player == null || player.worldObj == null || player.worldObj.isRemote) return null;
+        com.marrybye.neorism.common.entity.minion.MinionWorldData wd =
+            com.marrybye.neorism.common.entity.minion.MinionWorldData.get(player.worldObj);
+        if (wd != null) {
+            com.marrybye.neorism.common.entity.minion.PlayerMinionController c =
+                wd.getOrCreateController(player.getUniqueID());
+            c.setMaxMinions(getMaxMinions());
+            return c;
+        }
+        return null;
+    }
+
+    @Override
+    public void updateMinionAttributes(boolean increasedStats) {
+        com.marrybye.neorism.common.entity.minion.PlayerMinionController c = getMinionController();
+        if (c != null) {
+            c.setMaxMinions(getMaxMinions());
+        }
+    }
+
+    @Override
+    public void resetLordTasks() {
+        // Reset unique lord progression tasks
     }
 
     @Override

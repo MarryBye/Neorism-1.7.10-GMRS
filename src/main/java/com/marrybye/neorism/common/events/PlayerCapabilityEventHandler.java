@@ -139,6 +139,19 @@ public class PlayerCapabilityEventHandler {
     }
 
     @SubscribeEvent
+    public void onPlayerNameFormat(net.minecraftforge.event.entity.player.PlayerEvent.NameFormat event) {
+        if (event.entityPlayer != null) {
+            FactionPlayerHandler handler = FactionPlayerHandler.get(event.entityPlayer);
+            if (handler != null && handler.getLordLevel() > 0 && !handler.isDisguised()) {
+                net.minecraft.util.IChatComponent title = handler.getLordTitle();
+                if (title != null) {
+                    event.displayname = title.getFormattedText() + " " + event.username;
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.entityLiving;
@@ -153,6 +166,15 @@ public class PlayerCapabilityEventHandler {
             com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(player);
             if (ah != null) {
                 ah.onUpdate();
+            }
+            if (!player.worldObj.isRemote && player.ticksExisted % 20 == 0) {
+                FactionPlayerHandler handler = FactionPlayerHandler.get(player);
+                if (handler != null && handler.getLordLevel() > 0) {
+                    com.marrybye.neorism.common.entity.minion.PlayerMinionController controller = handler.getMinionController();
+                    if (controller != null) {
+                        controller.tick(player);
+                    }
+                }
             }
         } else {
             ExtendedCreature creature = ExtendedCreature.get(event.entityLiving);

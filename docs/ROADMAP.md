@@ -315,20 +315,20 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 - Minion Tasks Engine: `reference/vampirism/src/main/java/de/teamlapen/vampirism/common/world/entity/minion/MinionTasks.java`
 - Client Screens: `reference/vampirism/src/main/java/de/teamlapen/faction/client/gui/screens/MinionScreen.java`, `MinionStatsScreen.java`
 
-- [ ] **10.1. Lordship Hierarchy & Titles**
-  - [ ] Lord Levels 1 to 5 (`ILordPlayer`, `ILordTitleProvider`).
-  - [ ] Titles: Baron/Baroness, Viscount/Viscountess, Count/Countess, Duke/Duchess, Prince/Princess (`LordTitles.java`).
-  - [ ] Nametag prefix display and chat integration (`ScoreboardUtil.java`).
-- [ ] **10.2. Minion Entities (`VampireMinionEntity`, `HunterMinionEntity`)**
-  - [ ] Summoned or hired by Lords (`IMinionEntity`).
-  - [ ] Persistent ownership, stats, custom names, and equipment inventory (`MinionEntry.java`, `MinionContainer.java`).
-- [ ] **10.3. Minion Tasks & Orders (`MinionTasks.java`)**
-  - [ ] `TaskFollow`: Protects and follows the Lord.
-  - [ ] `TaskDefendArea`: Guards a designated radius around a beacon/coffin.
-  - [ ] `TaskCollectBlood`: Collects blood from surrounding wildlife and stores in containers.
-  - [ ] `TaskGatherLoot`: Collects drops from slain hunters/vampires.
-- [ ] **10.4. Minion Management GUI**
-  - [ ] Client GUI for inspecting minion health, stats, inventory, and issuing remote commands (`MinionScreen.java`, `MinionStatsScreen.java`).
+- [x] **10.1. Lordship Hierarchy & Titles**
+  - [x] Lord Levels 1 to 5 (`ILordPlayer`, `ILordTitleProvider`).
+  - [x] Titles: Baron/Baroness, Viscount/Viscountess, Count/Countess, Duke/Duchess, Prince/Princess (`LordTitles.java`).
+  - [x] Nametag prefix display and chat integration (`ScoreboardUtil.java`).
+- [x] **10.2. Minion Entities (`VampireMinionEntity`, `HunterMinionEntity`)**
+  - [x] Summoned or hired by Lords (`IMinionEntity`).
+  - [x] Persistent ownership, stats, custom names, and equipment inventory (`MinionEntry.java`, `MinionContainer.java`).
+- [x] **10.3. Minion Tasks & Orders (`MinionTasks.java`)**
+  - [x] `TaskFollow`: Protects and follows the Lord.
+  - [x] `TaskDefendArea`: Guards a designated radius around a beacon/coffin.
+  - [x] `TaskCollectBlood`: Collects blood from surrounding wildlife and stores in containers.
+  - [x] `TaskGatherLoot`: Collects drops from slain hunters/vampires.
+- [x] **10.4. Minion Management GUI**
+  - [x] Client GUI for inspecting minion health, stats, inventory, and issuing remote commands (`MinionScreen.java`, `MinionStatsScreen.java`).
 
 ---
 

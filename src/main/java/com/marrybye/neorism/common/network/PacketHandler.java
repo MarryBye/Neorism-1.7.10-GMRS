@@ -35,6 +35,8 @@ public class PacketHandler {
         registerMessage(com.marrybye.neorism.common.network.packets.ForgetSkillPacket.Handler.class, com.marrybye.neorism.common.network.packets.ForgetSkillPacket.class, Side.SERVER);
         registerMessage(com.marrybye.neorism.common.network.packets.ResetAllSkillsPacket.Handler.class, com.marrybye.neorism.common.network.packets.ResetAllSkillsPacket.class, Side.SERVER);
         registerMessage(com.marrybye.neorism.common.network.packets.ToggleActionPacket.Handler.class, com.marrybye.neorism.common.network.packets.ToggleActionPacket.class, Side.SERVER);
+        registerMessage(com.marrybye.neorism.common.network.packets.SelectMinionTaskPacket.Handler.class, com.marrybye.neorism.common.network.packets.SelectMinionTaskPacket.class, Side.SERVER);
+        registerMessage(com.marrybye.neorism.common.network.packets.ToggleMinionTaskLockPacket.Handler.class, com.marrybye.neorism.common.network.packets.ToggleMinionTaskLockPacket.class, Side.SERVER);
     }
 
     public static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(

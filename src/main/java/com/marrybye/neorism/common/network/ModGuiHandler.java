@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 public class ModGuiHandler implements IGuiHandler {
 
     public static final int GUI_ALTAR_INFUSION = 0;
+    public static final int GUI_MINION = 100;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -19,6 +20,11 @@ public class ModGuiHandler implements IGuiHandler {
             TileEntity te = world.getTileEntity(x, y, z);
             if (te instanceof TileEntityAltarInfusion) {
                 return new ContainerAltarInfusion(player.inventory, (TileEntityAltarInfusion) te);
+            }
+        } else if (ID == GUI_MINION) {
+            net.minecraft.entity.Entity entity = world.getEntityByID(x);
+            if (entity instanceof com.marrybye.neorism.common.entity.minion.EntityMinionBase) {
+                return new com.marrybye.neorism.common.entity.minion.ContainerMinion(player.inventory, (com.marrybye.neorism.common.entity.minion.EntityMinionBase) entity);
             }
         }
         return null;
@@ -30,6 +36,11 @@ public class ModGuiHandler implements IGuiHandler {
             TileEntity te = world.getTileEntity(x, y, z);
             if (te instanceof TileEntityAltarInfusion) {
                 return new GuiAltarInfusion(player.inventory, (TileEntityAltarInfusion) te);
+            }
+        } else if (ID == GUI_MINION) {
+            net.minecraft.entity.Entity entity = world.getEntityByID(x);
+            if (entity instanceof com.marrybye.neorism.common.entity.minion.EntityMinionBase) {
+                return new com.marrybye.neorism.client.gui.GuiMinion(player.inventory, (com.marrybye.neorism.common.entity.minion.EntityMinionBase) entity);
             }
         }
         return null;

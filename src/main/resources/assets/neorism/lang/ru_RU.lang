@@ -5670,3 +5670,12 @@ chat.neorism.coffin_woke_up=Вы восстановили силы и пробу
 chat.neorism.vampire_needs_coffin=Вампиры не могут спать в обычных кроватях. Вам нужен гроб!
 
 
+
+entity.neorism.vampire_minion.name=Вампир-миньон
+entity.neorism.hunter_minion.name=Миньон-охотник
+container.neorism.minion=Инвентарь миньона
+minion_task.neorism.follow_lord=Следовать за лордом
+minion_task.neorism.stay=Ждать
+minion_task.neorism.defend_area=Охранять область
+minion_task.neorism.protect_lord=Защищать лорда
+minion_task.neorism.collect.start=Миньон отправился на сбор ресурсов

@@ -5749,3 +5749,12 @@ chat.neorism.coffin_woke_up=You restored your vitality and awoken at dusk.
 chat.neorism.vampire_needs_coffin=Vampires cannot rest in ordinary beds. You need a coffin!
 
 
+
+entity.neorism.vampire_minion.name=Vampire Minion
+entity.neorism.hunter_minion.name=Hunter Minion
+container.neorism.minion=Minion Inventory
+minion_task.neorism.follow_lord=Follow Lord
+minion_task.neorism.stay=Stay
+minion_task.neorism.defend_area=Defend Area
+minion_task.neorism.protect_lord=Protect Lord
+minion_task.neorism.collect.start=Minion started collecting resources

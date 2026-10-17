@@ -23,16 +23,22 @@ public class SyncFactionPacket implements IMessage {
     private int level;
     private int lordLevel;
     private boolean disguised;
+    private byte titleGender;
 
     public SyncFactionPacket() {
     }
 
     public SyncFactionPacket(int entityId, String factionId, int level, int lordLevel, boolean disguised) {
+        this(entityId, factionId, level, lordLevel, disguised, (byte) 0);
+    }
+
+    public SyncFactionPacket(int entityId, String factionId, int level, int lordLevel, boolean disguised, byte titleGender) {
         this.entityId = entityId;
         this.factionId = factionId;
         this.level = level;
         this.lordLevel = lordLevel;
         this.disguised = disguised;
+        this.titleGender = titleGender;
     }
 
     @Override
@@ -42,6 +48,11 @@ public class SyncFactionPacket implements IMessage {
         level = buf.readInt();
         lordLevel = buf.readInt();
         disguised = buf.readBoolean();
+        if (buf.isReadable()) {
+            titleGender = buf.readByte();
+        } else {
+            titleGender = 0;
+        }
     }
 
     @Override
@@ -51,6 +62,7 @@ public class SyncFactionPacket implements IMessage {
         buf.writeInt(level);
         buf.writeInt(lordLevel);
         buf.writeBoolean(disguised);
+        buf.writeByte(titleGender);
     }
 
     public static class Handler implements IMessageHandler<SyncFactionPacket, IMessage> {
@@ -68,11 +80,13 @@ public class SyncFactionPacket implements IMessage {
                             ModFactions.getFaction(message.factionId),
                             message.level,
                             message.lordLevel,
-                            message.disguised
+                            message.disguised,
+                            message.titleGender
                         );
+                        targetPlayer.refreshDisplayName();
                         ModLogger.leveling(
-                            "Client synced faction data for %s: faction=%s, level=%d, lordLevel=%d, disguised=%b",
-                            targetPlayer.getCommandSenderName(), message.factionId, message.level, message.lordLevel, message.disguised
+                            "Client synced faction data for %s: faction=%s, level=%d, lordLevel=%d, disguised=%b, gender=%d",
+                            targetPlayer.getCommandSenderName(), message.factionId, message.level, message.lordLevel, message.disguised, message.titleGender
                         );
                     }
                 }

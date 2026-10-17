@@ -10,4 +10,29 @@ public interface IPlayableFaction extends IFaction {
     boolean canPlayerJoin(net.minecraft.entity.player.EntityPlayer player);
 
     boolean canPlayerLeave(net.minecraft.entity.player.EntityPlayer player);
+
+    enum TitleGender {
+        UNKNOWN("unknown"),
+        MALE("male"),
+        FEMALE("female");
+
+        private final String name;
+
+        TitleGender(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public static TitleGender byName(String name) {
+            for (TitleGender g : values()) {
+                if (g.name.equalsIgnoreCase(name)) {
+                    return g;
+                }
+            }
+            return UNKNOWN;
+        }
+    }
 }
