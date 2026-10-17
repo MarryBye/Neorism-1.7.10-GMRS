@@ -105,6 +105,6 @@ public class BlockNeorismSlab extends Block {
 
     @Override
     public String getItemIconName() {
-        return (textureName != null && !textureName.isEmpty()) ? (Neorism.MODID + ":" + textureName) : super.getItemIconName();
+        return null;
     }
 }

@@ -64,7 +64,7 @@ public class BlockNeorismWall extends BlockWall {
 
     @Override
     public String getItemIconName() {
-        return (textureName != null && !textureName.isEmpty()) ? (Neorism.MODID + ":" + textureName) : super.getItemIconName();
+        return null;
     }
 
     @SideOnly(Side.CLIENT)
