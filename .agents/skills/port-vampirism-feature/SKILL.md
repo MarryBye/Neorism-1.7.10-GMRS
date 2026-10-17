@@ -5,10 +5,14 @@ description: Guide and procedure for porting mechanics, items, and features from
 
 # Porting Modern Vampirism Features to Neorism (Minecraft 1.7.10)
 
+> **Критическое правило:**  
+> Всегда следовать скиллу `canonical-backport` (`.agents/skills/canonical-backport/SKILL.md`).  
+> **НЕ создавать новый код и НЕ писать по представлению.** Всегда находить исходный код в `reference/vampirism/` и точно адаптировать его под 1.7.10.
+
 Use this skill whenever tasked with implementing or porting a feature from modern Vampirism (1.12 - 1.21) to 1.7.10.
 
 ## 1. Feature Investigation Workflow
-1. Check the modern implementation in TeamLapen/Vampirism:
+1. Check the modern implementation in TeamLapen/Vampirism (`reference/vampirism/`):
    - Identify data classes, logic handlers, network packets, and GUI/client visual components.
 2. Determine dependencies on modern Minecraft APIs:
    - Tags, Registries, Capabilities, Particle types, SoundEvents, BlockPos/Direction, Math libraries.
@@ -20,7 +24,7 @@ Use this skill whenever tasked with implementing or porting a feature from moder
    - Packets -> `IMessage` / `IMessageHandler` via `SimpleNetworkWrapper`
 
 ## 2. Implementation Steps
-1. **Model / Data:** Define state and properties.
+1. **Model / Data:** Define state and properties, copying original constants and fields.
 2. **Registration:** Register items/blocks in `com.marrybye.neorism.common.*`.
 3. **Network Synchronization:** If state affects client HUD or actions, write packet pair.
 4. **Logic & Events:** Hook into Forge event bus (`MinecraftForge.EVENT_BUS` or `FMLCommonHandler.bus()`).
@@ -38,4 +42,3 @@ Consult `docs/MODEL_TEXTURE_PORTING_GUIDE.md` for full details:
    - Items: `item.neorism.<name>.name` (override `getItemStackDisplayName` to prevent vanilla `.name` suffix bug).
    - Blocks: `tile.neorism.<name>.name`.
    - Tabs: `itemGroup.neorism.<tab>` (override `getTranslatedTabLabel` with fallbacks).
-
