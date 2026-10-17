@@ -29,7 +29,7 @@ public class ItemCoffinRenderer implements IItemRenderer {
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
-        Minecraft.getMinecraft().renderEngine.bindTexture(TileEntityCoffinRenderer.TEXTURE);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TileEntityCoffinRenderer.TEXTURE_BASE);
 
         if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
             GL11.glTranslatef(0.5F, 0.3F, 0.5F);

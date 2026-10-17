@@ -285,11 +285,7 @@ public class ClientProxy extends CommonProxy {
             )
         );
 
-        // Coffin
-        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
-            net.minecraft.item.Item.getItemFromBlock(com.marrybye.neorism.common.core.ModBlocks.coffin),
-            new com.marrybye.neorism.client.render.item.ItemCoffinRenderer()
-        );
+        // Coffin is handled by ModelISBRH in modeledBlocks list
     }
 
     @Override

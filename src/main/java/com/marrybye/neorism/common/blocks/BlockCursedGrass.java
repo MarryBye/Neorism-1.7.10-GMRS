@@ -156,4 +156,12 @@ public class BlockCursedGrass extends BlockNeorism implements IGrowable {
         if (side == 0) return iconBottom;
         return iconSide;
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        if (side == 1) return iconTop;
+        if (side == 0) return iconBottom;
+        return iconSide;
+    }
 }

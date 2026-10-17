@@ -1,20 +1,164 @@
 {
+  "credit": "Designed by Maxanier with Cubik Studio",
   "parent": "block/block",
   "textures": {
-    "core": "neorism:block/totem_top_core_vampire",
-    "particle": "neorism:block/totem_top_core_vampire"
+    "particle": "minecraft:block/obsidian",
+    "obsidian": "minecraft:block/obsidian",
+    "iron": "minecraft:block/iron_block",
+    "core": "neorism:block/totem_top_core_vampire"
   },
   "elements": [
     {
-      "from": [0, 0, 0],
-      "to": [16, 16, 16],
+      "name": "base",
+      "from": [3, 0, 3],
+      "to": [13, 1, 13],
       "faces": {
-        "north": { "texture": "#core" },
-        "east": { "texture": "#core" },
-        "south": { "texture": "#core" },
-        "west": { "texture": "#core" },
-        "up": { "texture": "#core" },
-        "down": { "texture": "#core" }
+        "down":  { "texture": "#iron", "cullface": "down" },
+        "up":    { "texture": "#iron" },
+        "north": { "texture": "#iron" },
+        "south": { "texture": "#iron" },
+        "west":  { "texture": "#iron" },
+        "east":  { "texture": "#iron" }
+      }
+    },
+    {
+      "name": "cage_base",
+      "from": [1, 1, 1],
+      "to": [15, 2, 15],
+      "faces": {
+        "down":  { "texture": "#obsidian" },
+        "up":    { "texture": "#obsidian" },
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "core",
+      "from": [4, 2, 4],
+      "to": [12, 8, 12],
+      "faces": {
+        "down":  { "texture": "#core", "uv": [3, 5, 11, 11] },
+        "up":    { "texture": "#core", "uv": [3, 5, 11, 11] },
+        "north": { "texture": "#core", "uv": [3, 5, 13, 11] },
+        "south": { "texture": "#core", "uv": [3, 5, 13, 11] },
+        "west":  { "texture": "#core", "uv": [3, 5, 13, 11] },
+        "east":  { "texture": "#core", "uv": [3, 5, 13, 11] }
+      }
+    },
+    {
+      "name": "corner_nw",
+      "from": [1, 2, 1],
+      "to": [2, 8, 2],
+      "faces": {
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "corner_ne",
+      "from": [14, 2, 1],
+      "to": [15, 8, 2],
+      "faces": {
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "corner_sw",
+      "from": [1, 2, 14],
+      "to": [2, 8, 15],
+      "faces": {
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "corner_se",
+      "from": [14, 2, 14],
+      "to": [15, 8, 15],
+      "faces": {
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "bar_north",
+      "from": [7, 2, 1],
+      "to": [9, 8, 2],
+      "faces": {
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "bar_south",
+      "from": [7, 2, 14],
+      "to": [9, 8, 15],
+      "faces": {
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "bar_west",
+      "from": [1, 2, 7],
+      "to": [2, 8, 9],
+      "faces": {
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "bar_east",
+      "from": [14, 2, 7],
+      "to": [15, 8, 9],
+      "faces": {
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "cage_top",
+      "from": [1, 8, 1],
+      "to": [15, 9, 15],
+      "faces": {
+        "down":  { "texture": "#obsidian" },
+        "up":    { "texture": "#obsidian" },
+        "north": { "texture": "#obsidian" },
+        "south": { "texture": "#obsidian" },
+        "west":  { "texture": "#obsidian" },
+        "east":  { "texture": "#obsidian" }
+      }
+    },
+    {
+      "name": "top",
+      "from": [3, 9, 3],
+      "to": [13, 10, 13],
+      "faces": {
+        "down":  { "texture": "#iron" },
+        "up":    { "texture": "#iron", "cullface": "up" },
+        "north": { "texture": "#iron" },
+        "south": { "texture": "#iron" },
+        "west":  { "texture": "#iron" },
+        "east":  { "texture": "#iron" }
       }
     }
   ]
