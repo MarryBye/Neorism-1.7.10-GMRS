@@ -36,8 +36,21 @@ public class ItemBloodBottle extends Item {
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.setMaxStackSize(16);
-        this.setCreativeTab(ModCreativeTabs.tabMain);
+        this.setCreativeTab(ModCreativeTabs.tabVampire);
         this.setUnlocalizedName("neorism.blood_bottle");
+    }
+
+    public static int getBlood(ItemStack stack) {
+        if (stack != null && stack.getItem() instanceof ItemBloodBottle) {
+            return stack.getItemDamage();
+        }
+        return 0;
+    }
+
+    public static void setBlood(ItemStack stack, int blood) {
+        if (stack != null && stack.getItem() instanceof ItemBloodBottle) {
+            stack.setItemDamage(Math.max(0, Math.min(MAX_BLOOD, blood)));
+        }
     }
 
     @Override

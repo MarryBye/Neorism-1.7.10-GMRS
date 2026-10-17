@@ -52,7 +52,7 @@ public class ItemSwiftnessArmor extends ItemArmor implements IItemWithTier, IFac
         setHasSubtypes(true);
         setMaxDamage(0);
         setUnlocalizedName("neorism.armor_of_swiftness_" + partName);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class ItemHeartStriker extends ItemVampireSword {
     public ItemHeartStriker() {
         super(ToolMaterial.EMERALD);
         setUnlocalizedName("neorism.heart_striker");
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabVampire);
     }
 
     @Override

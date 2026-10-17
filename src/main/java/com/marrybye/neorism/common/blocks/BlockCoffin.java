@@ -2,6 +2,7 @@ package com.marrybye.neorism.common.blocks;
 
 import java.util.Random;
 
+import com.marrybye.neorism.common.core.ModCreativeTabs;
 import com.marrybye.neorism.common.tileentity.TileEntityCoffin;
 
 import cpw.mods.fml.relauncher.Side;
@@ -23,11 +24,19 @@ import net.minecraft.world.World;
  */
 public class BlockCoffin extends BlockModeled implements ITileEntityProvider {
 
+    public final String color;
+
     public BlockCoffin() {
-        super("coffin_red", "coffin_base", Material.wood);
+        this("red");
+    }
+
+    public BlockCoffin(String color) {
+        super("coffin_" + color, "coffin_base", Material.wood);
+        this.color = color;
         setHardness(2.0F);
         setStepSound(soundTypeWood);
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.65F, 1.0F);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override

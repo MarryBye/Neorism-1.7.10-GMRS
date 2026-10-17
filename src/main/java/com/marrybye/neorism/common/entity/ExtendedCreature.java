@@ -220,6 +220,10 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
         return amount;
     }
 
+    public int drainBlood(int amount, float saturation) {
+        return onSyringeUse(amount);
+    }
+
     @Override
     public boolean canBeInfected(IVampireEntity vampire) {
         return canBecomeVampire && poisonousBlood <= 0 && !entity.isPotionActive(ModPotions.sanguinare);

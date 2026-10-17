@@ -90,6 +90,10 @@ public class FactionRestriction {
         return true;
     }
 
+    public static void addInformation(ItemStack stack, EntityPlayer player, List tooltips) {
+        addTooltipIfExist(player, stack, tooltips);
+    }
+
     @SuppressWarnings("unchecked")
     public static void addTooltipIfExist(EntityPlayer player, ItemStack stack, List tooltips) {
         if (stack == null || !(stack.getItem() instanceof IFactionRestriction)) return;

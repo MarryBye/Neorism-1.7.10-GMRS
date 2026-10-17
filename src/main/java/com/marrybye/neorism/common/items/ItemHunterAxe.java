@@ -48,7 +48,7 @@ public class ItemHunterAxe extends ItemSword implements IItemWithTier, IFactionR
         setHasSubtypes(true);
         setMaxDamage(0);
         setUnlocalizedName("neorism.hunter_axe");
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override

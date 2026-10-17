@@ -40,7 +40,7 @@ public class ItemHolyWaterSplash extends ItemNeorism implements IItemWithTier, I
         setHasSubtypes(true);
         setMaxDamage(0);
         setMaxStackSize(16);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override

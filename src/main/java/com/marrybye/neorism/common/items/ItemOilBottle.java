@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
-import com.marrybye.neorism.common.core.ModItems;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -21,20 +20,24 @@ import net.minecraft.world.World;
 
 /**
  * Alchemical Weapon Oil Bottles crafted in the cauldron and applied to hunter and vampire blades.
+ * Ported 1:1 from TeamLapen's ModOils.java and OilBottleItem.java.
  */
 public class ItemOilBottle extends Item {
 
-    public static final int TYPES = 8;
     public static final String[] OIL_NAMES = {
-        "empty", "vampire_killer", "garlic", "bleeding", "fire", "poison", "weakness", "slowness"
+        "plant", "vampire_blood", "sovereign_blood", "poison", "weakness", "slowness",
+        "healing", "fire_resistance", "swiftness", "regeneration", "night_vision", "strength",
+        "jump", "water_breathing", "invisibility", "slow_falling", "luck", "harm",
+        "smelt", "teleport", "evasion", "garlic", "spitfire", "vampire_killer", "bleeding"
     };
 
+    public static final int TYPES = OIL_NAMES.length;
     public static final int CHARGES_PER_BOTTLE = 32;
 
     @SideOnly(Side.CLIENT)
     private IIcon iconBottle;
     @SideOnly(Side.CLIENT)
-    private IIcon iconStrong;
+    private IIcon iconOverlay;
 
     public ItemOilBottle() {
         super();
@@ -42,11 +45,11 @@ public class ItemOilBottle extends Item {
         setHasSubtypes(true);
         setMaxDamage(0);
         setUnlocalizedName("neorism.oil_bottle");
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     public static String getOilType(int meta) {
-        if (meta < 0 || meta >= OIL_NAMES.length) return "empty";
+        if (meta < 0 || meta >= OIL_NAMES.length) return OIL_NAMES[0];
         return OIL_NAMES[meta];
     }
 
@@ -57,6 +60,32 @@ public class ItemOilBottle extends Item {
         return 0;
     }
 
+    public static String getAppliedOilType(ItemStack stack) {
+        if (stack != null && stack.hasTagCompound() && stack.getTagCompound().hasKey("appliedOil")) {
+            return stack.getTagCompound().getString("appliedOil");
+        }
+        return null;
+    }
+
+    public static int getAppliedOilCharges(ItemStack stack) {
+        if (stack != null && stack.hasTagCompound() && stack.getTagCompound().hasKey("oilCharges")) {
+            return stack.getTagCompound().getInteger("oilCharges");
+        }
+        return 0;
+    }
+
+    public static void consumeOilCharge(ItemStack stack) {
+        if (stack != null && stack.hasTagCompound() && stack.getTagCompound().hasKey("oilCharges")) {
+            int charges = stack.getTagCompound().getInteger("oilCharges") - 1;
+            if (charges <= 0) {
+                stack.getTagCompound().removeTag("appliedOil");
+                stack.getTagCompound().removeTag("oilCharges");
+            } else {
+                stack.getTagCompound().setInteger("oilCharges", charges);
+            }
+        }
+    }
+
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         return "item.neorism.oil." + getOilType(stack.getItemDamage());
@@ -64,11 +93,24 @@ public class ItemOilBottle extends Item {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        String key = "item.neorism.oil." + getOilType(stack.getItemDamage()) + ".name";
+        String type = getOilType(stack.getItemDamage());
+        String key = "oil.neorism." + type;
         if (StatCollector.canTranslate(key)) {
             return StatCollector.translateToLocal(key);
         }
-        return super.getItemStackDisplayName(stack);
+        String vampKey = "oil.vampirism." + type;
+        if (StatCollector.canTranslate(vampKey)) {
+            return StatCollector.translateToLocal(vampKey);
+        }
+        return "Oil of " + type;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister register) {
+        iconBottle = register.registerIcon(Neorism.MODID + ":oil_bottle");
+        iconOverlay = register.registerIcon(Neorism.MODID + ":oil_bottle_overlay");
+        itemIcon = iconBottle;
     }
 
     @Override
@@ -83,92 +125,32 @@ public class ItemOilBottle extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean advanced) {
         int meta = stack.getItemDamage();
-        String descKey = "item.neorism.oil." + getOilType(meta) + ".desc";
+        String descKey = "oil.neorism." + getOilType(meta) + ".desc";
         if (StatCollector.canTranslate(descKey)) {
             list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal(descKey));
         }
-        if (meta > 0) {
-            list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.neorism.oil.charges") + ": " + CHARGES_PER_BOTTLE);
-            list.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("tooltip.neorism.oil.apply_hint"));
-        }
+        list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.neorism.oil.charges") + ": " + CHARGES_PER_BOTTLE);
+        list.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("tooltip.neorism.oil.apply_hint"));
     }
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        if (stack.getItemDamage() == 0) return stack;
-
         // Try applying to weapon in hotbar slots
         for (int i = 0; i < 9; i++) {
-            ItemStack slotStack = player.inventory.getStackInSlot(i);
-            if (slotStack != null && isCoatableWeapon(slotStack)) {
-                applyOilToWeapon(slotStack, getOilType(stack.getItemDamage()), CHARGES_PER_BOTTLE);
-                world.playSoundAtEntity(player, "random.fizz", 0.7F, 1.2F);
-                if (!player.capabilities.isCreativeMode) {
-                    stack.stackSize--;
-                    if (!player.inventory.addItemStackToInventory(new ItemStack(this, 1, 0))) {
-                        player.dropPlayerItemWithRandomChoice(new ItemStack(this, 1, 0), false);
+            ItemStack slot = player.inventory.getStackInSlot(i);
+            if (slot != null && slot != stack) {
+                if (slot.getItem() instanceof ItemVampireSword || slot.getItem() instanceof ItemHunterAxe) {
+                    if (!slot.hasTagCompound()) slot.setTagCompound(new NBTTagCompound());
+                    slot.getTagCompound().setString("appliedOil", getOilType(stack.getItemDamage()));
+                    slot.getTagCompound().setInteger("oilCharges", CHARGES_PER_BOTTLE);
+                    world.playSoundAtEntity(player, "random.fizz", 0.5F, 1.5F);
+                    if (!player.capabilities.isCreativeMode) {
+                        stack.stackSize--;
                     }
+                    return stack;
                 }
-                return stack;
             }
         }
         return stack;
-    }
-
-    public static boolean isCoatableWeapon(ItemStack stack) {
-        if (stack == null) return false;
-        Item item = stack.getItem();
-        return item instanceof net.minecraft.item.ItemSword ||
-               item instanceof net.minecraft.item.ItemAxe ||
-               item instanceof ItemStake ||
-               item instanceof ItemCrossbow;
-    }
-
-    public static void applyOilToWeapon(ItemStack weapon, String oilType, int charges) {
-        if (weapon == null) return;
-        NBTTagCompound tag = weapon.hasTagCompound() ? weapon.getTagCompound() : new NBTTagCompound();
-        NBTTagCompound oilTag = new NBTTagCompound();
-        oilTag.setString("type", oilType);
-        oilTag.setInteger("charges", charges);
-        tag.setTag("NeorismOil", oilTag);
-        weapon.setTagCompound(tag);
-    }
-
-    public static String getAppliedOilType(ItemStack weapon) {
-        if (weapon != null && weapon.hasTagCompound() && weapon.getTagCompound().hasKey("NeorismOil")) {
-            return weapon.getTagCompound().getCompoundTag("NeorismOil").getString("type");
-        }
-        return null;
-    }
-
-    public static int getAppliedOilCharges(ItemStack weapon) {
-        if (weapon != null && weapon.hasTagCompound() && weapon.getTagCompound().hasKey("NeorismOil")) {
-            return weapon.getTagCompound().getCompoundTag("NeorismOil").getInteger("charges");
-        }
-        return 0;
-    }
-
-    public static void consumeOilCharge(ItemStack weapon) {
-        if (weapon == null || !weapon.hasTagCompound() || !weapon.getTagCompound().hasKey("NeorismOil")) return;
-        NBTTagCompound oilTag = weapon.getTagCompound().getCompoundTag("NeorismOil");
-        int charges = oilTag.getInteger("charges") - 1;
-        if (charges <= 0) {
-            weapon.getTagCompound().removeTag("NeorismOil");
-        } else {
-            oilTag.setInteger("charges", charges);
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister register) {
-        iconBottle = register.registerIcon(Neorism.MODID + ":oil_bottle");
-        iconStrong = register.registerIcon(Neorism.MODID + ":oil_bottle_strong");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int meta) {
-        return (meta >= 1 && meta <= 3) ? iconStrong : iconBottle;
     }
 }

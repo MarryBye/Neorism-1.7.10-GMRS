@@ -94,6 +94,10 @@ public class BloodStats implements IBloodStats {
         return bloodLevel < maxBlood;
     }
 
+    public int addBlood(int amount) {
+        return addBlood(amount, 0.5F);
+    }
+
     @Override
     public int addBlood(int amount, float saturationModifier) {
         int add = Math.min(amount, maxBlood - bloodLevel);

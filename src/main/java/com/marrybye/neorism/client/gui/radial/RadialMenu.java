@@ -16,6 +16,10 @@ public class RadialMenu {
     private final List<IRadialMenuSlot> slots;
     private int currentSlot = -1;
 
+    public RadialMenu(List<IRadialMenuSlot> slots) {
+        this(null, slots);
+    }
+
     public RadialMenu(SlotConsumer onSlotSelected, List<IRadialMenuSlot> slots) {
         this.onSlotSelected = onSlotSelected;
         this.slots = slots;

@@ -14,16 +14,24 @@ import net.minecraft.block.material.Material;
 public class BlockNeorism extends Block {
 
     public BlockNeorism(String name, Material material) {
-        this(name, name, material);
+        this(name, name, material, ModCreativeTabs.tabVampirism);
+    }
+
+    public BlockNeorism(String name, Material material, net.minecraft.creativetab.CreativeTabs tab) {
+        this(name, name, material, tab);
     }
 
     public BlockNeorism(String name, String textureName, Material material) {
+        this(name, textureName, material, ModCreativeTabs.tabVampirism);
+    }
+
+    public BlockNeorism(String name, String textureName, Material material, net.minecraft.creativetab.CreativeTabs tab) {
         super(material);
         setBlockName("neorism." + name);
         if (textureName != null && !textureName.isEmpty()) {
             setBlockTextureName(Neorism.MODID + ":" + textureName);
         }
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(tab != null ? tab : ModCreativeTabs.tabVampirism);
     }
 
     @SideOnly(Side.CLIENT)

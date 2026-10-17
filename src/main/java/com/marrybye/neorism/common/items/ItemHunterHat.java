@@ -42,7 +42,7 @@ public class ItemHunterHat extends ItemArmor implements IFactionRestriction {
         setHasSubtypes(true);
         setMaxDamage(220);
         setUnlocalizedName("neorism.hunter_hat");
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override

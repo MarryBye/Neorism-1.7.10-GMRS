@@ -29,7 +29,7 @@ public class ItemPitchfork extends ItemSword {
         setUnlocalizedName("neorism.pitchfork");
         setTextureName(Neorism.MODID + ":pitchfork");
         setMaxDamage(250);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override

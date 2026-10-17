@@ -37,7 +37,7 @@ public class ItemQuarrelClip extends Item {
         setHasSubtypes(true);
         setMaxDamage(0);
         setUnlocalizedName("neorism.quarrel_clip");
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     public static int getAmmoCount(ItemStack stack) {

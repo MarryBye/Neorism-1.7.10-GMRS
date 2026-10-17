@@ -6,14 +6,22 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 
+/**
+ * Creative tabs for Neorism, matching canonical TeamLapen Vampirism structure:
+ * 1. Vampirism (General, nature, materials, blocks, decorative) - Icon: Vampire Fang
+ * 2. Vampirism: Hunter (Hunter gear, weapons, armor, alchemy, tables) - Icon: Hunter Minion Equipment
+ * 3. Vampirism: Vampire (Vampire weapons, armor, altars, blood containers, coffins) - Icon: Vampire Minion Binding
+ */
 public class ModCreativeTabs {
 
-    public static final CreativeTabs tabMain = new CreativeTabs("neorism.main") {
+    // Tab 1: Vampirism (General / Nature / Stone / Decor / Tech)
+    public static final CreativeTabs tabVampirism = new CreativeTabs("neorism") {
         @Override
         @SideOnly(Side.CLIENT)
         public Item getTabIconItem() {
-            return Items.glass_bottle;
+            return ModItems.vampireFang != null ? ModItems.vampireFang : Items.glass_bottle;
         }
 
         @Override
@@ -24,40 +32,87 @@ public class ModCreativeTabs {
             }
             return new ItemStack(Items.glass_bottle);
         }
+
         @Override
         @SideOnly(Side.CLIENT)
         public String getTranslatedTabLabel() {
-            String key = "itemGroup." + this.getTabLabel();
-            String trans = net.minecraft.util.StatCollector.translateToLocal(key);
-            if (trans != null && !trans.equals(key)) {
-                return trans;
+            if (StatCollector.canTranslate("itemGroup.neorism")) {
+                return StatCollector.translateToLocal("itemGroup.neorism");
             }
-            if (net.minecraft.util.StatCollector.canTranslate("itemGroup.neorism")) {
-                return net.minecraft.util.StatCollector.translateToLocal("itemGroup.neorism");
+            if (StatCollector.canTranslate("itemGroup.vampirism")) {
+                return StatCollector.translateToLocal("itemGroup.vampirism");
             }
-            return super.getTranslatedTabLabel();
+            return "Vampirism";
         }
     };
 
-    public static final CreativeTabs tabBooks = new CreativeTabs("neorism.books") {
+    // Tab 2: Vampirism: Hunter (Weapons, Armor, Holy Water, Garlic, Alchemy, Diffusers)
+    public static final CreativeTabs tabHunter = new CreativeTabs("neorism.hunter") {
         @Override
         @SideOnly(Side.CLIENT)
         public Item getTabIconItem() {
-            return Items.book;
+            return ModItems.hunterMinionEquipment != null ? ModItems.hunterMinionEquipment : Items.bow;
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public ItemStack getIconItemStack() {
+            if (ModItems.hunterMinionEquipment != null) {
+                return new ItemStack(ModItems.hunterMinionEquipment);
+            }
+            if (ModItems.hunterAxe != null) {
+                return new ItemStack(ModItems.hunterAxe);
+            }
+            return new ItemStack(Items.bow);
         }
 
         @Override
         @SideOnly(Side.CLIENT)
         public String getTranslatedTabLabel() {
-            String key = "itemGroup." + this.getTabLabel();
-            String trans = net.minecraft.util.StatCollector.translateToLocal(key);
-            if (trans != null && !trans.equals(key)) {
-                return trans;
+            if (StatCollector.canTranslate("itemGroup.neorism.hunter")) {
+                return StatCollector.translateToLocal("itemGroup.neorism.hunter");
             }
-            if (net.minecraft.util.StatCollector.canTranslate("itemGroup.vampirism.books")) {
-                return net.minecraft.util.StatCollector.translateToLocal("itemGroup.vampirism.books");
+            if (StatCollector.canTranslate("itemGroup.vampirism.hunter")) {
+                return StatCollector.translateToLocal("itemGroup.vampirism.hunter");
             }
-            return super.getTranslatedTabLabel();
+            return "Vampirism: Hunter";
         }
     };
+
+    // Tab 3: Vampirism: Vampire (Swords, Cloaks, Altars, Blood, Coffins)
+    public static final CreativeTabs tabVampire = new CreativeTabs("neorism.vampire") {
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Item getTabIconItem() {
+            return ModItems.vampireMinionBinding != null ? ModItems.vampireMinionBinding : Items.nether_star;
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public ItemStack getIconItemStack() {
+            if (ModItems.vampireMinionBinding != null) {
+                return new ItemStack(ModItems.vampireMinionBinding);
+            }
+            if (ModItems.bloodBottle != null) {
+                return new ItemStack(ModItems.bloodBottle);
+            }
+            return new ItemStack(Items.nether_star);
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public String getTranslatedTabLabel() {
+            if (StatCollector.canTranslate("itemGroup.neorism.vampire")) {
+                return StatCollector.translateToLocal("itemGroup.neorism.vampire");
+            }
+            if (StatCollector.canTranslate("itemGroup.vampirism.vampire")) {
+                return StatCollector.translateToLocal("itemGroup.vampirism.vampire");
+            }
+            return "Vampirism: Vampire";
+        }
+    };
+
+    // Backward-compatibility aliases
+    public static final CreativeTabs tabMain = tabVampirism;
+    public static final CreativeTabs tabBooks = tabVampirism;
 }

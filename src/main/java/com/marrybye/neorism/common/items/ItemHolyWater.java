@@ -48,7 +48,7 @@ public class ItemHolyWater extends ItemNeorism implements IItemWithTier, IFactio
         setHasSubtypes(true);
         setMaxDamage(0);
         setMaxStackSize(16);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override

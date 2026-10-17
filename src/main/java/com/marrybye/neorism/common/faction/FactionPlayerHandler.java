@@ -37,6 +37,16 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
     private de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender titleGender =
         de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender.UNKNOWN;
 
+    // 3 Refinement slots: 0 = Amulet, 1 = Ring, 2 = Obi Belt
+    private final net.minecraft.item.ItemStack[] refinements = new net.minecraft.item.ItemStack[3];
+
+    // Vampire Appearance Customization
+    private int fangType = 0; // 0..6
+    private int eyeType = 0;  // 0..18
+    private boolean glowingEyes = false;
+    private boolean wings = false;
+    private int wingsType = 0; // 0 = normal, 1 = castle contest, 2 = dev
+
     public FactionPlayerHandler(EntityPlayer player) {
         this.player = player;
     }
@@ -64,6 +74,23 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
         tag.setInteger("lordLevel", lordLevel);
         tag.setBoolean("disguised", disguised);
         tag.setString("titleGender", titleGender.getName());
+
+        // Refinements
+        for (int i = 0; i < 3; i++) {
+            if (refinements[i] != null) {
+                NBTTagCompound itemTag = new NBTTagCompound();
+                refinements[i].writeToNBT(itemTag);
+                tag.setTag("refinement_" + i, itemTag);
+            }
+        }
+
+        // Appearance
+        tag.setInteger("fangType", fangType);
+        tag.setInteger("eyeType", eyeType);
+        tag.setBoolean("glowingEyes", glowingEyes);
+        tag.setBoolean("wings", wings);
+        tag.setInteger("wingsType", wingsType);
+
         compound.setTag("NeorismFaction", tag);
     }
 
@@ -78,6 +105,20 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
             if (tag.hasKey("titleGender")) {
                 this.titleGender = de.teamlapen.faction.api.factions.IPlayableFaction.TitleGender.byName(tag.getString("titleGender"));
             }
+
+            for (int i = 0; i < 3; i++) {
+                if (tag.hasKey("refinement_" + i)) {
+                    this.refinements[i] = net.minecraft.item.ItemStack.loadItemStackFromNBT(tag.getCompoundTag("refinement_" + i));
+                } else {
+                    this.refinements[i] = null;
+                }
+            }
+
+            this.fangType = tag.getInteger("fangType");
+            this.eyeType = tag.getInteger("eyeType");
+            this.glowingEyes = tag.getBoolean("glowingEyes");
+            this.wings = tag.getBoolean("wings");
+            this.wingsType = tag.getInteger("wingsType");
         }
     }
 
@@ -88,8 +129,42 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
             this.lordLevel = oldHandler.lordLevel;
             this.disguised = oldHandler.disguised;
             this.titleGender = oldHandler.titleGender;
+            for (int i = 0; i < 3; i++) {
+                this.refinements[i] = oldHandler.refinements[i] != null ? oldHandler.refinements[i].copy() : null;
+            }
+            this.fangType = oldHandler.fangType;
+            this.eyeType = oldHandler.eyeType;
+            this.glowingEyes = oldHandler.glowingEyes;
+            this.wings = oldHandler.wings;
+            this.wingsType = oldHandler.wingsType;
         }
     }
+
+    public net.minecraft.item.ItemStack getRefinement(int slot) {
+        if (slot >= 0 && slot < 3) return refinements[slot];
+        return null;
+    }
+
+    public void setRefinement(int slot, net.minecraft.item.ItemStack stack) {
+        if (slot >= 0 && slot < 3) {
+            refinements[slot] = stack;
+        }
+    }
+
+    public int getFangType() { return fangType; }
+    public void setFangType(int fangType) { this.fangType = Math.max(0, Math.min(6, fangType)); }
+
+    public int getEyeType() { return eyeType; }
+    public void setEyeType(int eyeType) { this.eyeType = Math.max(0, Math.min(18, eyeType)); }
+
+    public boolean hasGlowingEyes() { return glowingEyes; }
+    public void setGlowingEyes(boolean glowingEyes) { this.glowingEyes = glowingEyes; }
+
+    public boolean hasWings() { return wings; }
+    public void setWings(boolean wings) { this.wings = wings; }
+
+    public int getWingsType() { return wingsType; }
+    public void setWingsType(int wingsType) { this.wingsType = Math.max(0, Math.min(2, wingsType)); }
 
     public IPlayableFaction getFaction() {
         return currentFaction;

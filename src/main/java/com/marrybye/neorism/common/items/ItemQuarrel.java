@@ -17,9 +17,28 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
 /**
- * Quarrel crossbow ammunition with standard (meta 0) and heavy (meta 1) variants.
+ * Quarrel crossbow ammunition with all 7 canonical variants:
+ * 0: Normal
+ * 1: Heavy
+ * 2: Spitfire
+ * 3: Garlic
+ * 4: Vampire Killer
+ * 5: Teleport
+ * 6: Bleeding
+ * Ported 1:1 from TeamLapen's ModItems.java and QuarrelItem.
  */
 public class ItemQuarrel extends ItemNeorism {
+
+    public static final int TYPES = 7;
+    public static final String[] NAMES = {
+        "quarrel_normal",
+        "quarrel_heavy",
+        "quarrel_spitfire",
+        "quarrel_garlic",
+        "quarrel_vampire_killer",
+        "quarrel_teleport",
+        "quarrel_bleeding"
+    };
 
     @SideOnly(Side.CLIENT)
     private IIcon iconNormal;
@@ -31,21 +50,32 @@ public class ItemQuarrel extends ItemNeorism {
         setHasSubtypes(true);
         setMaxDamage(0);
         setMaxStackSize(64);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
+    }
+
+    public static String getQuarrelName(int meta) {
+        int idx = Math.max(0, Math.min(meta, TYPES - 1));
+        return NAMES[idx];
     }
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return stack.getItemDamage() == 1 ? "item.neorism.quarrel_heavy" : "item.neorism.quarrel";
+        int meta = Math.max(0, Math.min(stack != null ? stack.getItemDamage() : 0, TYPES - 1));
+        return "item.neorism." + NAMES[meta];
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        String key = getUnlocalizedName(stack) + ".name";
+        int meta = Math.max(0, Math.min(stack != null ? stack.getItemDamage() : 0, TYPES - 1));
+        String key = "item.neorism." + NAMES[meta] + ".name";
         if (StatCollector.canTranslate(key)) {
             return StatCollector.translateToLocal(key).trim();
         }
-        return stack.getItemDamage() == 1 ? "Heavy Quarrel" : "Quarrel";
+        String vampKey = "item.vampirism." + NAMES[meta] + ".name";
+        if (StatCollector.canTranslate(vampKey)) {
+            return StatCollector.translateToLocal(vampKey).trim();
+        }
+        return meta == 1 ? "Heavy Quarrel" : "Quarrel";
     }
 
     @Override
@@ -65,18 +95,26 @@ public class ItemQuarrel extends ItemNeorism {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list) {
-        list.add(new ItemStack(item, 1, 0));
-        list.add(new ItemStack(item, 1, 1));
+        for (int i = 0; i < TYPES; i++) {
+            list.add(new ItemStack(item, 1, i));
+        }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        if (stack.getItemDamage() == 1) {
-            tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.quarrel_heavy.desc"));
-            tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.quarrel_heavy.damage"));
+        int meta = Math.max(0, Math.min(stack.getItemDamage(), TYPES - 1));
+        String descKey = "tooltip.neorism." + NAMES[meta] + ".desc";
+        if (StatCollector.canTranslate(descKey)) {
+            tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal(descKey));
         } else {
-            tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.quarrel.desc"));
+            String vDesc = "tooltip.vampirism." + NAMES[meta] + ".desc";
+            if (StatCollector.canTranslate(vDesc)) {
+                tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal(vDesc));
+            }
+        }
+        if (meta == 1) {
+            tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.quarrel_heavy.damage"));
         }
     }
 }

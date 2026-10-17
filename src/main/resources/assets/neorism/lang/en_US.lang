@@ -5813,3 +5813,25 @@ skill.neorism.artisan_craftsmanship=Artisan Craftsmanship
 skill.neorism.artisan_craftsmanship.desc=Craft and use ultimate hunter equipment
 skill.vampirism.artisan_craftsmanship=Artisan Craftsmanship
 skill.vampirism.artisan_craftsmanship.desc=Craft and use ultimate hunter equipment
+
+# 8 Canonical Keybindings
+key.vampirism.action=Open Action Radial Menu
+key.neorism.action=Open Action Radial Menu
+key.vampirism.minion=Open Minion Radial Menu
+key.neorism.minion=Open Minion Radial Menu
+key.vampirism.skills=Faction Skill Tree
+key.neorism.skills=Faction Skill Tree
+key.vampirism.faction_menu=Faction Dashboard
+key.neorism.faction_menu=Faction Dashboard
+
+# GUI & radial notifications
+gui.neorism.minion_radial.no_minion_tasks=No active minion tasks available
+gui.neorism.appearance.title=Vampire Appearance
+gui.neorism.appearance.fangs=Fangs
+gui.neorism.appearance.eyes=Eyes
+gui.neorism.appearance.glowing_eyes=Glowing Eyes
+gui.neorism.appearance.wings=Wings
+gui.neorism.appearance.wings_style=Wings Style
+gui.neorism.appearance.wings_enabled=Wings: Enabled
+gui.neorism.appearance.wings_disabled=Wings: Disabled
+gui.neorism.appearance.done=Done

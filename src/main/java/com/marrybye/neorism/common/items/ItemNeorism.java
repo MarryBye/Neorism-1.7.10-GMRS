@@ -14,9 +14,13 @@ import net.minecraft.util.StatCollector;
 public class ItemNeorism extends Item {
 
     public ItemNeorism(String name) {
+        this(name, ModCreativeTabs.tabVampirism);
+    }
+
+    public ItemNeorism(String name, net.minecraft.creativetab.CreativeTabs tab) {
         setUnlocalizedName("neorism." + name);
         setTextureName(Neorism.MODID + ":" + name);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(tab != null ? tab : ModCreativeTabs.tabVampirism);
     }
 
     @Override

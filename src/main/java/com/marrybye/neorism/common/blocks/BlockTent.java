@@ -92,8 +92,28 @@ public class BlockTent extends BlockContainer {
         }
     }
 
-    private boolean canReplace(World world, int x, int y, int z) {
+    public static boolean canPlaceTent(World world, int x, int y, int z, int dir) {
+        int[][] offs = OFFSETS_FROM_ZERO[dir];
+        return canReplaceAt(world, x, y, z) &&
+               canReplaceAt(world, x + offs[0][0], y, z + offs[0][1]) &&
+               canReplaceAt(world, x + offs[1][0], y, z + offs[1][1]) &&
+               canReplaceAt(world, x + offs[2][0], y, z + offs[2][1]);
+    }
+
+    public static void placeTent(World world, int x, int y, int z, int dir) {
+        int[][] offs = OFFSETS_FROM_ZERO[dir];
+        world.setBlock(x, y, z, com.marrybye.neorism.common.core.ModBlocks.tent, (0 << 2) | dir, 3);
+        world.setBlock(x + offs[0][0], y, z + offs[0][1], com.marrybye.neorism.common.core.ModBlocks.tent, (1 << 2) | dir, 3);
+        world.setBlock(x + offs[1][0], y, z + offs[1][1], com.marrybye.neorism.common.core.ModBlocks.tent, (2 << 2) | dir, 3);
+        world.setBlock(x + offs[2][0], y, z + offs[2][1], com.marrybye.neorism.common.core.ModBlocks.tent, (3 << 2) | dir, 3);
+    }
+
+    private static boolean canReplaceAt(World world, int x, int y, int z) {
         return world.isAirBlock(x, y, z) || world.getBlock(x, y, z).isReplaceable(world, x, y, z);
+    }
+
+    private boolean canReplace(World world, int x, int y, int z) {
+        return canReplaceAt(world, x, y, z);
     }
 
     @Override

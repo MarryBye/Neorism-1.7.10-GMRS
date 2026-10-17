@@ -40,7 +40,7 @@ public class ItemStake extends ItemSword implements IFactionRestriction {
         setUnlocalizedName("neorism.stake");
         setTextureName(Neorism.MODID + ":stake");
         setMaxDamage(64);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override

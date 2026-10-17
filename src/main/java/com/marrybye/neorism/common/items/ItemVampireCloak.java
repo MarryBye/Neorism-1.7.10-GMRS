@@ -45,7 +45,7 @@ public class ItemVampireCloak extends ItemArmor implements IFactionRestriction {
         setHasSubtypes(true);
         setMaxDamage(0);
         setUnlocalizedName("neorism.vampire_cloak");
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabVampire);
     }
 
     @Override

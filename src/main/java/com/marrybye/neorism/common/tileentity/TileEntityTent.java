@@ -28,6 +28,10 @@ public class TileEntityTent extends TileEntity {
         this.spawn = spawn;
     }
 
+    public void setSpawner(boolean spawn) {
+        this.spawn = spawn;
+    }
+
     public boolean isSpawner() {
         return spawn;
     }

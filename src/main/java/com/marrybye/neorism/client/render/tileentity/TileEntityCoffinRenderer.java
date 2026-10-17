@@ -3,6 +3,7 @@ package com.marrybye.neorism.client.render.tileentity;
 import org.lwjgl.opengl.GL11;
 
 import com.marrybye.neorism.Neorism;
+import com.marrybye.neorism.common.blocks.BlockCoffin;
 import com.marrybye.neorism.common.tileentity.TileEntityCoffin;
 
 import net.minecraft.client.renderer.Tessellator;
@@ -61,8 +62,16 @@ public class TileEntityCoffinRenderer extends TileEntitySpecialRenderer {
         renderOuterBase(tess);
         tess.draw();
 
-        // 2. Render Inner Red Velvet Lining
-        bindTexture(TEXTURE_INNER);
+        // 2. Render Inner Colored Velvet Lining
+        String color = "red";
+        if (te.hasWorldObj()) {
+            net.minecraft.block.Block b = te.getWorldObj().getBlock(te.xCoord, te.yCoord, te.zCoord);
+            if (b instanceof BlockCoffin) {
+                color = ((BlockCoffin) b).color;
+            }
+        }
+        ResourceLocation innerTex = new ResourceLocation(Neorism.MODID, "textures/blocks/coffin/coffin_inner_" + color + ".png");
+        bindTexture(innerTex);
         tess.startDrawingQuads();
         renderInnerVelvet(tess);
         tess.draw();

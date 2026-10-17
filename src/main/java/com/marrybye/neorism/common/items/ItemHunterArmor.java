@@ -52,7 +52,7 @@ public class ItemHunterArmor extends ItemArmor implements IItemWithTier, IFactio
         setHasSubtypes(true);
         setMaxDamage(0);
         setUnlocalizedName("neorism.hunter_coat_" + partName);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override

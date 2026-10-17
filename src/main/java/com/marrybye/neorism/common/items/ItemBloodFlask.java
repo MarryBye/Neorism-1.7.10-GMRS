@@ -29,7 +29,7 @@ public class ItemBloodFlask extends Item {
     public ItemBloodFlask() {
         super();
         this.setMaxStackSize(1);
-        this.setCreativeTab(ModCreativeTabs.tabMain);
+        this.setCreativeTab(ModCreativeTabs.tabVampire);
         this.setTextureName(Neorism.MODID + ":vampire_blood_bottle");
         this.setUnlocalizedName("neorism.blood_flask");
     }

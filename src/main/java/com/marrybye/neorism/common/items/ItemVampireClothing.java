@@ -35,7 +35,7 @@ public class ItemVampireClothing extends ItemArmor implements IFactionRestrictio
         this.pieceName = pieceName;
         setUnlocalizedName("neorism.vampire_clothing_" + pieceName);
         setTextureName(Neorism.MODID + ":vampire_clothing_" + pieceName);
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabVampire);
     }
 
     @Override

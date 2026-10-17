@@ -5734,3 +5734,25 @@ skill.neorism.artisan_craftsmanship=Искусное ремесло
 skill.neorism.artisan_craftsmanship.desc=Создание и использование совершенного снаряжения охотников
 skill.vampirism.artisan_craftsmanship=Искусное ремесло
 skill.vampirism.artisan_craftsmanship.desc=Создание и использование совершенного снаряжения охотников
+
+# 8 Canonical Keybindings
+key.vampirism.action=Радиальное меню действий
+key.neorism.action=Радиальное меню действий
+key.vampirism.minion=Радиальное меню миньонов
+key.neorism.minion=Радиальное меню миньонов
+key.vampirism.skills=Древо навыков фракции
+key.neorism.skills=Древо навыков фракции
+key.vampirism.faction_menu=Панель фракции
+key.neorism.faction_menu=Панель фракции
+
+# GUI & radial notifications
+gui.neorism.minion_radial.no_minion_tasks=Нет доступных задач для миньонов
+gui.neorism.appearance.title=Внешность вампира
+gui.neorism.appearance.fangs=Клыки
+gui.neorism.appearance.eyes=Глаза
+gui.neorism.appearance.glowing_eyes=Светящиеся глаза
+gui.neorism.appearance.wings=Крылья
+gui.neorism.appearance.wings_style=Стиль крыльев
+gui.neorism.appearance.wings_enabled=Крылья: Вкл
+gui.neorism.appearance.wings_disabled=Крылья: Выкл
+gui.neorism.appearance.done=Готово

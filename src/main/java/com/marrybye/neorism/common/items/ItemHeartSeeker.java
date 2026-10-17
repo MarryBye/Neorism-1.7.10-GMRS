@@ -29,7 +29,7 @@ public class ItemHeartSeeker extends ItemVampireSword {
     public ItemHeartSeeker() {
         super(ToolMaterial.EMERALD);
         setUnlocalizedName("neorism.heart_seeker");
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabVampire);
     }
 
     @Override

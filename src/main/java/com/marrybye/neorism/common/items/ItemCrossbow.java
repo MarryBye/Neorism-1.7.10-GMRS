@@ -5,9 +5,12 @@ import java.util.List;
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.api.faction.IFaction;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
+import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.entity.projectile.EntityQuarrel;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
 import com.marrybye.neorism.common.skills.SkillHandler;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
@@ -17,7 +20,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
@@ -27,20 +29,31 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import com.marrybye.neorism.common.core.ModFactions;
-import com.marrybye.neorism.common.faction.FactionRestriction;
-import com.marrybye.neorism.common.faction.IFactionRestriction;
-
 /**
- * Hunter Crossbow with 4 variants (Basic, Enhanced, Double, Tech).
- * Powerful ranged weapon utilizing Quarrels with high velocity and flat trajectory.
+ * Hunter Crossbow with all 6 canonical variants:
+ * 0: Basic Crossbow
+ * 1: Basic Double Crossbow
+ * 2: Enhanced Crossbow
+ * 3: Enhanced Double Crossbow
+ * 4: Basic Tech Crossbow (Semi-Auto)
+ * 5: Enhanced Tech Crossbow (Enhanced Semi-Auto)
+ * Ported 1:1 from TeamLapen's ModItems.java and HunterCrossbowItem subclasses.
  */
 public class ItemCrossbow extends ItemBow implements IFactionRestriction {
 
-    public static final int TYPES = 4;
-    private static final int[] DURABILITY = {384, 650, 500, 1000};
-    private static final int[] DRAW_TICKS = {24, 16, 28, 12};
-    private static final float[] VELOCITY = {2.8F, 3.5F, 2.8F, 3.2F};
+    public static final int TYPES = 6;
+    private static final int[] DURABILITY = {465, 465, 930, 930, 930, 1860};
+    private static final int[] DRAW_TICKS = {20, 20, 15, 15, 40, 30};
+    private static final float[] VELOCITY = {2.8F, 2.8F, 3.5F, 3.5F, 3.2F, 3.6F};
+
+    public static final String[] NAMES = {
+        "basic_crossbow",
+        "basic_double_crossbow",
+        "enhanced_crossbow",
+        "enhanced_double_crossbow",
+        "basic_tech_crossbow",
+        "enhanced_tech_crossbow"
+    };
 
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
@@ -50,7 +63,7 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
         setHasSubtypes(true);
         setMaxDamage(0);
         setUnlocalizedName("neorism.crossbow");
-        setCreativeTab(ModCreativeTabs.tabMain);
+        setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
     @Override
@@ -87,6 +100,14 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
         return stack != null && stack.hasTagCompound() && stack.getTagCompound().getBoolean("clipHeavy");
     }
 
+    public static boolean isTech(int meta) {
+        return meta == 4 || meta == 5;
+    }
+
+    public static boolean isDouble(int meta) {
+        return meta == 1 || meta == 3;
+    }
+
     private boolean reloadClipFromInventory(ItemStack crossbow, EntityPlayer player) {
         for (int i = 0; i < player.inventory.mainInventory.length; i++) {
             ItemStack stack = player.inventory.mainInventory[i];
@@ -115,7 +136,7 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
         int meta = Math.max(0, Math.min(stack.getItemDamage(), TYPES - 1));
 
         // Tech Crossbow: Semi-automatic firing from loaded clip!
-        if (meta == 3) {
+        if (isTech(meta)) {
             int clipAmmo = getClipAmmo(stack);
             if (clipAmmo > 0) {
                 boolean isHeavy = isClipHeavy(stack);
@@ -181,7 +202,7 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
             float vel = VELOCITY[meta];
 
             if (!world.isRemote) {
-                if (meta == 2) {
+                if (isDouble(meta)) {
                     // Double Crossbow: fires two quarrels with slight divergence
                     EntityQuarrel bolt1 = new EntityQuarrel(world, player, vel, isHeavy);
                     EntityQuarrel bolt2 = new EntityQuarrel(world, player, vel, isHeavy);
@@ -201,14 +222,17 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
             world.playSoundAtEntity(player, "random.bow", 1.0F, 1.2F / (itemRand.nextFloat() * 0.2F + 0.9F));
 
             if (!creative && ammo != null) {
-                ammo.stackSize--;
-                if (ammo.stackSize <= 0) {
-                    player.inventory.consumeInventoryItem(ammo.getItem());
-                }
-                if (meta == 2 && ammo.stackSize > 0) {
+                if (isDouble(meta)) {
+                    ammo.stackSize -= 2;
+                } else {
                     ammo.stackSize--;
-                    if (ammo.stackSize <= 0) {
-                        player.inventory.consumeInventoryItem(ammo.getItem());
+                }
+                if (ammo.stackSize <= 0) {
+                    for (int i = 0; i < player.inventory.mainInventory.length; i++) {
+                        if (player.inventory.mainInventory[i] == ammo) {
+                            player.inventory.setInventorySlotContents(i, null);
+                            break;
+                        }
                     }
                 }
             }
@@ -218,10 +242,9 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
     }
 
     private ItemStack findQuarrel(EntityPlayer player) {
-        for (int i = 0; i < player.inventory.mainInventory.length; i++) {
-            ItemStack stack = player.inventory.mainInventory[i];
-            if (stack != null && (stack.getItem() == ModItems.quarrel || stack.getItem() == Items.arrow)) {
-                return stack;
+        for (ItemStack item : player.inventory.mainInventory) {
+            if (item != null && item.getItem() == ModItems.quarrel && item.stackSize > 0) {
+                return item;
             }
         }
         return null;
@@ -229,21 +252,20 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return super.getUnlocalizedName(stack) + "." + stack.getItemDamage();
+        int meta = Math.max(0, Math.min(stack != null ? stack.getItemDamage() : 0, TYPES - 1));
+        return "item.neorism." + NAMES[meta];
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        int meta = stack.getItemDamage();
-        String specificKey;
-        switch (meta) {
-            case 1: specificKey = "item.neorism.crossbow_enhanced.name"; break;
-            case 2: specificKey = "item.neorism.crossbow_double.name"; break;
-            case 3: specificKey = "item.neorism.tech_crossbow.name"; break;
-            default: specificKey = "item.neorism.crossbow_normal.name"; break;
-        }
+        int meta = Math.max(0, Math.min(stack != null ? stack.getItemDamage() : 0, TYPES - 1));
+        String specificKey = "item.neorism." + NAMES[meta] + ".name";
         if (StatCollector.canTranslate(specificKey)) {
             return StatCollector.translateToLocal(specificKey).trim();
+        }
+        String vampKey = "item.vampirism." + NAMES[meta] + ".name";
+        if (StatCollector.canTranslate(vampKey)) {
+            return StatCollector.translateToLocal(vampKey).trim();
         }
         return super.getItemStackDisplayName(stack);
     }
@@ -253,9 +275,11 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
     public void registerIcons(IIconRegister register) {
         icons = new IIcon[TYPES];
         icons[0] = register.registerIcon(Neorism.MODID + ":crossbow");
-        icons[1] = register.registerIcon(Neorism.MODID + ":crossbow_enhanced");
-        icons[2] = register.registerIcon(Neorism.MODID + ":crossbow_double");
-        icons[3] = register.registerIcon(Neorism.MODID + ":tech_crossbow");
+        icons[1] = register.registerIcon(Neorism.MODID + ":crossbow_double");
+        icons[2] = register.registerIcon(Neorism.MODID + ":crossbow_enhanced");
+        icons[3] = register.registerIcon(Neorism.MODID + ":crossbow_double_enhanced");
+        icons[4] = register.registerIcon(Neorism.MODID + ":tech_crossbow");
+        icons[5] = register.registerIcon(Neorism.MODID + ":tech_crossbow_enhanced");
         itemIcon = icons[0];
     }
 
@@ -298,7 +322,7 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
         int meta = Math.max(0, Math.min(stack.getItemDamage(), TYPES - 1));
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.crossbow.desc"));
         tooltip.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocalFormatted("tooltip.neorism.crossbow.velocity", VELOCITY[meta]));
-        if (meta == 3) {
+        if (isTech(meta)) {
             int clipAmmo = getClipAmmo(stack);
             boolean heavy = isClipHeavy(stack);
             if (clipAmmo > 0) {
@@ -329,9 +353,11 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
         int meta = Math.max(0, Math.min(stack.getItemDamage(), TYPES - 1));
         switch (meta) {
             case 0: return "weapon_table";
-            case 1: return "master_craftsmanship";
-            case 2: return "double_it";
-            case 3: return "artisan_craftsmanship";
+            case 1: return "double_it";
+            case 2: return "master_craftsmanship";
+            case 3: return "double_it";
+            case 4: return "master_craftsmanship";
+            case 5: return "artisan_craftsmanship";
             default: return null;
         }
     }
