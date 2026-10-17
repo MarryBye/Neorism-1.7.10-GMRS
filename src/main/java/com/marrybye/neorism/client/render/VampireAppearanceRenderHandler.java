@@ -9,6 +9,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -16,7 +18,7 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 
 /**
  * Renders vampire facial features (eyes, glowing eyes, fangs) on the player model.
- * Faithful 1.7.10 backport of TeamLapen's VampirePlayerHeadLayer.
+ * Uses a dedicated 64x64 head model renderer to match 64x64 eye and fang decal sheets.
  */
 @SideOnly(Side.CLIENT)
 public class VampireAppearanceRenderHandler {
@@ -31,6 +33,15 @@ public class VampireAppearanceRenderHandler {
         for (int i = 0; i < FANG_TEXTURES.length; i++) {
             FANG_TEXTURES[i] = new ResourceLocation("neorism", "textures/entity/fangs/fangs" + i + ".png");
         }
+    }
+
+    private final ModelRenderer headModel;
+
+    public VampireAppearanceRenderHandler() {
+        headModel = new ModelRenderer(new ModelBase() {}, 0, 0);
+        headModel.setTextureSize(64, 64);
+        headModel.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.05F);
+        headModel.setRotationPoint(0.0F, 0.0F, 0.0F);
     }
 
     @SubscribeEvent
@@ -52,6 +63,13 @@ public class VampireAppearanceRenderHandler {
         int fangIdx = Math.max(0, Math.min(FANG_TEXTURES.length - 1, fph.getFangType()));
         boolean glowing = fph.hasGlowingEyes();
 
+        headModel.rotateAngleX = event.renderer.modelBipedMain.bipedHead.rotateAngleX;
+        headModel.rotateAngleY = event.renderer.modelBipedMain.bipedHead.rotateAngleY;
+        headModel.rotateAngleZ = event.renderer.modelBipedMain.bipedHead.rotateAngleZ;
+        headModel.rotationPointX = event.renderer.modelBipedMain.bipedHead.rotationPointX;
+        headModel.rotationPointY = event.renderer.modelBipedMain.bipedHead.rotationPointY;
+        headModel.rotationPointZ = event.renderer.modelBipedMain.bipedHead.rotationPointZ;
+
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -65,14 +83,14 @@ public class VampireAppearanceRenderHandler {
         // Render eyes
         if (glowing) {
             GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
         } else {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(EYE_TEXTURES[eyeIdx]);
-        event.renderer.modelBipedMain.bipedHead.render(0.0625F);
+        headModel.render(0.0625F);
 
         // Restore lighting for fangs if eyes were glowing
         if (glowing) {
@@ -87,7 +105,7 @@ public class VampireAppearanceRenderHandler {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(FANG_TEXTURES[fangIdx]);
-        event.renderer.modelBipedMain.bipedHead.render(0.0625F);
+        headModel.render(0.0625F);
 
         GL11.glDepthMask(true);
         GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);

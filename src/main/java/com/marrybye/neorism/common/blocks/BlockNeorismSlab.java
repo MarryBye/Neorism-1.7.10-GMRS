@@ -30,7 +30,9 @@ public class BlockNeorismSlab extends Block {
         setCreativeTab(tab != null ? tab : ModCreativeTabs.tabVampirism);
         setHardness(mat == Material.wood ? 2.0F : 1.5F);
         setResistance(mat == Material.wood ? 5.0F : 10.0F);
-        setStepSound(modelBlock.stepSound);
+        if (modelBlock != null && modelBlock.stepSound != null) {
+            setStepSound(modelBlock.stepSound);
+        }
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         this.useNeighborBrightness = true;
     }
@@ -74,19 +76,28 @@ public class BlockNeorismSlab extends Block {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister register) {
-        String tex = getTextureName();
-        if (tex == null && modelBlock != null) {
-            tex = modelBlock.getItemIconName();
-        }
-        if (tex != null) {
-            this.blockIcon = register.registerIcon(tex);
-        }
+        // Do NOT register icons here. Slabs delegate getIcon to modelBlock.
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        if (this.blockIcon != null) return this.blockIcon;
         return modelBlock != null ? modelBlock.getIcon(side, 0) : super.getIcon(side, meta);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        return modelBlock != null ? modelBlock.getIcon(world, x, y, z, side) : getIcon(side, world.getBlockMetadata(x, y, z));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getFallbackParticleIcon() {
+        return modelBlock != null ? modelBlock.getIcon(0, 0) : null;
+    }
+
+    @Override
+    public String getItemIconName() {
+        return modelBlock != null ? modelBlock.getItemIconName() : super.getItemIconName();
     }
 }

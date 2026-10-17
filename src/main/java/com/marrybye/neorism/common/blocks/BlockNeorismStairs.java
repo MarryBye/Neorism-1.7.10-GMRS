@@ -9,6 +9,7 @@ import net.minecraft.block.BlockStairs;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 public class BlockNeorismStairs extends BlockStairs {
 
@@ -30,19 +31,29 @@ public class BlockNeorismStairs extends BlockStairs {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(IIconRegister register) {
-        String tex = getTextureName();
-        if (tex == null && modelBlockRef != null) {
-            tex = modelBlockRef.getItemIconName();
-        }
-        if (tex != null) {
-            this.blockIcon = register.registerIcon(tex);
-        }
+        // Do NOT register MISSING_ICON_BLOCK_ here.
+        // In 1.7.10 vanilla BlockStairs has an empty registerBlockIcons and delegates getIcon to modelBlock.
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        if (this.blockIcon != null) return this.blockIcon;
         return modelBlockRef != null ? modelBlockRef.getIcon(side, modelMetaRef) : super.getIcon(side, meta);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        return modelBlockRef != null ? modelBlockRef.getIcon(world, x, y, z, side) : super.getIcon(world, x, y, z, side);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getFallbackParticleIcon() {
+        return modelBlockRef != null ? modelBlockRef.getIcon(0, modelMetaRef) : null;
+    }
+
+    @Override
+    public String getItemIconName() {
+        return modelBlockRef != null ? modelBlockRef.getItemIconName() : super.getItemIconName();
     }
 }

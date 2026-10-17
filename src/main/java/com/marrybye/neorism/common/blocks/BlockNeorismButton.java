@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockButtonWood;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 public class BlockNeorismButton extends BlockButtonWood {
 
@@ -28,19 +29,28 @@ public class BlockNeorismButton extends BlockButtonWood {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister register) {
-        String tex = getTextureName();
-        if (tex == null && modelBlock != null) {
-            tex = modelBlock.getItemIconName();
-        }
-        if (tex != null) {
-            this.blockIcon = register.registerIcon(tex);
-        }
+        // Do NOT register icons here. Buttons delegate getIcon to modelBlock.
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        if (this.blockIcon != null) return this.blockIcon;
         return modelBlock != null ? modelBlock.getIcon(side, 0) : super.getIcon(side, meta);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        return modelBlock != null ? modelBlock.getIcon(world, x, y, z, side) : getIcon(side, world.getBlockMetadata(x, y, z));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getFallbackParticleIcon() {
+        return modelBlock != null ? modelBlock.getIcon(0, 0) : null;
+    }
+
+    @Override
+    public String getItemIconName() {
+        return modelBlock != null ? modelBlock.getItemIconName() : super.getItemIconName();
     }
 }
