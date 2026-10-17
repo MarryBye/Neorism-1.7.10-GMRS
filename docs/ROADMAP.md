@@ -213,17 +213,21 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
   - [x] `Heartseeker` (Iron, Diamond, Netherite equivalent): Vampire slaying sword, bonus damage against unholy creatures.
   - [x] `Heartstriker`: Life-stealing blade.
   - [x] Wooden & Reinforced Stakes.
-- [x] **7.3. Hunter Crossbow Arsenal**
-  - [x] `BasicCrossbow`, `DoubleCrossbow` (dual shot), `EnhancedCrossbow`, `TechCrossbow` (rapid-fire magazine).
-  - [x] Custom Projectiles: Arrows, Quarrels, Explosive Quarrels, Teleport Quarrels, Holy Water Quarrels.
+- [x] **7.3. Hunter Crossbow Arsenal, Clips & Weapon Oils**
+  - [x] `BasicCrossbow`, `DoubleCrossbow` (dual shot), `EnhancedCrossbow`, `TechCrossbow` (rapid-fire semi-automatic magazine).
+  - [x] `QuarrelClip` magazine (16 ammo capacity, standard & heavy variants) with automatic inventory reload.
+  - [x] `ItemOilBottle` Alchemical Weapon Oils (8 types, 32 charges per bottle, on-hit combat procs and tooltips).
+  - [x] Custom Projectiles: Arrows, Quarrels, Heavy Quarrels.
 - [x] **7.4. Armor & Wearables**
   - [x] Vampire Cloak & Vampire Robes (with custom Cape/Cloak renderer).
   - [x] Vampire Crown & Vampire Lord Armor.
   - [x] Hunter Hat, Hunter Coat, Hunter Trousers, Hunter Boots (with movement speed attribute bonuses).
   - [x] Umbrella (handheld sun shade preventing daylight burns).
+  - [x] Faction equipment restrictions: debuffs and sears players wearing enemy faction armors.
 - [x] **7.5. Vampire Books & Lore**
   - [x] Vampire Book items (Tiers 1 to 9).
   - [x] Guidebook integration.
+
 
 ---
 
@@ -255,10 +259,11 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
   - [x] `TileEntityBloodContainer`: Stores up to 16,000 mB of blood. Fluid capability / 1.7.10 FluidHandler.
   - [x] Visual blood fluid level rendering inside glass tank.
 - [x] **8.4. Coffin System**
-  - [x] `BlockCoffin` (2-block multiblock, head & foot).
-  - [x] TileEntity & TESR model: lid open/close animation.
+  - [x] `BlockCoffin` (2-block multiblock, head & foot, `renderType = -1`).
+  - [x] `TileEntityCoffinRenderer` & `ModelCoffin`: faithful 3D model with dual opening animated lids.
+  - [x] `ItemCoffinRenderer`: 3D item rendering in inventory, in-hand, and as dropped entity.
   - [x] Allows vampire players to sleep through the sunny day and wake at dusk.
-  - [x] Sets vampire spawn point.
+  - [x] Sets vampire spawn point and heals vampire on rest.
 - [x] **8.5. Environmental & Utility Blocks**
   - [x] Fog Diffuser (generates dark fog field preventing sun damage).
   - [x] Garlic Diffuser (cleanses area from vampires).
