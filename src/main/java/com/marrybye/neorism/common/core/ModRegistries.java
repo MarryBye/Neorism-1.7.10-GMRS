@@ -17,8 +17,8 @@ public class ModRegistries {
         ModLogger.debug("Beginning Neorism preInit registries");
         ModPotions.init();
         ModFluids.init();
-        ModItems.init();
         ModBlocks.init();
+        ModItems.init();
         ModEntities.init();
         ModBiomes.init();
         PacketHandler.init();

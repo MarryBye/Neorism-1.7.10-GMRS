@@ -19,7 +19,9 @@ public class ItemModDoor extends Item {
     public ItemModDoor(String name, BlockModDoor doorBlock) {
         super();
         this.doorBlock = doorBlock;
-        this.doorBlock.setDoorItem(this);
+        if (this.doorBlock != null) {
+            this.doorBlock.setDoorItem(this);
+        }
         setUnlocalizedName("neorism." + name);
         setTextureName(Neorism.MODID + ":" + name);
         setCreativeTab(ModCreativeTabs.tabVampirism);
