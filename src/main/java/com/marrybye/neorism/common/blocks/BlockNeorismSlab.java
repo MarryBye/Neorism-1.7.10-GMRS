@@ -9,6 +9,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
@@ -18,14 +19,14 @@ import net.minecraft.world.World;
 
 public class BlockNeorismSlab extends Block {
 
-    private final Block modelBlock;
+    private final String textureName;
 
-    public BlockNeorismSlab(String name, Block modelBlock, Material mat, CreativeTabs tab) {
+    public BlockNeorismSlab(String name, Block modelBlock, String textureName, Material mat, CreativeTabs tab) {
         super(mat);
-        this.modelBlock = modelBlock;
+        this.textureName = textureName;
         setBlockName("neorism." + name);
-        if (modelBlock != null && modelBlock.getItemIconName() != null) {
-            setBlockTextureName(modelBlock.getItemIconName());
+        if (textureName != null && !textureName.isEmpty()) {
+            setBlockTextureName(Neorism.MODID + ":" + textureName);
         }
         setCreativeTab(tab != null ? tab : ModCreativeTabs.tabVampirism);
         setHardness(mat == Material.wood ? 2.0F : 1.5F);
@@ -35,6 +36,10 @@ public class BlockNeorismSlab extends Block {
         }
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         this.useNeighborBrightness = true;
+    }
+
+    public BlockNeorismSlab(String name, Block modelBlock, Material mat, CreativeTabs tab) {
+        this(name, modelBlock, name, mat, tab);
     }
 
     @Override
@@ -75,45 +80,31 @@ public class BlockNeorismSlab extends Block {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister register) {
-        String tex = getTextureName();
-        if (tex != null && !tex.startsWith("MISSING_ICON_BLOCK_")) {
-            this.blockIcon = register.registerIcon(tex);
+    public void registerBlockIcons(IIconRegister register) {
+        if (textureName != null && !textureName.isEmpty()) {
+            this.blockIcon = register.registerIcon(Neorism.MODID + ":" + textureName);
         }
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        if (modelBlock != null) {
-            return modelBlock.getIcon(side, 0);
-        }
         return this.blockIcon != null ? this.blockIcon : super.getIcon(side, meta);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        if (modelBlock != null) {
-            return modelBlock.getIcon(side, 0);
-        }
-        return getIcon(side, world.getBlockMetadata(x, y, z));
+        return this.blockIcon != null ? this.blockIcon : super.getIcon(world, x, y, z, side);
     }
 
     @SideOnly(Side.CLIENT)
     public IIcon getFallbackParticleIcon() {
-        return modelBlock != null ? modelBlock.getIcon(0, 0) : this.blockIcon;
+        return this.blockIcon;
     }
 
     @Override
     public String getItemIconName() {
-        if (modelBlock != null) {
-            String name = modelBlock.getItemIconName();
-            if (name != null && !name.startsWith("MISSING_ICON_BLOCK_")) {
-                return name;
-            }
-        }
-        String own = super.getItemIconName();
-        return (own != null && !own.startsWith("MISSING_ICON_BLOCK_")) ? own : null;
+        return (textureName != null && !textureName.isEmpty()) ? (Neorism.MODID + ":" + textureName) : super.getItemIconName();
     }
 }

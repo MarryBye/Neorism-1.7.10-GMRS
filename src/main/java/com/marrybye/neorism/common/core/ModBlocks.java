@@ -186,14 +186,14 @@ public class ModBlocks {
         strippedDarkSpruceWood = register("stripped_dark_spruce_wood", new BlockNeorismLog("stripped_dark_spruce_wood", "stripped_dark_spruce_log", "stripped_dark_spruce_log", ModCreativeTabs.tabVampirism));
         darkSpruceLeaves = register("dark_spruce_leaves", new BlockDarkSpruceLeaves());
         darkSpruceSapling = register("dark_spruce_sapling", new BlockDarkSpruceSapling());
-        darkSpruceStairs = register("dark_spruce_stairs", new BlockNeorismStairs("dark_spruce_stairs", darkSprucePlanks, 0, ModCreativeTabs.tabVampirism));
-        darkSpruceSlab = register("dark_spruce_slab", new BlockNeorismSlab("dark_spruce_slab", darkSprucePlanks, Material.wood, ModCreativeTabs.tabVampirism));
+        darkSpruceStairs = register("dark_spruce_stairs", new BlockNeorismStairs("dark_spruce_stairs", darkSprucePlanks, "dark_spruce_planks", 0, ModCreativeTabs.tabVampirism));
+        darkSpruceSlab = register("dark_spruce_slab", new BlockNeorismSlab("dark_spruce_slab", darkSprucePlanks, "dark_spruce_planks", Material.wood, ModCreativeTabs.tabVampirism));
         darkSpruceFence = register("dark_spruce_fence", new BlockNeorismFence("dark_spruce_fence", "dark_spruce_planks", Material.wood, ModCreativeTabs.tabVampirism));
-        darkSpruceFenceGate = register("dark_spruce_fence_gate", new BlockNeorismFenceGate("dark_spruce_fence_gate", darkSprucePlanks, ModCreativeTabs.tabVampirism));
+        darkSpruceFenceGate = register("dark_spruce_fence_gate", new BlockNeorismFenceGate("dark_spruce_fence_gate", darkSprucePlanks, "dark_spruce_planks", ModCreativeTabs.tabVampirism));
         darkSpruceDoor = register("dark_spruce_door", new BlockModDoor("dark_spruce_door", "dark_spruce_door"));
         darkSpruceTrapdoor = register("dark_spruce_trapdoor", new BlockNeorismTrapDoor("dark_spruce_trapdoor", "dark_spruce_trapdoor", Material.wood, ModCreativeTabs.tabVampirism));
         darkSprucePressurePlate = register("dark_spruce_pressure_plate", new BlockNeorismPressurePlate("dark_spruce_pressure_plate", "dark_spruce_planks", ModCreativeTabs.tabVampirism));
-        darkSpruceButton = register("dark_spruce_button", new BlockNeorismButton("dark_spruce_button", darkSprucePlanks, ModCreativeTabs.tabVampirism));
+        darkSpruceButton = register("dark_spruce_button", new BlockNeorismButton("dark_spruce_button", darkSprucePlanks, "dark_spruce_planks", ModCreativeTabs.tabVampirism));
 
         cursedSpruceSapling = register("cursed_spruce_sapling", new BlockDarkSpruceSapling());
         cursedSprucePlanks = register("cursed_spruce_planks", new BlockNeorism("cursed_spruce_planks", Material.wood).setHardness(2.0F));
@@ -201,14 +201,14 @@ public class ModBlocks {
         cursedSpruceWood = register("cursed_spruce_wood", new BlockNeorismLog("cursed_spruce_wood", "cursed_spruce_log", "cursed_spruce_log", ModCreativeTabs.tabVampirism));
         strippedCursedSpruceLog = register("stripped_cursed_spruce_log", new BlockNeorismLog("stripped_cursed_spruce_log", "stripped_cursed_spruce_log", "stripped_cursed_spruce_log_top", ModCreativeTabs.tabVampirism));
         strippedCursedSpruceWood = register("stripped_cursed_spruce_wood", new BlockNeorismLog("stripped_cursed_spruce_wood", "stripped_cursed_spruce_log", "stripped_cursed_spruce_log", ModCreativeTabs.tabVampirism));
-        cursedSpruceStairs = register("cursed_spruce_stairs", new BlockNeorismStairs("cursed_spruce_stairs", cursedSprucePlanks, 0, ModCreativeTabs.tabVampirism));
-        cursedSpruceSlab = register("cursed_spruce_slab", new BlockNeorismSlab("cursed_spruce_slab", cursedSprucePlanks, Material.wood, ModCreativeTabs.tabVampirism));
+        cursedSpruceStairs = register("cursed_spruce_stairs", new BlockNeorismStairs("cursed_spruce_stairs", cursedSprucePlanks, "cursed_spruce_planks", 0, ModCreativeTabs.tabVampirism));
+        cursedSpruceSlab = register("cursed_spruce_slab", new BlockNeorismSlab("cursed_spruce_slab", cursedSprucePlanks, "cursed_spruce_planks", Material.wood, ModCreativeTabs.tabVampirism));
         cursedSpruceFence = register("cursed_spruce_fence", new BlockNeorismFence("cursed_spruce_fence", "cursed_spruce_planks", Material.wood, ModCreativeTabs.tabVampirism));
-        cursedSpruceFenceGate = register("cursed_spruce_fence_gate", new BlockNeorismFenceGate("cursed_spruce_fence_gate", cursedSprucePlanks, ModCreativeTabs.tabVampirism));
+        cursedSpruceFenceGate = register("cursed_spruce_fence_gate", new BlockNeorismFenceGate("cursed_spruce_fence_gate", cursedSprucePlanks, "cursed_spruce_planks", ModCreativeTabs.tabVampirism));
         cursedSpruceDoor = register("cursed_spruce_door", new BlockModDoor("cursed_spruce_door", "cursed_spruce_door"));
         cursedSpruceTrapdoor = register("cursed_spruce_trapdoor", new BlockNeorismTrapDoor("cursed_spruce_trapdoor", "cursed_spruce_trapdoor", Material.wood, ModCreativeTabs.tabVampirism));
         cursedSprucePressurePlate = register("cursed_spruce_pressure_plate", new BlockNeorismPressurePlate("cursed_spruce_pressure_plate", "cursed_spruce_planks", ModCreativeTabs.tabVampirism));
-        cursedSpruceButton = register("cursed_spruce_button", new BlockNeorismButton("cursed_spruce_button", cursedSprucePlanks, ModCreativeTabs.tabVampirism));
+        cursedSpruceButton = register("cursed_spruce_button", new BlockNeorismButton("cursed_spruce_button", cursedSprucePlanks, "cursed_spruce_planks", ModCreativeTabs.tabVampirism));
 
         // Category 1: Dark Stone & Purple Stone
         darkStone = register("dark_stone", new com.marrybye.neorism.common.blocks.BlockDarkStone("dark_stone"));
@@ -220,30 +220,30 @@ public class ModBlocks {
         darkStoneTiles = register("dark_stone_tiles", new com.marrybye.neorism.common.blocks.BlockDarkStone("dark_stone_tiles"));
         crackedDarkStoneTiles = register("cracked_dark_stone_tiles", new com.marrybye.neorism.common.blocks.BlockDarkStone("cracked_dark_stone_tiles"));
 
-        darkStoneStairs = register("dark_stone_stairs", new BlockNeorismStairs("dark_stone_stairs", darkStone, 0, ModCreativeTabs.tabVampirism));
-        darkStoneSlab = register("dark_stone_slab", new BlockNeorismSlab("dark_stone_slab", darkStone, Material.rock, ModCreativeTabs.tabVampirism));
-        darkStoneWall = register("dark_stone_wall", new BlockNeorismWall("dark_stone_wall", darkStone, ModCreativeTabs.tabVampirism));
+        darkStoneStairs = register("dark_stone_stairs", new BlockNeorismStairs("dark_stone_stairs", darkStone, "dark_stone", 0, ModCreativeTabs.tabVampirism));
+        darkStoneSlab = register("dark_stone_slab", new BlockNeorismSlab("dark_stone_slab", darkStone, "dark_stone", Material.rock, ModCreativeTabs.tabVampirism));
+        darkStoneWall = register("dark_stone_wall", new BlockNeorismWall("dark_stone_wall", darkStone, "dark_stone", ModCreativeTabs.tabVampirism));
 
-        darkStoneBricksStairs = register("dark_stone_brick_stairs", new BlockNeorismStairs("dark_stone_brick_stairs", darkStoneBricks, 0, ModCreativeTabs.tabVampirism));
-        darkStoneBricksSlab = register("dark_stone_brick_slab", new BlockNeorismSlab("dark_stone_brick_slab", darkStoneBricks, Material.rock, ModCreativeTabs.tabVampirism));
-        darkStoneBricksWall = register("dark_stone_brick_wall", new BlockNeorismWall("dark_stone_brick_wall", darkStoneBricks, ModCreativeTabs.tabVampirism));
+        darkStoneBricksStairs = register("dark_stone_brick_stairs", new BlockNeorismStairs("dark_stone_brick_stairs", darkStoneBricks, "dark_stone_bricks", 0, ModCreativeTabs.tabVampirism));
+        darkStoneBricksSlab = register("dark_stone_brick_slab", new BlockNeorismSlab("dark_stone_brick_slab", darkStoneBricks, "dark_stone_bricks", Material.rock, ModCreativeTabs.tabVampirism));
+        darkStoneBricksWall = register("dark_stone_brick_wall", new BlockNeorismWall("dark_stone_brick_wall", darkStoneBricks, "dark_stone_bricks", ModCreativeTabs.tabVampirism));
 
-        cobbledDarkStoneStairs = register("cobbled_dark_stone_stairs", new BlockNeorismStairs("cobbled_dark_stone_stairs", cobbledDarkStone, 0, ModCreativeTabs.tabVampirism));
-        cobbledDarkStoneSlab = register("cobbled_dark_stone_slab", new BlockNeorismSlab("cobbled_dark_stone_slab", cobbledDarkStone, Material.rock, ModCreativeTabs.tabVampirism));
-        cobbledDarkStoneWall = register("cobbled_dark_stone_wall", new BlockNeorismWall("cobbled_dark_stone_wall", cobbledDarkStone, ModCreativeTabs.tabVampirism));
+        cobbledDarkStoneStairs = register("cobbled_dark_stone_stairs", new BlockNeorismStairs("cobbled_dark_stone_stairs", cobbledDarkStone, "cobbled_dark_stone", 0, ModCreativeTabs.tabVampirism));
+        cobbledDarkStoneSlab = register("cobbled_dark_stone_slab", new BlockNeorismSlab("cobbled_dark_stone_slab", cobbledDarkStone, "cobbled_dark_stone", Material.rock, ModCreativeTabs.tabVampirism));
+        cobbledDarkStoneWall = register("cobbled_dark_stone_wall", new BlockNeorismWall("cobbled_dark_stone_wall", cobbledDarkStone, "cobbled_dark_stone", ModCreativeTabs.tabVampirism));
 
-        polishedDarkStoneStairs = register("polished_dark_stone_stairs", new BlockNeorismStairs("polished_dark_stone_stairs", polishedDarkStone, 0, ModCreativeTabs.tabVampirism));
-        polishedDarkStoneSlab = register("polished_dark_stone_slab", new BlockNeorismSlab("polished_dark_stone_slab", polishedDarkStone, Material.rock, ModCreativeTabs.tabVampirism));
-        polishedDarkStoneWall = register("polished_dark_stone_wall", new BlockNeorismWall("polished_dark_stone_wall", polishedDarkStone, ModCreativeTabs.tabVampirism));
+        polishedDarkStoneStairs = register("polished_dark_stone_stairs", new BlockNeorismStairs("polished_dark_stone_stairs", polishedDarkStone, "polished_dark_stone", 0, ModCreativeTabs.tabVampirism));
+        polishedDarkStoneSlab = register("polished_dark_stone_slab", new BlockNeorismSlab("polished_dark_stone_slab", polishedDarkStone, "polished_dark_stone", Material.rock, ModCreativeTabs.tabVampirism));
+        polishedDarkStoneWall = register("polished_dark_stone_wall", new BlockNeorismWall("polished_dark_stone_wall", polishedDarkStone, "polished_dark_stone", ModCreativeTabs.tabVampirism));
 
         purpleStoneBricks = register("purple_stone_bricks", new com.marrybye.neorism.common.blocks.BlockDarkStone("purple_stone_bricks"));
         purpleStoneTiles = register("purple_stone_tiles", new com.marrybye.neorism.common.blocks.BlockDarkStone("purple_stone_tiles"));
-        purpleStoneBricksStairs = register("purple_stone_brick_stairs", new BlockNeorismStairs("purple_stone_brick_stairs", purpleStoneBricks, 0, ModCreativeTabs.tabVampirism));
-        purpleStoneBricksSlab = register("purple_stone_brick_slab", new BlockNeorismSlab("purple_stone_brick_slab", purpleStoneBricks, Material.rock, ModCreativeTabs.tabVampirism));
-        purpleStoneBricksWall = register("purple_stone_brick_wall", new BlockNeorismWall("purple_stone_brick_wall", purpleStoneBricks, ModCreativeTabs.tabVampirism));
-        purpleStoneTilesStairs = register("purple_stone_tiles_stairs", new BlockNeorismStairs("purple_stone_tiles_stairs", purpleStoneTiles, 0, ModCreativeTabs.tabVampirism));
-        purpleStoneTilesSlab = register("purple_stone_tiles_slab", new BlockNeorismSlab("purple_stone_tiles_slab", purpleStoneTiles, Material.rock, ModCreativeTabs.tabVampirism));
-        purpleStoneTilesWall = register("purple_stone_tiles_wall", new BlockNeorismWall("purple_stone_tiles_wall", purpleStoneTiles, ModCreativeTabs.tabVampirism));
+        purpleStoneBricksStairs = register("purple_stone_brick_stairs", new BlockNeorismStairs("purple_stone_brick_stairs", purpleStoneBricks, "purple_stone_bricks", 0, ModCreativeTabs.tabVampirism));
+        purpleStoneBricksSlab = register("purple_stone_brick_slab", new BlockNeorismSlab("purple_stone_brick_slab", purpleStoneBricks, "purple_stone_bricks", Material.rock, ModCreativeTabs.tabVampirism));
+        purpleStoneBricksWall = register("purple_stone_brick_wall", new BlockNeorismWall("purple_stone_brick_wall", purpleStoneBricks, "purple_stone_bricks", ModCreativeTabs.tabVampirism));
+        purpleStoneTilesStairs = register("purple_stone_tiles_stairs", new BlockNeorismStairs("purple_stone_tiles_stairs", purpleStoneTiles, "purple_stone_tiles", 0, ModCreativeTabs.tabVampirism));
+        purpleStoneTilesSlab = register("purple_stone_tiles_slab", new BlockNeorismSlab("purple_stone_tiles_slab", purpleStoneTiles, "purple_stone_tiles", Material.rock, ModCreativeTabs.tabVampirism));
+        purpleStoneTilesWall = register("purple_stone_tiles_wall", new BlockNeorismWall("purple_stone_tiles_wall", purpleStoneTiles, "purple_stone_tiles", ModCreativeTabs.tabVampirism));
 
         // Category 1: Blood Infused Iron Blocks & Decor
         bloodInfusedIronBlock = register("blood_infused_iron_block", new BlockNeorism("blood_infused_iron_block", Material.iron).setHardness(5.0F));

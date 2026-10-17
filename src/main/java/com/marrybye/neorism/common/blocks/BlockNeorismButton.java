@@ -1,72 +1,64 @@
 package com.marrybye.neorism.common.blocks;
 
+import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButtonWood;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 public class BlockNeorismButton extends BlockButtonWood {
 
-    private final Block modelBlock;
+    private final String textureName;
 
-    public BlockNeorismButton(String name, Block modelBlock, CreativeTabs tab) {
+    public BlockNeorismButton(String name, Block modelBlock, String textureName, CreativeTabs tab) {
         super();
-        this.modelBlock = modelBlock;
+        this.textureName = textureName;
         setBlockName("neorism." + name);
-        if (modelBlock != null && modelBlock.getItemIconName() != null) {
-            setBlockTextureName(modelBlock.getItemIconName());
+        if (textureName != null && !textureName.isEmpty()) {
+            setBlockTextureName(Neorism.MODID + ":" + textureName);
         }
         setCreativeTab(tab != null ? tab : ModCreativeTabs.tabVampirism);
         setHardness(0.5F);
         setStepSound(soundTypeWood);
     }
 
+    public BlockNeorismButton(String name, Block modelBlock, CreativeTabs tab) {
+        this(name, modelBlock, name, tab);
+    }
+
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister register) {
-        String tex = getTextureName();
-        if (tex != null && !tex.startsWith("MISSING_ICON_BLOCK_")) {
-            this.blockIcon = register.registerIcon(tex);
+    public void registerBlockIcons(IIconRegister register) {
+        if (textureName != null && !textureName.isEmpty()) {
+            this.blockIcon = register.registerIcon(Neorism.MODID + ":" + textureName);
         }
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        if (modelBlock != null) {
-            return modelBlock.getIcon(side, 0);
-        }
         return this.blockIcon != null ? this.blockIcon : super.getIcon(side, meta);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        if (modelBlock != null) {
-            return modelBlock.getIcon(side, 0);
-        }
-        return getIcon(side, world.getBlockMetadata(x, y, z));
+        return this.blockIcon != null ? this.blockIcon : super.getIcon(world, x, y, z, side);
     }
 
     @SideOnly(Side.CLIENT)
     public IIcon getFallbackParticleIcon() {
-        return modelBlock != null ? modelBlock.getIcon(0, 0) : this.blockIcon;
+        return this.blockIcon;
     }
 
     @Override
     public String getItemIconName() {
-        if (modelBlock != null) {
-            String name = modelBlock.getItemIconName();
-            if (name != null && !name.startsWith("MISSING_ICON_BLOCK_")) {
-                return name;
-            }
-        }
-        String own = super.getItemIconName();
-        return (own != null && !own.startsWith("MISSING_ICON_BLOCK_")) ? own : null;
+        return (textureName != null && !textureName.isEmpty()) ? (Neorism.MODID + ":" + textureName) : super.getItemIconName();
     }
 }
