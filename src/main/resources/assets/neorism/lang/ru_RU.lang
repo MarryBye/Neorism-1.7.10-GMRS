@@ -5816,3 +5816,40 @@ item.neorism.dark_sprice_sign.name=Табличка из тёмной ели
 item.neorism.cursed_sprice_sign.name=Табличка из проклятой ели
 item.neorism.dark_sprice_boat.name=Лодка из тёмной ели
 item.neorism.cursed_sprice_boat.name=Лодка из проклятой ели
+item.neorism.dark_sprice_hanging_sign.name=Подвесная табличка из тёмной ели
+item.neorism.cursed_sprice_hanging_sign.name=Подвесная табличка из проклятой ели
+tile.neorism.dark_sprice_hanging_sign.name=Подвесная табличка из тёмной ели
+tile.neorism.cursed_sprice_hanging_sign.name=Подвесная табличка из проклятой ели
+tile.neorism.dark_sprice_sign.name=Табличка из тёмной ели
+tile.neorism.cursed_sprice_sign.name=Табличка из проклятой ели
+
+# Прямые названия лодок
+Dark Spruce Boat.name=Лодка из тёмной ели
+Cursed Spruce Boat.name=Лодка из проклятой ели
+Dark Spruce Boat with Chest.name=Лодка из тёмной ели с сундуком
+Cursed Spruce Boat with Chest.name=Лодка из проклятой ели с сундуком
+
+# Эффекты зелий
+potion.sanguinare=Сангвинаре Вампирис
+potion.sanguinare.postfix=Зелье Сангвинаре Вампирис
+potion.sunscreen=Солнцезащита
+potion.sunscreen.postfix=Зелье солнцезащиты
+potion.garlic=Чеснок
+potion.garlic.postfix=Зелье чеснока
+potion.no_blood=Малокровие
+potion.no_blood.postfix=Зелье малокровия
+potion.freeze=Заморозка
+potion.freeze.postfix=Зелье заморозки
+potion.bleeding=Кровотечение
+potion.bleeding.postfix=Зелье кровотечения
+potion.oblivion=Забвение
+potion.oblivion.postfix=Зелье забвения
+
+# Действия маскировки и сообщения
+action.neorism.disguise_hunter=Маскировка
+action.neorism.disguise_vampire=Маскировка
+chat.neorism.disguise_activated=Маскировка активирована.
+chat.neorism.disguise_deactivated=Маскировка отключена.
+chat.neorism.hunter_awareness_detected=Обнаружено вампирских угроз поблизости: %s.
+chat.neorism.skills_reset=Все очки навыков были сброшены!
+

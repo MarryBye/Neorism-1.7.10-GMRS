@@ -265,7 +265,7 @@ public class ModBlocks {
         batCage = register("bat_cage", new BlockNeorismDecor("bat_cage", "bat_cage", Material.iron, ModCreativeTabs.tabVampirism, 0.15F, 0.0F, 0.15F, 0.85F, 0.9F, 0.85F, true));
         ancientTrophy = register("mother_trophy", new BlockNeorismDecor("mother_trophy", "vulnerable_remains", Material.rock, ModCreativeTabs.tabVampirism, 0.2F, 0.0F, 0.2F, 0.8F, 0.8F, 0.8F, false).setLightLevel(0.1F));
         velmorraAltar = register("velmorra_altar", new BlockNeorismDecor("velmorra_altar", "velmorra_altar_bloody", Material.rock, ModCreativeTabs.tabVampirism, 0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F, true));
-        tent = register("tent", new com.marrybye.neorism.common.blocks.BlockTent());
+        tent = registerBlockOnly("tent", new com.marrybye.neorism.common.blocks.BlockTent());
 
         // Category 2: Hunter Functional Blocks & 16 Coffins
         hunterTable = register("hunter_table", new com.marrybye.neorism.common.blocks.BlockHunterTable());
@@ -320,6 +320,11 @@ public class ModBlocks {
 
     public static <T extends Block> T register(String name, T block) {
         GameRegistry.registerBlock(block, name);
+        return block;
+    }
+
+    public static <T extends Block> T registerBlockOnly(String name, T block) {
+        GameRegistry.registerBlock(block, null, name);
         return block;
     }
 }

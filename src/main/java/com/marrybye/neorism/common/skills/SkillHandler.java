@@ -178,42 +178,92 @@ public class SkillHandler implements IExtendedEntityProperties {
 
     public boolean isActionUnlocked(String actionId) {
         if (actionId == null || actionId.isEmpty()) return false;
-        if ("night_vision".equals(actionId)) return Helper.isVampire(player);
-        if ("regen".equals(actionId) || "vampire_regen".equals(actionId)) {
-            return Helper.isVampire(player) && (Helper.getLevel(player) >= 2 || isSkillUnlocked("vampire_regen") || isSkillUnlocked("vampire_regeneration"));
-        }
-        if ("bat".equals(actionId) || "bat_form".equals(actionId)) {
-            return Helper.isVampire(player) && (isSkillUnlocked("bat_form") || isSkillUnlocked("fledgling") || isSkillUnlocked("vampire_disguise") || Helper.getLevel(player) >= 6);
-        }
-        if ("vampire_rage".equals(actionId)) {
-            return Helper.isVampire(player) && (isSkillUnlocked("vampire_rage") || Helper.getLevel(player) >= 4);
-        }
-        if ("teleport".equals(actionId)) {
-            return Helper.isVampire(player) && (isSkillUnlocked("teleport") || Helper.getLevel(player) >= 8);
-        }
-        if ("freeze".equals(actionId)) {
-            return Helper.isVampire(player) && (isSkillUnlocked("freeze") || Helper.getLevel(player) >= 10);
-        }
-        if ("dark_blood_projectile".equals(actionId)) {
-            return Helper.isVampire(player) && (isSkillUnlocked("dark_blood_projectile") || Helper.getLevel(player) >= 5);
-        }
-        if ("sunscreen".equals(actionId)) {
-            return Helper.isVampire(player) && (isSkillUnlocked("sunscreen") || Helper.getLevel(player) >= 7);
-        }
-        if ("invisibility".equals(actionId) || "vampire_invisibility".equals(actionId)) {
-            return Helper.isVampire(player) && (isSkillUnlocked("invisibility") || isSkillUnlocked("vampire_invisibility") || Helper.getLevel(player) >= 9);
-        }
-        if ("summon_bat".equals(actionId) || "summon_bats".equals(actionId)) {
-            return Helper.isVampire(player) && (isSkillUnlocked("summon_bats") || isSkillUnlocked("summon_bat") || Helper.getLevel(player) >= 11);
-        }
-        if ("awareness_hunter".equals(actionId) || "hunter_awareness".equals(actionId)) {
-            return Helper.isHunter(player) && (isSkillUnlocked("hunter_awareness") || isSkillUnlocked("awareness_hunter") || Helper.getLevel(player) >= 2);
-        }
-        if ("potion_resistance_hunter".equals(actionId) || "potion_resistance".equals(actionId)) {
-            return Helper.isHunter(player) && (isSkillUnlocked("potion_resistance") || isSkillUnlocked("potion_resistance_hunter") || Helper.getLevel(player) >= 4);
+
+        // Canonical: Night vision is innate for vampires
+        if ("night_vision".equals(actionId)) {
+            return Helper.isVampire(player);
         }
 
-        return isSkillUnlocked(actionId);
+        // Vampire actions check
+        if (isVampireAction(actionId)) {
+            if (!Helper.isVampire(player)) return false;
+            if ("regen".equals(actionId) || "vampire_regen".equals(actionId)) {
+                return isSkillUnlocked("vampire_regen") || isSkillUnlocked("vampire_regeneration");
+            }
+            if ("bat".equals(actionId) || "bat_form".equals(actionId)) {
+                return isSkillUnlocked("no_longer_fledgling") || isSkillUnlocked("fledgling") || isSkillUnlocked("bat") || isSkillUnlocked("bat_form");
+            }
+            if ("disguise_vampire".equals(actionId) || "vampire_disguise".equals(actionId)) {
+                return isSkillUnlocked("vampire_disguise") || isSkillUnlocked("disguise_vampire");
+            }
+            if ("invisibility".equals(actionId) || "vampire_invisibility".equals(actionId)) {
+                return isSkillUnlocked("vampire_invisibility") || isSkillUnlocked("invisibility");
+            }
+            if ("summon_bats".equals(actionId) || "summon_bat".equals(actionId)) {
+                return isSkillUnlocked("summon_bats") || isSkillUnlocked("summon_bat");
+            }
+            return isSkillUnlocked(actionId);
+        }
+
+        // Hunter actions check
+        if (isHunterAction(actionId)) {
+            if (!Helper.isHunter(player)) return false;
+            if ("awareness_hunter".equals(actionId) || "hunter_awareness".equals(actionId)) {
+                return isSkillUnlocked("awareness_hunter") || isSkillUnlocked("hunter_awareness");
+            }
+            if ("potion_resistance_hunter".equals(actionId) || "potion_resistance".equals(actionId)) {
+                return isSkillUnlocked("potion_resistance_hunter") || isSkillUnlocked("potion_resistance");
+            }
+            if ("disguise_hunter".equals(actionId) || "hunter_disguise".equals(actionId)) {
+                return isSkillUnlocked("hunter_disguise") || isSkillUnlocked("disguise_hunter");
+            }
+            return isSkillUnlocked(actionId);
+        }
+
+        return false;
+    }
+
+    public static boolean isVampireAction(String actionId) {
+        if (actionId == null) return false;
+        switch (actionId) {
+            case "night_vision":
+            case "regen":
+            case "vampire_regen":
+            case "vampire_rage":
+            case "bat":
+            case "bat_form":
+            case "teleport":
+            case "freeze":
+            case "dark_blood_projectile":
+            case "sunscreen":
+            case "invisibility":
+            case "vampire_invisibility":
+            case "summon_bat":
+            case "summon_bats":
+            case "blood_vision":
+            case "disguise_vampire":
+            case "vampire_disguise":
+            case "half_invulnerable":
+            case "hissing":
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isHunterAction(String actionId) {
+        if (actionId == null) return false;
+        switch (actionId) {
+            case "awareness_hunter":
+            case "hunter_awareness":
+            case "potion_resistance":
+            case "potion_resistance_hunter":
+            case "disguise_hunter":
+            case "hunter_disguise":
+                return true;
+            default:
+                return false;
+        }
     }
 
     public boolean unlockSkill(String skillId) {

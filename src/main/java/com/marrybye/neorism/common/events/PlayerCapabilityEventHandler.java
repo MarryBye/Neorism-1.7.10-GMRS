@@ -101,6 +101,16 @@ public class PlayerCapabilityEventHandler {
         FactionPlayerHandler handler = FactionPlayerHandler.get(event.player);
         if (handler != null) {
             handler.sync();
+            if (event.player instanceof net.minecraft.entity.player.EntityPlayerMP) {
+                com.marrybye.neorism.common.network.PacketHandler.sendTo(new com.marrybye.neorism.common.network.packets.AppearancePacket(
+                    event.player.getEntityId(),
+                    handler.getFangType(),
+                    handler.getEyeType(),
+                    handler.hasGlowingEyes(),
+                    handler.hasWings(),
+                    handler.getWingsType()
+                ), (net.minecraft.entity.player.EntityPlayerMP) event.player);
+            }
             ModLogger.debug("Player %s logged in with faction=%s, level=%d",
                 event.player.getCommandSenderName(), handler.getFaction().getId(), handler.getCurrentLevel());
         }
@@ -115,6 +125,33 @@ public class PlayerCapabilityEventHandler {
         com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get(event.player);
         if (sh != null) {
             sh.sync();
+        }
+    }
+
+    @SubscribeEvent
+    public void onStartTracking(net.minecraftforge.event.entity.player.PlayerEvent.StartTracking event) {
+        if (event.entityPlayer != null && !event.entityPlayer.worldObj.isRemote &&
+            event.target instanceof EntityPlayer && event.entityPlayer instanceof net.minecraft.entity.player.EntityPlayerMP) {
+            EntityPlayer target = (EntityPlayer) event.target;
+            FactionPlayerHandler fph = FactionPlayerHandler.get(target);
+            if (fph != null) {
+                com.marrybye.neorism.common.network.PacketHandler.sendTo(new com.marrybye.neorism.common.network.packets.AppearancePacket(
+                    target.getEntityId(),
+                    fph.getFangType(),
+                    fph.getEyeType(),
+                    fph.hasGlowingEyes(),
+                    fph.hasWings(),
+                    fph.getWingsType()
+                ), (net.minecraft.entity.player.EntityPlayerMP) event.entityPlayer);
+                com.marrybye.neorism.common.network.PacketHandler.sendTo(new com.marrybye.neorism.common.network.packets.SyncFactionPacket(
+                    target.getEntityId(),
+                    fph.getCurrentFaction() != null ? fph.getCurrentFaction().getId() : "neutral",
+                    fph.getCurrentLevel(),
+                    fph.getLordLevel(),
+                    fph.isDisguised(),
+                    (byte) (fph.titleGender() != null ? fph.titleGender().ordinal() : 0)
+                ), (net.minecraft.entity.player.EntityPlayerMP) event.entityPlayer);
+            }
         }
     }
 

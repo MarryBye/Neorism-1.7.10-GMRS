@@ -41,7 +41,12 @@ public class SelectActionRadialScreen extends GuiRadialMenu {
 
         List<IAction> available = new ArrayList<IAction>();
         for (IAction action : ActionRegistry.getAllActions()) {
-            if (sh.isActionUnlocked(action.getId()) || action.isUnlocked(mc.thePlayer)) {
+            if (action instanceof com.marrybye.neorism.common.action.ActionBase) {
+                com.marrybye.neorism.common.action.ActionBase ab = (com.marrybye.neorism.common.action.ActionBase) action;
+                if (ab.isVampireAction() && !com.marrybye.neorism.common.util.Helper.isVampire(mc.thePlayer)) continue;
+                if (ab.isHunterAction() && !com.marrybye.neorism.common.util.Helper.isHunter(mc.thePlayer)) continue;
+            }
+            if (sh.isActionUnlocked(action.getId())) {
                 available.add(action);
             }
         }

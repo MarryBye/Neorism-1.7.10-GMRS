@@ -33,6 +33,8 @@ public class ActionRegistry {
 
         register(new HunterAwarenessAction());
         register(new PotionResistanceAction());
+        register(new com.marrybye.neorism.common.action.hunter.DisguiseHunterAction());
+        register(new com.marrybye.neorism.common.action.vampire.DisguiseVampireAction());
 
         ModLogger.debug("Registered %d core actions in ActionRegistry", ACTIONS.size());
     }
@@ -44,7 +46,19 @@ public class ActionRegistry {
     }
 
     public static IAction getAction(String id) {
-        return ACTIONS.get(id);
+        if (id == null) return null;
+        IAction action = ACTIONS.get(id);
+        if (action != null) return action;
+
+        if ("bat_form".equals(id)) return ACTIONS.get("bat");
+        if ("vampire_regen".equals(id)) return ACTIONS.get("regen");
+        if ("summon_bats".equals(id)) return ACTIONS.get("summon_bat");
+        if ("invisibility".equals(id)) return ACTIONS.get("vampire_invisibility");
+        if ("hunter_awareness".equals(id)) return ACTIONS.get("awareness_hunter");
+        if ("potion_resistance".equals(id)) return ACTIONS.get("potion_resistance_hunter");
+        if ("hunter_disguise".equals(id)) return ACTIONS.get("disguise_hunter");
+        if ("vampire_disguise".equals(id)) return ACTIONS.get("disguise_vampire");
+        return null;
     }
 
     public static Collection<IAction> getAllActions() {

@@ -53,21 +53,28 @@ public class VampireAppearanceRenderHandler {
         boolean glowing = fph.hasGlowingEyes();
 
         GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
         GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
-        GL11.glPolygonOffset(-1.0F, -10.0F);
+        GL11.glPolygonOffset(-2.0F, -20.0F);
+        GL11.glDepthMask(false);
 
         // Render eyes
         if (glowing) {
             GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+        } else {
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         }
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(EYE_TEXTURES[eyeIdx]);
         event.renderer.modelBipedMain.bipedHead.render(0.0625F);
 
+        // Restore lighting for fangs if eyes were glowing
         if (glowing) {
             GL11.glEnable(GL11.GL_LIGHTING);
             int light = player.getBrightnessForRender(event.partialRenderTick);
@@ -77,9 +84,12 @@ public class VampireAppearanceRenderHandler {
         }
 
         // Render fangs
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(FANG_TEXTURES[fangIdx]);
         event.renderer.modelBipedMain.bipedHead.render(0.0625F);
 
+        GL11.glDepthMask(true);
         GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

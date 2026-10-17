@@ -53,8 +53,8 @@ public class SkillRegistry {
         // Core Skills
         Skill sLevelRoot = regSkill(new Skill("vampire_level_root", vampireFaction, 1, 0, true, "vampire"));
         Skill sNightVision = regSkill(new Skill("night_vision", vampireFaction, 1, 1, false, "night_vision", ActionRegistry.getAction("night_vision")));
-        Skill sRegen = regSkill(new Skill("vampire_regen", vampireFaction, 1, 1, false, "vampire", ActionRegistry.getAction("vampire_regen")));
-        Skill sFledgling = regSkill(new Skill("no_longer_fledgling", vampireFaction, 2, 1, true, "vampire"));
+        Skill sRegen = regSkill(new Skill("vampire_regen", vampireFaction, 1, 1, false, "vampire", ActionRegistry.getAction("regen")));
+        Skill sFledgling = regSkill(new Skill("no_longer_fledgling", vampireFaction, 2, 1, false, "vampire", ActionRegistry.getAction("bat")));
 
         // Branch 1: Combat / Rage
         Skill sRage = regSkill(new Skill("vampire_rage", vampireFaction, 3, 1, false, "vampire_rage", ActionRegistry.getAction("vampire_rage")));
@@ -78,7 +78,7 @@ public class SkillRegistry {
         Skill sInvis = regSkill(new Skill("vampire_invisibility", vampireFaction, 10, 2, false, "vampire_invisibility", ActionRegistry.getAction("invisibility")));
 
         // Branch 3: Disguise / Spells
-        Skill sDisguise = regSkill(new Skill("vampire_disguise", vampireFaction, 3, 1, false, "vampire", ActionRegistry.getAction("bat_form")));
+        Skill sDisguise = regSkill(new Skill("vampire_disguise", vampireFaction, 3, 1, false, "vampire", ActionRegistry.getAction("disguise_vampire")));
         Skill sSummonBats = regSkill(new Skill("summon_bats", vampireFaction, 4, 1, false, "vampire", ActionRegistry.getAction("summon_bats")));
         Skill sSunscreen = regSkill(new Skill("sunscreen", vampireFaction, 5, 1, false, "less_sundamage", ActionRegistry.getAction("sunscreen")));
         Skill sDarkProj = regSkill(new Skill("dark_blood_projectile", vampireFaction, 6, 1, false, "vampire", ActionRegistry.getAction("dark_blood_projectile")));
@@ -159,16 +159,16 @@ public class SkillRegistry {
 
         Skill sHunterRoot = regSkill(new Skill("hunter_level_root", hunterFaction, 1, 0, true, "hunter"));
         Skill sStake1 = regSkill(new Skill("stake1", hunterFaction, 1, 1, true, "stake1"));
-        Skill sDisguise = regSkill(new Skill("hunter_disguise", hunterFaction, 2, 1, false, "hunter", ActionRegistry.getAction("hunter_awareness")));
+        Skill sDisguise = regSkill(new Skill("hunter_disguise", hunterFaction, 2, 1, false, "hunter", ActionRegistry.getAction("disguise_hunter")));
         Skill sAlchemy = regSkill(new Skill("master_alchemist", hunterFaction, 3, 1, true, "master_alchemist"));
         Skill sPurifiedGarlic = regSkill(new Skill("purified_garlic", hunterFaction, 4, 1, true, "purified_garlic"));
         Skill sCrucifix = regSkill(new Skill("ultimate_crucifix", hunterFaction, 5, 1, true, "ultimate_crucifix"));
-        Skill sAwareness = regSkill(new Skill("awareness_hunter", hunterFaction, 6, 1, false, "hunter", ActionRegistry.getAction("hunter_awareness")));
+        Skill sAwareness = regSkill(new Skill("awareness_hunter", hunterFaction, 6, 1, false, "hunter", ActionRegistry.getAction("awareness_hunter")));
 
         Skill sMultitask = regSkill(new Skill("multitask_brewing", hunterFaction, 3, 1, true, "multitask_brewing"));
         Skill sSwiftBrew = regSkill(new Skill("swift_brewing", hunterFaction, 4, 1, true, "swift_brewing"));
         Skill sMasterBrew = regSkill(new Skill("master_brewer", hunterFaction, 5, 1, true, "master_brewer"));
-        Skill sPotionResist = regSkill(new Skill("potion_resistance_hunter", hunterFaction, 6, 1, false, "hunter", ActionRegistry.getAction("potion_resistance")));
+        Skill sPotionResist = regSkill(new Skill("potion_resistance_hunter", hunterFaction, 6, 1, false, "hunter", ActionRegistry.getAction("potion_resistance_hunter")));
 
         Skill sTech = regSkill(new Skill("weapon_table", hunterFaction, 3, 1, true, "weapon_table"));
         Skill sAtkDamage = regSkill(new Skill("hunter_attack_damage", hunterFaction, 4, 1, true, "hunter_attack_damage"));

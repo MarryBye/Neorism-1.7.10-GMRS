@@ -5895,3 +5895,40 @@ item.neorism.dark_sprice_sign.name=Dark Spruce Sign
 item.neorism.cursed_sprice_sign.name=Cursed Spruce Sign
 item.neorism.dark_sprice_boat.name=Dark Spruce Boat
 item.neorism.cursed_sprice_boat.name=Cursed Spruce Boat
+item.neorism.dark_sprice_hanging_sign.name=Dark Spruce Hanging Sign
+item.neorism.cursed_sprice_hanging_sign.name=Cursed Spruce Hanging Sign
+tile.neorism.dark_sprice_hanging_sign.name=Dark Spruce Hanging Sign
+tile.neorism.cursed_sprice_hanging_sign.name=Cursed Spruce Hanging Sign
+tile.neorism.dark_sprice_sign.name=Dark Spruce Sign
+tile.neorism.cursed_sprice_sign.name=Cursed Spruce Sign
+
+# Boat direct names
+Dark Spruce Boat.name=Dark Spruce Boat
+Cursed Spruce Boat.name=Cursed Spruce Boat
+Dark Spruce Boat with Chest.name=Dark Spruce Boat with Chest
+Cursed Spruce Boat with Chest.name=Cursed Spruce Boat with Chest
+
+# Potion effect names and tooltips
+potion.sanguinare=Sanguinare Vampiris
+potion.sanguinare.postfix=Potion of Sanguinare Vampiris
+potion.sunscreen=Sunscreen
+potion.sunscreen.postfix=Potion of Sunscreen
+potion.garlic=Garlic
+potion.garlic.postfix=Potion of Garlic
+potion.no_blood=No Blood
+potion.no_blood.postfix=Potion of No Blood
+potion.freeze=Freeze
+potion.freeze.postfix=Potion of Freezing
+potion.bleeding=Bleeding
+potion.bleeding.postfix=Potion of Bleeding
+potion.oblivion=Oblivion
+potion.oblivion.postfix=Potion of Oblivion
+
+# Disguise Actions & Messages
+action.neorism.disguise_hunter=Disguise
+action.neorism.disguise_vampire=Disguise
+chat.neorism.disguise_activated=Disguise activated.
+chat.neorism.disguise_deactivated=Disguise deactivated.
+chat.neorism.hunter_awareness_detected=Detected %s vampire threats nearby.
+chat.neorism.skills_reset=All skill points have been reset!
+

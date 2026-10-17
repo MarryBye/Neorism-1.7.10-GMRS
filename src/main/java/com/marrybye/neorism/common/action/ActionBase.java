@@ -59,16 +59,29 @@ public abstract class ActionBase implements IAction {
         return bloodCost;
     }
 
+    public boolean isVampireAction() {
+        return this.getClass().getName().contains(".vampire.");
+    }
+
+    public boolean isHunterAction() {
+        return this.getClass().getName().contains(".hunter.");
+    }
+
     @Override
     public boolean canUse(EntityPlayer player) {
         if (player == null) return false;
+
+        // Faction membership checks
+        if (isVampireAction() && !Helper.isVampire(player)) return false;
+        if (isHunterAction() && !Helper.isHunter(player)) return false;
+
         if (!isUnlocked(player)) return false;
 
         ActionHandler handler = ActionHandler.get(player);
         if (handler != null && handler.isOnCooldown(this)) return false;
 
         // Garlic debuff prevents using vampire skills
-        if (player.isPotionActive(ModPotions.garlic)) return false;
+        if (isVampireAction() && player.isPotionActive(ModPotions.garlic)) return false;
 
         if (bloodCost > 0) {
             if (!Helper.isVampire(player)) {
