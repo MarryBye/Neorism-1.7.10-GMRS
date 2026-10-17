@@ -1,49 +1,6 @@
 {
-  "__comment": "Designed by Maxanier",
+  "parent": "neorism:block/tent",
   "textures": {
-    "light_wool": "neorism:block/wool_colored_white",
-    "dark_wool": "neorism:block/wool_colored_silver",
-    "particle": "neorism:block/wool_colored_white",
     "floor": "neorism:block/tent/floor_br"
-  },
-  "render_type": "minecraft:cutout",
-  "elements": [
-    {
-      "from": [0, 0, 0],
-      "to": [16, 1, 16],
-      "faces": {
-        "down": { "uv": [16, 16, 0, 0], "texture": "#dark_wool", "cullface": "down" },
-        "up": { "uv": [16, 16, 0, 0], "texture": "#floor" },
-        "north": { "uv": [0, 15, 16, 16], "texture": "#dark_wool", "cullface": "north" },
-        "south": { "uv": [0, 15, 16, 16], "texture": "#dark_wool", "cullface": "south" },
-        "west": { "uv": [0, 15, 16, 16], "texture": "#dark_wool", "cullface": "west" },
-        "east": { "uv": [0, 15, 16, 16], "texture": "#dark_wool", "cullface": "east" }
-      }
-    },
-    {
-      "from": [-5, 0, 0],
-      "to": [16, 1, 16],
-      "rotation": { "origin": [16, 1, 0], "axis": "z", "angle": -45 },
-      "faces": {
-        "down": { "uv": [0, 16, 16, 0], "texture": "#light_wool" },
-        "up": { "uv": [16, 0, 0, 16], "texture": "#light_wool" },
-        "north": { "uv": [0, 15, 16, 16], "texture": "#light_wool", "cullface": "north" },
-        "south": { "uv": [0, 15, 16, 16], "texture": "#light_wool", "cullface": "south" },
-        "west": { "uv": [0, 15, 16, 16], "texture": "#light_wool" },
-        "east": { "uv": [0, 15, 16, 16], "texture": "#light_wool", "cullface": "east" }
-      }
-    },
-    {
-      "from": [0, 15, 0],
-      "to": [1, 16, 16],
-      "faces": {
-        "down": { "uv": [1, 16, 0, 0], "texture": "#light_wool" },
-        "up": { "uv": [0, 0, 1, 16], "texture": "#light_wool", "cullface": "up" },
-        "north": { "uv": [0, 0, 1, 1], "texture": "#light_wool", "cullface": "north" },
-        "south": { "uv": [15, 0, 16, 1], "texture": "#light_wool", "cullface": "south" },
-        "west": { "uv": [0, 0, 16, 1], "texture": "#light_wool", "cullface": "west" },
-        "east": { "uv": [0, 0, 16, 1], "texture": "#light_wool" }
-      }
-    }
-  ]
+  }
 }
