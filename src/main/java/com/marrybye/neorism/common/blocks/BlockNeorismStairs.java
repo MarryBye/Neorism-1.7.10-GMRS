@@ -31,29 +31,44 @@ public class BlockNeorismStairs extends BlockStairs {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(IIconRegister register) {
-        // Do NOT register MISSING_ICON_BLOCK_ here.
-        // In 1.7.10 vanilla BlockStairs has an empty registerBlockIcons and delegates getIcon to modelBlock.
+        String tex = getTextureName();
+        if (tex != null && !tex.startsWith("MISSING_ICON_BLOCK_")) {
+            this.blockIcon = register.registerIcon(tex);
+        }
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        return modelBlockRef != null ? modelBlockRef.getIcon(side, modelMetaRef) : super.getIcon(side, meta);
+        if (modelBlockRef != null) {
+            return modelBlockRef.getIcon(side, modelMetaRef);
+        }
+        return this.blockIcon != null ? this.blockIcon : super.getIcon(side, meta);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        return modelBlockRef != null ? modelBlockRef.getIcon(world, x, y, z, side) : super.getIcon(world, x, y, z, side);
+        if (modelBlockRef != null) {
+            return modelBlockRef.getIcon(side, modelMetaRef);
+        }
+        return getIcon(side, world.getBlockMetadata(x, y, z));
     }
 
     @SideOnly(Side.CLIENT)
     public IIcon getFallbackParticleIcon() {
-        return modelBlockRef != null ? modelBlockRef.getIcon(0, modelMetaRef) : null;
+        return modelBlockRef != null ? modelBlockRef.getIcon(0, modelMetaRef) : this.blockIcon;
     }
 
     @Override
     public String getItemIconName() {
-        return modelBlockRef != null ? modelBlockRef.getItemIconName() : super.getItemIconName();
+        if (modelBlockRef != null) {
+            String name = modelBlockRef.getItemIconName();
+            if (name != null && !name.startsWith("MISSING_ICON_BLOCK_")) {
+                return name;
+            }
+        }
+        String own = super.getItemIconName();
+        return (own != null && !own.startsWith("MISSING_ICON_BLOCK_")) ? own : null;
     }
 }

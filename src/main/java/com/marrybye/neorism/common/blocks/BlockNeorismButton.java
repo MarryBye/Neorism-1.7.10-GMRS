@@ -29,28 +29,44 @@ public class BlockNeorismButton extends BlockButtonWood {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister register) {
-        // Do NOT register icons here. Buttons delegate getIcon to modelBlock.
+        String tex = getTextureName();
+        if (tex != null && !tex.startsWith("MISSING_ICON_BLOCK_")) {
+            this.blockIcon = register.registerIcon(tex);
+        }
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        return modelBlock != null ? modelBlock.getIcon(side, 0) : super.getIcon(side, meta);
+        if (modelBlock != null) {
+            return modelBlock.getIcon(side, 0);
+        }
+        return this.blockIcon != null ? this.blockIcon : super.getIcon(side, meta);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        return modelBlock != null ? modelBlock.getIcon(world, x, y, z, side) : getIcon(side, world.getBlockMetadata(x, y, z));
+        if (modelBlock != null) {
+            return modelBlock.getIcon(side, 0);
+        }
+        return getIcon(side, world.getBlockMetadata(x, y, z));
     }
 
     @SideOnly(Side.CLIENT)
     public IIcon getFallbackParticleIcon() {
-        return modelBlock != null ? modelBlock.getIcon(0, 0) : null;
+        return modelBlock != null ? modelBlock.getIcon(0, 0) : this.blockIcon;
     }
 
     @Override
     public String getItemIconName() {
-        return modelBlock != null ? modelBlock.getItemIconName() : super.getItemIconName();
+        if (modelBlock != null) {
+            String name = modelBlock.getItemIconName();
+            if (name != null && !name.startsWith("MISSING_ICON_BLOCK_")) {
+                return name;
+            }
+        }
+        String own = super.getItemIconName();
+        return (own != null && !own.startsWith("MISSING_ICON_BLOCK_")) ? own : null;
     }
 }

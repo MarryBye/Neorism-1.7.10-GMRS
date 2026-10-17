@@ -165,12 +165,11 @@ public class BlockTent extends BlockContainer {
         int meta = world.getBlockMetadata(x, y, z);
         int pos = (meta >> 2) & 3;
         int dir = meta & 3;
-        int baseDir = (pos == 0 || pos == 3) ? (dir + 2) & 3 : dir;
 
         // Delegate to position 0 if activated on another part
         if (pos != 0) {
-            int x0 = x - OFFSETS_FROM_ZERO[baseDir][pos - 1][0];
-            int z0 = z - OFFSETS_FROM_ZERO[baseDir][pos - 1][1];
+            int x0 = x - OFFSETS_FROM_ZERO[dir][pos - 1][0];
+            int z0 = z - OFFSETS_FROM_ZERO[dir][pos - 1][1];
             if (world.getBlock(x0, y, z0) == this) {
                 return onBlockActivated(world, x0, y, z0, player, side, hitX, hitY, hitZ);
             }

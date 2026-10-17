@@ -278,7 +278,7 @@ public class ModBlocks {
         garlicDiffuser = register("garlic_diffuser_normal", new BlockGarlicDiffuser());
         garlicDiffuserLong = register("garlic_diffuser_long", new BlockGarlicDiffuser());
         garlicDiffuserStrong = register("garlic_diffuser_strong", new BlockGarlicDiffuser());
-        sunscreenBeacon = register("sunscreen_beacon", new BlockNeorismDecor("sunscreen_beacon", "vampire_beacon", Material.iron, ModCreativeTabs.tabHunter).setLightLevel(1.0F));
+        sunscreenBeacon = register("sunscreen_beacon", new BlockNeorismDecor("sunscreen_beacon", "sunscreen_beacon", Material.iron, ModCreativeTabs.tabHunter).setLightLevel(1.0F));
 
         coffin = register("coffin_red", new BlockCoffin("red"));
         String[] coffinColors = {"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "black"};
