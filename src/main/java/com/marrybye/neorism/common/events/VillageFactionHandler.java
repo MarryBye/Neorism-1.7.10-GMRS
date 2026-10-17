@@ -82,7 +82,10 @@ public class VillageFactionHandler {
                 }
             }
         } else if (controllingFaction == TileEntityTotem.FACTION_HUNTER && Helper.isHunter(player)) {
-            // Hunter territory: friendly greeting
+            // Hunter territory: friendly greeting and trade discount
+            if (com.marrybye.neorism.common.integration.IntegrationManager.isVillagerTradesLoaded()) {
+                com.marrybye.neorism.common.integration.VillagerTradesBackportIntegration.applyHunterDiscounts(villager, player);
+            }
             if (world.rand.nextInt(10) == 0) {
                 player.addChatMessage(new ChatComponentTranslation("chat.neorism.villager_hunter_greeting"));
             }

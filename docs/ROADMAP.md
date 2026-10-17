@@ -416,18 +416,18 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
 ## Phase 14: Cross-Mod Integrations & Balance Tuning (GTNH Stack)
 *Seamless integration with modern backports and GT New Horizons core mods.*
 
-- [ ] **14.1. Et-Futurum-Requiem Integration**
-  - [ ] Shared crossbow mechanics, arrow/quarrel pooling, shield blocking against stakes.
-  - [ ] Modern banner patterns for Vampire and Hunter factions.
-- [ ] **14.2. Combat Backport Integration**
-  - [ ] Attack cooldowns and attack speed attributes on Hunter Axes and Heartseekers.
-  - [ ] Sweeping Edge enchantment support for faction blades.
-- [ ] **14.3. Villager Trades Backport Integration**
-  - [ ] Modern 1.14+ trading GUI and workstation AI for Hunter Trainers and converted villagers.
-- [ ] **14.4. VillageNames Integration**
-  - [ ] Procedural gothic/vampiric name generation for captured villages and crypts.
-- [ ] **14.5. Hodgepodge & GTNHLib Integration**
-  - [ ] Celestial angle time sync with Hodgepodge day/night calculations.
-  - [ ] Matrix transformations and rendering math via GTNHLib.
-- [ ] **14.6. NEI (Not Enough Items) Integration**
-  - [ ] Recipe handlers for Altar of Inspiration, Altar of Infusion, Weapon Table, and Cauldron.
+- [x] **14.1. Et-Futurum-Requiem Integration**
+  - [x] Shared crossbow mechanics, arrow/quarrel pooling, shield blocking against stakes.
+  - [x] Modern banner patterns for Vampire and Hunter factions.
+- [x] **14.2. Combat Backport Integration**
+  - [x] Attack cooldowns and attack speed attributes on Hunter Axes and Heartseekers.
+  - [x] Sweeping Edge enchantment support for faction blades.
+- [x] **14.3. Villager Trades Backport Integration**
+  - [x] Modern 1.14+ trading GUI and workstation AI for Hunter Trainers and converted villagers.
+- [x] **14.4. VillageNames Integration**
+  - [x] Procedural gothic/vampiric name generation for captured villages and crypts.
+- [x] **14.5. Hodgepodge & GTNHLib Integration**
+  - [x] Celestial angle time sync with Hodgepodge day/night calculations.
+  - [x] Matrix transformations and rendering math via GTNHLib.
+- [x] **14.6. NEI (Not Enough Items) Integration**
+  - [x] Recipe handlers for Altar of Inspiration, Altar of Infusion, Weapon Table, and Cauldron.

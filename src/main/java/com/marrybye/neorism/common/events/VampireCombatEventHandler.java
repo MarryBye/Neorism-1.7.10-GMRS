@@ -45,6 +45,16 @@ public class VampireCombatEventHandler {
             }
         }
 
+        // Shield blocking check (Et-Futurum shield mitigation)
+        if (com.marrybye.neorism.common.integration.IntegrationManager.isEtFuturumLoaded()) {
+            if (com.marrybye.neorism.common.integration.EtFuturumIntegration.isBlockingWithShield(target)) {
+                if (source.isProjectile() || source.damageType.equals("stake")) {
+                    event.ammount *= 0.25F; // 75% damage mitigation on shield block
+                    ModLogger.combat("Entity %s blocked attack with shield: remaining damage %.1f", target.getCommandSenderName(), event.ammount);
+                }
+            }
+        }
+
         // Crossbow Technique Hunter skill bonus damage
         if (source.getSourceOfDamage() instanceof net.minecraft.entity.projectile.EntityArrow && source.getEntity() instanceof EntityPlayer) {
             EntityPlayer shooter = (EntityPlayer) source.getEntity();
@@ -56,6 +66,14 @@ public class VampireCombatEventHandler {
                     ModLogger.combat("Hunter %s hit %s with Crossbow Technique (+25%% damage: %.1f -> %.1f)",
                         shooter.getCommandSenderName(), target.getCommandSenderName(), oldAmt, event.ammount);
                 }
+            }
+        }
+
+        // Sweeping attack for Heartseeker / Heartstriker
+        if (source.getEntity() instanceof EntityPlayer) {
+            EntityPlayer attacker = (EntityPlayer) source.getEntity();
+            if (com.marrybye.neorism.common.integration.IntegrationManager.isCombatBackportLoaded()) {
+                com.marrybye.neorism.common.integration.CombatBackportIntegration.triggerSweepAttack(attacker, target, event.ammount);
             }
         }
 

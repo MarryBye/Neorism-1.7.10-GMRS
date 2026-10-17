@@ -53,5 +53,6 @@ public class ModRegistries {
 
     public static void postInit(FMLPostInitializationEvent event) {
         ModLogger.debug("Beginning Neorism postInit integrations");
+        com.marrybye.neorism.common.integration.IntegrationManager.postInit(event);
     }
 }

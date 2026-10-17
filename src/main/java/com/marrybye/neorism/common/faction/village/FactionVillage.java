@@ -26,6 +26,7 @@ public class FactionVillage implements IVillageFaction {
     private int captureProgress = 0;
     private boolean isUnderAttack = false;
     private long timeSinceLastRaid = 0;
+    private String villageName = null;
 
     public FactionVillage(World world, int x, int y, int z) {
         this.world = world;
@@ -131,6 +132,21 @@ public class FactionVillage implements IVillageFaction {
         this.timeSinceLastRaid++;
     }
 
+    public String getVillageName() {
+        if (this.villageName == null) {
+            if (com.marrybye.neorism.common.integration.IntegrationManager.isVillageNamesLoaded()) {
+                this.villageName = com.marrybye.neorism.common.integration.VillageNamesIntegration.generateGothicName(this.world.rand);
+            } else {
+                this.villageName = "Gothic Village";
+            }
+        }
+        return this.villageName;
+    }
+
+    public void setVillageName(String name) {
+        this.villageName = name;
+    }
+
     public void writeToNBT(NBTTagCompound tag) {
         tag.setInteger("CenterX", this.centerX);
         tag.setInteger("CenterY", this.centerY);
@@ -140,6 +156,9 @@ public class FactionVillage implements IVillageFaction {
         tag.setInteger("CaptureProgress", this.captureProgress);
         tag.setBoolean("IsUnderAttack", this.isUnderAttack);
         tag.setLong("TimeSinceLastRaid", this.timeSinceLastRaid);
+        if (this.villageName != null) {
+            tag.setString("VillageName", this.villageName);
+        }
     }
 
     public void readFromNBT(NBTTagCompound tag) {
@@ -158,5 +177,8 @@ public class FactionVillage implements IVillageFaction {
         this.captureProgress = tag.getInteger("CaptureProgress");
         this.isUnderAttack = tag.getBoolean("IsUnderAttack");
         this.timeSinceLastRaid = tag.getLong("TimeSinceLastRaid");
+        if (tag.hasKey("VillageName")) {
+            this.villageName = tag.getString("VillageName");
+        }
     }
 }

@@ -103,6 +103,9 @@ public class Helper {
         if (world == null || world.provider == null || !world.provider.isSurfaceWorld()) {
             return false;
         }
+        if (com.marrybye.neorism.common.integration.IntegrationManager.isHodgepodgeLoaded()) {
+            return com.marrybye.neorism.common.integration.HodgepodgeIntegration.isSunPresent(world);
+        }
         float angle = world.getCelestialAngle(1.0F);
         return angle > 0.78F || angle < 0.24F;
     }
