@@ -2,9 +2,9 @@
   "credit": "Designed by Maxanier with Cubik Studio",
   "parent": "block/block",
   "textures": {
-    "particle": "minecraft:block/obsidian",
-    "obsidian": "minecraft:block/obsidian",
-    "iron": "minecraft:block/iron_block",
+    "particle": "neorism:block/obsidian",
+    "obsidian": "neorism:block/obsidian",
+    "iron": "neorism:block/iron_block",
     "core": "neorism:block/totem_top_core_vampire"
   },
   "elements": [

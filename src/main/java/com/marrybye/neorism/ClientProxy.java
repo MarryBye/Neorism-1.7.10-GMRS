@@ -143,7 +143,6 @@ public class ClientProxy extends CommonProxy {
             com.marrybye.neorism.common.core.ModBlocks.totemTop,
             com.marrybye.neorism.common.core.ModBlocks.hunterTable,
             com.marrybye.neorism.common.core.ModBlocks.alchemicalCauldron,
-            com.marrybye.neorism.common.core.ModBlocks.tent,
             com.marrybye.neorism.common.core.ModBlocks.coffin
         };
         for (net.minecraft.block.Block block : modeledBlocks) {
@@ -178,16 +177,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerItemRenderers() {
-        // Pitchfork
-        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
-            com.marrybye.neorism.common.core.ModItems.pitchfork,
-            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
-                "/assets/neorism/models/item/pitchfork.json",
-                new net.minecraft.util.ResourceLocation("neorism", "textures/item/pitchfork.png")
-            )
-        );
-
-        // Umbrella
+        // Umbrella (Sun protection) - 3D JSON model
         net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
             com.marrybye.neorism.common.core.ModItems.umbrella,
             new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
@@ -196,96 +186,9 @@ public class ClientProxy extends CommonProxy {
             )
         );
 
-        // Crucifix (Wooden, Iron, Gold)
-        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
-            com.marrybye.neorism.common.core.ModItems.crucifix,
-            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
-                "/assets/neorism/models/item/crucifix.json",
-                new net.minecraft.util.ResourceLocation[]{
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/crucifix_wooden.png"),
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/crucifix_iron.png"),
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/crucifix_gold.png")
-                }
-            )
-        );
-
-        // Hunter Axe (Normal, Enhanced, Ultimate)
-        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
-            com.marrybye.neorism.common.core.ModItems.hunterAxe,
-            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
-                "/assets/neorism/models/item/hunter_axe.json",
-                new net.minecraft.util.ResourceLocation[]{
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/hunter_axe_normal.png"),
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/hunter_axe_enhanced.png"),
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/hunter_axe_ultimate.png")
-                }
-            )
-        );
-
-        // Heart Seeker (Normal, Enhanced, Ultimate)
-        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
-            com.marrybye.neorism.common.core.ModItems.heartSeeker,
-            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
-                "/assets/neorism/models/item/heart_seeker_model.json",
-                new net.minecraft.util.ResourceLocation[]{
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/heart_seeker_normal.png"),
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/heart_seeker_enhanced.png"),
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/heart_seeker_ultimate.png")
-                }
-            )
-        );
-
-        // Heart Striker (Normal, Enhanced, Ultimate)
-        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
-            com.marrybye.neorism.common.core.ModItems.heartStriker,
-            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
-                "/assets/neorism/models/item/heart_striker_model.json",
-                new net.minecraft.util.ResourceLocation[]{
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/heart_striker_normal.png"),
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/heart_striker_enhanced.png"),
-                    new net.minecraft.util.ResourceLocation("neorism", "textures/item/heart_striker_ultimate.png")
-                }
-            )
-        );
-
-        // Crossbow (Basic, Enhanced, Double, Tech)
-        net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(
-            com.marrybye.neorism.common.core.ModItems.crossbow,
-            new com.marrybye.neorism.client.render.item.JsonModelItemRenderer(
-                new com.marrybye.neorism.client.render.item.JsonModelItemRenderer.IModelResolver() {
-                    @Override
-                    public String resolveModel(net.minecraft.item.ItemStack stack) {
-                        int meta = stack != null ? stack.getItemDamage() : 0;
-                        switch (meta) {
-                            case 2:
-                                return "/assets/neorism/models/item/double_crossbow.json";
-                            case 3:
-                                return "/assets/neorism/models/item/tech_crossbow.json";
-                            default:
-                                return "/assets/neorism/models/item/crossbow.json";
-                        }
-                    }
-                },
-                new com.marrybye.neorism.client.render.item.JsonModelItemRenderer.ITextureResolver() {
-                    @Override
-                    public net.minecraft.util.ResourceLocation resolveTexture(net.minecraft.item.ItemStack stack) {
-                        int meta = stack != null ? stack.getItemDamage() : 0;
-                        switch (meta) {
-                            case 1:
-                                return new net.minecraft.util.ResourceLocation("neorism", "textures/item/crossbow_enhanced.png");
-                            case 2:
-                                return new net.minecraft.util.ResourceLocation("neorism", "textures/item/crossbow_double.png");
-                            case 3:
-                                return new net.minecraft.util.ResourceLocation("neorism", "textures/item/tech_crossbow.png");
-                            default:
-                                return new net.minecraft.util.ResourceLocation("neorism", "textures/item/crossbow.png");
-                        }
-                    }
-                }
-            )
-        );
-
-        // Coffin is handled by ModelISBRH in modeledBlocks list
+        // Weapons (Crossbows, Crucifixes, Heart Seeker, Heart Striker, Hunter Axes, Pitchforks)
+        // are rendered via standard Minecraft 2D item extrusion, ensuring zero transparent glitches,
+        // perfect vanilla hand alignments, and flawless rendering for both players and mob biped hands.
     }
 
     @Override

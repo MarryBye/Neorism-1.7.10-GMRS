@@ -109,7 +109,7 @@ public class JsonModelItemRenderer implements IItemRenderer {
             case ENTITY_BOBBING:
                 return true;
             case EQUIPPED_BLOCK:
-                return true; // Bypass Forge's 2D flat item slicing for both first and third person
+                return type == ItemRenderType.EQUIPPED_FIRST_PERSON;
             default:
                 return false;
         }
@@ -130,14 +130,11 @@ public class JsonModelItemRenderer implements IItemRenderer {
 
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glCullFace(GL11.GL_BACK);
+        GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-        GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
-        GL11.glPolygonOffset(-0.2F, -0.2F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         switch (type) {
@@ -154,26 +151,17 @@ public class JsonModelItemRenderer implements IItemRenderer {
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                 break;
             case EQUIPPED:
-                // Undo RenderBiped's EQUIPPED_BLOCK inversion and position weapon naturally in entity hand
-                GL11.glTranslatef(0.0F, -0.1875F, 0.3125F);
-                GL11.glRotatef(-45.0F, 0.0F, 1.0F, 0.0F);
-                GL11.glRotatef(-20.0F, 1.0F, 0.0F, 0.0F);
-                GL11.glScalef(-1.0F, -1.0F, 1.0F);
-
-                GL11.glTranslatef(0.1F, 0.3F, 0.0F);
-                GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
-                GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-                GL11.glScalef(1.4F, 1.4F, 1.4F);
-
                 if (model.thirdPerson != null) {
                     model.thirdPerson.apply();
+                } else {
+                    GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
+                    GL11.glScalef(0.7F, 0.7F, 0.7F);
                 }
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                 break;
             case EQUIPPED_FIRST_PERSON:
                 GL11.glTranslatef(0.5F, 0.5F, 0.5F);
                 GL11.glRotatef(-45.0F, 0.0F, 1.0F, 0.0F);
-                GL11.glScalef(1.5F, 1.5F, 1.5F);
                 if (model.firstPerson != null) {
                     model.firstPerson.apply();
                 } else {
@@ -197,8 +185,6 @@ public class JsonModelItemRenderer implements IItemRenderer {
         }
 
         GL11.glCallList(model.displayList);
-        GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-        GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glPopMatrix();
     }
 

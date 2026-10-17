@@ -31,16 +31,16 @@ import net.minecraft.world.World;
 public class BlockTent extends BlockContainer {
 
     // Directions: 0 = SOUTH, 1 = WEST, 2 = NORTH, 3 = EAST
-    // Offsets from pos 0 for pos 1, 2, 3: {dx, dz}
+    // Offsets from pos 0 (Right-Front) for pos 1 (Left-Front), pos 2 (Left-Back), pos 3 (Right-Back): {dx, dz}
     private static final int[][][] OFFSETS_FROM_ZERO = new int[][][] {
         // SOUTH (0):
-        { {1, 0}, {1, 1}, {0, 1} },
-        // WEST (1):
-        { {0, 1}, {-1, 1}, {-1, 0} },
-        // NORTH (2):
         { {-1, 0}, {-1, -1}, {0, -1} },
+        // WEST (1):
+        { {0, -1}, {1, -1}, {1, 0} },
+        // NORTH (2):
+        { {1, 0}, {1, 1}, {0, 1} },
         // EAST (3):
-        { {0, -1}, {1, -1}, {1, 0} }
+        { {0, 1}, {-1, 1}, {-1, 0} }
     };
 
     @SideOnly(Side.CLIENT)
@@ -188,10 +188,10 @@ public class BlockTent extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
+        blockIcon = register.registerIcon(Neorism.MODID + ":item_tent");
         iconBack = register.registerIcon(Neorism.MODID + ":tent_back");
         iconSide = register.registerIcon(Neorism.MODID + ":wool_colored_white");
         iconTop = register.registerIcon(Neorism.MODID + ":wool_colored_gray");
-        blockIcon = iconSide;
 
         // Register textures used in JSON models
         register.registerIcon(Neorism.MODID + ":wool_colored_silver");
@@ -204,8 +204,6 @@ public class BlockTent extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-        if (side == 1) return iconTop;
-        if (side == 2 || side == 3) return iconBack;
-        return iconSide;
+        return blockIcon;
     }
 }

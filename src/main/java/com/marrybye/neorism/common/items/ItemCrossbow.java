@@ -268,6 +268,24 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
 
     @Override
     @SideOnly(Side.CLIENT)
+    public IIcon getIconIndex(ItemStack stack) {
+        return getIconFromDamage(stack != null ? stack.getItemDamage() : 0);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(ItemStack stack, int pass) {
+        return getIconIndex(stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
+        return getIconIndex(stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list) {
         for (int i = 0; i < TYPES; i++) {
             list.add(new ItemStack(item, 1, i));

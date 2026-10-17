@@ -36,7 +36,7 @@ public class TileEntityCoffinRenderer extends TileEntitySpecialRenderer {
         int dir = meta & 3;
 
         GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glDisable(GL11.GL_CULL_FACE);
 
         // Position and rotate based on facing direction
         if (dir == 0) { // South (head at +Z)
@@ -72,19 +72,25 @@ public class TileEntityCoffinRenderer extends TileEntitySpecialRenderer {
         float lidAngle = coffin.getLidAngle(partialTick); // 0.0 = closed, 1.0 = open
 
         GL11.glPushMatrix();
-        // Lid sits on top of coffin rim at Y = 9/16 = 0.5625
-        GL11.glTranslatef(0.0F, 0.5625F, 0.0F);
-
         if (lidAngle > 0.001F) {
-            // Canonical sliding + pivot opening from modern CoffinRenderer
-            GL11.glTranslatef(0.0F, 0.0F, -0.5F * lidAngle);
-            GL11.glRotatef(-35.0F * lidAngle, 0.0F, 1.0F, 0.0F);
+            // Leaning open lid matching coffin.json inventory model
+            float curAngle = -32.5F * lidAngle;
+            float curOriginX = (-5.0F / 16.0F) * lidAngle;
+            float curOriginY = (9.0F / 16.0F) * (1.0F - lidAngle);
+
+            GL11.glTranslatef(curOriginX, curOriginY, 0.0F);
+            GL11.glRotatef(curAngle, 0.0F, 0.0F, 1.0F);
+
+            tess.startDrawingQuads();
+            renderLeaningLid(tess);
+            tess.draw();
+        } else {
+            // Closed lid flat on top of coffin rim
+            GL11.glTranslatef(0.0F, 9.0F / 16.0F, 0.0F);
+            tess.startDrawingQuads();
+            renderFlatLid(tess);
+            tess.draw();
         }
-
-        tess.startDrawingQuads();
-        renderLid(tess);
-        tess.draw();
-
         GL11.glPopMatrix();
 
         GL11.glPopMatrix();
@@ -105,10 +111,10 @@ public class TileEntityCoffinRenderer extends TileEntitySpecialRenderer {
 
         // North face (Foot end): uv [8, 8.75, 12, 11]
         tess.setNormal(0.0F, 0.0F, -1.0F);
+        tess.addVertexWithUV(x2, y1, z1, 8.0 / 32.0, 11.0 / 32.0);
         tess.addVertexWithUV(x1, y1, z1, 12.0 / 32.0, 11.0 / 32.0);
         tess.addVertexWithUV(x1, y2, z1, 12.0 / 32.0, 8.75 / 32.0);
         tess.addVertexWithUV(x2, y2, z1, 8.0 / 32.0, 8.75 / 32.0);
-        tess.addVertexWithUV(x2, y1, z1, 8.0 / 32.0, 11.0 / 32.0);
 
         // South face (Head end): uv [8, 8.75, 12, 11]
         tess.setNormal(0.0F, 0.0F, 1.0F);
@@ -126,10 +132,10 @@ public class TileEntityCoffinRenderer extends TileEntitySpecialRenderer {
 
         // East face (Right side): uv [0, 8.75, 8, 11]
         tess.setNormal(1.0F, 0.0F, 0.0F);
+        tess.addVertexWithUV(x2, y1, z2, 0.0, 11.0 / 32.0);
         tess.addVertexWithUV(x2, y1, z1, 8.0 / 32.0, 11.0 / 32.0);
         tess.addVertexWithUV(x2, y2, z1, 8.0 / 32.0, 8.75 / 32.0);
         tess.addVertexWithUV(x2, y2, z2, 0.0, 8.75 / 32.0);
-        tess.addVertexWithUV(x2, y1, z2, 0.0, 11.0 / 32.0);
 
         // Top rim faces (wood wall borders of thickness 2/16 = 0.125):
         // Up rim: uv [0, 0, 4, 8]
@@ -201,7 +207,7 @@ public class TileEntityCoffinRenderer extends TileEntitySpecialRenderer {
         tess.addVertexWithUV(ix2, iy1, iz2, 9.0 / 32.0, 3.0 / 32.0);
     }
 
-    private void renderLid(Tessellator tess) {
+    private void renderFlatLid(Tessellator tess) {
         float lx1 = 0.0F, lx2 = 1.0F;
         float ly1 = 0.0F, ly2 = 2.0F / 16.0F;
         float lz1 = 0.0F, lz2 = 2.0F;
@@ -247,5 +253,47 @@ public class TileEntityCoffinRenderer extends TileEntitySpecialRenderer {
         tess.addVertexWithUV(lx2, ly2, lz1, 8.0 / 32.0, 8.0 / 32.0);
         tess.addVertexWithUV(lx2, ly2, lz2, 0.0, 8.0 / 32.0);
         tess.addVertexWithUV(lx2, ly1, lz2, 0.0, 8.5 / 32.0);
+    }
+
+    private void renderLeaningLid(Tessellator tess) {
+        float lx1 = -2.0F / 16.0F, lx2 = 0.0F;
+        float ly1 = 0.0F, ly2 = 1.0F;
+        float lz1 = 0.0F, lz2 = 2.0F;
+
+        // North face: uv [8, 8, 12, 8.5]
+        tess.addVertexWithUV(lx1, ly1, lz1, 12.0 / 32.0, 8.5 / 32.0);
+        tess.addVertexWithUV(lx1, ly2, lz1, 12.0 / 32.0, 8.0 / 32.0);
+        tess.addVertexWithUV(lx2, ly2, lz1, 8.0 / 32.0, 8.0 / 32.0);
+        tess.addVertexWithUV(lx2, ly1, lz1, 8.0 / 32.0, 8.5 / 32.0);
+
+        // South face: uv [8, 8, 12, 8.5]
+        tess.addVertexWithUV(lx1, ly1, lz2, 8.0 / 32.0, 8.5 / 32.0);
+        tess.addVertexWithUV(lx2, ly1, lz2, 12.0 / 32.0, 8.5 / 32.0);
+        tess.addVertexWithUV(lx2, ly2, lz2, 12.0 / 32.0, 8.0 / 32.0);
+        tess.addVertexWithUV(lx1, ly2, lz2, 8.0 / 32.0, 8.0 / 32.0);
+
+        // West face (facing outward): uv [8, 0, 12, 8]
+        tess.addVertexWithUV(lx1, ly1, lz1, 8.0 / 32.0, 0.0);
+        tess.addVertexWithUV(lx1, ly1, lz2, 8.0 / 32.0, 8.0 / 32.0);
+        tess.addVertexWithUV(lx1, ly2, lz2, 12.0 / 32.0, 8.0 / 32.0);
+        tess.addVertexWithUV(lx1, ly2, lz1, 12.0 / 32.0, 0.0);
+
+        // East face (facing coffin): uv [12, 0, 16, 8]
+        tess.addVertexWithUV(lx2, ly1, lz1, 12.0 / 32.0, 0.0);
+        tess.addVertexWithUV(lx2, ly2, lz1, 16.0 / 32.0, 0.0);
+        tess.addVertexWithUV(lx2, ly2, lz2, 16.0 / 32.0, 8.0 / 32.0);
+        tess.addVertexWithUV(lx2, ly1, lz2, 12.0 / 32.0, 8.0 / 32.0);
+
+        // Top rim (Y = ly2): uv [0, 8, 8, 8.5]
+        tess.addVertexWithUV(lx1, ly2, lz1, 0.0, 8.0 / 32.0);
+        tess.addVertexWithUV(lx1, ly2, lz2, 8.0 / 32.0, 8.0 / 32.0);
+        tess.addVertexWithUV(lx2, ly2, lz2, 8.0 / 32.0, 8.5 / 32.0);
+        tess.addVertexWithUV(lx2, ly2, lz1, 0.0, 8.5 / 32.0);
+
+        // Bottom rim (Y = ly1): uv [0, 8, 8, 8.5]
+        tess.addVertexWithUV(lx1, ly1, lz1, 0.0, 8.5 / 32.0);
+        tess.addVertexWithUV(lx2, ly1, lz1, 8.0 / 32.0, 8.5 / 32.0);
+        tess.addVertexWithUV(lx2, ly1, lz2, 8.0 / 32.0, 8.0 / 32.0);
+        tess.addVertexWithUV(lx1, ly1, lz2, 0.0, 8.0 / 32.0);
     }
 }
