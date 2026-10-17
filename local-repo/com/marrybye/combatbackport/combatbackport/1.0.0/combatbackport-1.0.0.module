@@ -1,0 +1,131 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.marrybye.combatbackport",
+    "module": "combatbackport",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.3.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "com.gtnewhorizons.retrofuturagradle.obfuscation": "mcp",
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "combatbackport-1.0.0-dev.jar",
+          "url": "combatbackport-1.0.0-dev.jar",
+          "size": 3024948,
+          "sha512": "f43741688eb0df276bd09a41131cede03f107444c42482bf8cedc4905fda6e3499a59139f29c2774a0066cbdfc68cc6f67ba83dc217b63e449adc4bc7c4c89f8",
+          "sha256": "fee2d3e84a6734e897d11a2bfa041ae25a6be4e53550cc8eb59f6af329f234ec",
+          "sha1": "b799f1e025e6682d49363e70b8bef08c63819184",
+          "md5": "e8f22f0b306d9e1ce0f8edab4d12be22"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "com.gtnewhorizons.retrofuturagradle.obfuscation": "mcp",
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.github.legacymoddingmc",
+          "module": "unimixins",
+          "version": {
+            "requires": "0.2.1"
+          },
+          "thirdPartyCompatibility": {
+            "artifactSelector": {
+              "name": "unimixins",
+              "type": "jar",
+              "extension": "jar",
+              "classifier": "dev"
+            }
+          }
+        }
+      ],
+      "dependencyConstraints": [
+        {
+          "group": "com.github.GTNewHorizons",
+          "module": "GTNHLib",
+          "version": {
+            "requires": "0.9.20"
+          },
+          "reason": "fixes duplicate mod errors in java 17 configurations using old gtnhlib"
+        }
+      ],
+      "files": [
+        {
+          "name": "combatbackport-1.0.0-dev.jar",
+          "url": "combatbackport-1.0.0-dev.jar",
+          "size": 3024948,
+          "sha512": "f43741688eb0df276bd09a41131cede03f107444c42482bf8cedc4905fda6e3499a59139f29c2774a0066cbdfc68cc6f67ba83dc217b63e449adc4bc7c4c89f8",
+          "sha256": "fee2d3e84a6734e897d11a2bfa041ae25a6be4e53550cc8eb59f6af329f234ec",
+          "sha1": "b799f1e025e6682d49363e70b8bef08c63819184",
+          "md5": "e8f22f0b306d9e1ce0f8edab4d12be22"
+        }
+      ]
+    },
+    {
+      "name": "reobfElements",
+      "attributes": {
+        "com.gtnewhorizons.retrofuturagradle.obfuscation": "srg",
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "combatbackport-1.0.0.jar",
+          "url": "combatbackport-1.0.0.jar",
+          "size": 3026717,
+          "sha512": "f8f3bfbcf655cab3256d85d19f8c0c99424a8c93982b0a44fb7739a3131306674fe1804a62621da93ea4eeffdf58cfdef673b079f7733172996fac458b633423",
+          "sha256": "5e6724596b0b6abc5180c7ffc10e3cde10eb59e356ab0a06f0dac9b07c919f2f",
+          "sha1": "98ec9244985954ad4ffd0c18f53db279b26e5d1f",
+          "md5": "cd004e308a7f76955c6a2814f6afd650"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "com.gtnewhorizons.retrofuturagradle.obfuscation": "mcp",
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "combatbackport-1.0.0-sources.jar",
+          "url": "combatbackport-1.0.0-sources.jar",
+          "size": 2977005,
+          "sha512": "4acd50ad2edf5526b7315a1bb803121d73ae98fb965c3248ead5206c33d42b98fcab1a5a02d7f1e6d65b9f0af5d1a55cb6a9c31432d02c7373c2c19829c8f330",
+          "sha256": "6e0b24b41980a4ba76d0273469e603004ca735477f39a4718af9053cf7f133ca",
+          "sha1": "e4d95a7cd1d22b08a171fb51415a6c3b52efe81a",
+          "md5": "c8d03ba935102b17ae01c9c4663ee3ee"
+        }
+      ]
+    }
+  ]
+}

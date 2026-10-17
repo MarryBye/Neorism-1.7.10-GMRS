@@ -2,4 +2,8 @@
 
 repositories {
     mavenLocal()
+    maven {
+        name = "ProjectLocal"
+        url = uri("${rootDir}/local-repo")
+    }
 }

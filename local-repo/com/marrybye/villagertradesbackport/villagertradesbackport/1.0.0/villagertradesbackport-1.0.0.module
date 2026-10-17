@@ -1,0 +1,131 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.marrybye.villagertradesbackport",
+    "module": "villagertradesbackport",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.7.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "com.gtnewhorizons.retrofuturagradle.obfuscation": "mcp",
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "villagertradesbackport-1.0.0-dev.jar",
+          "url": "villagertradesbackport-1.0.0-dev.jar",
+          "size": 225616,
+          "sha512": "c2e0669a14e2228d5ff2d07ab9a62838a530ec0ea4676f4514df8a3cf2bdf34bf74175deb52e9f03c5f7afe5745391bf1cd7aa2ba95f727fcdc948947a532b74",
+          "sha256": "d1d9e41483328cd31b9f6d912fd2cf41eb8264dcee876d8c2f8fd820eb8d57a4",
+          "sha1": "15a74d21884471463d7286426731059974b6b7ce",
+          "md5": "64b44f93ba8bc5a418ea35fdf000ed9d"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "com.gtnewhorizons.retrofuturagradle.obfuscation": "mcp",
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.github.legacymoddingmc",
+          "module": "unimixins",
+          "version": {
+            "requires": "0.3.1"
+          },
+          "thirdPartyCompatibility": {
+            "artifactSelector": {
+              "name": "unimixins",
+              "type": "jar",
+              "extension": "jar",
+              "classifier": "dev"
+            }
+          }
+        }
+      ],
+      "dependencyConstraints": [
+        {
+          "group": "com.github.GTNewHorizons",
+          "module": "GTNHLib",
+          "version": {
+            "requires": "0.11.48"
+          },
+          "reason": "fixes duplicate mod errors in java 17 configurations using old gtnhlib"
+        }
+      ],
+      "files": [
+        {
+          "name": "villagertradesbackport-1.0.0-dev.jar",
+          "url": "villagertradesbackport-1.0.0-dev.jar",
+          "size": 225616,
+          "sha512": "c2e0669a14e2228d5ff2d07ab9a62838a530ec0ea4676f4514df8a3cf2bdf34bf74175deb52e9f03c5f7afe5745391bf1cd7aa2ba95f727fcdc948947a532b74",
+          "sha256": "d1d9e41483328cd31b9f6d912fd2cf41eb8264dcee876d8c2f8fd820eb8d57a4",
+          "sha1": "15a74d21884471463d7286426731059974b6b7ce",
+          "md5": "64b44f93ba8bc5a418ea35fdf000ed9d"
+        }
+      ]
+    },
+    {
+      "name": "reobfElements",
+      "attributes": {
+        "com.gtnewhorizons.retrofuturagradle.obfuscation": "srg",
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "villagertradesbackport-1.0.0.jar",
+          "url": "villagertradesbackport-1.0.0.jar",
+          "size": 226323,
+          "sha512": "1235dfc6cc4cb51697f6d7b5d4499f8298f4eba1b4aedcf10aa8bba17db3c1f815e8244388931cfa13f11e251b329286325755759c8d244f51379381eef63057",
+          "sha256": "20b25e0f5134b1e90d5dce8382bca2348b63647302a91d6bae38096c7268b9f0",
+          "sha1": "42631610f2f5bda73224d057595701ad27e6125e",
+          "md5": "724100fadc1287e0d319e06a156fdb31"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "com.gtnewhorizons.retrofuturagradle.obfuscation": "mcp",
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "villagertradesbackport-1.0.0-sources.jar",
+          "url": "villagertradesbackport-1.0.0-sources.jar",
+          "size": 180996,
+          "sha512": "1856d28776f55267e9ac7ba34c03d27aca39edfe3e8c723c8bd8f75b7fe054052b11bf40b18bbb61cf2b26ba796db175097fb36cfa89fe6185c6a0531b5ca140",
+          "sha256": "350805cb6e5a0f6539c8f556b659819902bc82210d811d3ee1676c3f913b6797",
+          "sha1": "e50d0a4e9e51e3ffc7ede8ec88811f2012c3a396",
+          "md5": "b7273ef6184075a3b19cf116fc891760"
+        }
+      ]
+    }
+  ]
+}
