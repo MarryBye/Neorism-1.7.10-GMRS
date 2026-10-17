@@ -1,38 +1,48 @@
 package com.marrybye.neorism.client.render.entity;
 
 import com.marrybye.neorism.Neorism;
+import com.marrybye.neorism.client.model.ModelBiped64;
 import com.marrybye.neorism.common.entity.hunter.EntityHunter;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * Angelica-compatible renderer for hunter patrols with skin variants.
+ * Angelica-compatible renderer for hunter patrols with 64x64 skin variants.
  */
 public class RenderHunter extends RenderBiped {
 
-    private static final ResourceLocation[] SKINS = new ResourceLocation[10];
-
-    static {
-        for (int i = 1; i <= 9; ++i) {
-            SKINS[i] = new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter" + i + ".png");
-        }
-    }
+    private static final ResourceLocation[] SKINS = new ResourceLocation[] {
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter1.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter2.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter3.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter4.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter5_slim.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter6_slim.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter7_slim.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter8_slim.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter9.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter10.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter11.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter12_slim.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter13.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter14.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter15.png"),
+        new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter16.png")
+    };
 
     public RenderHunter() {
-        super(new ModelBiped(0.0F), 0.5F);
+        super(new ModelBiped64(0.0F), 0.5F);
     }
 
     @Override
     protected ResourceLocation getEntityTexture(Entity entity) {
         if (entity instanceof EntityHunter) {
             int skin = ((EntityHunter) entity).getSkinType();
-            if (skin >= 1 && skin <= 9 && SKINS[skin] != null) {
-                return SKINS[skin];
-            }
+            int idx = Math.abs(skin) % SKINS.length;
+            return SKINS[idx];
         }
-        return SKINS[1];
+        return SKINS[0];
     }
 }
