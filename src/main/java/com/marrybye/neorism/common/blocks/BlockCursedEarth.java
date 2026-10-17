@@ -11,7 +11,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -51,6 +53,26 @@ public class BlockCursedEarth extends BlockNeorism {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        ItemStack held = player.getHeldItem();
+        if (held != null && held.getItem() instanceof com.marrybye.neorism.common.items.ItemHolyWater) {
+            if (!world.isRemote) {
+                world.setBlock(x, y, z, Blocks.dirt, 0, 3);
+                int uses = held.getItemDamage() == 2 ? 100 : (held.getItemDamage() == 1 ? 50 : 25);
+                if (!player.capabilities.isCreativeMode && world.rand.nextInt(uses) == 0) {
+                    held.stackSize--;
+                    if (held.stackSize <= 0) {
+                        player.setCurrentItemOrArmor(0, null);
+                    }
+                }
+                world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 0.8F, 1.0F);
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.marrybye.neorism.common.faction;
 
+import com.marrybye.neorism.api.faction.IFaction;
 import com.marrybye.neorism.api.faction.IFactionPlayer;
 import com.marrybye.neorism.api.faction.IPlayableFaction;
 import com.marrybye.neorism.common.core.ModFactions;
@@ -117,6 +118,16 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
 
     public boolean isNeutral() {
         return currentFaction == null || currentFaction.isNeutral();
+    }
+
+    public boolean isInFaction(IFaction faction) {
+        if (faction == null) return false;
+        return currentFaction != null && currentFaction.equals(faction);
+    }
+
+    public boolean isInFaction(de.teamlapen.faction.api.factions.IFaction faction) {
+        if (faction == null) return false;
+        return currentFaction != null && currentFaction.getId().equalsIgnoreCase(faction.getName());
     }
 
     @Override

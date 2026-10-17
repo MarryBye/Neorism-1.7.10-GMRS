@@ -18,11 +18,19 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
+import com.marrybye.neorism.api.faction.IFaction;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
+import com.marrybye.neorism.common.core.ModFactions;
+import com.marrybye.neorism.common.core.ModPotions;
+import com.marrybye.neorism.common.util.Helper;
+import net.minecraft.potion.PotionEffect;
+
 /**
  * Hunter Hat headwear with Broad (meta 0) and Tall (meta 1) variants.
  * Iconic vampire hunter brimmed hats.
  */
-public class ItemHunterHat extends ItemArmor {
+public class ItemHunterHat extends ItemArmor implements IFactionRestriction {
 
     @SideOnly(Side.CLIENT)
     private IIcon iconBroad;
@@ -81,11 +89,9 @@ public class ItemHunterHat extends ItemArmor {
 
     @Override
     public void onArmorTick(net.minecraft.world.World world, EntityPlayer player, ItemStack itemStack) {
-        if (!world.isRemote && com.marrybye.neorism.common.util.Helper.isVampire(player)) {
-            if (world.getTotalWorldTime() % 40 == 0) {
-                player.attackEntityFrom(com.marrybye.neorism.common.core.ModDamageSource.causeIndirectHolyWaterDamage(player, player), 1.0F);
-                player.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.weakness.id, 60, 0));
-                com.marrybye.neorism.common.core.ModSounds.playAtEntity(player, com.marrybye.neorism.common.core.ModSounds.SIZZLE, 0.5F, 1.0F);
+        if (!world.isRemote && (world.getTotalWorldTime() % 16 == 8)) {
+            if (!Helper.isHunter(player)) {
+                player.addPotionEffect(new PotionEffect(ModPotions.garlic.id, 20, 1));
             }
         }
     }
@@ -94,6 +100,26 @@ public class ItemHunterHat extends ItemArmor {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.hunter_hat.desc"));
-        tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.hunter"));
+        FactionRestriction.addTooltipIfExist(player, stack, tooltip);
+    }
+
+    @Override
+    public IFaction getRequiredFaction(ItemStack stack) {
+        return ModFactions.HUNTER;
+    }
+
+    @Override
+    public int getMinLevel(ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public String getRequiredSkill(ItemStack stack) {
+        return null;
+    }
+
+    @Override
+    public String getCustomMessageKey(ItemStack stack) {
+        return "message.vampirism.restriction.hunter_clothing";
     }
 }

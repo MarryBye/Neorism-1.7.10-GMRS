@@ -112,6 +112,23 @@ public class EntityHolyWaterBottle extends EntityThrowable {
                 }
             }
 
+            // Canonical Cursed Earth purification in splash radius
+            int minX = (int) Math.floor(posX - radius);
+            int maxX = (int) Math.ceil(posX + radius);
+            int minY = (int) Math.floor(posY - 2.0D);
+            int maxY = (int) Math.ceil(posY + 2.0D);
+            int minZ = (int) Math.floor(posZ - radius);
+            int maxZ = (int) Math.ceil(posZ + radius);
+            for (int bx = minX; bx <= maxX; bx++) {
+                for (int by = minY; by <= maxY; by++) {
+                    for (int bz = minZ; bz <= maxZ; bz++) {
+                        if (worldObj.getBlock(bx, by, bz) == com.marrybye.neorism.common.core.ModBlocks.cursedEarth) {
+                            worldObj.setBlock(bx, by, bz, net.minecraft.init.Blocks.dirt, 0, 3);
+                        }
+                    }
+                }
+            }
+
             worldObj.playSoundEffect(posX, posY, posZ, "game.potion.smash", 1.0F, 0.9F + rand.nextFloat() * 0.2F);
             ModSounds.playAt(worldObj, posX, posY, posZ, ModSounds.SIZZLE, 0.8F, 1.2F);
             setDead();

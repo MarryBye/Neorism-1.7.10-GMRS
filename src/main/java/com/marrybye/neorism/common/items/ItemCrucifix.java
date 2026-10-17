@@ -4,10 +4,15 @@ import java.util.List;
 
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.api.entity.IVampireEntity;
+import com.marrybye.neorism.api.faction.IFaction;
+import com.marrybye.neorism.api.items.IItemWithTier;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
 import com.marrybye.neorism.common.core.ModDamageSource;
+import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.core.ModPotions;
 import com.marrybye.neorism.common.core.ModSounds;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 
@@ -15,6 +20,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -31,8 +37,9 @@ import net.minecraft.world.World;
 /**
  * Holy crucifix item (Wooden, Iron, Golden).
  * Repels undead and vampire entities when channeled by mortal hunters.
+ * Ported 1:1 from TeamLapen's CrucifixItem.java.
  */
-public class ItemCrucifix extends ItemNeorism {
+public class ItemCrucifix extends ItemNeorism implements IItemWithTier, IFactionRestriction {
 
     public static final int TIERS = 3;
 
@@ -48,6 +55,48 @@ public class ItemCrucifix extends ItemNeorism {
     }
 
     @Override
+    public Tier getVampirismTier() {
+        return Tier.NORMAL;
+    }
+
+    public Tier getVampirismTier(ItemStack stack) {
+        int meta = stack != null ? stack.getItemDamage() : 0;
+        switch (meta) {
+            case 1: return Tier.ENHANCED;
+            case 2: return Tier.ULTIMATE;
+            default: return Tier.NORMAL;
+        }
+    }
+
+    @Override
+    public IFaction getRequiredFaction(ItemStack stack) {
+        return ModFactions.HUNTER;
+    }
+
+    @Override
+    public int getMinLevel(ItemStack stack) {
+        return 1;
+    }
+
+    @Override
+    public String getRequiredSkill(ItemStack stack) {
+        Tier tier = getVampirismTier(stack);
+        return tier == Tier.ULTIMATE ? "ultimate_crucifix" : "crucifix_wielder";
+    }
+
+    @Override
+    public String getCustomMessageKey(ItemStack stack) {
+        return "message.vampirism.restriction.holy";
+    }
+
+    @Override
+    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+        if (!world.isRemote) {
+            Helper.handleHeldNonVampireItem(stack, entity, isSelected);
+        }
+    }
+
+    @Override
     public int getMaxItemUseDuration(ItemStack stack) {
         return 72000;
     }
@@ -59,6 +108,9 @@ public class ItemCrucifix extends ItemNeorism {
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+        if (!FactionRestriction.canUse(player, stack, true)) {
+            return stack;
+        }
         player.setItemInUse(stack, getMaxItemUseDuration(stack));
         return stack;
     }
@@ -67,7 +119,7 @@ public class ItemCrucifix extends ItemNeorism {
     public void onUsingTick(ItemStack stack, EntityPlayer player, int count) {
         World world = player.worldObj;
         int tier = stack.getItemDamage();
-        double radius = tier == 2 ? 12.0D : (tier == 1 ? 8.5D : 5.5D);
+        double radius = tier == 2 ? 10.0D : (tier == 1 ? 8.0D : 4.0D);
 
         // 1. If player is a vampire, holy power burns them!
         if (Helper.isVampire(player)) {
@@ -175,7 +227,15 @@ public class ItemCrucifix extends ItemNeorism {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
         int tier = stack.getItemDamage();
-        double radius = tier == 2 ? 12.0D : (tier == 1 ? 8.5D : 5.5D);
+        Tier vTier = getVampirismTier(stack);
+        if (vTier != Tier.NORMAL) {
+            EnumChatFormatting format = vTier == Tier.ENHANCED ? EnumChatFormatting.YELLOW : EnumChatFormatting.AQUA;
+            tooltip.add(format + StatCollector.translateToLocal("tooltip.neorism.tier." + vTier.getName()));
+        }
+
+        double radius = tier == 2 ? 10.0D : (tier == 1 ? 8.0D : 4.0D);
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted("tooltip.neorism.crucifix", radius));
+
+        FactionRestriction.addTooltipIfExist(player, stack, tooltip);
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
 import com.marrybye.neorism.common.core.ModSounds;
+import com.marrybye.neorism.common.faction.FactionRestriction;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 import com.marrybye.neorism.common.vampire.VampirePlayer;
@@ -17,71 +18,56 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
 /**
- * Heart Striker corrupted vampire sword with 3 tiers (Normal, Enhanced, Ultimate).
- * Dark vampiric blade siphoning vital energy and restoring health/blood to the wielder.
+ * Canonical Heart Striker corrupted vampire sword with 3 tiers (Normal, Enhanced, Ultimate).
+ * Heavy vampiric blade dealing massive damage and siphoning life/blood when charged.
+ * Ported 1:1 from TeamLapen's HeartStrikerItem.java.
  */
-public class ItemHeartStriker extends ItemSword {
+public class ItemHeartStriker extends ItemVampireSword {
 
-    public static final int TIERS = 3;
     private static final float[] LIFESTEAL_RATIO = {0.15F, 0.25F, 0.35F};
-    private static final int[] MAX_DURABILITY = {450, 950, 2000};
 
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
 
     public ItemHeartStriker() {
         super(ToolMaterial.EMERALD);
-        setHasSubtypes(true);
-        setMaxDamage(0);
         setUnlocalizedName("neorism.heart_striker");
         setCreativeTab(ModCreativeTabs.tabMain);
     }
 
     @Override
-    public int getMaxDamage(ItemStack stack) {
-        int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
-        return MAX_DURABILITY[tier];
-    }
-
-    @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        if (!super.hitEntity(stack, target, attacker)) {
+            return false;
+        }
+
         int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
 
         if (!target.worldObj.isRemote && attacker instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) attacker;
-            if (!Helper.isVampire(player)) {
-                player.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.wither.id, 60, 0));
-                ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 0.5F, 0.8F);
-                ModLogger.combat("Heart Striker withered non-vampire wielder %s", player.getCommandSenderName());
-                stack.damageItem(1, attacker);
-                return true;
-            }
+            if (Helper.isVampire(player) && getChargePercentage(stack) > 0.0F) {
+                float heal = 6.0F * LIFESTEAL_RATIO[tier];
 
-            float heal = 6.0F * LIFESTEAL_RATIO[tier];
+                if (player.shouldHeal()) {
+                    player.heal(heal);
+                }
 
-            if (player.shouldHeal()) {
-                player.heal(heal);
-            }
-
-            if (Helper.isVampire(player)) {
                 VampirePlayer vp = VampirePlayer.get(player);
                 if (vp != null && vp.getBloodStats() != null && vp.getBloodStats().needsBlood()) {
                     vp.getBloodStats().addBlood(1, 0.5F);
                 }
-            }
 
-            ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 0.8F, 1.2F);
-            ModLogger.combat("Heart Striker (Tier %d) siphoned %.1f HP for %s",
-                tier + 1, heal, player.getCommandSenderName());
+                ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 0.8F, 1.2F);
+                ModLogger.combat("Heart Striker (Tier %d) siphoned %.1f HP for %s",
+                    tier + 1, heal, player.getCommandSenderName());
+            }
         }
 
-        stack.damageItem(1, attacker);
         return true;
     }
 
@@ -141,6 +127,6 @@ public class ItemHeartStriker extends ItemSword {
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.heart_striker.desc"));
         tooltip.add(EnumChatFormatting.DARK_RED + "+" + (int) (LIFESTEAL_RATIO[tier] * 100) + "% " +
             StatCollector.translateToLocal("tooltip.neorism.lifesteal"));
-        tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.vampire"));
+        super.addInformation(stack, player, tooltip, advanced);
     }
 }

@@ -46,6 +46,13 @@ public class ItemGarlic extends ItemFood {
     }
 
     @Override
+    public void onUpdate(ItemStack stack, World world, net.minecraft.entity.Entity entity, int itemSlot, boolean isSelected) {
+        if (!world.isRemote) {
+            Helper.handleHeldNonVampireItem(stack, entity, isSelected);
+        }
+    }
+
+    @Override
     protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
         super.onFoodEaten(stack, world, player);
         if (!world.isRemote) {

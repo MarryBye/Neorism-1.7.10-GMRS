@@ -23,11 +23,20 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
+import com.marrybye.neorism.api.faction.IFaction;
+import com.marrybye.neorism.api.items.IItemWithTier;
+import com.marrybye.neorism.common.core.ModFactions;
+import com.marrybye.neorism.common.core.ModPotions;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+
 /**
  * Armor of Swiftness set (head, chest, legs, feet) with 3 tiers (Normal, Enhanced, Ultimate).
- * High-agility armor designed for rapid combat maneuvers.
+ * Canonical port of TeamLapen's ArmorOfSwiftnessItem.
  */
-public class ItemSwiftnessArmor extends ItemArmor {
+public class ItemSwiftnessArmor extends ItemArmor implements IItemWithTier, IFactionRestriction {
 
     public static final int TIERS = 3;
     private static final String[] SUFFIXES = {"normal", "enhanced", "ultimate"};
@@ -66,7 +75,8 @@ public class ItemSwiftnessArmor extends ItemArmor {
     public Multimap getAttributeModifiers(ItemStack stack) {
         Multimap multimap = super.getAttributeModifiers(stack);
         int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
-        double speedBonus = (tier + 1) * 0.05D; // +5% / +10% / +15% speed per piece!
+        // Canonical speed bonuses: Normal 0.035, Enhanced 0.075, Ultimate 0.10
+        double speedBonus = tier == 2 ? 0.10D : (tier == 1 ? 0.075D : 0.035D);
         multimap.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(),
             new AttributeModifier(field_111210_e, "Swiftness Armor Speed", speedBonus, 1));
         return multimap;
@@ -122,11 +132,40 @@ public class ItemSwiftnessArmor extends ItemArmor {
 
     @Override
     public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        if (!world.isRemote && Helper.isVampire(player)) {
-            if (world.getTotalWorldTime() % 40 == 0) {
-                player.attackEntityFrom(com.marrybye.neorism.common.core.ModDamageSource.causeIndirectHolyWaterDamage(player, player), 1.5F);
-                player.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.weakness.id, 60, 0));
-                com.marrybye.neorism.common.core.ModSounds.playAtEntity(player, com.marrybye.neorism.common.core.ModSounds.SIZZLE, 0.5F, 1.0F);
+        if (world.isRemote) return;
+        long time = world.getTotalWorldTime();
+
+        // Toxicant penalty for non-hunters every 16 ticks
+        if (time % 16 == 8) {
+            if (!Helper.isHunter(player)) {
+                player.addPotionEffect(new PotionEffect(ModPotions.garlic.id, 20, 1));
+            }
+        }
+
+        // Full set bonus checked on chestplate every 45 ticks (matches reference tick % 45 == 3)
+        if (this.armorType == 1 && time % 45 == 3) {
+            boolean fullSet = true;
+            int minTierOrdinal = 2; // ULTIMATE
+
+            for (int i = 0; i < 4; i++) {
+                ItemStack armorPiece = player.getCurrentArmor(i);
+                if (armorPiece != null && armorPiece.getItem() instanceof ItemSwiftnessArmor) {
+                    minTierOrdinal = Math.min(minTierOrdinal, armorPiece.getItemDamage());
+                } else {
+                    fullSet = false;
+                    break;
+                }
+            }
+
+            if (fullSet) {
+                // Tier 2 (Ultimate): Jump Boost II (amplifier 1)
+                // Tier 1 (Enhanced): Jump Boost I (amplifier 0)
+                // Tier 0 (Normal): No jump boost (-1)
+                if (minTierOrdinal == 2) {
+                    player.addPotionEffect(new PotionEffect(Potion.jump.id, 50, 1, false));
+                } else if (minTierOrdinal == 1) {
+                    player.addPotionEffect(new PotionEffect(Potion.jump.id, 50, 0, false));
+                }
             }
         }
     }
@@ -134,10 +173,40 @@ public class ItemSwiftnessArmor extends ItemArmor {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
+        addTierInformation(stack, tooltip);
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.armor_swiftness.desc"));
-        tooltip.add(EnumChatFormatting.AQUA + "+" + ((tier + 1) * 5) + "% " +
-            StatCollector.translateToLocal("tooltip.neorism.movement_speed"));
-        tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.hunter"));
+        FactionRestriction.addTooltipIfExist(player, stack, tooltip);
+    }
+
+    @Override
+    public Tier getVampirismTier() {
+        return Tier.NORMAL;
+    }
+
+    @Override
+    public Tier getVampirismTier(ItemStack stack) {
+        if (stack == null) return Tier.NORMAL;
+        int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
+        return Tier.values()[tier];
+    }
+
+    @Override
+    public IFaction getRequiredFaction(ItemStack stack) {
+        return ModFactions.HUNTER;
+    }
+
+    @Override
+    public int getMinLevel(ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public String getRequiredSkill(ItemStack stack) {
+        return null;
+    }
+
+    @Override
+    public String getCustomMessageKey(ItemStack stack) {
+        return "message.vampirism.restriction.hunter_clothing";
     }
 }

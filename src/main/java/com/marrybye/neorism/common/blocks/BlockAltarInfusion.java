@@ -46,7 +46,7 @@ public class BlockAltarInfusion extends BlockModeled implements ITileEntityProvi
 
         if (!Helper.isVampire(player)) {
             if (!world.isRemote) {
-                player.addChatMessage(new ChatComponentTranslation("chat.neorism.not_a_vampire"));
+                player.addChatMessage(com.marrybye.neorism.common.faction.FactionRestriction.getFactionRestrictionMessage(com.marrybye.neorism.common.core.ModFactions.VAMPIRE));
             }
             return true;
         }

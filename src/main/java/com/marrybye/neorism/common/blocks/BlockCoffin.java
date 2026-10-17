@@ -113,7 +113,16 @@ public class BlockCoffin extends BlockModeled implements ITileEntityProvider {
 
         TileEntity te = world.getTileEntity(footX, y, footZ);
         if (te instanceof TileEntityCoffin) {
-            return ((TileEntityCoffin) te).trySleep(player);
+            TileEntityCoffin coffin = (TileEntityCoffin) te;
+            if (player.isSneaking()) {
+                if (!world.isRemote) {
+                    coffin.toggleClosed();
+                    world.playSoundEffect(footX + 0.5D, y + 0.5D, footZ + 0.5D,
+                        "neorism:cc/block/coffin_lid_slide", 0.8F, 1.0F);
+                }
+                return true;
+            }
+            return coffin.trySleep(player);
         }
         return false;
     }

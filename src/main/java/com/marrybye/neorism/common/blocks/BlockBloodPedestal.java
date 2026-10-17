@@ -43,12 +43,23 @@ public class BlockBloodPedestal extends BlockModeled implements ITileEntityProvi
         if (stored != null) {
             // Take item from pedestal
             ped.takeStoredItem();
+            if (stored.getItem() instanceof com.marrybye.neorism.common.items.ItemVampireSword) {
+                com.marrybye.neorism.common.items.ItemVampireSword sword = (com.marrybye.neorism.common.items.ItemVampireSword) stored.getItem();
+                if (sword.isFullyCharged(stored)) {
+                    sword.tryName(stored, player);
+                }
+            }
             if (!player.inventory.addItemStackToInventory(stored)) {
                 player.dropPlayerItemWithRandomChoice(stored, false);
             }
             world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "random.pop", 0.5F, 1.2F);
             return true;
         } else if (held != null) {
+            // Canonical check: only IBloodChargeable items can be placed on Blood Pedestal
+            if (!(held.getItem() instanceof com.marrybye.neorism.api.items.IBloodChargeable)) {
+                return false;
+            }
+
             // Place 1 item from hand onto pedestal
             ItemStack toPlace = held.copy();
             toPlace.stackSize = 1;
@@ -65,6 +76,20 @@ public class BlockBloodPedestal extends BlockModeled implements ITileEntityProvi
         }
 
         return false;
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof TileEntityBloodPedestal) {
+            return ((TileEntityBloodPedestal) te).getChargedProgress();
+        }
+        return 0;
     }
 
     @Override

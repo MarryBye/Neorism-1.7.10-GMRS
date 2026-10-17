@@ -39,18 +39,32 @@ public class ItemGarlicBread extends ItemFood {
     }
 
     @Override
+    public void onUpdate(ItemStack stack, World world, net.minecraft.entity.Entity entity, int itemSlot, boolean isSelected) {
+        if (!world.isRemote) {
+            Helper.handleHeldNonVampireItem(stack, entity, isSelected);
+        }
+    }
+
+    @Override
     protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
         super.onFoodEaten(stack, world, player);
-        if (!world.isRemote) {
-            if (Helper.isVampire(player)) {
-                player.attackEntityFrom(ModDamageSource.GARLIC, 6.0F);
-                player.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 1));
-                player.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 0));
-                player.addPotionEffect(new PotionEffect(ModPotions.garlic.id, 300, 1));
-                ModSounds.playAtEntity(player, ModSounds.SCREECH, 1.0F, 0.9F);
-                ModLogger.combat("Vampire %s ate Garlic Bread and suffered severe garlic burning!", player.getCommandSenderName());
-            } else {
-                player.addPotionEffect(new PotionEffect(Potion.regeneration.id, 100, 0));
+        if (world.isRemote) return;
+
+        if (Helper.isVampire(player)) {
+            Helper.applyGarlicBurn(player, 6.0F);
+            player.addPotionEffect(new PotionEffect(ModPotions.garlic.id, 200, 1));
+            ModSounds.playAtEntity(player, ModSounds.SCREECH, 1.0F, 0.9F);
+            ModLogger.combat("Vampire %s ate Garlic Bread and suffered severe garlic burning!", player.getCommandSenderName());
+        } else {
+            // Canonical ModConsumables.GARLIC: Cures Sanguinare Vampiris
+            if (player.isPotionActive(ModPotions.sanguinare)) {
+                player.removePotionEffect(ModPotions.sanguinare.id);
+                ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 1.0F, 1.0F);
+                ModLogger.combat("Player %s cured Sanguinare Vampiris by eating Garlic Bread", player.getCommandSenderName());
+            }
+            // Hunter bonus: nutrition 8, saturation 0.8F (+2 hunger, +0.1F saturation over base 6/0.7F)
+            if (Helper.isHunter(player) && player.getFoodStats() != null) {
+                player.getFoodStats().addStats(2, 0.1F);
             }
         }
     }

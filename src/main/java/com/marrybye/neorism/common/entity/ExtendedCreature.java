@@ -26,6 +26,7 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEntity {
 
     public static final String PROPERTY_ID = "neorism:extended_creature";
+    public static final int POISONOUS_BLOOD_DOSE_DURATION = 12000;
 
     private final EntityLivingBase entity;
     private int maxBlood = -1;
@@ -179,6 +180,13 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
             biter != null ? biter.asEntity().getCommandSenderName() : "unknown",
             entity.getCommandSenderName(), amt, blood, maxBlood);
 
+        if (poisonousBlood > 0 && biter != null) {
+            biter.asEntity().attackEntityFrom(ModDamageSource.GARLIC, 6.0F);
+            biter.asEntity().addPotionEffect(new PotionEffect(ModPotions.garlic.id, 200, 1));
+            ModLogger.combat("Vampire %s bit creature with poisonous blood and suffered garlic burns",
+                biter.asEntity().getCommandSenderName());
+        }
+
         // Creature starved of blood dies
         if (blood <= 0) {
             ModLogger.combat("Creature %s died from complete blood loss", entity.getCommandSenderName());
@@ -235,12 +243,25 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
 
     public void updateLiving() {
         ensureInitialized();
+        if (poisonousBlood > 0) {
+            poisonousBlood--;
+        }
         // Natural blood replenishment over time (1 in 20 chance every 40 ticks = ~2 seconds)
         if (blood < maxBlood && entity.ticksExisted % 40 == 0) {
             if (entity.worldObj.rand.nextInt(20) == 0) {
                 blood++;
             }
         }
+    }
+
+    public void setPoisonousBlood(int duration) {
+        ensureInitialized();
+        this.poisonousBlood = Math.max(this.poisonousBlood, duration);
+    }
+
+    public boolean hasPoisonousBlood() {
+        ensureInitialized();
+        return this.poisonousBlood > 0;
     }
 
     public int getBlood() {

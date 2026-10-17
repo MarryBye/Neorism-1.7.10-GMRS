@@ -9,6 +9,7 @@ import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.faction.FactionPlayerHandler;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -127,6 +128,54 @@ public class Helper {
     }
 
     /**
+     * Checks if entity can really see target within field of view (100 degrees cone).
+     * Exact 1:1 ported formula from modern Vampirism UtilLib.canReallySee.
+     */
+    public static boolean canReallySee(EntityLivingBase entity, EntityLivingBase target, boolean alsoRaytrace) {
+        if (entity == null || target == null) return false;
+        if (alsoRaytrace && !entity.canEntityBeSeen(target)) {
+            return false;
+        }
+        double lookX = -Math.sin(entity.rotationYawHead / 180.0F * (float) Math.PI);
+        double lookZ = Math.cos(entity.rotationYawHead / 180.0F * (float) Math.PI);
+        double lookLen = Math.sqrt(lookX * lookX + lookZ * lookZ);
+        if (lookLen > 0) {
+            lookX /= lookLen;
+            lookZ /= lookLen;
+        }
+        double distX = target.posX - entity.posX;
+        double distZ = target.posZ - entity.posZ;
+        double distLen = Math.sqrt(distX * distX + distZ * distZ);
+        if (distLen > 0) {
+            distX /= distLen;
+            distZ /= distLen;
+        }
+        double dot = lookX * distX + lookZ * distZ;
+        dot = Math.max(-1.0D, Math.min(1.0D, dot));
+        double alpha = Math.acos(dot);
+        return alpha < Math.PI / 1.8D;
+    }
+
+    /**
+     * If held by a vampire in hand, forces them to drop the item and inflicts toxicant effect.
+     * Exact 1:1 ported from Helper.handleHeldNonVampireItem.
+     */
+    public static boolean handleHeldNonVampireItem(ItemStack stack, Entity entity, boolean isSelected) {
+        if (entity instanceof net.minecraft.entity.EntityLivingBase && isSelected && entity.ticksExisted % 16 == 8) {
+            if (Helper.isVampire(entity)) {
+                ((net.minecraft.entity.EntityLivingBase) entity).addPotionEffect(new net.minecraft.potion.PotionEffect(com.marrybye.neorism.common.core.ModPotions.garlic.id, 20, 1));
+                if (entity instanceof EntityPlayer) {
+                    EntityPlayer player = (EntityPlayer) entity;
+                    player.dropPlayerItemWithRandomChoice(stack, true);
+                    player.destroyCurrentEquippedItem();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Shrinks item stack by 1 and places container/remainder item in player inventory.
      */
     public static ItemStack shrinkItemStack(ItemStack stack, EntityPlayer player) {
@@ -144,4 +193,15 @@ public class Helper {
         }
         return stack.stackSize > 0 ? stack : null;
     }
+
+    /**
+     * Applies garlic effect and garlic burn damage to a vampire entity.
+     */
+    public static void applyGarlicBurn(EntityLivingBase entity, float multiplier) {
+        if (entity != null && isVampire(entity)) {
+            entity.addPotionEffect(new net.minecraft.potion.PotionEffect(com.marrybye.neorism.common.core.ModPotions.garlic.id, (int) (multiplier * 20), 1));
+            entity.attackEntityFrom(com.marrybye.neorism.common.core.ModDamageSource.GARLIC, multiplier);
+        }
+    }
 }
+

@@ -2,6 +2,8 @@ package com.marrybye.neorism.common.blocks;
 
 import com.marrybye.neorism.common.core.ModFluids;
 import com.marrybye.neorism.common.core.ModItems;
+import com.marrybye.neorism.common.items.ItemBloodBottle;
+import com.marrybye.neorism.common.items.ItemBloodFlask;
 import com.marrybye.neorism.common.tileentity.TileEntityBloodContainer;
 
 import cpw.mods.fml.relauncher.Side;
@@ -15,6 +17,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
+/**
+ * Blood Container multiblock storage block.
+ * Supports full bidirectional interaction with buckets, blood bottles, and flasks.
+ * Ported 1:1 from TeamLapen's BloodContainerBlock.java.
+ */
 public class BlockBloodContainer extends BlockModeled implements ITileEntityProvider {
 
     public BlockBloodContainer() {
@@ -45,7 +52,7 @@ public class BlockBloodContainer extends BlockModeled implements ITileEntityProv
         ItemStack held = player.getHeldItem();
 
         if (held != null) {
-            // Bucket interaction
+            // 1. Bucket interactions
             if (held.getItem() == Items.bucket && container.getBloodAmount() >= 1000) {
                 container.drainBlood(1000);
                 if (!player.capabilities.isCreativeMode) {
@@ -66,16 +73,73 @@ public class BlockBloodContainer extends BlockModeled implements ITileEntityProv
                 }
                 world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "liquid.water", 0.8F, 1.0F);
                 return true;
-            } else if (held.getItem() == ModItems.bloodBottle) {
-                // Add bottle of blood (200 mB)
-                int added = container.addBlood(200);
-                if (added > 0) {
-                    if (!player.capabilities.isCreativeMode) {
-                        held.stackSize--;
-                        player.inventory.addItemStackToInventory(new ItemStack(Items.glass_bottle));
+            }
+
+            // 2. Empty vanilla glass bottle -> fill from container
+            if (held.getItem() == Items.glass_bottle && container.getBloodAmount() >= 200) {
+                container.drainBlood(200);
+                if (!player.capabilities.isCreativeMode) {
+                    held.stackSize--;
+                    ItemStack bottle = new ItemStack(ModItems.bloodBottle, 1, 1);
+                    if (!player.inventory.addItemStackToInventory(bottle)) {
+                        player.dropPlayerItemWithRandomChoice(bottle, false);
                     }
-                    world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "liquid.water", 0.7F, 1.2F);
-                    return true;
+                }
+                world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 0.8F, 1.0F);
+                return true;
+            }
+
+            // 3. Mod Blood Bottle interaction
+            if (held.getItem() == ModItems.bloodBottle) {
+                int curDamage = held.getItemDamage();
+                if (curDamage > 0 && container.getBloodAmount() < container.getCapacity()) {
+                    // Pour blood from bottle into container
+                    int canAcceptUnits = (container.getCapacity() - container.getBloodAmount()) / 100;
+                    int transfer = Math.min(curDamage, canAcceptUnits);
+                    if (transfer > 0) {
+                        container.addBlood(transfer * 100);
+                        held.setItemDamage(curDamage - transfer);
+                        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "liquid.water", 0.8F, 1.0F);
+                        return true;
+                    }
+                } else if (curDamage < ItemBloodBottle.MAX_BLOOD && container.getBloodAmount() >= 100) {
+                    // Fill bottle from container
+                    int neededUnits = ItemBloodBottle.MAX_BLOOD - curDamage;
+                    int availUnits = container.getBloodAmount() / 100;
+                    int transfer = Math.min(neededUnits, availUnits);
+                    if (transfer > 0) {
+                        container.drainBlood(transfer * 100);
+                        held.setItemDamage(curDamage + transfer);
+                        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 0.7F, 1.2F);
+                        return true;
+                    }
+                }
+            }
+
+            // 4. Mod Blood Flask interaction
+            if (held.getItem() == ModItems.bloodFlask) {
+                int curFlaskBlood = ItemBloodFlask.getBlood(held);
+                if (curFlaskBlood > 0 && container.getBloodAmount() < container.getCapacity()) {
+                    // Pour blood from flask into container
+                    int canAcceptUnits = (container.getCapacity() - container.getBloodAmount()) / 100;
+                    int transfer = Math.min(curFlaskBlood, canAcceptUnits);
+                    if (transfer > 0) {
+                        container.addBlood(transfer * 100);
+                        ItemBloodFlask.setBlood(held, curFlaskBlood - transfer);
+                        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "liquid.water", 0.8F, 1.0F);
+                        return true;
+                    }
+                } else if (curFlaskBlood < ItemBloodFlask.CAPACITY && container.getBloodAmount() >= 100) {
+                    // Fill flask from container
+                    int spaceUnits = ItemBloodFlask.CAPACITY - curFlaskBlood;
+                    int availUnits = container.getBloodAmount() / 100;
+                    int transfer = Math.min(spaceUnits, availUnits);
+                    if (transfer > 0) {
+                        container.drainBlood(transfer * 100);
+                        ItemBloodFlask.setBlood(held, curFlaskBlood + transfer);
+                        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "liquid.water", 0.8F, 1.2F);
+                        return true;
+                    }
                 }
             }
         }
@@ -84,6 +148,57 @@ public class BlockBloodContainer extends BlockModeled implements ITileEntityProv
         player.addChatMessage(new ChatComponentTranslation("chat.neorism.blood_container_status",
             container.getBloodAmount(), container.getCapacity()));
         return true;
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof TileEntityBloodContainer) {
+            TileEntityBloodContainer container = (TileEntityBloodContainer) te;
+            if (container.getBloodAmount() == 0) return 0;
+            return 1 + (int) ((float) container.getBloodAmount() / (float) container.getCapacity() * 14.0F);
+        }
+        return 0;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, net.minecraft.entity.EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(world, x, y, z, placer, stack);
+        if (stack != null && stack.hasTagCompound() && stack.getTagCompound().hasKey("FluidAmount")) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if (te instanceof TileEntityBloodContainer) {
+                ((TileEntityBloodContainer) te).addBlood(stack.getTagCompound().getInteger("FluidAmount"));
+            }
+        }
+    }
+
+    @Override
+    public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
+        if (!world.isRemote && !player.capabilities.isCreativeMode) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            if (te instanceof TileEntityBloodContainer) {
+                TileEntityBloodContainer container = (TileEntityBloodContainer) te;
+                int blood = container.getBloodAmount();
+                ItemStack drop = new ItemStack(this, 1);
+                if (blood > 0) {
+                    net.minecraft.nbt.NBTTagCompound tag = new net.minecraft.nbt.NBTTagCompound();
+                    tag.setInteger("FluidAmount", blood);
+                    drop.setTagCompound(tag);
+                }
+                dropBlockAsItem(world, x, y, z, drop);
+            }
+        }
+        super.onBlockHarvested(world, x, y, z, meta, player);
+    }
+
+    @Override
+    public java.util.ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+        return new java.util.ArrayList<ItemStack>();
     }
 
     @SideOnly(Side.CLIENT)

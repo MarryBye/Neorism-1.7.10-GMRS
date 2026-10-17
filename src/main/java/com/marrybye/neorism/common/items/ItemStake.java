@@ -4,11 +4,17 @@ import java.util.List;
 
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.api.entity.IVampireEntity;
+import com.marrybye.neorism.api.faction.IFaction;
 import com.marrybye.neorism.common.achievement.ModAchievements;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
 import com.marrybye.neorism.common.core.ModDamageSource;
+import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.core.ModSounds;
+import com.marrybye.neorism.common.faction.FactionPlayerHandler;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
+import com.marrybye.neorism.common.skills.SkillHandler;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 
@@ -21,13 +27,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
 
 /**
  * Wooden Stake weapon designed for hunters.
- * Features an instant-kill backstab calculation against weakened vampires.
+ * Features canonical instant-kill backstab calculation against weakened vampires.
+ * Ported 1:1 from TeamLapen's StakeItem.java.
  */
-public class ItemStake extends ItemSword {
+public class ItemStake extends ItemSword implements IFactionRestriction {
 
     public ItemStake() {
         super(ToolMaterial.WOOD);
@@ -38,68 +44,89 @@ public class ItemStake extends ItemSword {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        if (target == null || attacker == null) {
-            return super.hitEntity(stack, target, attacker);
+    public IFaction getRequiredFaction(ItemStack stack) {
+        return ModFactions.HUNTER;
+    }
+
+    @Override
+    public int getMinLevel(ItemStack stack) {
+        return 1;
+    }
+
+    @Override
+    public String getRequiredSkill(ItemStack stack) {
+        return null;
+    }
+
+    @Override
+    public String getCustomMessageKey(ItemStack stack) {
+        return null;
+    }
+
+    public static boolean canKillInstantly(EntityLivingBase target, EntityLivingBase attacker) {
+        if (target == null || attacker == null || !attacker.isEntityAlive()) return false;
+
+        boolean isHunter = false;
+        if (attacker instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) attacker;
+            SkillHandler sh = SkillHandler.get(player);
+            boolean hasStakeSkill = sh != null && sh.isSkillUnlocked("stake1");
+            isHunter = hasStakeSkill || Helper.isHunter(player);
+        } else {
+            isHunter = Helper.isHunter(attacker);
         }
 
+        if (!isHunter) return false;
+
+        // Target must be a vampire
         boolean isVampire = Helper.isVampire(target) ||
             (target instanceof IVampireEntity) ||
             target.getClass().getName().toLowerCase().contains("vampire");
 
-        if (isVampire) {
-            Vec3 attackerLook = attacker.getLookVec();
-            Vec3 targetLook = target.getLookVec();
-            double dot = attackerLook != null && targetLook != null ? attackerLook.dotProduct(targetLook) : 0.0D;
-            boolean fromBehind = dot > 0.4D;
+        if (!isVampire) return false;
 
-            float maxHp = target.getMaxHealth();
-            float curHp = target.getHealth();
-            float hpPercent = maxHp > 0.0F ? curHp / maxHp : 1.0F;
+        // Canonical health threshold: 35% max HP
+        float maxHealth = target.getMaxHealth();
+        if (target.getHealth() > (0.35F * maxHealth)) {
+            return false;
+        }
 
-            float thresholdPercent = 0.40F;
-            float thresholdHp = 8.0F;
-            float frontalBonus = 3.0F;
+        // Canonical backstab check: target cannot see attacker
+        return !Helper.canReallySee(target, attacker, true);
+    }
 
-            if (attacker instanceof EntityPlayer) {
-                com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get((EntityPlayer) attacker);
-                if (sh != null && sh.isSkillUnlocked("stake_mastery")) {
-                    thresholdPercent = 0.60F;
-                    thresholdHp = 14.0F;
-                    frontalBonus = 6.0F;
-                }
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        if (attacker instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) attacker;
+            if (!FactionRestriction.canUse(player, stack, true)) {
+                return false;
             }
+        }
 
-            // Instant kill condition: from behind and (<= threshold health)
-            if (fromBehind && (hpPercent <= thresholdPercent || curHp <= thresholdHp)) {
-                if (!target.worldObj.isRemote) {
-                    target.attackEntityFrom(ModDamageSource.STAKE, curHp + 100.0F);
-                    ModSounds.playAtEntity(target, ModSounds.STAKE, 1.2F, 0.9F);
-                    // Wood shatter particle & sound effect
-                    target.worldObj.playAuxSFX(2001, (int) target.posX, (int) target.posY, (int) target.posZ,
-                        net.minecraft.block.Block.getIdFromBlock(Blocks.log));
+        if (canKillInstantly(target, attacker)) {
+            if (!target.worldObj.isRemote) {
+                target.attackEntityFrom(ModDamageSource.STAKE, 10000.0F);
+                ModSounds.playAtEntity(target, ModSounds.STAKE, 1.5F, 0.7F);
+                // Wood shatter visual FX
+                target.worldObj.playAuxSFX(2001, (int) target.posX, (int) target.posY, (int) target.posZ,
+                    net.minecraft.block.Block.getIdFromBlock(Blocks.log));
 
-                    if (attacker instanceof EntityPlayer) {
-                        EntityPlayer player = (EntityPlayer) attacker;
-                        player.triggerAchievement(ModAchievements.stake);
-                        // Chance to drop vampire blood bottle
-                        if (target.worldObj.rand.nextInt(2) == 0 && ModItems.bloodBottle != null) {
-                            target.entityDropItem(new ItemStack(ModItems.bloodBottle, 1), 0.5F);
-                        }
-                    }
-
-                    ModLogger.combat("STAKE INSTANT-KILL! %s staked vampire %s from behind (dot=%.2f, hp=%.1f/%.1f)",
-                        attacker.getCommandSenderName(), target.getCommandSenderName(), dot, curHp, maxHp);
+                if (attacker instanceof EntityPlayer) {
+                    EntityPlayer player = (EntityPlayer) attacker;
+                    player.triggerAchievement(ModAchievements.stake);
                 }
-                stack.damageItem(3, attacker);
-                return true;
-            } else {
-                // Frontal or non-lethal strike: bonus damage against vampires
-                if (!target.worldObj.isRemote) {
-                    target.attackEntityFrom(ModDamageSource.STAKE, frontalBonus);
-                    ModSounds.playAtEntity(target, ModSounds.STAKE, 0.7F, 1.2F);
+
+                // Drop vampire soul
+                if (ModItems.soulOrbVampire != null) {
+                    target.entityDropItem(new ItemStack(ModItems.soulOrbVampire, 1), 0.5F);
                 }
+
+                ModLogger.combat("STAKE INSTANT-KILL! %s staked vampire %s from behind",
+                    attacker.getCommandSenderName(), target.getCommandSenderName());
             }
+            stack.damageItem(3, attacker);
+            return true;
         }
 
         return super.hitEntity(stack, target, attacker);
@@ -123,6 +150,6 @@ public class ItemStake extends ItemSword {
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
         tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.stake"));
         tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.neorism.stake.backstab_hint"));
-        tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.hunter"));
+        FactionRestriction.addTooltipIfExist(player, stack, tooltip);
     }
 }

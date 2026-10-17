@@ -3,6 +3,7 @@ package com.marrybye.neorism.common.items;
 import java.util.List;
 
 import com.marrybye.neorism.Neorism;
+import com.marrybye.neorism.api.faction.IFaction;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
 import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.core.ModSounds;
@@ -26,11 +27,15 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import com.marrybye.neorism.common.core.ModFactions;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
+
 /**
  * Hunter Crossbow with 4 variants (Basic, Enhanced, Double, Tech).
  * Powerful ranged weapon utilizing Quarrels with high velocity and flat trajectory.
  */
-public class ItemCrossbow extends ItemBow {
+public class ItemCrossbow extends ItemBow implements IFactionRestriction {
 
     public static final int TYPES = 4;
     private static final int[] DURABILITY = {384, 650, 500, 1000};
@@ -104,6 +109,9 @@ public class ItemCrossbow extends ItemBow {
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+        if (!FactionRestriction.canUse(player, stack, true)) {
+            return stack;
+        }
         int meta = Math.max(0, Math.min(stack.getItemDamage(), TYPES - 1));
 
         // Tech Crossbow: Semi-automatic firing from loaded clip!
@@ -284,6 +292,34 @@ public class ItemCrossbow extends ItemBow {
                 tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.tech_crossbow.empty"));
             }
         }
-        tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.hunter"));
+        FactionRestriction.addTooltipIfExist(player, stack, tooltip);
+    }
+
+    @Override
+    public IFaction getRequiredFaction(ItemStack stack) {
+        return ModFactions.HUNTER;
+    }
+
+    @Override
+    public int getMinLevel(ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public String getRequiredSkill(ItemStack stack) {
+        if (stack == null) return null;
+        int meta = Math.max(0, Math.min(stack.getItemDamage(), TYPES - 1));
+        switch (meta) {
+            case 0: return "weapon_table";
+            case 1: return "master_craftsmanship";
+            case 2: return "double_it";
+            case 3: return "artisan_craftsmanship";
+            default: return null;
+        }
+    }
+
+    @Override
+    public String getCustomMessageKey(ItemStack stack) {
+        return null;
     }
 }

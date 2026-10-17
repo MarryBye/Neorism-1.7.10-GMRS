@@ -15,11 +15,26 @@ import net.minecraft.util.ChunkCoordinates;
 public class TileEntityCoffin extends TileEntityNeorism {
 
     private boolean occupied = false;
-    private float lidAngle = 0.0F;
-    private float prevLidAngle = 0.0F;
+    private boolean closed = false;
+    private float lidAngle = 1.0F; // Default open
+    private float prevLidAngle = 1.0F;
 
     public boolean isOccupied() {
         return occupied;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+        markForUpdate();
+        markDirty();
+    }
+
+    public void toggleClosed() {
+        setClosed(!this.closed);
     }
 
     public float getLidAngle(float partialTicks) {
@@ -30,14 +45,24 @@ public class TileEntityCoffin extends TileEntityNeorism {
         if (worldObj.isRemote || player == null) return false;
 
         if (!Helper.isVampire(player)) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.coffin_only_vampires"));
+            player.addChatMessage(new ChatComponentTranslation("message.vampirism.coffin.cant_use"));
+            return false;
+        }
+
+        if (occupied) {
+            player.addChatMessage(new ChatComponentTranslation("message.vampirism.coffin.occupied"));
+            return false;
+        }
+
+        if (closed) {
+            player.addChatMessage(new ChatComponentTranslation("message.vampirism.coffin.closed"));
             return false;
         }
 
         // Vampires can only sleep during day (time between 0 and 12500)
         long time = worldObj.getWorldTime() % 24000;
         if (time > 12500 && time < 23500) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.coffin_only_day"));
+            player.addChatMessage(new ChatComponentTranslation("message.vampirism.coffin.day_only"));
             return false;
         }
 
@@ -69,10 +94,10 @@ public class TileEntityCoffin extends TileEntityNeorism {
     public void updateEntity() {
         super.updateEntity();
         prevLidAngle = lidAngle;
-        if (occupied && lidAngle < 1.0F) {
-            lidAngle = Math.min(1.0F, lidAngle + 0.1F);
-        } else if (!occupied && lidAngle > 0.0F) {
-            lidAngle = Math.max(0.0F, lidAngle - 0.1F);
+        if (closed && lidAngle > 0.0F) {
+            lidAngle = Math.max(0.0F, lidAngle - 0.05F);
+        } else if (!closed && lidAngle < 1.0F) {
+            lidAngle = Math.min(1.0F, lidAngle + 0.05F);
         }
     }
 
@@ -80,11 +105,17 @@ public class TileEntityCoffin extends TileEntityNeorism {
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setBoolean("occupied", occupied);
+        tag.setBoolean("closed", closed);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.occupied = tag.getBoolean("occupied");
+        this.closed = tag.getBoolean("closed");
+        if (this.closed) {
+            this.lidAngle = 0.0F;
+            this.prevLidAngle = 0.0F;
+        }
     }
 }

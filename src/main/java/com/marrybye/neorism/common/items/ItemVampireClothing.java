@@ -14,11 +14,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
+import com.marrybye.neorism.api.faction.IFaction;
+import com.marrybye.neorism.common.core.ModFactions;
+import com.marrybye.neorism.common.core.ModPotions;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
+import com.marrybye.neorism.common.util.Helper;
+import net.minecraft.potion.PotionEffect;
+
 /**
  * Aristocratic Vampire clothing (crown, hat, robe legs, boots).
- * Gives noble vampire stature, resistance, and blood capacity enhancement.
+ * Canonical port of TeamLapen's VampireClothingItem.
  */
-public class ItemVampireClothing extends ItemArmor {
+public class ItemVampireClothing extends ItemArmor implements IFactionRestriction {
 
     private final String pieceName;
 
@@ -49,11 +57,9 @@ public class ItemVampireClothing extends ItemArmor {
 
     @Override
     public void onArmorTick(net.minecraft.world.World world, EntityPlayer player, ItemStack itemStack) {
-        if (!world.isRemote && com.marrybye.neorism.common.util.Helper.isHunter(player)) {
-            if (world.getTotalWorldTime() % 40 == 0) {
-                player.attackEntityFrom(net.minecraft.util.DamageSource.magic, 1.0F);
-                player.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.confusion.id, 60, 0));
-                com.marrybye.neorism.common.core.ModSounds.playAtEntity(player, com.marrybye.neorism.common.core.ModSounds.SIZZLE, 0.5F, 1.0F);
+        if (!world.isRemote && (world.getTotalWorldTime() % 16 == 8)) {
+            if (!Helper.isVampire(player)) {
+                player.addPotionEffect(new PotionEffect(ModPotions.garlic.id, 20, 1));
             }
         }
     }
@@ -62,6 +68,26 @@ public class ItemVampireClothing extends ItemArmor {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
         tooltip.add(EnumChatFormatting.DARK_PURPLE + StatCollector.translateToLocal("tooltip.neorism.vampire_clothing.desc"));
-        tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.faction_restriction.vampire"));
+        FactionRestriction.addTooltipIfExist(player, stack, tooltip);
+    }
+
+    @Override
+    public IFaction getRequiredFaction(ItemStack stack) {
+        return ModFactions.VAMPIRE;
+    }
+
+    @Override
+    public int getMinLevel(ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public String getRequiredSkill(ItemStack stack) {
+        return null;
+    }
+
+    @Override
+    public String getCustomMessageKey(ItemStack stack) {
+        return "message.vampirism.restriction.vampire_clothing";
     }
 }

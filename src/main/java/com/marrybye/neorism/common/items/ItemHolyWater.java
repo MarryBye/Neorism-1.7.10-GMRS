@@ -26,11 +26,17 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import com.marrybye.neorism.api.faction.IFaction;
+import com.marrybye.neorism.api.items.IItemWithTier;
+import com.marrybye.neorism.common.core.ModFactions;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
+
 /**
  * Drinkable Holy Water bottle (Normal, Enhanced, Ultimate).
- * Cures Sanguinare Vampiris infection on mortals, heavily burns and damages vampire players.
+ * Canonical port of TeamLapen's HolyWaterBottleItem.
  */
-public class ItemHolyWater extends ItemNeorism {
+public class ItemHolyWater extends ItemNeorism implements IItemWithTier, IFactionRestriction {
 
     public static final int TIERS = 3;
 
@@ -56,8 +62,26 @@ public class ItemHolyWater extends ItemNeorism {
     }
 
     @Override
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+        if (world.getBlock(x, y, z) == com.marrybye.neorism.common.core.ModBlocks.cursedEarth) {
+            if (!world.isRemote) {
+                world.setBlock(x, y, z, net.minecraft.init.Blocks.dirt, 0, 3);
+                int uses = stack.getItemDamage() == 2 ? 100 : (stack.getItemDamage() == 1 ? 50 : 25);
+                if (!player.capabilities.isCreativeMode && world.rand.nextInt(uses) == 0) {
+                    stack.stackSize--;
+                }
+                world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 0.8F, 1.0F);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        player.setItemInUse(stack, getMaxItemUseDuration(stack));
+        if (FactionRestriction.canUse(player, stack, true)) {
+            player.setItemInUse(stack, getMaxItemUseDuration(stack));
+        }
         return stack;
     }
 
@@ -139,13 +163,39 @@ public class ItemHolyWater extends ItemNeorism {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
-        int tier = stack.getItemDamage();
-        if (tier == 2) {
-            tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.neorism.holy_water.ultimate"));
-        } else if (tier == 1) {
-            tooltip.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal("tooltip.neorism.holy_water.enhanced"));
-        } else {
-            tooltip.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.neorism.holy_water.normal"));
-        }
+        addTierInformation(stack, tooltip);
+        FactionRestriction.addTooltipIfExist(player, stack, tooltip);
+    }
+
+    @Override
+    public Tier getVampirismTier() {
+        return Tier.NORMAL;
+    }
+
+    @Override
+    public Tier getVampirismTier(ItemStack stack) {
+        if (stack == null) return Tier.NORMAL;
+        int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
+        return Tier.values()[tier];
+    }
+
+    @Override
+    public IFaction getRequiredFaction(ItemStack stack) {
+        return ModFactions.HUNTER;
+    }
+
+    @Override
+    public int getMinLevel(ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public String getRequiredSkill(ItemStack stack) {
+        return null;
+    }
+
+    @Override
+    public String getCustomMessageKey(ItemStack stack) {
+        return "message.vampirism.restriction.holy";
     }
 }

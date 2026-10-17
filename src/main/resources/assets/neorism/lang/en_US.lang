@@ -5579,7 +5579,8 @@ chat.neorism.trainer_initiation_req=Bring me a Wooden Stake and Garlic to begin 
 chat.neorism.hunter_joined=You have joined the Vampire Hunter Faction! Seek out unholy creatures.
 chat.neorism.trainer_max_level=You have attained the pinnacle of the Vampire Hunter Order (Level 14).
 chat.neorism.hunter_level_up=Congratulations! You have reached Hunter Level %d!
-chat.neorism.trainer_req_info=To reach Hunter Level %d, bring me %d Vampire Fangs and Pure Blood.
+chat.neorism.trainer_req_info=To reach Hunter Level %d, bring me %d Vampire Fangs.
+chat.neorism.trainer_intel_req=To reach Hunter Level %d, bring me Hunter Intel Tier %d, %d Iron Ingots, and %d Gold Ingots.
 chat.neorism.taskmaster_refuse_vampire=The Hunter Order does not parley with creatures of darkness.
 chat.neorism.taskmaster_bounty_reward=Bounty claimed! 4 Vampire Fangs exchanged for Hunter Intel & 2 Emeralds.
 chat.neorism.taskmaster_need_fangs=Bring me 4 Vampire Fangs from your hunts to claim a bounty.
@@ -5745,5 +5746,6 @@ chat.neorism.armor_vampire_reject_hunter=The dark magic of vampire robes poisons
 chat.neorism.coffin_only_vampires=Only vampires can rest inside a coffin.
 chat.neorism.coffin_only_day=Vampires only sleep in coffins during daytime. Night is the time to hunt!
 chat.neorism.coffin_woke_up=You restored your vitality and awoken at dusk.
+chat.neorism.vampire_needs_coffin=Vampires cannot rest in ordinary beds. You need a coffin!
 
 

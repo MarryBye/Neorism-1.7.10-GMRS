@@ -5500,7 +5500,8 @@ chat.neorism.trainer_initiation_req=Принеси мне деревянный �
 chat.neorism.hunter_joined=Вы вступили в орден Охотников на вампиров! Очищайте мир от скверны.
 chat.neorism.trainer_max_level=Вы достигли вершины мастерства Ордена Охотников (14 уровень).
 chat.neorism.hunter_level_up=Поздравляем! Вы достигли %d уровня Охотника на вампиров!
-chat.neorism.trainer_req_info=Для повышения до %d уровня принесите мне %d клыков вампира и чистую кровь.
+chat.neorism.trainer_req_info=Для повышения до %d уровня принесите мне %d клыков вампира.
+chat.neorism.trainer_intel_req=Для повышения до %d уровня принесите мне разведданные %d ранга, %d слитков железа и %d слитков золота.
 chat.neorism.taskmaster_refuse_vampire=Орден охотников не ведёт переговоров с нечистью.
 chat.neorism.taskmaster_bounty_reward=Награда получена! 4 клыка вампира обменены на разведданные и 2 изумруда.
 chat.neorism.taskmaster_need_fangs=Принеси мне 4 клыка вампиров с охоты, чтобы получить награду.
@@ -5666,5 +5667,6 @@ chat.neorism.armor_vampire_reject_hunter=Тёмная магия вампирс�
 chat.neorism.coffin_only_vampires=Только вампиры могут покоиться в гробу.
 chat.neorism.coffin_only_day=Вампиры спят в гробу лишь при свете солнца. Ночью пора охотиться!
 chat.neorism.coffin_woke_up=Вы восстановили силы и пробудились с наступлением сумерек.
+chat.neorism.vampire_needs_coffin=Вампиры не могут спать в обычных кроватях. Вам нужен гроб!
 
 

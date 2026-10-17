@@ -12,6 +12,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import net.minecraft.util.ChatComponentTranslation;
+import com.marrybye.neorism.common.blocks.BlockCoffin;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.util.Helper;
 
 /**
  * Event handler managing IExtendedEntityProperties lifecycle, cloning across deaths, updates, and syncing.
@@ -171,6 +178,39 @@ public class PlayerCapabilityEventHandler {
     public void onWorldUnload(net.minecraftforge.event.world.WorldEvent.Unload event) {
         if (!event.world.isRemote && event.world.provider.dimensionId == 0) {
             com.marrybye.neorism.common.world.garlic.GarlicHandler.instance().clearCache();
+        }
+    }
+
+    @SubscribeEvent
+    public void onAttackEntity(AttackEntityEvent event) {
+        if (event.entityPlayer != null && event.entityPlayer.getHeldItem() != null) {
+            if (!FactionRestriction.canUse(event.entityPlayer, event.entityPlayer.getHeldItem(), true)) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            if (event.entityPlayer != null && event.entityPlayer.getHeldItem() != null) {
+                if (!FactionRestriction.canUse(event.entityPlayer, event.entityPlayer.getHeldItem(), true)) {
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerSleepInBed(PlayerSleepInBedEvent event) {
+        if (Helper.isVampire(event.entityPlayer)) {
+            net.minecraft.block.Block block = event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z);
+            if (!(block instanceof BlockCoffin)) {
+                event.result = EntityPlayer.EnumStatus.OTHER_PROBLEM;
+                if (!event.entityPlayer.worldObj.isRemote) {
+                    event.entityPlayer.addChatMessage(new ChatComponentTranslation("chat.neorism.vampire_needs_coffin"));
+                }
+            }
         }
     }
 }

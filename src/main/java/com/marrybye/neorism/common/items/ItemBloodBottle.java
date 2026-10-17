@@ -41,6 +41,13 @@ public class ItemBloodBottle extends Item {
     }
 
     @Override
+    public int getItemStackLimit(ItemStack stack) {
+        if (stack == null) return 16;
+        int blood = stack.getItemDamage();
+        return (blood == 0 || blood == MAX_BLOOD) ? 16 : 1;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister register) {
         icons = new IIcon[MAX_BLOOD + 1];

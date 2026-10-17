@@ -3,8 +3,6 @@ package com.marrybye.neorism.common.hunter;
 import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.faction.FactionPlayerHandler;
-import com.marrybye.neorism.common.items.ItemHunterIntel;
-import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,18 +10,17 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.StatCollector;
 
 /**
  * Requirements and engine for Hunter leveling progression (levels 1-14).
- * Ported from modern Vampirism HunterLeveling.java.
+ * Ported 1:1 from TeamLapen's HunterLeveling.java.
  */
 public class HunterLeveling {
 
     public static final int MAX_LEVEL = 14;
 
     /**
-     * Requirement container for basic training (levels 1-4).
+     * Requirement container for basic training (levels 2-4).
      */
     public static class BasicTrainingRequirement {
         public final int targetLevel;
@@ -41,43 +38,43 @@ public class HunterLeveling {
     public static class AdvancedTrainingRequirement {
         public final int targetLevel;
         public final int intelTier;       // 0 to 9
-        public final Item metalItem;      // Items.iron_ingot or Items.gold_ingot
-        public final int metalCount;
+        public final int ironRequired;
+        public final int goldRequired;
         public final int vampireBooksRequired;
 
-        public AdvancedTrainingRequirement(int targetLevel, int intelTier, Item metalItem, int metalCount, int vampireBooksRequired) {
+        public AdvancedTrainingRequirement(int targetLevel, int intelTier, int ironRequired, int goldRequired, int vampireBooksRequired) {
             this.targetLevel = targetLevel;
             this.intelTier = intelTier;
-            this.metalItem = metalItem;
-            this.metalCount = metalCount;
+            this.ironRequired = ironRequired;
+            this.goldRequired = goldRequired;
             this.vampireBooksRequired = vampireBooksRequired;
         }
     }
 
     private static final BasicTrainingRequirement[] BASIC_REQUIREMENTS = {
         null,
-        new BasicTrainingRequirement(1, 1),   // Join faction: 1 fang / blood
-        new BasicTrainingRequirement(2, 5),   // 5 fangs
-        new BasicTrainingRequirement(3, 12),  // 12 fangs
-        new BasicTrainingRequirement(4, 20)   // 20 fangs
+        null,                                // Level 1: Obtained via initiation
+        new BasicTrainingRequirement(2, 1),   // Level 2: 1 blood/fang
+        new BasicTrainingRequirement(3, 5),   // Level 3: 5 fangs
+        new BasicTrainingRequirement(4, 12)   // Level 4: 12 fangs
     };
 
     private static final AdvancedTrainingRequirement[] ADVANCED_REQUIREMENTS = {
         null, null, null, null, null,
-        new AdvancedTrainingRequirement(5, 0, Items.iron_ingot, 5, 0),
-        new AdvancedTrainingRequirement(6, 1, Items.iron_ingot, 10, 0),
-        new AdvancedTrainingRequirement(7, 2, Items.iron_ingot, 15, 0),
-        new AdvancedTrainingRequirement(8, 3, Items.iron_ingot, 20, 0),
-        new AdvancedTrainingRequirement(9, 4, Items.gold_ingot, 5, 0),
-        new AdvancedTrainingRequirement(10, 5, Items.gold_ingot, 10, 1),
-        new AdvancedTrainingRequirement(11, 6, Items.gold_ingot, 15, 1),
-        new AdvancedTrainingRequirement(12, 7, Items.gold_ingot, 20, 1),
-        new AdvancedTrainingRequirement(13, 8, Items.gold_ingot, 25, 2),
-        new AdvancedTrainingRequirement(14, 9, Items.gold_ingot, 30, 2)
+        new AdvancedTrainingRequirement(5, 0, 5, 0, 0),
+        new AdvancedTrainingRequirement(6, 1, 10, 0, 0),
+        new AdvancedTrainingRequirement(7, 2, 15, 0, 0),
+        new AdvancedTrainingRequirement(8, 3, 40, 0, 0),
+        new AdvancedTrainingRequirement(9, 4, 20, 10, 0),
+        new AdvancedTrainingRequirement(10, 5, 20, 20, 1),
+        new AdvancedTrainingRequirement(11, 6, 20, 10, 1),
+        new AdvancedTrainingRequirement(12, 7, 30, 10, 1),
+        new AdvancedTrainingRequirement(13, 8, 40, 20, 2),
+        new AdvancedTrainingRequirement(14, 9, 40, 40, 2)
     };
 
     public static BasicTrainingRequirement getBasicRequirement(int targetLevel) {
-        if (targetLevel >= 1 && targetLevel <= 4) {
+        if (targetLevel >= 2 && targetLevel <= 4) {
             return BASIC_REQUIREMENTS[targetLevel];
         }
         return null;
@@ -99,7 +96,7 @@ public class HunterLeveling {
         if (fph == null) return false;
 
         if (targetLevel == 1) {
-            if (!fph.canJoin(ModFactions.HUNTER)) return false;
+            return fph.canJoin(ModFactions.HUNTER);
         } else {
             if (!fph.isHunter() || fph.getCurrentLevel() != targetLevel - 1) return false;
         }
@@ -115,8 +112,10 @@ public class HunterLeveling {
 
             // Check Intel
             if (!hasHunterIntel(player, req.intelTier)) return false;
-            // Check Metal
-            if (countItem(player, req.metalItem) < req.metalCount) return false;
+            // Check Iron
+            if (req.ironRequired > 0 && countItem(player, Items.iron_ingot) < req.ironRequired) return false;
+            // Check Gold
+            if (req.goldRequired > 0 && countItem(player, Items.gold_ingot) < req.goldRequired) return false;
             // Check Vampire Books
             if (req.vampireBooksRequired > 0 && countItem(player, ModItems.vampireBook) < req.vampireBooksRequired) {
                 return false;
@@ -142,21 +141,24 @@ public class HunterLeveling {
             return false;
         }
 
-        if (targetLvl <= 4) {
+        if (targetLvl == 1) {
+            fph.setFaction(ModFactions.HUNTER, 1);
+        } else if (targetLvl <= 4) {
             BasicTrainingRequirement req = getBasicRequirement(targetLvl);
             consumeItem(player, ModItems.vampireFang, req.fangsRequired);
+            fph.setLevel(targetLvl);
         } else {
             AdvancedTrainingRequirement req = getAdvancedRequirement(targetLvl);
             consumeHunterIntel(player, req.intelTier);
-            consumeItem(player, req.metalItem, req.metalCount);
+            if (req.ironRequired > 0) {
+                consumeItem(player, Items.iron_ingot, req.ironRequired);
+            }
+            if (req.goldRequired > 0) {
+                consumeItem(player, Items.gold_ingot, req.goldRequired);
+            }
             if (req.vampireBooksRequired > 0) {
                 consumeItem(player, ModItems.vampireBook, req.vampireBooksRequired);
             }
-        }
-
-        if (targetLvl == 1) {
-            fph.setFaction(ModFactions.HUNTER, 1);
-        } else {
             fph.setLevel(targetLvl);
         }
 

@@ -32,11 +32,15 @@ public class EntityHunterTrainer extends EntityHunterBase {
             return true;
         }
 
+        if (tryCureSanguinare(player)) {
+            return true;
+        }
+
         FactionPlayerHandler fph = FactionPlayerHandler.get(player);
         if (fph == null) return false;
 
         if (Helper.isVampire(player)) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.trainer_refuse_vampire"));
+            player.addChatMessage(com.marrybye.neorism.common.faction.FactionRestriction.getFactionRestrictionMessage(ModFactions.HUNTER));
             return true;
         }
 
@@ -58,30 +62,30 @@ public class EntityHunterTrainer extends EntityHunterBase {
 
         if (fph.isHunter()) {
             int curLevel = fph.getCurrentLevel();
-            if (curLevel >= 14) {
+            if (curLevel >= com.marrybye.neorism.common.hunter.HunterLeveling.MAX_LEVEL) {
                 player.addChatMessage(new ChatComponentTranslation("chat.neorism.trainer_max_level"));
                 return true;
             }
 
             int nextLevel = curLevel + 1;
-            int reqFangs = Math.min(16, nextLevel * 2);
-            int reqPureBloodTier = nextLevel >= 5 ? Math.min(4, nextLevel - 5) : -1;
-
-            boolean hasFangs = countItem(player, ModItems.vampireFang, 0) >= reqFangs;
-            boolean hasBlood = reqPureBloodTier < 0 || countItem(player, ModItems.pureBlood, reqPureBloodTier) >= 1;
-
-            if (hasFangs && hasBlood) {
-                consumeItem(player, ModItems.vampireFang, reqFangs, 0);
-                if (reqPureBloodTier >= 0) {
-                    consumeItem(player, ModItems.pureBlood, 1, reqPureBloodTier);
+            if (com.marrybye.neorism.common.hunter.HunterLeveling.canLevelUp(player, nextLevel)) {
+                if (com.marrybye.neorism.common.hunter.HunterLeveling.tryLevelUp(player)) {
+                    this.worldObj.playSoundAtEntity(player, "random.levelup", 1.0F, 1.0F);
                 }
-
-                fph.setFaction(ModFactions.HUNTER, nextLevel);
-                this.worldObj.playSoundAtEntity(player, "random.levelup", 1.0F, 1.0F);
-                player.addChatMessage(new ChatComponentTranslation("chat.neorism.hunter_level_up", nextLevel));
-                ModLogger.leveling("Hunter %s leveled up to %d via Hunter Trainer", player.getCommandSenderName(), nextLevel);
             } else {
-                player.addChatMessage(new ChatComponentTranslation("chat.neorism.trainer_req_info", nextLevel, reqFangs));
+                if (nextLevel <= 4) {
+                    com.marrybye.neorism.common.hunter.HunterLeveling.BasicTrainingRequirement req =
+                        com.marrybye.neorism.common.hunter.HunterLeveling.getBasicRequirement(nextLevel);
+                    int fangs = req != null ? req.fangsRequired : 0;
+                    player.addChatMessage(new ChatComponentTranslation("chat.neorism.trainer_req_info", nextLevel, fangs));
+                } else {
+                    com.marrybye.neorism.common.hunter.HunterLeveling.AdvancedTrainingRequirement req =
+                        com.marrybye.neorism.common.hunter.HunterLeveling.getAdvancedRequirement(nextLevel);
+                    if (req != null) {
+                        player.addChatMessage(new ChatComponentTranslation("chat.neorism.trainer_intel_req",
+                            nextLevel, req.intelTier + 1, req.ironRequired, req.goldRequired));
+                    }
+                }
             }
             return true;
         }

@@ -41,6 +41,7 @@ public class ModSounds {
     public static final String HEARTBEAT = "neorism:fx.heartbeat";
     public static final String SIZZLE = "random.fizz";
     public static final String FIZZ = "random.fizz";
+    public static final String LEVEL_UP = "random.levelup";
 
     public static void playAtEntity(Entity entity, String soundName, float volume, float pitch) {
         if (entity != null && entity.worldObj != null) {

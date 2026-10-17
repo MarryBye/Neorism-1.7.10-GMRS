@@ -23,20 +23,18 @@ public class ItemVampireFang extends ItemNeorism {
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if (!world.isRemote) {
-            if (Helper.isVampire(player)) {
-                player.addChatMessage(new ChatComponentTranslation("chat.neorism.fang_already_vampire"));
-                return stack;
+            if (Helper.canBecomeVampire(player)) {
+                // Inoculate with Sanguinare Vampiris (2 minutes incubation in ticks) + poison reaction
+                player.addPotionEffect(new PotionEffect(ModPotions.sanguinare.id, 2400, 0));
+                player.addPotionEffect(new PotionEffect(net.minecraft.potion.Potion.poison.id, 60, 0));
+                ModSounds.playAtEntity(player, ModSounds.VAMPIRE_BITE, 1.0F, 1.0F);
+            } else {
+                if (Helper.isVampire(player)) {
+                    player.addChatMessage(new ChatComponentTranslation("message.vampirism.already_vampire"));
+                } else {
+                    player.addChatMessage(new ChatComponentTranslation("message.vampirism.immune_to_sanguinare"));
+                }
             }
-
-            if (player.isPotionActive(ModPotions.sanguinare)) {
-                player.addChatMessage(new ChatComponentTranslation("chat.neorism.fang_already_infected"));
-                return stack;
-            }
-
-            // Prick flesh: inflict Sanguinare Vampiris (2 minutes incubation in ticks)
-            player.addPotionEffect(new PotionEffect(ModPotions.sanguinare.id, 2400, 0));
-            ModSounds.playAtEntity(player, ModSounds.VAMPIRE_BITE, 1.0F, 1.0F);
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.fang_pricked"));
 
             if (!player.capabilities.isCreativeMode) {
                 stack.stackSize--;

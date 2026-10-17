@@ -11,6 +11,7 @@ import com.marrybye.neorism.common.items.ItemHeartSeeker;
 import com.marrybye.neorism.common.items.ItemHeartStriker;
 import com.marrybye.neorism.common.items.ItemHolyWater;
 import com.marrybye.neorism.common.items.ItemHolyWaterSplash;
+import com.marrybye.neorism.common.items.ItemHumanHeart;
 import com.marrybye.neorism.common.items.ItemHunterArmor;
 import com.marrybye.neorism.common.items.ItemHunterAxe;
 import com.marrybye.neorism.common.items.ItemHunterHat;
@@ -117,8 +118,8 @@ public class ModItems {
 
         // Materials & Collectibles
         vampireFang = register("vampire_fang", new ItemVampireFang());
-        humanHeart = register("human_heart", new ItemNeorism("human_heart"));
-        weakHumanHeart = register("weak_human_heart", new ItemNeorism("weak_human_heart"));
+        humanHeart = register("human_heart", new ItemHumanHeart(false));
+        weakHumanHeart = register("weak_human_heart", new ItemHumanHeart(true));
         garlic = register("garlic", new ItemGarlic());
         purifiedGarlic = register("purified_garlic", new ItemNeorism("purified_garlic"));
         garlicBread = register("garlic_bread", new ItemGarlicBread());

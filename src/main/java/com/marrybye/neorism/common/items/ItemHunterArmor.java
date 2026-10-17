@@ -23,11 +23,19 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import com.marrybye.neorism.api.faction.IFaction;
+import com.marrybye.neorism.api.items.IItemWithTier;
+import com.marrybye.neorism.common.core.ModFactions;
+import com.marrybye.neorism.common.faction.FactionPlayerHandler;
+import com.marrybye.neorism.common.faction.FactionRestriction;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
+
 /**
  * Hunter Coat armor set (head, chest, legs, feet) with 3 tiers (Normal, Enhanced, Ultimate).
  * Grants movement speed attribute bonuses and protection against vampire attacks.
+ * Ported 1:1 from TeamLapen's HunterArmorItem.java.
  */
-public class ItemHunterArmor extends ItemArmor {
+public class ItemHunterArmor extends ItemArmor implements IItemWithTier, IFactionRestriction {
 
     public static final int TIERS = 3;
     private static final String[] SLOTS = {"head", "chest", "legs", "feet"};
@@ -65,12 +73,50 @@ public class ItemHunterArmor extends ItemArmor {
     }
 
     @Override
+    public Tier getVampirismTier() {
+        return Tier.NORMAL;
+    }
+
+    public Tier getVampirismTier(ItemStack stack) {
+        int meta = stack != null ? stack.getItemDamage() : 0;
+        switch (meta) {
+            case 1: return Tier.ENHANCED;
+            case 2: return Tier.ULTIMATE;
+            default: return Tier.NORMAL;
+        }
+    }
+
+    @Override
+    public IFaction getRequiredFaction(ItemStack stack) {
+        return ModFactions.HUNTER;
+    }
+
+    @Override
+    public int getMinLevel(ItemStack stack) {
+        return 1;
+    }
+
+    @Override
+    public String getRequiredSkill(ItemStack stack) {
+        Tier tier = getVampirismTier(stack);
+        switch (tier) {
+            case ULTIMATE: return "artisan_craftsmanship";
+            case ENHANCED: return "master_craftsmanship";
+            default: return "weapon_table";
+        }
+    }
+
+    @Override
+    public String getCustomMessageKey(ItemStack stack) {
+        return "message.vampirism.restriction.hunter_clothing";
+    }
+
+    @Override
     public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        if (!world.isRemote && Helper.isVampire(player)) {
-            if (world.getTotalWorldTime() % 40 == 0) {
-                player.attackEntityFrom(com.marrybye.neorism.common.core.ModDamageSource.causeIndirectHolyWaterDamage(player, player), 1.0F);
-                player.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.weakness.id, 60, 0));
-                com.marrybye.neorism.common.core.ModSounds.playAtEntity(player, com.marrybye.neorism.common.core.ModSounds.SIZZLE, 0.5F, 1.0F);
+        if (!world.isRemote && player.ticksExisted % 16 == 8) {
+            FactionPlayerHandler fph = FactionPlayerHandler.get(player);
+            if (fph == null || !fph.isHunter()) {
+                player.addPotionEffect(new net.minecraft.potion.PotionEffect(com.marrybye.neorism.common.core.ModPotions.garlic.id, 20, 1));
             }
         }
     }

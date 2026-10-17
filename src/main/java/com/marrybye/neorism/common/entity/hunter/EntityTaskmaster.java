@@ -30,8 +30,12 @@ public class EntityTaskmaster extends EntityHunterBase {
             return true;
         }
 
+        if (tryCureSanguinare(player)) {
+            return true;
+        }
+
         if (Helper.isVampire(player)) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.taskmaster_refuse_vampire"));
+            player.addChatMessage(com.marrybye.neorism.common.faction.FactionRestriction.getFactionRestrictionMessage(com.marrybye.neorism.common.core.ModFactions.HUNTER));
             return true;
         }
 

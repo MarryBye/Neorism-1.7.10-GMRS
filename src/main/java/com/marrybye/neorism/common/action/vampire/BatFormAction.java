@@ -19,6 +19,10 @@ public class BatFormAction extends ActionBase {
 
     @Override
     public boolean onActivated(EntityPlayer player) {
+        if (SundamageRegistry.instance().isHoldingUmbrella(player)) {
+            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("message.vampirism.action.bat.has_umbrella"));
+            return false;
+        }
         player.capabilities.allowFlying = true;
         player.sendPlayerAbilities();
         ModSounds.playAtEntity(player, ModSounds.BAT_SWARM, 0.8F, 1.2F);

@@ -73,4 +73,13 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
     protected boolean canDespawn() {
         return false;
     }
+
+    public boolean tryCureSanguinare(EntityPlayer player) {
+        if (!this.worldObj.isRemote && player != null && player.isPotionActive(com.marrybye.neorism.common.core.ModPotions.sanguinare)) {
+            player.removePotionEffect(com.marrybye.neorism.common.core.ModPotions.sanguinare.id);
+            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("dialogue.vampirism.hunter.cured_sanguinare"));
+            return true;
+        }
+        return false;
+    }
 }
