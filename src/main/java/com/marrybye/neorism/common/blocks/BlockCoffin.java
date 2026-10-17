@@ -35,6 +35,7 @@ public class BlockCoffin extends BlockModeled implements ITileEntityProvider {
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.65F, 1.0F);
     }
 
+
     @Override
     public boolean hasTileEntity(int metadata) {
         return (metadata & 8) == 0;
