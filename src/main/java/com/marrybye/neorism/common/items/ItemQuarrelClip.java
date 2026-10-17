@@ -61,9 +61,27 @@ public class ItemQuarrelClip extends Item {
     }
 
     @Override
+    public String getUnlocalizedNameInefficiently(ItemStack stack) {
+        return this.getUnlocalizedName(stack);
+    }
+
+    @Override
     public String getUnlocalizedName(ItemStack stack) {
         int meta = stack.getItemDamage();
         return meta == 1 ? "item.neorism.heavy_quarrel_clip" : "item.neorism.quarrel_clip";
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        String key = this.getUnlocalizedName(stack) + ".name";
+        if (StatCollector.canTranslate(key)) {
+            return StatCollector.translateToLocal(key).trim();
+        }
+        String fallback = this.getUnlocalizedName(stack);
+        if (StatCollector.canTranslate(fallback)) {
+            return StatCollector.translateToLocal(fallback).trim();
+        }
+        return super.getItemStackDisplayName(stack);
     }
 
     @Override

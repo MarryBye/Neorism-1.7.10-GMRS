@@ -109,22 +109,39 @@ public class FactionRestriction {
         if (reqFaction != null) {
             boolean matches = fph != null && fph.isInFaction(reqFaction);
             EnumChatFormatting color = matches ? EnumChatFormatting.DARK_GREEN : EnumChatFormatting.DARK_RED;
-            tooltips.add(" " + color + reqFaction.getName());
+            String factionName = reqFaction.getName();
+            if (StatCollector.canTranslate(reqFaction.getTranslationKey())) {
+                factionName = StatCollector.translateToLocal(reqFaction.getTranslationKey());
+            } else if (StatCollector.canTranslate("faction.neorism." + reqFaction.getId())) {
+                factionName = StatCollector.translateToLocal("faction.neorism." + reqFaction.getId());
+            } else if (StatCollector.canTranslate("faction.vampirism." + reqFaction.getId() + ".name")) {
+                factionName = StatCollector.translateToLocal("faction.vampirism." + reqFaction.getId() + ".name");
+            }
+            tooltips.add("  " + color + factionName);
         }
 
         if (minLevel > 0) {
             boolean matches = fph != null && fph.getCurrentLevel() >= minLevel;
             EnumChatFormatting color = matches ? EnumChatFormatting.DARK_GREEN : EnumChatFormatting.DARK_RED;
-            tooltips.add(" " + color + StatCollector.translateToLocalFormatted("tooltip.neorism.required_level", minLevel));
+            tooltips.add("  " + color + StatCollector.translateToLocalFormatted("tooltip.neorism.required_level", minLevel));
         }
 
         if (reqSkill != null && !reqSkill.isEmpty()) {
             SkillHandler sh = player != null ? SkillHandler.get(player) : null;
             boolean matches = sh != null && sh.isSkillUnlocked(reqSkill);
             EnumChatFormatting color = matches ? EnumChatFormatting.DARK_GREEN : EnumChatFormatting.DARK_RED;
-            String skillName = StatCollector.canTranslate("skill.neorism." + reqSkill + ".name") ?
-                StatCollector.translateToLocal("skill.neorism." + reqSkill + ".name") : reqSkill;
-            tooltips.add(" " + color + skillName);
+            tooltips.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.required_skills"));
+            String skillName = reqSkill;
+            if (StatCollector.canTranslate("skill.neorism." + reqSkill)) {
+                skillName = StatCollector.translateToLocal("skill.neorism." + reqSkill);
+            } else if (StatCollector.canTranslate("skill.vampirism." + reqSkill)) {
+                skillName = StatCollector.translateToLocal("skill.vampirism." + reqSkill);
+            } else if (StatCollector.canTranslate("skill.neorism." + reqSkill + ".name")) {
+                skillName = StatCollector.translateToLocal("skill.neorism." + reqSkill + ".name");
+            } else if (StatCollector.canTranslate("skill.vampirism." + reqSkill + ".name")) {
+                skillName = StatCollector.translateToLocal("skill.vampirism." + reqSkill + ".name");
+            }
+            tooltips.add("  " + color + skillName);
         }
     }
 

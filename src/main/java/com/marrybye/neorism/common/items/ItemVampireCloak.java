@@ -60,19 +60,32 @@ public class ItemVampireCloak extends ItemArmor implements IFactionRestriction {
     }
 
     @Override
+    public String getUnlocalizedNameInefficiently(ItemStack stack) {
+        return this.getUnlocalizedName(stack);
+    }
+
+    @Override
     public String getUnlocalizedName(ItemStack stack) {
         int meta = Math.max(0, Math.min(stack.getItemDamage(), COLORS.length - 1));
-        return super.getUnlocalizedName(stack) + "." + COLORS[meta];
+        return "item.neorism.vampire_cloak_" + COLORS[meta];
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         int meta = Math.max(0, Math.min(stack.getItemDamage(), COLORS.length - 1));
-        String key = "item.neorism.vampire_cloak." + COLORS[meta] + ".name";
+        String key = "item.neorism.vampire_cloak_" + COLORS[meta] + ".name";
         if (StatCollector.canTranslate(key)) {
             return StatCollector.translateToLocal(key).trim();
         }
-        return super.getItemStackDisplayName(stack) + " (" + COLORS[meta] + ")";
+        String fallbackKey = "item.vampirism.vampire_cloak_" + COLORS[meta] + ".name";
+        if (StatCollector.canTranslate(fallbackKey)) {
+            return StatCollector.translateToLocal(fallbackKey).trim();
+        }
+        String baseKey = "item.neorism.vampire_cloak.name";
+        if (StatCollector.canTranslate(baseKey)) {
+            return StatCollector.translateToLocal(baseKey).trim() + " (" + COLORS[meta] + ")";
+        }
+        return super.getItemStackDisplayName(stack);
     }
 
     @Override

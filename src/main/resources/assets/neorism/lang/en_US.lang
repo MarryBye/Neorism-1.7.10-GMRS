@@ -5786,3 +5786,24 @@ message.vampirism.tent.cant_use=This shelter repels your vampiric presence!
 message.vampirism.tent.rested=You rested inside the tent and recovered vitality.
 message.vampirism.tent.occupied=This tent is already occupied.
 biome.vampire_forest=Vampire Forest
+
+# Faction Restriction & Tooltips
+tooltip.neorism.faction_specifics=Faction Specifics:
+tooltip.factionapi.faction_specifics=Faction Specifics:
+tooltip.vampirism.faction_specifics=Faction Specifics:
+tooltip.neorism.required_level=Required Level: %s
+tooltip.factionapi.required_level=Required Level: %s
+tooltip.vampirism.required_level=Required Level: %s
+tooltip.neorism.required_skills=Required Skills:
+tooltip.factionapi.required_skills=Required Skills:
+tooltip.vampirism.required_skills=Required Skills:
+
+# Hunter Skills (Craftsmanship)
+skill.neorism.master_craftsmanship=Master Craftsmanship
+skill.neorism.master_craftsmanship.desc=Craft and use enhanced hunter equipment
+skill.vampirism.master_craftsmanship=Master Craftsmanship
+skill.vampirism.master_craftsmanship.desc=Craft and use enhanced hunter equipment
+skill.neorism.artisan_craftsmanship=Artisan Craftsmanship
+skill.neorism.artisan_craftsmanship.desc=Craft and use ultimate hunter equipment
+skill.vampirism.artisan_craftsmanship=Artisan Craftsmanship
+skill.vampirism.artisan_craftsmanship.desc=Craft and use ultimate hunter equipment

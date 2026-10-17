@@ -111,9 +111,9 @@ public class ItemGarlicDiffuserCore extends ItemNeorism {
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
         int tier = stack.getItemDamage();
         if (tier == 2) {
-            tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.garlic_diffuser_strong"));
+            tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted("tooltip.neorism.garlic_diffuser_strong", 3, 3));
         } else if (tier == 1) {
-            tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.garlic_diffuser_long"));
+            tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted("tooltip.neorism.garlic_diffuser_long", 5, 5));
         } else {
             tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.garlic_diffuser_core"));
         }

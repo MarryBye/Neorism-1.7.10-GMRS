@@ -5707,3 +5707,24 @@ message.vampirism.tent.cant_use=Это укрытие отторгает ваш�
 message.vampirism.tent.rested=Вы отдохнули в палатке и восстановили силы.
 message.vampirism.tent.occupied=Эта палатка уже занята.
 biome.vampire_forest=Вампирский лес
+
+# Faction Restriction & Tooltips
+tooltip.neorism.faction_specifics=Особенности фракции:
+tooltip.factionapi.faction_specifics=Особенности фракции:
+tooltip.vampirism.faction_specifics=Особенности фракции:
+tooltip.neorism.required_level=Требуемый уровень: %s
+tooltip.factionapi.required_level=Требуемый уровень: %s
+tooltip.vampirism.required_level=Требуемый уровень: %s
+tooltip.neorism.required_skills=Требуемые навыки:
+tooltip.factionapi.required_skills=Требуемые навыки:
+tooltip.vampirism.required_skills=Требуемые навыки:
+
+# Hunter Skills (Craftsmanship)
+skill.neorism.master_craftsmanship=Мастерство ремесла
+skill.neorism.master_craftsmanship.desc=Создание и использование улучшенного снаряжения охотников
+skill.vampirism.master_craftsmanship=Мастерство ремесла
+skill.vampirism.master_craftsmanship.desc=Создание и использование улучшенного снаряжения охотников
+skill.neorism.artisan_craftsmanship=Искусное ремесло
+skill.neorism.artisan_craftsmanship.desc=Создание и использование совершенного снаряжения охотников
+skill.vampirism.artisan_craftsmanship=Искусное ремесло
+skill.vampirism.artisan_craftsmanship.desc=Создание и использование совершенного снаряжения охотников
