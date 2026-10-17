@@ -461,9 +461,11 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
   - [x] Disable `GL_BLEND` and enable backface culling (`GL_CULL_FACE`, `GL_BACK`) with `GL_DEPTH_TEST` in `JsonModelItemRenderer.java` to prevent see-through translucent weapons.
   - [x] Compensate for 1.7.10 first-person hand matrix (`glRotatef(-45 Y)`, `EQUIPPED_BLOCK` helper) so Blockbench 3D weapons render at canonical position and scale.
   - [x] Set `setFull3D()` on `ItemCrucifix` and `ItemUmbrella` for proper third-person weapon grip.
-- [x] **15.6. Skill Tree GUI Canvas & Background (Phase F)**
-  - [x] Enable `GL_BLEND` with `GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA` when drawing `window.png` in `SkillsScreen.java`, preventing transparent canvas window from rendering as solid black.
-  - [x] Replace non-existent `minecraft:textures/blocks/*.png` backgrounds with canonical `factionapi:textures/gui/skills/backgrounds/level.png`.
-  - [x] Implement smooth panning UV scrolling in `SkillsTabComponent.drawTiledBackground`.
-  - [x] Add fallback skill icons and missing `vampire_rage.png` and `vampire_invisibility.png` textures.
+- [x] **15.7. In-World Models, Multiblocks & Textures Refinement (Post-Test Validation)**
+  - [x] **Vampire Coffin**: Replace `ModelCoffin` with canonical `Tessellator` renderer in `TileEntityCoffinRenderer.java` using 32x32 textures (`coffin_base.png`, `coffin_inner_red.png`) and Zozozrob model geometry with animated opening/sliding lid. Fixed side UV in `coffin.json`. Removed redundant `ItemCoffinRenderer` override in `ClientProxy.java`.
+  - [x] **Cursed Grass**: Created `assets/minecraft/models/block/cube_bottom_top.json` and `assets/neorism/models/block/cube_bottom_top.json`. Added `getIcon(IBlockAccess, int, int, int, int)` in `BlockCursedGrass.java`.
+  - [x] **Hunter Tent**: Implemented canonical 2x2 multiblock placement in `BlockTent.java` (`onBlockPlacedBy`), multiblock destruction (`breakBlock`), activation delegation, and icon registration. Created complete `tent_tl.json` and `tent_tr.json` models with back wall cloth and all 16 `meta=0..15` variants in `blockstates/tent.json`.
+  - [x] **Faction Totem Top**: Reconstructed full 3D obsidian cage, iron plates, and central core from `totem_top.cubik`. Added `registerBlockIcons` for `totem_top_core_vampire` and `totem_top_core_hunter` in `BlockTotemTop.java`, with `meta=0..2` in `blockstates/totem_top.json`.
+  - [x] **NPC Skin**: Cleaned second layer headwear artifacts on white-haired hunter skin (`hunter16.png`).
+  - [x] **Handheld Items**: Reversed quad vertex winding to CCW for standard `GL_CULL_FACE` culling (eliminating see-through layers on crossbows), scaled by 1.5x in first person, and inverted block matrix in third person for proper weapon grip.
 
