@@ -431,3 +431,39 @@ Phase 12: Client Experience, GUI, Angelica Shaders & Cross-Mod Integrations
   - [x] Matrix transformations and rendering math via GTNHLib.
 - [x] **14.6. NEI (Not Enough Items) Integration**
   - [x] Recipe handlers for Altar of Inspiration, Altar of Infusion, Weapon Table, and Cauldron.
+
+---
+
+## Phase 15: Client Testing Audit, Rendering & Texture Polish
+*Comprehensive fixes for all issues identified during real client runtime testing.*
+*Audit Document: `docs/reports/client-testing-audit-and-fix-plan.md`*
+*Summary Report: `docs/reports/client-testing-fix-summary.md`*
+
+- [x] **15.1. Localization & Tooltips (Phase A)**
+  - [x] Fix unformatted `%s` in `ItemGarlicDiffuserCore.java` (`translateToLocalFormatted` with radius 5, strength 3).
+  - [x] Fix raw unlocalized faction keys and missing headers in `FactionRestriction.java`.
+  - [x] Eliminate `.name` leakage on `ItemQuarrelClip` and `ItemVampireCloak`.
+  - [x] Add missing skill names/descriptions (`double_it`, `master_of_craftsmanship`, `crucifix_wielder`) in `en_US.lang` and `ru_RU.lang`.
+- [x] **15.2. Block Textures & Blockstate Variants (Phase B)**
+  - [x] Add default `""` and `"normal"` variants to `dark_spruce_log.json` and `cursed_grass.json`.
+  - [x] Fix `BlockDarkSpruceLog.java` texture binding and axis metadata mapping.
+  - [x] Create `totem_top.json` blockstate model.
+  - [x] Convert `hunter_table.json` and `tent.json` multipart models to GTNHLib-compatible variant models with directional rotations.
+  - [x] Register `BlockTent` with `ModelISBRH.JSON_ISBRH_ID` in `ClientProxy`.
+- [x] **15.3. Vampire Coffin TESR Model & UV Mapping (Phase C)**
+  - [x] Reconstruct `textures/entity/coffin/coffin_base.png` (256x128) replacing magenta missing texture with rich red velvet and dark oak trims matching inventory.
+  - [x] Fix UV mappings in `coffin.json` eliminating 32-unit door edge texture distortion.
+  - [x] Set `BlockCoffin` render type to `-1` to eliminate duplicate chunk mesh and z-fighting.
+- [x] **15.4. NPC 64x64 Skins & Biped Model (Phase D)**
+  - [x] Implement `ModelBiped64.java` supporting 64x64 modern player skins with second layers (armwear, legwear, bodywear, headwear).
+  - [x] Update all Vampire and Hunter mob renderers (`RenderHunter`, `RenderVampire`, `RenderHunterMinion`, `RenderVampireMinion`, `RenderAdvancedHunter`, `RenderAdvancedVampire`) to use `ModelBiped64`.
+- [x] **15.5. Handheld 3D Weapon Rendering (Phase E)**
+  - [x] Disable `GL_BLEND` and enable backface culling (`GL_CULL_FACE`, `GL_BACK`) with `GL_DEPTH_TEST` in `JsonModelItemRenderer.java` to prevent see-through translucent weapons.
+  - [x] Compensate for 1.7.10 first-person hand matrix (`glRotatef(-45 Y)`, `EQUIPPED_BLOCK` helper) so Blockbench 3D weapons render at canonical position and scale.
+  - [x] Set `setFull3D()` on `ItemCrucifix` and `ItemUmbrella` for proper third-person weapon grip.
+- [x] **15.6. Skill Tree GUI Canvas & Background (Phase F)**
+  - [x] Enable `GL_BLEND` with `GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA` when drawing `window.png` in `SkillsScreen.java`, preventing transparent canvas window from rendering as solid black.
+  - [x] Replace non-existent `minecraft:textures/blocks/*.png` backgrounds with canonical `factionapi:textures/gui/skills/backgrounds/level.png`.
+  - [x] Implement smooth panning UV scrolling in `SkillsTabComponent.drawTiledBackground`.
+  - [x] Add fallback skill icons and missing `vampire_rage.png` and `vampire_invisibility.png` textures.
+
