@@ -29,6 +29,7 @@ public class ItemUmbrella extends ItemNeorism {
         super("umbrella");
         setMaxDamage(0);
         setMaxStackSize(1);
+        setFull3D();
         setCreativeTab(ModCreativeTabs.tabMain);
     }
 

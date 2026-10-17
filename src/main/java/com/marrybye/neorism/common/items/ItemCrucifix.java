@@ -51,6 +51,7 @@ public class ItemCrucifix extends ItemNeorism implements IItemWithTier, IFaction
         setHasSubtypes(true);
         setMaxDamage(0);
         setMaxStackSize(1);
+        setFull3D();
         setCreativeTab(ModCreativeTabs.tabMain);
     }
 
