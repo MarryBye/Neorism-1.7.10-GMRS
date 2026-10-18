@@ -153,12 +153,19 @@ public class FactionMenuScreen extends GuiScreen {
         int maxLevel = 14;
 
         String lvlWord = StatCollector.translateToLocal("text.vampirism.level");
-        if (lvlWord.equals("text.vampirism.level") || fontRendererObj.getStringWidth(lvlWord + " " + curLevel) > 48) {
-            lvlWord = "Lvl";
+        if (lvlWord.equals("text.vampirism.level") || fontRendererObj.getStringWidth(lvlWord + " " + curLevel) > 42) {
+            String shortLvl = StatCollector.translateToLocal("text.neorism.short_level");
+            lvlWord = !shortLvl.equals("text.neorism.short_level") ? shortLvl : "Lvl";
         }
-        String levelText = curLevel > 0 ? (lvlWord + " " + curLevel) : "Lvl 0";
+        String levelText = curLevel > 0 ? (lvlWord + " " + curLevel) : (lvlWord + " 0");
         int lvlW = fontRendererObj.getStringWidth(levelText);
-        int lvlX = guiLeft + Math.max(7, 31 - lvlW / 2);
+        if (lvlW > 44) {
+            levelText = "Lvl " + curLevel;
+            lvlW = fontRendererObj.getStringWidth(levelText);
+        }
+        int lvlX = guiLeft + 31 - lvlW / 2;
+        if (lvlX < guiLeft + 8) lvlX = guiLeft + 8;
+        if (lvlX + lvlW > guiLeft + 54) lvlX = guiLeft + 54 - lvlW;
         int lvlColor = Helper.isVampire(player) ? 0xC02030 : (Helper.isHunter(player) ? 0x3060D0 : 0x404040);
         fontRendererObj.drawString(levelText, lvlX, guiTop + 80, lvlColor);
 

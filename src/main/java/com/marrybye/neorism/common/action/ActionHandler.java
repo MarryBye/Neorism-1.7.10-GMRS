@@ -206,6 +206,29 @@ public class ActionHandler implements IExtendedEntityProperties {
     public void setClientData(Map<String, Integer> cds, Map<String, Integer> actives) {
         this.cooldowns.clear();
         if (cds != null) this.cooldowns.putAll(cds);
+
+        // Notify deactivations
+        for (String oldKey : this.activeActions.keySet()) {
+            if (actives == null || !actives.containsKey(oldKey)) {
+                IAction action = ActionRegistry.getAction(oldKey);
+                if (action != null) {
+                    action.onDeactivated(player);
+                }
+            }
+        }
+
+        // Notify activations
+        if (actives != null) {
+            for (String newKey : actives.keySet()) {
+                if (!this.activeActions.containsKey(newKey)) {
+                    IAction action = ActionRegistry.getAction(newKey);
+                    if (action != null) {
+                        action.onActivated(player);
+                    }
+                }
+            }
+        }
+
         this.activeActions.clear();
         if (actives != null) this.activeActions.putAll(actives);
     }

@@ -82,7 +82,6 @@ public class BatFormAction extends ActionBase {
         Helper.setEntitySize(player, 0.6F, 1.8F);
         player.height = 1.8F;
         player.eyeHeight = player.getDefaultEyeHeight();
-        player.yOffset = 1.62F;
         if (player.boundingBox != null) {
             player.boundingBox.maxY = player.boundingBox.minY + 1.8D;
         }

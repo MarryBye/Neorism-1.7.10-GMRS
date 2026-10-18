@@ -50,14 +50,15 @@ public class ActionRegistry {
         IAction action = ACTIONS.get(id);
         if (action != null) return action;
 
-        if ("bat_form".equals(id)) return ACTIONS.get("bat");
-        if ("vampire_regen".equals(id)) return ACTIONS.get("regen");
-        if ("summon_bats".equals(id)) return ACTIONS.get("summon_bat");
-        if ("invisibility".equals(id)) return ACTIONS.get("vampire_invisibility");
-        if ("hunter_awareness".equals(id)) return ACTIONS.get("awareness_hunter");
-        if ("potion_resistance".equals(id)) return ACTIONS.get("potion_resistance_hunter");
-        if ("hunter_disguise".equals(id)) return ACTIONS.get("disguise_hunter");
-        if ("vampire_disguise".equals(id)) return ACTIONS.get("disguise_vampire");
+        if ("bat".equals(id) || "bat_form".equals(id)) return ACTIONS.get("bat");
+        if ("regen".equals(id) || "vampire_regen".equals(id)) return ACTIONS.get("regen");
+        if ("summon_bat".equals(id) || "summon_bats".equals(id)) return ACTIONS.get("summon_bats");
+        if ("invisibility".equals(id) || "vampire_invisibility".equals(id)) return ACTIONS.get("vampire_invisibility");
+        if ("awareness".equals(id) || "hunter_awareness".equals(id) || "awareness_hunter".equals(id)) return ACTIONS.get("awareness_hunter");
+        if ("potion_resistance".equals(id) || "potion_resistance_hunter".equals(id)) return ACTIONS.get("potion_resistance_hunter");
+        if ("disguise_hunter".equals(id) || "hunter_disguise".equals(id)) return ACTIONS.get("disguise_hunter");
+        if ("disguise_vampire".equals(id) || "vampire_disguise".equals(id)) return ACTIONS.get("disguise_vampire");
+        if ("rage".equals(id) || "vampire_rage".equals(id)) return ACTIONS.get("vampire_rage");
         return null;
     }
 

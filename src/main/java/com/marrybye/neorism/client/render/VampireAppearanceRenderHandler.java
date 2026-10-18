@@ -65,10 +65,15 @@ public class VampireAppearanceRenderHandler {
 
             float partialTicks = event.partialRenderTick;
             double renderX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosX;
-            double renderY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosY;
+            double renderY = (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks - (player == mc.thePlayer ? (double) player.yOffset : 0.0D)) - net.minecraft.client.renderer.entity.RenderManager.renderPosY;
             double renderZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosZ;
 
-            float yaw = interpolateRotation(player.prevRotationYawHead, player.rotationYawHead, partialTicks);
+            float yaw;
+            if (player == mc.thePlayer) {
+                yaw = interpolateRotation(player.prevRotationYaw, player.rotationYaw, partialTicks);
+            } else {
+                yaw = interpolateRotation(player.prevRotationYawHead, player.rotationYawHead, partialTicks);
+            }
             float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
 
             GL11.glPushMatrix();
@@ -89,6 +94,17 @@ public class VampireAppearanceRenderHandler {
             batModel.render(dummyBat, 0.0F, 0.0F, ageInTicks, 0.0F, 0.0F, 0.0625F);
 
             GL11.glPopMatrix();
+        }
+    }
+
+    @SubscribeEvent
+    public void onRenderHand(net.minecraftforge.client.event.RenderHandEvent event) {
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.thePlayer != null) {
+            com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(mc.thePlayer);
+            if (ah != null && ah.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("bat_form"))) {
+                event.setCanceled(true);
+            }
         }
     }
 

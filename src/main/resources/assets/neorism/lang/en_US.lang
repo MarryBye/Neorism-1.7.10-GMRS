@@ -5990,5 +5990,7 @@ skill.neorism.hunter_minion_collect=Resource Collection
 skill.neorism.hunter_minion_collect.desc=Send minions to gather valuable resources.
 skill.neorism.minion_tech_crossbows=Advanced Tech
 skill.neorism.minion_tech_crossbows.desc=Allow minions to wield semi-automatic tech crossbows.
+text.neorism.short_level=Lvl
+
 
 
