@@ -26,6 +26,7 @@ public class EntityVampireMother extends EntityVampireBase implements IBossDispl
         this.experienceValue = 90;
         this.setCustomNameTag("Vampire Mother");
         this.setAlwaysRenderNameTag(true);
+        this.setIgnoringSundamage(true);
     }
 
     @Override
@@ -85,6 +86,16 @@ public class EntityVampireMother extends EntityVampireBase implements IBossDispl
         this.dropItem(ModItems.soulOrbVampire, 1);
         this.dropItem(ModItems.bloodInfusedDiamond, 2);
         this.entityDropItem(new ItemStack(ModItems.vampireBook, 1, 7), 0.0F);
+    }
+
+    @Override
+    protected String getLivingSound() {
+        return com.marrybye.neorism.common.core.ModSounds.MOTHER_AMBIENT;
+    }
+
+    @Override
+    protected String getDeathSound() {
+        return com.marrybye.neorism.common.core.ModSounds.MOTHER_DEATH;
     }
 
     @Override

@@ -51,21 +51,23 @@ public class TileEntityTent extends TileEntity {
         }
 
         if (--spawnCooldown <= 0) {
-            spawnCooldown = 400 + worldObj.rand.nextInt(400);
+            // Canonical TentBlockEntity: minSpawnDelay=600, maxSpawnDelay=1000
+            spawnCooldown = 600 + worldObj.rand.nextInt(400);
 
             // Check if player is within activation range (64 blocks)
             if (worldObj.getClosestPlayer(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64.0D) == null) {
                 return;
             }
 
-            // Check nearby hunters within 16 blocks
-            AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord - 16, yCoord - 8, zCoord - 16, xCoord + 16, yCoord + 8, zCoord + 16);
+            // Canonical SimpleSpawnerLogic: spawnRange = 6, inflate(5) = 11 block check box
+            AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord - 11, yCoord - 8, zCoord - 11, xCoord + 11, yCoord + 8, zCoord + 11);
             List nearbyHunters = worldObj.selectEntitiesWithinAABB(EntityHunter.class, aabb, IEntitySelector.selectAnything);
 
             if (nearbyHunters.size() < 2) {
                 EntityHunter hunter = new EntityHunter(worldObj);
-                hunter.setLocationAndAngles(xCoord + 0.5D + (worldObj.rand.nextDouble() - 0.5D) * 2.0D, yCoord, zCoord + 0.5D + (worldObj.rand.nextDouble() - 0.5D) * 2.0D, worldObj.rand.nextFloat() * 360.0F, 0.0F);
+                hunter.setLocationAndAngles(xCoord + 0.5D + (worldObj.rand.nextDouble() - 0.5D) * 4.0D, yCoord, zCoord + 0.5D + (worldObj.rand.nextDouble() - 0.5D) * 4.0D, worldObj.rand.nextFloat() * 360.0F, 0.0F);
                 hunter.onSpawnWithEgg(null);
+                hunter.setHomeArea(xCoord, yCoord, zCoord, 10);
                 worldObj.spawnEntityInWorld(hunter);
             }
 
@@ -73,8 +75,9 @@ public class TileEntityTent extends TileEntity {
                 List nearbyAdvHunters = worldObj.selectEntitiesWithinAABB(EntityAdvancedHunter.class, aabb, IEntitySelector.selectAnything);
                 if (nearbyAdvHunters.isEmpty()) {
                     EntityAdvancedHunter advHunter = new EntityAdvancedHunter(worldObj);
-                    advHunter.setLocationAndAngles(xCoord + 0.5D + (worldObj.rand.nextDouble() - 0.5D) * 2.0D, yCoord, zCoord + 0.5D + (worldObj.rand.nextDouble() - 0.5D) * 2.0D, worldObj.rand.nextFloat() * 360.0F, 0.0F);
+                    advHunter.setLocationAndAngles(xCoord + 0.5D + (worldObj.rand.nextDouble() - 0.5D) * 4.0D, yCoord, zCoord + 0.5D + (worldObj.rand.nextDouble() - 0.5D) * 4.0D, worldObj.rand.nextFloat() * 360.0F, 0.0F);
                     advHunter.onSpawnWithEgg(null);
+                    advHunter.setHomeArea(xCoord, yCoord, zCoord, 10);
                     worldObj.spawnEntityInWorld(advHunter);
                 }
             }

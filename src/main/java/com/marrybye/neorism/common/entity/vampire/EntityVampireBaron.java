@@ -105,7 +105,17 @@ public class EntityVampireBaron extends EntityVampireBase {
     }
 
     @Override
+    public boolean getCanSpawnHere() {
+        int x = net.minecraft.util.MathHelper.floor_double(this.posX);
+        int z = net.minecraft.util.MathHelper.floor_double(this.posZ);
+        if (!com.marrybye.neorism.common.world.gen.ModWorldGen.isVampireBiome(this.worldObj.getBiomeGenForCoords(x, z))) {
+            return false;
+        }
+        return super.getCanSpawnHere();
+    }
+
+    @Override
     protected boolean canDespawn() {
-        return false;
+        return !this.hasHome();
     }
 }

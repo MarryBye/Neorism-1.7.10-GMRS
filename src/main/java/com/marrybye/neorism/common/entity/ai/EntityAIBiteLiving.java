@@ -29,12 +29,15 @@ public class EntityAIBiteLiving extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (vampire == null || attacker.getAttackTarget() == null) {
+        if (vampire == null || !vampire.wantsBlood() || attacker.getAttackTarget() == null) {
             return false;
         }
 
         EntityLivingBase target = attacker.getAttackTarget();
-        if (!target.isEntityAlive()) {
+        if (!target.isEntityAlive()
+            || target instanceof net.minecraft.entity.player.EntityPlayer
+            || target instanceof com.marrybye.neorism.api.entity.IHunterEntity
+            || target instanceof IVampireEntity) {
             return false;
         }
 
@@ -49,8 +52,13 @@ public class EntityAIBiteLiving extends EntityAIBase {
 
     @Override
     public boolean continueExecuting() {
+        if (vampire == null || !vampire.wantsBlood()) {
+            return false;
+        }
         EntityLivingBase target = attacker.getAttackTarget();
-        if (target == null || !target.isEntityAlive()) {
+        if (target == null || !target.isEntityAlive()
+            || target instanceof net.minecraft.entity.player.EntityPlayer
+            || target instanceof com.marrybye.neorism.api.entity.IHunterEntity) {
             return false;
         }
 

@@ -46,7 +46,7 @@ public class EntityAICrossbowAttack extends EntityAIBase {
 
     @Override
     public boolean continueExecuting() {
-        return shouldExecute() || !hunter.getNavigator().noPath();
+        return shouldExecute();
     }
 
     @Override

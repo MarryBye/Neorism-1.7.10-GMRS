@@ -61,6 +61,9 @@ public class EntityBloodBat extends EntityBat implements IVampireEntity, IMob {
         int x = MathHelper.floor_double(this.posX);
         int y = MathHelper.floor_double(this.posY);
         int z = MathHelper.floor_double(this.posZ);
+        if (com.marrybye.neorism.common.world.gen.ModWorldGen.isVampireBiome(this.worldObj.getBiomeGenForCoords(x, z))) {
+            return false;
+        }
         return this.worldObj.canBlockSeeTheSky(x, y, z);
     }
 

@@ -118,16 +118,11 @@ public class EntityVampire extends EntityVampireBase {
 
     @Override
     protected String getLivingSound() {
-        return "mob.zombie.say";
+        return ModSounds.VAMPIRE_SCREAM;
     }
 
     @Override
-    protected String getHurtSound() {
-        return "mob.zombie.hurt";
-    }
-
-    @Override
-    protected String getDeathSound() {
-        return "mob.zombie.death";
+    public int getTalkInterval() {
+        return 2400;
     }
 }

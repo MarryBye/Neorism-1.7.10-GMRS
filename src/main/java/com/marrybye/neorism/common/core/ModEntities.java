@@ -67,19 +67,25 @@ public class ModEntities {
         registerMob(EntityConvertedHorse.class, "converted_horse", 0x6e431f, 0x8b0000);
         registerMob(EntityConvertedVillager.class, "converted_villager", 0x563c24, 0x8b0000);
 
-        // Natural Spawns in Overworld
+        // Natural Spawns in Overworld (Canonical ModBiomeTags.NoSpawn: exclude Vampire Forest, Mushroom Island, Nether, End)
         List<BiomeGenBase> overworldBiomes = new ArrayList<BiomeGenBase>();
         for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
-            if (biome != null && biome.biomeID != BiomeGenBase.hell.biomeID && biome.biomeID != BiomeGenBase.sky.biomeID) {
+            if (biome != null
+                && biome != ModBiomes.vampireForest
+                && biome.biomeID != BiomeGenBase.hell.biomeID
+                && biome.biomeID != BiomeGenBase.sky.biomeID
+                && biome.biomeID != BiomeGenBase.mushroomIsland.biomeID
+                && biome.biomeID != BiomeGenBase.mushroomIslandShore.biomeID) {
                 overworldBiomes.add(biome);
             }
         }
         BiomeGenBase[] biomes = overworldBiomes.toArray(new BiomeGenBase[0]);
 
         EntityRegistry.addSpawn(EntityVampire.class, 25, 1, 3, EnumCreatureType.monster, biomes);
-        EntityRegistry.addSpawn(EntityAdvancedVampire.class, 6, 1, 1, EnumCreatureType.monster, biomes);
-        EntityRegistry.addSpawn(EntityBloodBat.class, 20, 2, 4, EnumCreatureType.ambient, biomes);
-        EntityRegistry.addSpawn(EntityHunter.class, 12, 1, 2, EnumCreatureType.creature, biomes);
+        EntityRegistry.addSpawn(EntityAdvancedVampire.class, 8, 1, 2, EnumCreatureType.monster, biomes);
+        EntityRegistry.addSpawn(EntityBloodBat.class, 15, 1, 3, EnumCreatureType.ambient, biomes);
+        EntityRegistry.addSpawn(EntityHunter.class, 10, 1, 3, EnumCreatureType.creature, biomes);
+        EntityRegistry.addSpawn(EntityAdvancedHunter.class, 3, 1, 2, EnumCreatureType.creature, biomes);
 
         ModLogger.debug("Successfully registered all Neorism entities, spawn eggs, and natural world spawns (total: %d entities)", nextEntityId);
     }

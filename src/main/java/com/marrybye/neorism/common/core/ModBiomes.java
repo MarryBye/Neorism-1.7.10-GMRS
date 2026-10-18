@@ -41,9 +41,8 @@ public class ModBiomes {
         // Register to BiomeDictionary
         BiomeDictionary.registerBiomeType(vampireForest, Type.SPOOKY, Type.DEAD, Type.FOREST, Type.MAGICAL, Type.DENSE);
 
-        // Register to Overworld BiomeManager
+        // Register to Overworld BiomeManager (canonical OverworldModifications replaces cool taiga climate points)
         BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(vampireForest, 10));
-        BiomeManager.addBiome(BiomeType.WARM, new BiomeEntry(vampireForest, 5));
         BiomeManager.addSpawnBiome(vampireForest);
 
         ModLogger.info("Initialized Vampire Forest biome with ID {}", biomeId);

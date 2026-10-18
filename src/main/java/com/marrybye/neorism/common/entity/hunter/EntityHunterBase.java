@@ -34,14 +34,29 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
     }
 
     protected void setupAI() {
+        this.getNavigator().setBreakDoors(true);
+        this.getNavigator().setAvoidsWater(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1.15D, false));
-        this.tasks.addTask(2, new EntityAIWander(this, 0.9D));
-        this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.tasks.addTask(4, new EntityAILookIdle(this));
+        this.tasks.addTask(1, new EntityAIOpenDoor(this, true));
+        this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1.15D, false));
+        this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 1.0D));
+        this.tasks.addTask(4, new EntityAIWander(this, 0.9D));
+        this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
+        this.tasks.addTask(6, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new EntityAIAttackFaction(this, ModFactions.HUNTER, true));
+    }
+
+    @Override
+    protected boolean isAIEnabled() {
+        return true;
+    }
+
+    @Override
+    public void onLivingUpdate() {
+        this.updateArmSwingProgress();
+        super.onLivingUpdate();
     }
 
     @Override
@@ -77,8 +92,43 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
     }
 
     @Override
+    protected String getHurtSound() {
+        return "game.hostile.hurt";
+    }
+
+    @Override
+    protected String getDeathSound() {
+        return "game.hostile.die";
+    }
+
+    /**
+     * Canonical BasicHunterEntity.removeWhenFarAway:
+     * Wild roaming hunters despawn normally; camp/village hunters with a home area do not despawn.
+     */
+    @Override
     protected boolean canDespawn() {
-        return false;
+        return !this.hasHome();
+    }
+
+    /**
+     * Canonical HunterBaseEntity.spawnPredicateHunter:
+     * Must not be Peaceful difficulty, not in Vampire Forest, and on solid surface ground.
+     */
+    @Override
+    public boolean getCanSpawnHere() {
+        if (this.worldObj.difficultySetting == net.minecraft.world.EnumDifficulty.PEACEFUL) {
+            return false;
+        }
+        int x = net.minecraft.util.MathHelper.floor_double(this.posX);
+        int y = net.minecraft.util.MathHelper.floor_double(this.boundingBox.minY);
+        int z = net.minecraft.util.MathHelper.floor_double(this.posZ);
+        if (com.marrybye.neorism.common.world.gen.ModWorldGen.isVampireBiome(this.worldObj.getBiomeGenForCoords(x, z))) {
+            return false;
+        }
+        net.minecraft.block.Block below = this.worldObj.getBlock(x, y - 1, z);
+        return y >= 60
+            && (below == net.minecraft.init.Blocks.grass || below == net.minecraft.init.Blocks.dirt || below == net.minecraft.init.Blocks.sand)
+            && super.getCanSpawnHere();
     }
 
     public boolean tryCureSanguinare(EntityPlayer player) {

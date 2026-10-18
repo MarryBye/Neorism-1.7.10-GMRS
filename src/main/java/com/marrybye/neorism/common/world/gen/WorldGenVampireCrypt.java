@@ -90,6 +90,8 @@ public class WorldGenVampireCrypt extends WorldGenerator {
         EntityVampireBaron baron = new EntityVampireBaron(world);
         baron.setLocationAndAngles(x + 0.5D, y + 1, z + 0.5D, rand.nextFloat() * 360.0F, 0.0F);
         baron.onSpawnWithEgg(null);
+        baron.setHomeArea(x, y + 1, z, 8);
+        baron.func_110163_bv();
         world.spawnEntityInWorld(baron);
 
         // Iron bars in entrance alcoves

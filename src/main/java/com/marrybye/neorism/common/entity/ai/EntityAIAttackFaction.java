@@ -25,34 +25,51 @@ public class EntityAIAttackFaction extends EntityAINearestAttackableTarget {
     private final EntityCreature attacker;
     private final IFaction faction;
 
-    public EntityAIAttackFaction(EntityCreature creature, IFaction faction, boolean checkSight) {
+    public EntityAIAttackFaction(final EntityCreature creature, final IFaction faction, boolean checkSight) {
         super(creature, EntityLivingBase.class, 0, checkSight, false, new IEntitySelector() {
             @Override
             public boolean isEntityApplicable(Entity entity) {
-                if (!(entity instanceof EntityLivingBase)) return false;
+                if (!(entity instanceof EntityLivingBase) || entity == creature) return false;
                 EntityLivingBase living = (EntityLivingBase) entity;
                 if (!living.isEntityAlive()) return false;
+
+                boolean isBaronOrBoss = creature instanceof com.marrybye.neorism.common.entity.vampire.EntityVampireBaron
+                    || creature instanceof com.marrybye.neorism.common.entity.vampire.EntityDracula
+                    || creature instanceof com.marrybye.neorism.common.entity.vampire.EntityVampireMother;
 
                 if (living instanceof EntityPlayer) {
                     EntityPlayer p = (EntityPlayer) living;
                     if (p.capabilities.isCreativeMode) return false;
                     if (faction == ModFactions.VAMPIRE) {
-                        return Helper.isHunter(p);
+                        // Canonical VampireBaronEntity / Dracula / Mother attack all players;
+                        // Basic & Advanced Vampires (HOSTILE_TOWARDS_NEUTRAL) attack Hunter and Neutral players
+                        if (isBaronOrBoss) {
+                            return true;
+                        }
+                        return !Helper.isVampire(p);
                     } else if (faction == ModFactions.HUNTER) {
+                        // Canonical BasicHunterEntity / AdvancedHunterEntity (.notNeutral()) attack Vampire players
                         return Helper.isVampire(p);
                     }
+                    return false;
                 }
 
                 if (faction == ModFactions.VAMPIRE) {
                     if (living instanceof IHunterEntity) return true;
-                    // Check if vampire is hungry for biteable prey
-                    if (creature instanceof IVampireEntity && ((IVampireEntity) creature).wantsBlood()) {
+                    // Canonical BasicVampireEntity: biteable non-vampire creatures when hungry for blood
+                    if (!isBaronOrBoss && creature instanceof IVampireEntity && ((IVampireEntity) creature).wantsBlood()) {
+                        if (living instanceof IVampireEntity) return false;
                         ExtendedCreature ext = ExtendedCreature.get(living);
                         if (ext != null && ext.canBeBitten((IVampireEntity) creature)) return true;
                         if (living instanceof IBiteableEntity && ((IBiteableEntity) living).canBeBitten((IVampireEntity) creature)) return true;
                     }
                 } else if (faction == ModFactions.HUNTER) {
-                    if (living instanceof IVampireEntity) return true;
+                    if (living instanceof IVampireEntity && !(living instanceof com.marrybye.neorism.common.entity.converted.EntityConvertedVillager)) {
+                        return true;
+                    }
+                    if (living instanceof net.minecraft.entity.monster.EntityZombie) {
+                        return true;
+                    }
                 }
 
                 return false;

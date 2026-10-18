@@ -72,13 +72,25 @@ public class WorldGenHunterCamp extends WorldGenerator {
             world.setBlock(x + p[0], y, z + p[1], Blocks.stone_slab, 3, 2); // Cobble slab
         }
 
-        // Hunter Tents in 2 to 4 quadrants: {dx, dz, dir} oriented so entrances face the central campfire
+        // Canonical HunterCampPieces.Fireplace: 1-in-3 chance of advanced camp (1 advanced tent + 1 normal tent + 0..2 extra),
+        // otherwise normal camp (1 normal tent + 50% 1 extra)
         int[][] tentOffsets = { {-3, -3, 2}, {3, -3, 3}, {-3, 3, 1}, {3, 3, 0} };
-        boolean advancedCamp = rand.nextFloat() < 0.35F;
+        boolean advancedCamp = rand.nextInt(3) == 0;
 
-        for (int[] t : tentOffsets) {
-            if (rand.nextBoolean() || (t[0] == -3 && t[1] == -3)) {
-                placeTent(world, x + t[0], y, z + t[1], t[2], advancedCamp);
+        if (advancedCamp) {
+            placeTent(world, x + tentOffsets[0][0], y, z + tentOffsets[0][1], tentOffsets[0][2], true);
+            placeTent(world, x + tentOffsets[1][0], y, z + tentOffsets[1][1], tentOffsets[1][2], false);
+            int extra = rand.nextInt(4);
+            if (extra < 2) {
+                placeTent(world, x + tentOffsets[2][0], y, z + tentOffsets[2][1], tentOffsets[2][2], true);
+            }
+            if (extra < 1) {
+                placeTent(world, x + tentOffsets[3][0], y, z + tentOffsets[3][1], tentOffsets[3][2], true);
+            }
+        } else {
+            placeTent(world, x + tentOffsets[0][0], y, z + tentOffsets[0][1], tentOffsets[0][2], false);
+            if (rand.nextInt(2) == 0) {
+                placeTent(world, x + tentOffsets[1][0], y, z + tentOffsets[1][1], tentOffsets[1][2], false);
             }
         }
 
@@ -118,11 +130,15 @@ public class WorldGenHunterCamp extends WorldGenerator {
             placePerimeterPost(world, x + 6, y, z + dz);
         }
 
-        // Spawn Hunter Trainer NPC in camp
-        EntityHunterTrainer trainer = new EntityHunterTrainer(world);
-        trainer.setLocationAndAngles(x + 1.5D, y, z + 1.5D, rand.nextFloat() * 360.0F, 0.0F);
-        trainer.onSpawnWithEgg(null);
-        world.spawnEntityInWorld(trainer);
+        // Canonical HunterOutpostPools.TRAINER: Spawn Hunter Trainer NPC in advanced camps / outposts (50% in normal camps)
+        if (advancedCamp || rand.nextBoolean()) {
+            EntityHunterTrainer trainer = new EntityHunterTrainer(world);
+            trainer.setLocationAndAngles(x + 1.5D, y, z + 1.5D, rand.nextFloat() * 360.0F, 0.0F);
+            trainer.onSpawnWithEgg(null);
+            trainer.setHomeArea(x, y, z, 10);
+            trainer.func_110163_bv();
+            world.spawnEntityInWorld(trainer);
+        }
 
         return true;
     }

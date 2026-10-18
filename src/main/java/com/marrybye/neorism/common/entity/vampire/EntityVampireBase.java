@@ -44,16 +44,23 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
     }
 
     protected void setupAI() {
+        this.getNavigator().setBreakDoors(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAISunFlee(this, 1.25D));
-        this.tasks.addTask(2, new EntityAIBiteLiving(this, 1.15D));
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1.1D, false));
-        this.tasks.addTask(4, new EntityAIWander(this, 0.9D));
-        this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.tasks.addTask(6, new EntityAILookIdle(this));
+        this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1.1D, false));
+        this.tasks.addTask(3, new EntityAIBiteLiving(this, 1.15D));
+        this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
+        this.tasks.addTask(5, new EntityAIWander(this, 0.9D));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
+        this.tasks.addTask(7, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new EntityAIAttackFaction(this, ModFactions.VAMPIRE, true));
+    }
+
+    @Override
+    protected boolean isAIEnabled() {
+        return true;
     }
 
     @Override
@@ -80,12 +87,17 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
     public boolean isGettingSundamage() {
         if (ignoringSundamage || this.worldObj.isRemote) return false;
         if (!this.worldObj.isDaytime()) return false;
-        if (TileEntityFogDiffuser.isEntityProtected(this)) return false;
         if (this.isInWater()) return false;
 
         int x = MathHelper.floor_double(this.posX);
         int y = MathHelper.floor_double(this.posY + 0.5D);
         int z = MathHelper.floor_double(this.posZ);
+
+        // Canonical VampirismBiomes: Vampire Forest has ModEnvironmentAttributes.SUN_DAMAGE = false
+        if (com.marrybye.neorism.common.world.gen.ModWorldGen.isVampireBiome(this.worldObj.getBiomeGenForCoords(x, z))) {
+            return false;
+        }
+        if (TileEntityFogDiffuser.isEntityProtected(this)) return false;
 
         return this.worldObj.canBlockSeeTheSky(x, y, z);
     }
@@ -106,6 +118,7 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
 
     @Override
     public void onLivingUpdate() {
+        this.updateArmSwingProgress();
         super.onLivingUpdate();
 
         if (!this.worldObj.isRemote && this.isEntityAlive()) {
@@ -131,6 +144,16 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
     }
 
     @Override
+    protected String getHurtSound() {
+        return "game.hostile.hurt";
+    }
+
+    @Override
+    protected String getDeathSound() {
+        return "game.hostile.die";
+    }
+
+    @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
         tag.setBoolean("IgnoringSundamage", this.ignoringSundamage);
@@ -148,13 +171,31 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
 
     @Override
     public boolean getCanSpawnHere() {
-        return isValidLightLevel() && super.getCanSpawnHere();
+        return this.worldObj.difficultySetting != net.minecraft.world.EnumDifficulty.PEACEFUL
+            && !this.isGettingSundamage()
+            && isValidLightLevel()
+            && super.getCanSpawnHere();
     }
 
+    /**
+     * Canonical port of VampireBaseEntity.getCanSpawnHereRestricted & spawnPredicateVampire:
+     * Checks if light level is dark enough, OR if inside Vampire Forest on Cursed Grass / Cursed Earth.
+     */
     protected boolean isValidLightLevel() {
         int x = MathHelper.floor_double(this.posX);
         int y = MathHelper.floor_double(this.boundingBox.minY);
         int z = MathHelper.floor_double(this.posZ);
+
+        if (com.marrybye.neorism.common.world.gen.ModWorldGen.isVampireBiome(this.worldObj.getBiomeGenForCoords(x, z))
+            || TileEntityFogDiffuser.isEntityProtected(this)) {
+            net.minecraft.block.Block below = this.worldObj.getBlock(x, y - 1, z);
+            if (below == com.marrybye.neorism.common.core.ModBlocks.cursedGrass
+                || below == com.marrybye.neorism.common.core.ModBlocks.cursedEarth
+                || below == net.minecraft.init.Blocks.grass
+                || below == net.minecraft.init.Blocks.dirt) {
+                return true;
+            }
+        }
 
         if (this.worldObj.getSavedLightValue(net.minecraft.world.EnumSkyBlock.Sky, x, y, z) > this.rand.nextInt(32)) {
             return false;

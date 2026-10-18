@@ -34,6 +34,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
         this.experienceValue = 100;
         this.setCustomNameTag("Lord Dracula");
         this.setAlwaysRenderNameTag(true);
+        this.setIgnoringSundamage(true);
     }
 
     @Override
@@ -201,6 +202,21 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
             this.dataWatcher.updateObject(DATA_PHASE, Byte.valueOf((byte) this.phase));
         }
         this.spawnedPhase2Bats = tag.getBoolean("SpawnedPhase2Bats");
+    }
+
+    @Override
+    protected String getLivingSound() {
+        return com.marrybye.neorism.common.core.ModSounds.DRACULA_AMBIENT;
+    }
+
+    @Override
+    protected String getHurtSound() {
+        return com.marrybye.neorism.common.core.ModSounds.DRACULA_HURT;
+    }
+
+    @Override
+    protected String getDeathSound() {
+        return com.marrybye.neorism.common.core.ModSounds.DRACULA_DEATH;
     }
 
     @Override

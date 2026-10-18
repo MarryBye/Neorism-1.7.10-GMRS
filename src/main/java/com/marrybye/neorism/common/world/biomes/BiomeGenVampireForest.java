@@ -36,17 +36,26 @@ public class BiomeGenVampireForest extends BiomeGenBase {
         setDisableRain();
         waterColorMultiplier = 0x670717;
 
-        this.theBiomeDecorator.treesPerChunk = 12;
-        this.theBiomeDecorator.flowersPerChunk = 4;
-        this.theBiomeDecorator.grassPerChunk = 15;
+        this.theBiomeDecorator.treesPerChunk = 15;
+        this.theBiomeDecorator.flowersPerChunk = 5;
+        this.theBiomeDecorator.grassPerChunk = 30;
         this.theBiomeDecorator.deadBushPerChunk = 2;
+        this.theBiomeDecorator.generateLakes = true;
 
         this.flowers.clear();
         this.addFlower(ModBlocks.vampireOrchid, 0, 10);
 
+        // Canonical VampirismBiomes.createVampireForest + NO_DEFAULT_MONSTERS:
+        // Clear default vanilla monsters/creatures so only Vampire Forest entities spawn here
+        this.spawnableMonsterList.clear();
+        this.spawnableCreatureList.clear();
+        this.spawnableWaterCreatureList.clear();
+        this.spawnableCaveCreatureList.clear();
+
         this.spawnableMonsterList.add(new SpawnListEntry(EntityVampire.class, 80, 1, 3));
         this.spawnableMonsterList.add(new SpawnListEntry(EntityVampireBaron.class, 27, 1, 1));
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityBloodBat.class, 60, 2, 4));
+        this.spawnableMonsterList.add(new SpawnListEntry(com.marrybye.neorism.common.entity.vampire.EntityAdvancedVampire.class, 27, 1, 2));
+        this.spawnableCaveCreatureList.add(new SpawnListEntry(EntityBloodBat.class, 60, 2, 4));
     }
 
     @Override

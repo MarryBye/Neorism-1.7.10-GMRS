@@ -27,6 +27,24 @@ public class EntityHunterTrainer extends EntityHunterBase {
     }
 
     @Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getEntityAttribute(net.minecraft.entity.SharedMonsterAttributes.maxHealth).setBaseValue(300.0D);
+        this.getEntityAttribute(net.minecraft.entity.SharedMonsterAttributes.attackDamage).setBaseValue(19.0D);
+        this.getEntityAttribute(net.minecraft.entity.SharedMonsterAttributes.movementSpeed).setBaseValue(0.17D);
+    }
+
+    @Override
+    public net.minecraft.entity.IEntityLivingData onSpawnWithEgg(net.minecraft.entity.IEntityLivingData data) {
+        data = super.onSpawnWithEgg(data);
+        this.setCurrentItemOrArmor(4, new ItemStack(ModItems.hunterHat));
+        this.setCurrentItemOrArmor(0, new ItemStack(ModItems.hunterAxe, 1, 0));
+        this.equipmentDropChances[0] = 0.0F;
+        this.equipmentDropChances[4] = 0.0F;
+        return data;
+    }
+
+    @Override
     public boolean interact(EntityPlayer player) {
         if (this.worldObj.isRemote) {
             return true;

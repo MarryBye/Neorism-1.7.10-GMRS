@@ -24,13 +24,30 @@ public class WorldGenDraculaCastle extends WorldGenerator {
     @Override
     public boolean generate(World world, Random rand, int x, int y, int z) {
         y = world.getTopSolidOrLiquidBlock(x, z);
-        if (y < 55 || y > 140) {
+        if (y < 60 || y > 120) {
+            return false;
+        }
+
+        Block centerGround = world.getBlock(x, y - 1, z);
+        if (centerGround != ModBlocks.cursedGrass && centerGround != ModBlocks.cursedEarth && centerGround != Blocks.grass && centerGround != Blocks.dirt) {
             return false;
         }
 
         int halfW = 12; // 25 blocks wide
         int halfD = 12; // 25 blocks deep
         int wallH = 7;
+
+        // Verify all 4 corners are in Vampire Forest and not in water/cliffs
+        int[][] checkCorners = {{-halfW, -halfD}, {halfW, -halfD}, {-halfW, halfD}, {halfW, halfD}};
+        for (int[] c : checkCorners) {
+            if (!ModWorldGen.isVampireBiome(world.getBiomeGenForCoords(x + c[0], z + c[1]))) {
+                return false;
+            }
+            int cy = world.getTopSolidOrLiquidBlock(x + c[0], z + c[1]);
+            if (Math.abs(cy - y) > 6 || world.getBlock(x + c[0], cy - 1, z + c[1]).getMaterial().isLiquid()) {
+                return false;
+            }
+        }
 
         // Level foundation
         for (int dx = -halfW; dx <= halfW; ++dx) {

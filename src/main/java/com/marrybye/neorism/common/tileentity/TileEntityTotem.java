@@ -171,6 +171,10 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
 
         if (!this.isRaidActive) {
             this.timeSinceLastRaid++;
+            // Canonical TotemBlockEntity.serverTickSecondNonCapture: every 16 seconds (320 ticks)
+            if (this.controllingFactionId != FACTION_NEUTRAL && this.timeSinceLastRaid % 320 == 0) {
+                tickNonCaptureVillageSpawns();
+            }
             return;
         }
 
@@ -246,14 +250,61 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
     private void spawnDefenderWave() {
         if (this.controllingFactionId == FACTION_HUNTER) {
             EntityHunter hunter = new EntityHunter(this.worldObj);
-            hunter.setPosition(this.xCoord + (this.worldObj.rand.nextDouble() - 0.5D) * 10,
-                this.yCoord, this.zCoord + (this.worldObj.rand.nextDouble() - 0.5D) * 10);
+            hunter.setLocationAndAngles(this.xCoord + (this.worldObj.rand.nextDouble() - 0.5D) * 10,
+                this.yCoord, this.zCoord + (this.worldObj.rand.nextDouble() - 0.5D) * 10, this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+            hunter.onSpawnWithEgg(null);
+            hunter.setHomeArea(this.xCoord, this.yCoord, this.zCoord, 24);
             this.worldObj.spawnEntityInWorld(hunter);
         } else if (this.controllingFactionId == FACTION_VAMPIRE) {
             EntityVampire vampire = new EntityVampire(this.worldObj);
-            vampire.setPosition(this.xCoord + (this.worldObj.rand.nextDouble() - 0.5D) * 10,
-                this.yCoord, this.zCoord + (this.worldObj.rand.nextDouble() - 0.5D) * 10);
+            vampire.setLocationAndAngles(this.xCoord + (this.worldObj.rand.nextDouble() - 0.5D) * 10,
+                this.yCoord, this.zCoord + (this.worldObj.rand.nextDouble() - 0.5D) * 10, this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+            vampire.onSpawnWithEgg(null);
+            vampire.setHomeArea(this.xCoord, this.yCoord, this.zCoord, 24);
             this.worldObj.spawnEntityInWorld(vampire);
+        }
+    }
+
+    /**
+     * Canonical port of TotemBlockEntity.serverTickSecondNonCapture:
+     * Spawns Taskmaster, Hunter Trainer (in Hunter villages), and village guards up to defender cap.
+     */
+    private void tickNonCaptureVillageSpawns() {
+        if (this.worldObj.getClosestPlayer(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, 64.0D) == null) {
+            return;
+        }
+
+        AxisAlignedBB area = getVillageArea();
+        List taskmasters = this.worldObj.getEntitiesWithinAABB(com.marrybye.neorism.common.entity.hunter.EntityTaskmaster.class, area);
+        if (taskmasters.isEmpty()) {
+            com.marrybye.neorism.common.entity.hunter.EntityTaskmaster tm = new com.marrybye.neorism.common.entity.hunter.EntityTaskmaster(this.worldObj);
+            tm.setLocationAndAngles(this.xCoord + 2.5D, this.yCoord, this.zCoord + 0.5D, this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+            tm.onSpawnWithEgg(null);
+            tm.setHomeArea(this.xCoord, this.yCoord, this.zCoord, 24);
+            tm.func_110163_bv();
+            this.worldObj.spawnEntityInWorld(tm);
+        }
+
+        if (this.controllingFactionId == FACTION_HUNTER) {
+            List trainers = this.worldObj.getEntitiesWithinAABB(com.marrybye.neorism.common.entity.hunter.EntityHunterTrainer.class, area);
+            if (trainers.isEmpty()) {
+                com.marrybye.neorism.common.entity.hunter.EntityHunterTrainer trainer = new com.marrybye.neorism.common.entity.hunter.EntityHunterTrainer(this.worldObj);
+                trainer.setLocationAndAngles(this.xCoord - 2.5D, this.yCoord, this.zCoord + 0.5D, this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+                trainer.onSpawnWithEgg(null);
+                trainer.setHomeArea(this.xCoord, this.yCoord, this.zCoord, 24);
+                trainer.func_110163_bv();
+                this.worldObj.spawnEntityInWorld(trainer);
+            }
+
+            List guards = this.worldObj.getEntitiesWithinAABB(EntityHunter.class, area);
+            if (guards.size() < 4) {
+                spawnDefenderWave();
+            }
+        } else if (this.controllingFactionId == FACTION_VAMPIRE) {
+            List guards = this.worldObj.getEntitiesWithinAABB(EntityVampire.class, area);
+            if (guards.size() < 4 && !this.worldObj.isDaytime()) {
+                spawnDefenderWave();
+            }
         }
     }
 

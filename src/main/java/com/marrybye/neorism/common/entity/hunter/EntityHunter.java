@@ -36,23 +36,37 @@ public class EntityHunter extends EntityHunterBase {
     }
 
     @Override
+    protected void setupAI() {
+        super.setupAI();
+        this.tasks.addTask(1, new com.marrybye.neorism.common.entity.ai.EntityAICrossbowAttack(this, 1.0D, 16.0F));
+    }
+
+    @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
         this.setSkinType(this.rand.nextInt(9) + 1);
 
-        // Equip melee weapon: Stake or Hunter Axe
-        if (this.rand.nextBoolean()) {
-            this.setCurrentItemOrArmor(0, new ItemStack(ModItems.hunterAxe, 1, 0));
-        } else {
-            this.setCurrentItemOrArmor(0, new ItemStack(ModItems.stake));
+        // Canonical BasicHunterEntity.randomEquipments:
+        // 0: Stake, 1: Hunter Axe, 2: Single Crossbow, 3: Stake
+        switch (this.rand.nextInt(4)) {
+            case 1:
+                this.setCurrentItemOrArmor(0, new ItemStack(ModItems.hunterAxe, 1, 0));
+                break;
+            case 2:
+                this.setCurrentItemOrArmor(0, new ItemStack(ModItems.crossbow, 1, 0));
+                break;
+            case 0:
+            case 3:
+            default:
+                this.setCurrentItemOrArmor(0, new ItemStack(ModItems.stake));
+                break;
         }
+        this.equipmentDropChances[0] = 0.0F;
 
-        // Equip hunter coat hat or chest
-        if (this.rand.nextBoolean()) {
+        // Canonical hat roll (nextInt(5): 0=Tall, 1=Broad -> ModItems.hunterHat)
+        if (this.rand.nextInt(5) < 2) {
             this.setCurrentItemOrArmor(4, new ItemStack(ModItems.hunterHat));
-        }
-        if (this.rand.nextBoolean()) {
-            this.setCurrentItemOrArmor(3, new ItemStack(ModItems.hunterCoatChest));
+            this.equipmentDropChances[4] = 0.0F;
         }
 
         ModLogger.spawn("Spawned Hunter patrol %s (skin=%d) at (%.1f, %.1f, %.1f)",

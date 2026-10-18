@@ -92,11 +92,14 @@ public class WorldGenVampireAltarRuins extends WorldGenerator {
             chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.gold_ingot, 2 + rand.nextInt(3)));
         }
 
-        // Spawn Advanced Vampire Guardian
-        EntityAdvancedVampire guardian = new EntityAdvancedVampire(world);
-        guardian.setLocationAndAngles(x + 0.5D, y, z + 0.5D, rand.nextFloat() * 360.0F, 0.0F);
-        guardian.onSpawnWithEgg(null);
-        world.spawnEntityInWorld(guardian);
+        // Canonical VampireAltarPieces: Spawn Advanced Vampire Guardian if protected from sun or in Vampire Forest
+        if (ModWorldGen.isVampireBiome(world.getBiomeGenForCoords(x, z)) || !world.isDaytime()) {
+            EntityAdvancedVampire guardian = new EntityAdvancedVampire(world);
+            guardian.setLocationAndAngles(x + 0.5D, y, z + 0.5D, rand.nextFloat() * 360.0F, 0.0F);
+            guardian.onSpawnWithEgg(null);
+            guardian.setHomeArea(x, y, z, 12);
+            world.spawnEntityInWorld(guardian);
+        }
 
         return true;
     }

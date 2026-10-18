@@ -25,6 +25,25 @@ public class EntityTaskmaster extends EntityHunterBase {
     }
 
     @Override
+    protected void setupAI() {
+        this.tasks.addTask(1, new net.minecraft.entity.ai.EntityAISwimming(this));
+        this.tasks.addTask(2, new net.minecraft.entity.ai.EntityAIOpenDoor(this, true));
+        this.tasks.addTask(5, new net.minecraft.entity.ai.EntityAIMoveTowardsRestriction(this, 1.0D));
+        this.tasks.addTask(8, new net.minecraft.entity.ai.EntityAIWander(this, 0.7D));
+        this.tasks.addTask(9, new net.minecraft.entity.ai.EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.tasks.addTask(10, new net.minecraft.entity.ai.EntityAILookIdle(this));
+        this.targetTasks.addTask(1, new net.minecraft.entity.ai.EntityAIHurtByTarget(this, false));
+    }
+
+    @Override
+    public net.minecraft.entity.IEntityLivingData onSpawnWithEgg(net.minecraft.entity.IEntityLivingData data) {
+        data = super.onSpawnWithEgg(data);
+        this.setCurrentItemOrArmor(4, new ItemStack(ModItems.hunterHat));
+        this.equipmentDropChances[4] = 0.0F;
+        return data;
+    }
+
+    @Override
     public boolean interact(EntityPlayer player) {
         if (this.worldObj.isRemote) {
             return true;
