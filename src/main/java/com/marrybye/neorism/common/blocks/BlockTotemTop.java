@@ -59,4 +59,24 @@ public class BlockTotemTop extends BlockModeled implements ITileEntityProvider {
             world.func_147480_a(x, y, z, true);
         }
     }
+
+    @Override
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof TileEntityTotem) {
+            if (!((TileEntityTotem) te).canPlayerRemoveBlock(player)) {
+                return false;
+            }
+        }
+        return super.removedByPlayer(world, player, x, y, z, willHarvest);
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, net.minecraft.block.Block oldBlock, int oldMeta) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof TileEntityTotem) {
+            ((TileEntityTotem) te).breakCapture();
+        }
+        super.breakBlock(world, x, y, z, oldBlock, oldMeta);
+    }
 }

@@ -94,17 +94,19 @@ public class VillageFactionHandler {
 
     @SubscribeEvent
     public void onGolemTarget(LivingSetAttackTargetEvent event) {
-        if (!(event.entityLiving instanceof EntityIronGolem)) return;
-        if (!(event.target instanceof EntityPlayer)) return;
+        if (!(event.entityLiving instanceof EntityIronGolem) || event.target == null) return;
 
-        EntityPlayer player = (EntityPlayer) event.target;
-        if (!Helper.isVampire(player)) return;
+        World world = event.entityLiving.worldObj;
+        TileEntityTotem totem = getNearbyTotem(world, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, 48.0D);
+        if (totem == null) return;
 
-        World world = player.worldObj;
-        TileEntityTotem totem = getNearbyTotem(world, player.posX, player.posY, player.posZ, 48.0D);
-        if (totem != null && totem.getControllingFactionId() == TileEntityTotem.FACTION_VAMPIRE) {
-            // Iron Golems do not attack vampires in a vampire-controlled village
-            ((EntityIronGolem) event.entityLiving).setAttackTarget(null);
+        int controlling = totem.getControllingFactionId();
+        if (controlling == TileEntityTotem.FACTION_VAMPIRE) {
+            // Canonical GolemTargetNonVillageFactionGoal: Iron Golems in Vampire villages do not attack Vampires
+            if (Helper.isVampire(event.target) || event.target instanceof com.marrybye.neorism.api.entity.IVampireEntity) {
+                ((EntityIronGolem) event.entityLiving).setAttackTarget(null);
+                ((EntityIronGolem) event.entityLiving).setRevengeTarget(null);
+            }
         }
     }
 

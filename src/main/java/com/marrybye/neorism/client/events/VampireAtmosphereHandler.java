@@ -26,7 +26,10 @@ public class VampireAtmosphereHandler {
         }
 
         BiomeGenBase biome = entity.worldObj.getBiomeGenForCoords((int) entity.posX, (int) entity.posZ);
-        if (biome == ModBiomes.vampireForest || (biome != null && biome.biomeName != null && biome.biomeName.toLowerCase().contains("vampire"))) {
+        boolean inVampireFog = biome == ModBiomes.vampireForest
+            || (biome != null && biome.biomeName != null && biome.biomeName.toLowerCase().contains("vampire"))
+            || com.marrybye.neorism.common.tileentity.TileEntityTotem.isEntityProtectedByVampireVillage(entity);
+        if (inVampireFog) {
             // Dark purple-black vampire fog (0x1b002c)
             float targetR = 0.106F;
             float targetG = 0.000F;
@@ -50,7 +53,10 @@ public class VampireAtmosphereHandler {
         }
 
         BiomeGenBase biome = entity.worldObj.getBiomeGenForCoords((int) entity.posX, (int) entity.posZ);
-        if (biome == ModBiomes.vampireForest || (biome != null && biome.biomeName != null && biome.biomeName.toLowerCase().contains("vampire"))) {
+        boolean inVampireFog = biome == ModBiomes.vampireForest
+            || (biome != null && biome.biomeName != null && biome.biomeName.toLowerCase().contains("vampire"))
+            || com.marrybye.neorism.common.tileentity.TileEntityTotem.isEntityProtectedByVampireVillage(entity);
+        if (inVampireFog) {
             event.density = 0.035F;
             event.setCanceled(true);
         }

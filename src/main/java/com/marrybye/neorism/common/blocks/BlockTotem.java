@@ -35,6 +35,17 @@ public class BlockTotem extends BlockModeled {
     }
 
     @Override
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+        if (world.getBlock(x, y + 1, z) == ModBlocks.totemTop) {
+            TileEntity te = world.getTileEntity(x, y + 1, z);
+            if (te instanceof TileEntityTotem && !((TileEntityTotem) te).canPlayerRemoveBlock(player)) {
+                return false;
+            }
+        }
+        return super.removedByPlayer(world, player, x, y, z, willHarvest);
+    }
+
+    @Override
     public void breakBlock(World world, int x, int y, int z, net.minecraft.block.Block oldBlock, int oldMeta) {
         // Destroy top block above
         if (world.getBlock(x, y + 1, z) == ModBlocks.totemTop) {

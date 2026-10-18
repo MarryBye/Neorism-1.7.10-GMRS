@@ -45,7 +45,8 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
         this.tasks.addTask(6, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-        this.targetTasks.addTask(2, new EntityAIAttackFaction(this, ModFactions.HUNTER, true));
+        this.targetTasks.addTask(2, new com.marrybye.neorism.common.entity.ai.EntityAIVillageCapture(this));
+        this.targetTasks.addTask(3, new EntityAIAttackFaction(this, ModFactions.HUNTER, true));
     }
 
     @Override

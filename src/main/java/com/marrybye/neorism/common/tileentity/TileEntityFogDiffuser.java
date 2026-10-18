@@ -37,6 +37,9 @@ public class TileEntityFogDiffuser extends TileEntityNeorism {
 
     public static boolean isEntityProtected(Entity entity) {
         if (entity == null || entity.worldObj == null) return false;
+        if (TileEntityTotem.isEntityProtectedByVampireVillage(entity)) {
+            return true;
+        }
         for (TileEntityFogDiffuser diffuser : ACTIVE_DIFFUSERS) {
             if (diffuser != null && diffuser.worldObj == entity.worldObj && !diffuser.isInvalid()) {
                 double distSq = entity.getDistanceSq(diffuser.xCoord + 0.5D, diffuser.yCoord + 0.5D, diffuser.zCoord + 0.5D);

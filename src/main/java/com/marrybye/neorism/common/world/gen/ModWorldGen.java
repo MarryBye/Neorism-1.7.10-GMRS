@@ -38,6 +38,7 @@ public class ModWorldGen implements IWorldGenerator {
 
     public static void init() {
         GameRegistry.registerWorldGenerator(new ModWorldGen(), 10);
+        VillageTotemCreationHandler.init();
     }
 
     @Override
