@@ -94,10 +94,9 @@ Modern Vampirism is divided into two major architectural layers:
 ---
 
 ## 4. Execution Strategy
-All development strictly follows the 12 Phases defined in [`docs/ROADMAP.md`](ROADMAP.md). Every task:
+All development strictly follows [`docs/BACKPORT_ROADMAP.md`](BACKPORT_ROADMAP.md) and [`AGENTS.md`](../AGENTS.md). Every task:
 1. Examines the exact modern code in `reference/vampirism/`.
-2. Implements the 1.7.10 equivalent with identical formulas and balance values.
+2. Implements the 1.7.10 equivalent with identical formulas and balance values (using existing original models/textures).
 3. Adds categorized diagnostic logging (`ModLogger`).
-4. Verifies compilation and syncs `.jar` to `run/client/mods/`.
-5. Updates `docs/ROADMAP.md` checkboxes and writes a report in `docs/reports/`.
-6. Creates a local Conventional Commit.
+4. Verifies compilation via `.\gradlew assemble` (never copying jars to `run/client/mods/`).
+5. Creates a local Conventional Commit.
