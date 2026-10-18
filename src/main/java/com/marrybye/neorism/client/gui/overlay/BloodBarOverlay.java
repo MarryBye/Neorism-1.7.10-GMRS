@@ -5,10 +5,12 @@ import com.marrybye.neorism.api.entity.player.IBloodStats;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.vampire.VampirePlayer;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -35,8 +37,16 @@ public class BloodBarOverlay {
         this.mc = mc;
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onRenderOverlayPre(RenderGameOverlayEvent.Pre event) {
+        if (event.type == RenderGameOverlayEvent.ElementType.BOSSHEALTH) {
+            // Ensure Gui.icons is bound before GuiIngame.renderBossHealth() runs,
+            // since mods hooking CROSSHAIRS (e.g. Combat Backport's AttackIndicatorRenderer)
+            // bind custom textures when aiming at an entity and do not rebind Gui.icons.
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            mc.getTextureManager().bindTexture(Gui.icons);
+            return;
+        }
         if (event.type == RenderGameOverlayEvent.ElementType.FOOD) {
             EntityPlayer player = mc.thePlayer;
             if (player != null && Helper.isVampire(player)) {
@@ -47,6 +57,16 @@ public class BloodBarOverlay {
                     renderBloodBar(event.resolution);
                 }
             }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onRenderOverlayPost(RenderGameOverlayEvent.Post event) {
+        if (event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS
+                || event.type == RenderGameOverlayEvent.ElementType.HOTBAR
+                || event.type == RenderGameOverlayEvent.ElementType.ALL) {
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            mc.getTextureManager().bindTexture(Gui.icons);
         }
     }
 

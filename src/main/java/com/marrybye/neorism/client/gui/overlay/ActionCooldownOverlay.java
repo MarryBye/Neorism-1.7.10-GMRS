@@ -107,6 +107,7 @@ public class ActionCooldownOverlay {
 
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        mc.getTextureManager().bindTexture(net.minecraft.client.gui.Gui.icons);
     }
 
     private void drawTexturedRect(int x, int y, int w, int h) {

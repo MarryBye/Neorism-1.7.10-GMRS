@@ -53,6 +53,13 @@ public class ItemHunterHat extends ItemArmor implements IFactionRestriction {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public net.minecraft.client.model.ModelBiped getArmorModel(net.minecraft.entity.EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
+        int meta = itemStack != null ? itemStack.getItemDamage() : 0;
+        return com.marrybye.neorism.client.model.ModelVampirismArmor.getHunterHatModel(meta, entityLiving);
+    }
+
+    @Override
     public String getUnlocalizedName(ItemStack stack) {
         return stack.getItemDamage() == 1 ? "item.neorism.hunter_hat_tall" : "item.neorism.hunter_hat_broad";
     }

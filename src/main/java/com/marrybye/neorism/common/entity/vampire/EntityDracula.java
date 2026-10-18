@@ -22,6 +22,8 @@ import net.minecraft.world.World;
  */
 public class EntityDracula extends EntityVampireBase implements IBossDisplayData {
 
+    private static final int DATA_PHASE = 21;
+
     private int phase = 1;
     private int phaseCooldown = 0;
     private boolean spawnedPhase2Bats = false;
@@ -35,6 +37,12 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
     }
 
     @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataWatcher.addObject(DATA_PHASE, Byte.valueOf((byte) 1));
+    }
+
+    @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(500.0D);
@@ -45,7 +53,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
 
     @Override
     public IChatComponent func_145748_c_() {
-        return new ChatComponentText(this.getCommandSenderName() + (phase == 3 ? " (Blood Rage)" : ""));
+        return new ChatComponentText(this.getCommandSenderName() + (getPhase() == 3 ? " (Blood Rage)" : ""));
     }
 
     @Override
@@ -99,6 +107,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
 
     private void transitionToPhase(int newPhase) {
         this.phase = newPhase;
+        this.dataWatcher.updateObject(DATA_PHASE, Byte.valueOf((byte) newPhase));
         ModLogger.combat("Lord Dracula transitioned to Phase %d!", newPhase);
 
         if (newPhase == 2 && !spawnedPhase2Bats) {
@@ -137,7 +146,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
         if (flag) {
             // Lifesteal
             float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-            this.heal(damage * (phase == 3 ? 0.5F : 0.25F));
+            this.heal(damage * (getPhase() == 3 ? 0.5F : 0.25F));
             this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.eat", 1.0F, 0.7F);
         }
         return flag;
@@ -146,7 +155,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         // Phase 1 parry mechanic: takes 40% reduced damage
-        if (phase == 1 && !source.isUnblockable()) {
+        if (getPhase() == 1 && !source.isUnblockable()) {
             amount *= 0.6F;
             this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.break", 0.8F, 1.5F);
         }
@@ -172,7 +181,26 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
     }
 
     public int getPhase() {
-        return phase;
+        return this.worldObj != null && this.worldObj.isRemote
+            ? this.dataWatcher.getWatchableObjectByte(DATA_PHASE)
+            : this.phase;
+    }
+
+    @Override
+    public void writeEntityToNBT(net.minecraft.nbt.NBTTagCompound tag) {
+        super.writeEntityToNBT(tag);
+        tag.setInteger("Phase", this.phase);
+        tag.setBoolean("SpawnedPhase2Bats", this.spawnedPhase2Bats);
+    }
+
+    @Override
+    public void readEntityFromNBT(net.minecraft.nbt.NBTTagCompound tag) {
+        super.readEntityFromNBT(tag);
+        if (tag.hasKey("Phase")) {
+            this.phase = Math.max(1, Math.min(3, tag.getInteger("Phase")));
+            this.dataWatcher.updateObject(DATA_PHASE, Byte.valueOf((byte) this.phase));
+        }
+        this.spawnedPhase2Bats = tag.getBoolean("SpawnedPhase2Bats");
     }
 
     @Override

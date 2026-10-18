@@ -47,6 +47,12 @@ public class ItemVampireClothing extends ItemArmor implements IFactionRestrictio
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public net.minecraft.client.model.ModelBiped getArmorModel(net.minecraft.entity.EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
+        return com.marrybye.neorism.client.model.ModelVampirismArmor.getVampireClothingModel(this.pieceName, entityLiving);
+    }
+
+    @Override
     public String getItemStackDisplayName(ItemStack stack) {
         String key = "item.neorism.vampire_clothing_" + pieceName + ".name";
         if (StatCollector.canTranslate(key)) {

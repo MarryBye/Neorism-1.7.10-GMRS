@@ -1,8 +1,8 @@
 package com.marrybye.neorism.client.render.entity;
 
 import com.marrybye.neorism.Neorism;
+import com.marrybye.neorism.client.model.ModelBaron;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,7 +18,7 @@ public class RenderVampireMother extends RenderBiped {
         new ResourceLocation(Neorism.MODID, "textures/entity/baron/baroness_enraged.png");
 
     public RenderVampireMother() {
-        super(new ModelBiped(0.0F), 0.65F);
+        super(new ModelBaron(true), 0.65F);
     }
 
     @Override

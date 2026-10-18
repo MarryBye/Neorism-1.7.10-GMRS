@@ -107,9 +107,8 @@ public class JsonModelItemRenderer implements IItemRenderer {
         switch (helper) {
             case ENTITY_ROTATION:
             case ENTITY_BOBBING:
-                return true;
             case EQUIPPED_BLOCK:
-                return false;
+                return true;
             default:
                 return false;
         }
@@ -137,8 +136,6 @@ public class JsonModelItemRenderer implements IItemRenderer {
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        boolean isUmbrella = modelPath.contains("umbrella");
-
         switch (type) {
             case INVENTORY:
                 GL11.glTranslatef(8.0F, 8.0F, 0.0F);
@@ -152,33 +149,64 @@ public class JsonModelItemRenderer implements IItemRenderer {
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                 break;
             case EQUIPPED:
-                if (isUmbrella) {
-                    GL11.glTranslatef(0.3F, 0.6F, 0.0F);
-                    GL11.glRotatef(-15.0F, 0.0F, 0.0F, 1.0F);
-                    GL11.glScalef(1.0F, 1.0F, 1.0F);
-                } else if (model.thirdPerson != null) {
+                // Undo ForgeHooksClient EQUIPPED_BLOCK (-0.5, -0.5, -0.5) and RenderBiped/RenderPlayer
+                // isFull3D() pre-transform to return to the clean bipedRightArm.postRender(0.0625F) origin
+                GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+                GL11.glRotatef(-45.0F, 0.0F, 1.0F, 0.0F);
+                GL11.glRotatef(100.0F, 1.0F, 0.0F, 0.0F);
+                GL11.glScalef(1.6F, -1.6F, 1.6F);
+                GL11.glTranslatef(0.0625F, -0.625F, 0.125F);
+
+                // Apply modern Minecraft ItemInHandLayer right-hand basis
+                GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+                GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+                GL11.glTranslatef(1.0F / 16.0F, 0.125F, -0.625F);
+
+                if (model.thirdPerson != null) {
                     model.thirdPerson.apply();
                 } else {
-                    GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
-                    GL11.glTranslatef(0.2F, -0.1F, 0.0F);
                     GL11.glScalef(0.7F, 0.7F, 0.7F);
                 }
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                if (isUmbrella) {
-                    // Position umbrella high overhead shading the player
-                    GL11.glTranslatef(0.35F, 0.9F, -0.2F);
-                    GL11.glRotatef(15.0F, 1.0F, 0.0F, 0.0F);
-                    GL11.glRotatef(-75.0F, 0.0F, 1.0F, 0.0F);
-                    GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
-                    GL11.glScalef(1.3F, 1.3F, 1.3F);
-                } else if (model.firstPerson != null) {
+                // Undo ForgeHooksClient EQUIPPED_BLOCK (-0.5, -0.5, -0.5) and ItemRenderer's 0.4F scale
+                GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+                GL11.glScalef(2.5F, 2.5F, 2.5F);
+
+                // If player is actively using the item (block/bow), undo 1.7.10's 2D sprite use-rotations
+                if (data != null && data.length > 1 && data[1] instanceof net.minecraft.entity.player.EntityPlayer) {
+                    net.minecraft.entity.player.EntityPlayer player = (net.minecraft.entity.player.EntityPlayer) data[1];
+                    if (player.getItemInUseCount() > 0 && item != null) {
+                        net.minecraft.item.EnumAction action = item.getItemUseAction();
+                        if (action == net.minecraft.item.EnumAction.block) {
+                            GL11.glRotatef(-60.0F, 0.0F, 1.0F, 0.0F);
+                            GL11.glRotatef(80.0F, 1.0F, 0.0F, 0.0F);
+                            GL11.glRotatef(-30.0F, 0.0F, 1.0F, 0.0F);
+                            GL11.glTranslatef(0.5F, -0.2F, 0.0F);
+                            GL11.glRotatef(-45.0F, 0.0F, 1.0F, 0.0F);
+                            GL11.glTranslatef(-0.2F, 0.1F, 0.0F);
+                            GL11.glRotatef(20.0F, 0.0F, 1.0F, 0.0F);
+                        } else if (action == net.minecraft.item.EnumAction.bow) {
+                            GL11.glTranslatef(0.9F, -0.2F, 0.0F);
+                            GL11.glRotatef(8.0F, 1.0F, 0.0F, 0.0F);
+                            GL11.glRotatef(12.0F, 0.0F, 1.0F, 0.0F);
+                            GL11.glRotatef(18.0F, 0.0F, 0.0F, 1.0F);
+                            GL11.glRotatef(-45.0F, 0.0F, 1.0F, 0.0F);
+                            GL11.glTranslatef(-0.25F, 0.05F, 0.0F);
+                        } else {
+                            GL11.glRotatef(-45.0F, 0.0F, 1.0F, 0.0F);
+                        }
+                    } else {
+                        GL11.glRotatef(-45.0F, 0.0F, 1.0F, 0.0F);
+                    }
+                } else {
+                    GL11.glRotatef(-45.0F, 0.0F, 1.0F, 0.0F);
+                }
+
+                if (model.firstPerson != null) {
                     model.firstPerson.apply();
                 } else {
-                    GL11.glTranslatef(0.5F, 0.2F, 0.0F);
-                    GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-                    GL11.glRotatef(35.0F, 0.0F, 0.0F, 1.0F);
                     GL11.glScalef(0.8F, 0.8F, 0.8F);
                 }
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);

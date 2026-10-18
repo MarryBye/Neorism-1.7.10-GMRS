@@ -62,6 +62,7 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
         super();
         setHasSubtypes(true);
         setMaxDamage(0);
+        setFull3D();
         setUnlocalizedName("neorism.crossbow");
         setCreativeTab(ModCreativeTabs.tabHunter);
     }

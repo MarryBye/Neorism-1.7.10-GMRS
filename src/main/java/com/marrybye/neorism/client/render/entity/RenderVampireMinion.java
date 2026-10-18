@@ -23,7 +23,7 @@ public class RenderVampireMinion extends RenderBiped {
     };
 
     public RenderVampireMinion() {
-        super(new ModelBiped64(0.0F), 0.5F);
+        super(new ModelBiped64(0.0F, true), 0.5F);
     }
 
     @Override

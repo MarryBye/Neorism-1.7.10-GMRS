@@ -60,6 +60,12 @@ public class ItemVampireCloak extends ItemArmor implements IFactionRestriction {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public net.minecraft.client.model.ModelBiped getArmorModel(net.minecraft.entity.EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
+        return com.marrybye.neorism.client.model.ModelVampirismArmor.getVampireCloakModel(entityLiving);
+    }
+
+    @Override
     public String getUnlocalizedNameInefficiently(ItemStack stack) {
         return this.getUnlocalizedName(stack);
     }
