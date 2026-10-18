@@ -38,6 +38,7 @@ public class VampireAppearanceRenderHandler {
     private final net.minecraft.client.model.ModelBat batModel = new net.minecraft.client.model.ModelBat();
     private static final ResourceLocation BAT_TEXTURE = new ResourceLocation("textures/entity/bat.png");
     private final ModelRenderer headModel;
+    private net.minecraft.entity.passive.EntityBat dummyBat;
 
     public VampireAppearanceRenderHandler() {
         headModel = new ModelRenderer(new ModelBase() {}, 0, 0);
@@ -74,10 +75,12 @@ public class VampireAppearanceRenderHandler {
             GL11.glScalef(scale, scale, scale);
 
             Minecraft.getMinecraft().getTextureManager().bindTexture(BAT_TEXTURE);
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
             float ageInTicks = player.ticksExisted + partialTicks;
-            batModel.render(null, 0.0F, 0.0F, ageInTicks, 0.0F, pitch, 0.0625F);
+            if (dummyBat == null || dummyBat.worldObj != player.worldObj) {
+                dummyBat = new net.minecraft.entity.passive.EntityBat(player.worldObj);
+                dummyBat.setIsBatHanging(false);
+            }
+            batModel.render(dummyBat, 0.0F, 0.0F, ageInTicks, 0.0F, pitch, 0.0625F);
 
             GL11.glPopMatrix();
         }
