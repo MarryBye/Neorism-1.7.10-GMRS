@@ -35,6 +35,8 @@ public class VampireAppearanceRenderHandler {
         }
     }
 
+    private final net.minecraft.client.model.ModelBat batModel = new net.minecraft.client.model.ModelBat();
+    private static final ResourceLocation BAT_TEXTURE = new ResourceLocation("textures/entity/bat.png");
     private final ModelRenderer headModel;
 
     public VampireAppearanceRenderHandler() {
@@ -45,12 +47,54 @@ public class VampireAppearanceRenderHandler {
     }
 
     @SubscribeEvent
+    public void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
+        EntityPlayer player = event.entityPlayer;
+        if (player == null || player.deathTime > 0) return;
+
+        com.marrybye.neorism.common.action.ActionHandler handler = com.marrybye.neorism.common.action.ActionHandler.get(player);
+        if (handler != null && handler.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("bat_form"))) {
+            event.setCanceled(true);
+
+            if (player.isInvisible()) return;
+
+            float partialTicks = event.partialRenderTick;
+            double renderX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosX;
+            double renderY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosY;
+            double renderZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosZ;
+
+            float yaw = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks;
+            float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
+
+            GL11.glPushMatrix();
+            GL11.glTranslated(renderX, renderY + 0.45D, renderZ);
+            GL11.glRotatef(180.0F - yaw, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+
+            float scale = 0.65F;
+            GL11.glScalef(scale, scale, scale);
+
+            Minecraft.getMinecraft().getTextureManager().bindTexture(BAT_TEXTURE);
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+            float ageInTicks = player.ticksExisted + partialTicks;
+            batModel.render(null, 0.0F, 0.0F, ageInTicks, 0.0F, pitch, 0.0625F);
+
+            GL11.glPopMatrix();
+        }
+    }
+
+    @SubscribeEvent
     public void onRenderPlayerSpecialsPost(RenderPlayerEvent.Specials.Post event) {
         EntityPlayer player = event.entityPlayer;
         if (player == null || player.deathTime > 0) return;
 
         FactionPlayerHandler fph = FactionPlayerHandler.get(player);
         if (fph == null) return;
+
+        com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(player);
+        if (ah != null && ah.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("bat_form"))) {
+            return;
+        }
 
         boolean inAppearanceScreen = Minecraft.getMinecraft().currentScreen instanceof VampirePlayerAppearanceScreen;
         if (!inAppearanceScreen) {

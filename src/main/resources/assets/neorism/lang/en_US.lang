@@ -5932,3 +5932,63 @@ chat.neorism.disguise_deactivated=Disguise deactivated.
 chat.neorism.hunter_awareness_detected=Detected %s vampire threats nearby.
 chat.neorism.skills_reset=All skill points have been reset!
 
+# Altar of Inspiration Status
+chat.neorism.altar_inspiration_status=Altar of Inspiration: %d / %d mB blood (Requires: %d mB for Level %d)
+chat.neorism.altar_inspiration_status_maxed=Altar of Inspiration: %d / %d mB blood (Maximum Level 4 reached)
+chat.neorism.altar_inspiration_status_simple=Altar of Inspiration: %d / %d mB blood
+
+# Skill Names & Descriptions
+skill.neorism.vampire_level_root=Become a Vampire
+skill.neorism.vampire_level_root.desc=The start of the true child of the night.
+skill.neorism.no_longer_fledgling=No Longer Fledgling
+skill.neorism.no_longer_fledgling.desc=Unlock the ability to transform into a bat.
+skill.neorism.vampire_regen=Regeneration
+skill.neorism.vampire_regen.desc=Rapidly regenerate health at the cost of blood.
+skill.neorism.vampire_rage=Vampire Rage
+skill.neorism.vampire_rage.desc=Boost your attack speed and strength at the cost of blood.
+skill.neorism.garlic_blood_vision=Garlic Blood Vision
+skill.neorism.garlic_blood_vision.desc=Sense creatures with garlic blood through walls.
+skill.neorism.half_invulnerable=Half Invulnerable
+skill.neorism.half_invulnerable.desc=Halves all incoming damage.
+skill.neorism.hissing=Hissing
+skill.neorism.hissing.desc=Frightening vampire hiss that scares enemies away.
+skill.neorism.dark_stalker=Dark Stalker
+skill.neorism.dark_stalker.desc=Move swiftly and stealthily in darkness.
+skill.neorism.vampire_invisibility=Invisibility
+skill.neorism.vampire_invisibility.desc=Turn completely invisible for a brief duration.
+skill.neorism.vampire_disguise=Disguise
+skill.neorism.vampire_disguise.desc=Conceal your vampire identity beneath human form.
+skill.neorism.summon_bats=Summon Bats
+skill.neorism.summon_bats.desc=Summon a swarm of bats to distract enemies.
+skill.neorism.sunscreen=Sunscreen
+skill.neorism.sunscreen.desc=Temporary protection against lethal sun damage.
+skill.neorism.dark_blood_projectile=Dark Blood Projectile
+skill.neorism.dark_blood_projectile.desc=Fire a destructive projectile of condensed dark blood.
+skill.neorism.freeze=Freeze
+skill.neorism.freeze.desc=Freeze enemies around you from a distance.
+skill.neorism.teleport=Teleport
+skill.neorism.teleport.desc=Instantly step through shadows across short distances.
+skill.neorism.vampire_lord_root=Become a Vampire Lord
+skill.neorism.vampire_lord_root.desc=Ascend to ruler of the vampire bloodlines.
+skill.neorism.vampire_lord_speed=Lord Speed
+skill.neorism.vampire_lord_speed.desc=Increased movement speed for Vampire Lords.
+skill.neorism.vampire_minion_recovery=Minion Recovery
+skill.neorism.vampire_minion_recovery.desc=Faster recovery rate for fallen minions.
+skill.neorism.hunter_level_root=Become a Hunter
+skill.neorism.hunter_level_root.desc=The start of a vampire slayer's journey.
+skill.neorism.hunter_disguise=Hunter Disguise
+skill.neorism.hunter_disguise.desc=Conceal your hunter equipment as a common villager.
+skill.neorism.master_alchemist=Basic Alchemy
+skill.neorism.master_alchemist.desc=Learn how to brew concoctions with the alchemical cauldron.
+skill.neorism.awareness_hunter=Hunter Awareness
+skill.neorism.awareness_hunter.desc=Heightened senses to detect nearby vampires.
+skill.neorism.potion_resistance_hunter=Potion Resistance
+skill.neorism.potion_resistance_hunter.desc=Reduces harmful effects of hostile potions.
+skill.neorism.hunter_lord_root=Become a Hunter Lord
+skill.neorism.hunter_lord_root.desc=Lead the hunter order and wage war against darkness.
+skill.neorism.hunter_minion_collect=Resource Collection
+skill.neorism.hunter_minion_collect.desc=Send minions to gather valuable resources.
+skill.neorism.minion_tech_crossbows=Advanced Tech
+skill.neorism.minion_tech_crossbows.desc=Allow minions to wield semi-automatic tech crossbows.
+
+

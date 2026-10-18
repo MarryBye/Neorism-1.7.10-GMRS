@@ -65,6 +65,23 @@ public class TileEntityAltarInspiration extends TileEntityNeorism implements IFl
         return worldObj.getPlayerEntityByName(ritualPlayerName);
     }
 
+    public void sendBloodStatus(EntityPlayer player) {
+        if (player == null) return;
+        FactionPlayerHandler fph = FactionPlayerHandler.get(player);
+        int curLevel = (fph != null && Helper.isVampire(player)) ? fph.getCurrentLevel() : 0;
+        int nextLevel = curLevel + 1;
+        int reqIndex = curLevel - 1;
+        int reqBlood = (reqIndex >= 0 && reqIndex < BLOOD_REQUIREMENTS.length) ? BLOOD_REQUIREMENTS[reqIndex] : 0;
+
+        if (curLevel >= 4) {
+            player.addChatMessage(new ChatComponentTranslation("chat.neorism.altar_inspiration_status_maxed", tank.getFluidAmount(), CAPACITY));
+        } else if (reqBlood > 0) {
+            player.addChatMessage(new ChatComponentTranslation("chat.neorism.altar_inspiration_status", tank.getFluidAmount(), CAPACITY, reqBlood, nextLevel));
+        } else {
+            player.addChatMessage(new ChatComponentTranslation("chat.neorism.altar_inspiration_status_simple", tank.getFluidAmount(), CAPACITY));
+        }
+    }
+
     public boolean tryLevelUp(EntityPlayer player) {
         if (worldObj.isRemote || player == null || isRunning()) return false;
 
@@ -76,7 +93,7 @@ public class TileEntityAltarInspiration extends TileEntityNeorism implements IFl
 
         int curLevel = fph.getCurrentLevel();
         if (curLevel >= 4) {
-            player.addChatMessage(new ChatComponentTranslation("message.vampirism.altar_infusion.ritual.level_wrong"));
+            player.addChatMessage(new ChatComponentTranslation("chat.neorism.altar_inspiration_maxed"));
             return false;
         }
 
@@ -85,7 +102,9 @@ public class TileEntityAltarInspiration extends TileEntityNeorism implements IFl
 
         int reqBlood = BLOOD_REQUIREMENTS[reqIndex];
         if (tank.getFluidAmount() < reqBlood) {
-            player.addChatMessage(new ChatComponentTranslation("message.vampirism.altar_inspiration.not_enough_blood"));
+            int missing = reqBlood - tank.getFluidAmount();
+            player.addChatMessage(new ChatComponentTranslation("chat.neorism.altar_inspiration_need_blood", missing));
+            sendBloodStatus(player);
             return false;
         }
 

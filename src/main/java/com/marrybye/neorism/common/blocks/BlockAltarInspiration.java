@@ -55,6 +55,7 @@ public class BlockAltarInspiration extends BlockModeled implements ITileEntityPr
                     }
                 }
                 world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 0.8F, 1.0F);
+                altar.sendBloodStatus(player);
                 return true;
             } else if (held.getItem() == ModFluids.bloodBucket && altar.getBloodAmount() <= altar.getCapacity() - 1000) {
                 altar.fill(ForgeDirection.UNKNOWN, new FluidStack(ModFluids.fluidBlood, 1000), true);
@@ -65,21 +66,27 @@ public class BlockAltarInspiration extends BlockModeled implements ITileEntityPr
                     }
                 }
                 world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "liquid.water", 0.8F, 1.0F);
+                altar.sendBloodStatus(player);
                 return true;
             }
 
-            // 2. Empty vanilla glass bottle -> fill from altar (1 unit = 200 mB)
-            if (held.getItem() == Items.glass_bottle && altar.getBloodAmount() >= 200) {
-                altar.drain(ForgeDirection.UNKNOWN, 200, true);
-                if (!player.capabilities.isCreativeMode) {
-                    held.stackSize--;
-                    ItemStack bottle = new ItemStack(ModItems.bloodBottle, 1, 1);
-                    if (!player.inventory.addItemStackToInventory(bottle)) {
-                        player.dropPlayerItemWithRandomChoice(bottle, false);
+            // 2. Empty vanilla glass bottle -> fill from altar (up to 5 units = 500 mB)
+            if (held.getItem() == Items.glass_bottle && altar.getBloodAmount() >= 100) {
+                int availUnits = altar.getBloodAmount() / 100;
+                int transfer = Math.min(ItemBloodBottle.MAX_BLOOD, availUnits);
+                if (transfer > 0) {
+                    altar.drain(ForgeDirection.UNKNOWN, transfer * 100, true);
+                    if (!player.capabilities.isCreativeMode) {
+                        held.stackSize--;
+                        ItemStack bottle = new ItemStack(ModItems.bloodBottle, 1, transfer);
+                        if (!player.inventory.addItemStackToInventory(bottle)) {
+                            player.dropPlayerItemWithRandomChoice(bottle, false);
+                        }
                     }
+                    world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 0.8F, 1.0F);
+                    altar.sendBloodStatus(player);
+                    return true;
                 }
-                world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 0.8F, 1.0F);
-                return true;
             }
 
             // 3. Mod Blood Bottle interaction
@@ -90,8 +97,19 @@ public class BlockAltarInspiration extends BlockModeled implements ITileEntityPr
                     int transfer = Math.min(curDamage, canAcceptUnits);
                     if (transfer > 0) {
                         altar.fill(ForgeDirection.UNKNOWN, new FluidStack(ModFluids.fluidBlood, transfer * 100), true);
-                        held.setItemDamage(curDamage - transfer);
+                        if (!player.capabilities.isCreativeMode) {
+                            if (held.stackSize > 1) {
+                                held.stackSize--;
+                                ItemStack remainder = new ItemStack(ModItems.bloodBottle, 1, curDamage - transfer);
+                                if (!player.inventory.addItemStackToInventory(remainder)) {
+                                    player.dropPlayerItemWithRandomChoice(remainder, false);
+                                }
+                            } else {
+                                held.setItemDamage(curDamage - transfer);
+                            }
+                        }
                         world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "liquid.water", 0.8F, 1.0F);
+                        altar.sendBloodStatus(player);
                         return true;
                     }
                 } else if (curDamage < ItemBloodBottle.MAX_BLOOD && altar.getBloodAmount() >= 100) {
@@ -100,8 +118,19 @@ public class BlockAltarInspiration extends BlockModeled implements ITileEntityPr
                     int transfer = Math.min(neededUnits, availUnits);
                     if (transfer > 0) {
                         altar.drain(ForgeDirection.UNKNOWN, transfer * 100, true);
-                        held.setItemDamage(curDamage + transfer);
+                        if (!player.capabilities.isCreativeMode) {
+                            if (held.stackSize > 1) {
+                                held.stackSize--;
+                                ItemStack remainder = new ItemStack(ModItems.bloodBottle, 1, curDamage + transfer);
+                                if (!player.inventory.addItemStackToInventory(remainder)) {
+                                    player.dropPlayerItemWithRandomChoice(remainder, false);
+                                }
+                            } else {
+                                held.setItemDamage(curDamage + transfer);
+                            }
+                        }
                         world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 0.7F, 1.2F);
+                        altar.sendBloodStatus(player);
                         return true;
                     }
                 }
@@ -117,6 +146,7 @@ public class BlockAltarInspiration extends BlockModeled implements ITileEntityPr
                         altar.fill(ForgeDirection.UNKNOWN, new FluidStack(ModFluids.fluidBlood, transfer * 100), true);
                         ItemBloodFlask.setBlood(held, curFlaskBlood - transfer);
                         world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "liquid.water", 0.8F, 1.0F);
+                        altar.sendBloodStatus(player);
                         return true;
                     }
                 } else if (curFlaskBlood < ItemBloodFlask.CAPACITY && altar.getBloodAmount() >= 100) {
@@ -127,10 +157,16 @@ public class BlockAltarInspiration extends BlockModeled implements ITileEntityPr
                         altar.drain(ForgeDirection.UNKNOWN, transfer * 100, true);
                         ItemBloodFlask.setBlood(held, curFlaskBlood + transfer);
                         world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "liquid.water", 0.8F, 1.2F);
+                        altar.sendBloodStatus(player);
                         return true;
                     }
                 }
             }
+        }
+
+        if (player.isSneaking()) {
+            altar.sendBloodStatus(player);
+            return true;
         }
 
         // Level-up interaction

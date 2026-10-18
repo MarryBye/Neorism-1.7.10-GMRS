@@ -5853,3 +5853,63 @@ chat.neorism.disguise_deactivated=Маскировка отключена.
 chat.neorism.hunter_awareness_detected=Обнаружено вампирских угроз поблизости: %s.
 chat.neorism.skills_reset=Все очки навыков были сброшены!
 
+# Altar of Inspiration Status
+chat.neorism.altar_inspiration_status=Алтарь вдохновения: %d / %d мБ крови (Требуется: %d мБ для %d уровня)
+chat.neorism.altar_inspiration_status_maxed=Алтарь вдохновения: %d / %d мБ крови (Максимальный 4 уровень достигнут)
+chat.neorism.altar_inspiration_status_simple=Алтарь вдохновения: %d / %d мБ крови
+
+# Дополнительные ключи локализации навыков (Skill Names & Descriptions)
+skill.neorism.vampire_level_root=Становление вампиром
+skill.neorism.vampire_level_root.desc=Начало пути истинного дитя ночи.
+skill.neorism.no_longer_fledgling=Вставание на крыло
+skill.neorism.no_longer_fledgling.desc=Разблокируйте способность обращаться в летучую мышь.
+skill.neorism.vampire_regen=Регенерация
+skill.neorism.vampire_regen.desc=Быстро восстанавливайте здоровье ценой повышенного расхода крови.
+skill.neorism.vampire_rage=Вампирская ярость
+skill.neorism.vampire_rage.desc=Увеличьте скорость и силу своих атак ценой крови.
+skill.neorism.garlic_blood_vision=Чесночно-кровное чутьё
+skill.neorism.garlic_blood_vision.desc=Распознавайте сквозь стены существ с чесночной кровью.
+skill.neorism.half_invulnerable=Полунеуязвимость
+skill.neorism.half_invulnerable.desc=Снижает весь получаемый урон наполовину.
+skill.neorism.hissing=Шипение
+skill.neorism.hissing.desc=Устрашающее вампирское шипение, отпугивающее врагов.
+skill.neorism.dark_stalker=Тёмный охотник
+skill.neorism.dark_stalker.desc=Скрытное и быстрое передвижение во тьме.
+skill.neorism.vampire_invisibility=Невидимость
+skill.neorism.vampire_invisibility.desc=Станьте полностью невидимым на короткое время.
+skill.neorism.vampire_disguise=Маскировка
+skill.neorism.vampire_disguise.desc=Скройте свою вампирскую сущность под личиной человека.
+skill.neorism.summon_bats=Призыв летучих мышей
+skill.neorism.summon_bats.desc=Призовите стаю летучих мышей, отвлекающих врагов.
+skill.neorism.sunscreen=Солнцезащита
+skill.neorism.sunscreen.desc=Временная защита от смертоносных солнечных ожогов.
+skill.neorism.dark_blood_projectile=Сгусток тёмной крови
+skill.neorism.dark_blood_projectile.desc=Выпустите разрушительный снаряд из сгущённой крови.
+skill.neorism.freeze=Заморозка
+skill.neorism.freeze.desc=Заморозьте врагов вокруг на расстоянии.
+skill.neorism.teleport=Телепортация
+skill.neorism.teleport.desc=Мгновенное перемещение сквозь тени на короткую дистанцию.
+skill.neorism.vampire_lord_root=Становление лордом вампиров
+skill.neorism.vampire_lord_root.desc=Возвысьтесь до правителя вампирского рода.
+skill.neorism.vampire_lord_speed=Скорость лорда
+skill.neorism.vampire_lord_speed.desc=Повышенная скорость передвижения для лорда вампиров.
+skill.neorism.vampire_minion_recovery=Восстановление подручных
+skill.neorism.vampire_minion_recovery.desc=Ускоренное восстановление павших подручных.
+skill.neorism.hunter_level_root=Становление охотником
+skill.neorism.hunter_level_root.desc=Начало пути безжалостного истребителя нечисти.
+skill.neorism.hunter_disguise=Маскировка охотника
+skill.neorism.hunter_disguise.desc=Скрытная маскировка под обычного жителя.
+skill.neorism.master_alchemist=Азы алхимии
+skill.neorism.master_alchemist.desc=Научитесь использовать алхимический котёл и варить снадобья.
+skill.neorism.awareness_hunter=Охотничье чутьё
+skill.neorism.awareness_hunter.desc=Обострённые чувства для выявления скрытых вампиров.
+skill.neorism.potion_resistance_hunter=Сопротивление зельям
+skill.neorism.potion_resistance_hunter.desc=Снижает негативные эффекты враждебных зелий.
+skill.neorism.hunter_lord_root=Становление лордом охотников
+skill.neorism.hunter_lord_root.desc=Возглавьте орден охотников и ведите войну против тьмы.
+skill.neorism.hunter_minion_collect=Сбор ресурсов
+skill.neorism.hunter_minion_collect.desc=Отправляйте подручных собирать ценные ресурсы.
+skill.neorism.minion_tech_crossbows=Передовые технологии
+skill.neorism.minion_tech_crossbows.desc=Позвольте своим подручным использовать полуавтоматические арбалеты.
+
+

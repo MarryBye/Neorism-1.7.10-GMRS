@@ -206,5 +206,23 @@ public class Helper {
             entity.attackEntityFrom(com.marrybye.neorism.common.core.ModDamageSource.GARLIC, multiplier);
         }
     }
+
+    public static void setEntitySize(Entity entity, float width, float height) {
+        if (entity == null) return;
+        try {
+            java.lang.reflect.Method m = Entity.class.getDeclaredMethod("setSize", float.class, float.class);
+            m.setAccessible(true);
+            m.invoke(entity, width, height);
+        } catch (Exception ignored) {
+            try {
+                java.lang.reflect.Method m = Entity.class.getDeclaredMethod("func_70105_a", float.class, float.class);
+                m.setAccessible(true);
+                m.invoke(entity, width, height);
+            } catch (Exception e) {
+                entity.width = width;
+                entity.height = height;
+            }
+        }
+    }
 }
 

@@ -220,8 +220,11 @@ public class ActionHandler implements IExtendedEntityProperties {
 
     public void sync() {
         if (!player.worldObj.isRemote && player instanceof EntityPlayerMP) {
-            SyncActionsPacket packet = new SyncActionsPacket(cooldowns, activeActions);
+            SyncActionsPacket packet = new SyncActionsPacket(player.getEntityId(), cooldowns, activeActions);
             PacketHandler.sendTo(packet, (EntityPlayerMP) player);
+            PacketHandler.sendToAllAround(packet, new cpw.mods.fml.common.network.NetworkRegistry.TargetPoint(
+                player.dimension, player.posX, player.posY, player.posZ, 64.0D
+            ));
         }
     }
 }

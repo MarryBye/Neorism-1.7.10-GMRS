@@ -69,22 +69,60 @@ public class Skill implements ISkill {
 
     @Override
     public String getTranslationKey() {
-        if (!net.minecraft.util.StatCollector.canTranslate(translationKey) && action != null) {
+        if (net.minecraft.util.StatCollector.canTranslate(translationKey)) {
+            return translationKey;
+        }
+        String vampKey = "skill.vampirism." + skillId;
+        if (net.minecraft.util.StatCollector.canTranslate(vampKey)) {
+            return vampKey;
+        }
+        if (action != null) {
             String actionKey = "action.neorism." + action.getActionId();
             if (net.minecraft.util.StatCollector.canTranslate(actionKey)) {
                 return actionKey;
             }
+            String actionVampKey = "action.vampirism." + action.getActionId();
+            if (net.minecraft.util.StatCollector.canTranslate(actionVampKey)) {
+                return actionVampKey;
+            }
+        }
+        String directActionKey = "action.neorism." + skillId;
+        if (net.minecraft.util.StatCollector.canTranslate(directActionKey)) {
+            return directActionKey;
+        }
+        String directActionVamp = "action.vampirism." + skillId;
+        if (net.minecraft.util.StatCollector.canTranslate(directActionVamp)) {
+            return directActionVamp;
         }
         return translationKey;
     }
 
     @Override
     public String getDescriptionTranslationKey() {
-        if (!net.minecraft.util.StatCollector.canTranslate(descriptionTranslationKey) && action != null) {
+        if (net.minecraft.util.StatCollector.canTranslate(descriptionTranslationKey)) {
+            return descriptionTranslationKey;
+        }
+        String vampDescKey = "skill.vampirism." + skillId + ".desc";
+        if (net.minecraft.util.StatCollector.canTranslate(vampDescKey)) {
+            return vampDescKey;
+        }
+        if (action != null) {
             String actionDescKey = "action.neorism." + action.getActionId() + ".desc";
             if (net.minecraft.util.StatCollector.canTranslate(actionDescKey)) {
                 return actionDescKey;
             }
+            String actionVampDescKey = "action.vampirism." + action.getActionId() + ".desc";
+            if (net.minecraft.util.StatCollector.canTranslate(actionVampDescKey)) {
+                return actionVampDescKey;
+            }
+        }
+        String directActionDesc = "action.neorism." + skillId + ".desc";
+        if (net.minecraft.util.StatCollector.canTranslate(directActionDesc)) {
+            return directActionDesc;
+        }
+        String directActionVampDesc = "action.vampirism." + skillId + ".desc";
+        if (net.minecraft.util.StatCollector.canTranslate(directActionVampDesc)) {
+            return directActionVampDesc;
         }
         return descriptionTranslationKey;
     }
