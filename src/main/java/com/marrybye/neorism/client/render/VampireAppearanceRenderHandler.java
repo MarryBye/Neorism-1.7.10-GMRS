@@ -56,6 +56,11 @@ public class VampireAppearanceRenderHandler {
         if (handler != null && handler.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("bat_form"))) {
             event.setCanceled(true);
 
+            Minecraft mc = Minecraft.getMinecraft();
+            if (mc.thePlayer == player && mc.gameSettings.thirdPersonView == 0) {
+                return;
+            }
+
             if (player.isInvisible()) return;
 
             float partialTicks = event.partialRenderTick;
@@ -63,27 +68,35 @@ public class VampireAppearanceRenderHandler {
             double renderY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosY;
             double renderZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosZ;
 
-            float yaw = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks;
+            float yaw = interpolateRotation(player.prevRotationYawHead, player.rotationYawHead, partialTicks);
             float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
 
             GL11.glPushMatrix();
-            GL11.glTranslated(renderX, renderY + 0.45D, renderZ);
+            GL11.glTranslated(renderX, renderY + 0.35D, renderZ);
             GL11.glRotatef(180.0F - yaw, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+            GL11.glRotatef(-pitch, 1.0F, 0.0F, 0.0F);
 
             float scale = 0.65F;
-            GL11.glScalef(scale, scale, scale);
+            GL11.glScalef(-scale, -scale, scale);
+            GL11.glTranslatef(0.0F, -0.6F, 0.0F);
 
             Minecraft.getMinecraft().getTextureManager().bindTexture(BAT_TEXTURE);
             float ageInTicks = player.ticksExisted + partialTicks;
             if (dummyBat == null || dummyBat.worldObj != player.worldObj) {
                 dummyBat = new net.minecraft.entity.passive.EntityBat(player.worldObj);
-                dummyBat.setIsBatHanging(false);
             }
-            batModel.render(dummyBat, 0.0F, 0.0F, ageInTicks, 0.0F, pitch, 0.0625F);
+            dummyBat.setIsBatHanging(false);
+            batModel.render(dummyBat, 0.0F, 0.0F, ageInTicks, 0.0F, 0.0F, 0.0625F);
 
             GL11.glPopMatrix();
         }
+    }
+
+    private float interpolateRotation(float prev, float current, float partialTicks) {
+        float diff = current - prev;
+        while (diff < -180.0F) diff += 360.0F;
+        while (diff >= 180.0F) diff -= 360.0F;
+        return prev + partialTicks * diff;
     }
 
     @SubscribeEvent

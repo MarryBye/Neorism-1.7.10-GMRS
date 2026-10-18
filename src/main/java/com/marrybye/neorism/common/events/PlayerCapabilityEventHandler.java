@@ -7,6 +7,7 @@ import com.marrybye.neorism.common.vampire.VampirePlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -203,6 +204,9 @@ public class PlayerCapabilityEventHandler {
             com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(player);
             if (ah != null) {
                 ah.onUpdate();
+                if (ah.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("bat_form"))) {
+                    applyBatDimensions(player);
+                }
             }
             if (!player.worldObj.isRemote && player.ticksExisted % 20 == 0) {
                 FactionPlayerHandler handler = FactionPlayerHandler.get(player);
@@ -270,6 +274,25 @@ public class PlayerCapabilityEventHandler {
                     event.entityPlayer.addChatMessage(new ChatComponentTranslation("chat.neorism.vampire_needs_coffin"));
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.player == null) return;
+        com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(event.player);
+        if (ah != null && ah.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("bat_form"))) {
+            applyBatDimensions(event.player);
+        }
+    }
+
+    public static void applyBatDimensions(EntityPlayer player) {
+        if (player == null) return;
+        Helper.setEntitySize(player, 0.6F, 0.6F);
+        player.height = 0.6F;
+        player.eyeHeight = 0.45F;
+        if (player.boundingBox != null) {
+            player.boundingBox.maxY = player.boundingBox.minY + 0.6D;
         }
     }
 }

@@ -207,21 +207,35 @@ public class Helper {
         }
     }
 
+    private static java.lang.reflect.Method setSizeMethod;
+    static {
+        try {
+            setSizeMethod = Entity.class.getDeclaredMethod("setSize", float.class, float.class);
+            setSizeMethod.setAccessible(true);
+        } catch (Exception e1) {
+            try {
+                setSizeMethod = Entity.class.getDeclaredMethod("func_70105_a", float.class, float.class);
+                setSizeMethod.setAccessible(true);
+            } catch (Exception e2) {
+                setSizeMethod = null;
+            }
+        }
+    }
+
     public static void setEntitySize(Entity entity, float width, float height) {
         if (entity == null) return;
-        try {
-            java.lang.reflect.Method m = Entity.class.getDeclaredMethod("setSize", float.class, float.class);
-            m.setAccessible(true);
-            m.invoke(entity, width, height);
-        } catch (Exception ignored) {
+        if (setSizeMethod != null) {
             try {
-                java.lang.reflect.Method m = Entity.class.getDeclaredMethod("func_70105_a", float.class, float.class);
-                m.setAccessible(true);
-                m.invoke(entity, width, height);
-            } catch (Exception e) {
-                entity.width = width;
-                entity.height = height;
-            }
+                setSizeMethod.invoke(entity, width, height);
+                return;
+            } catch (Exception ignored) {}
+        }
+        entity.width = width;
+        entity.height = height;
+        if (entity.boundingBox != null) {
+            entity.boundingBox.maxX = entity.boundingBox.minX + (double) width;
+            entity.boundingBox.maxZ = entity.boundingBox.minZ + (double) width;
+            entity.boundingBox.maxY = entity.boundingBox.minY + (double) height;
         }
     }
 }

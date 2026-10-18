@@ -28,14 +28,16 @@ public class BatFormAction extends ActionBase {
         player.capabilities.isFlying = true;
         player.capabilities.setFlySpeed(0.10F);
         player.sendPlayerAbilities();
-        Helper.setEntitySize(player, 0.6F, 0.6F);
-        player.eyeHeight = 0.45F;
+        com.marrybye.neorism.common.events.PlayerCapabilityEventHandler.applyBatDimensions(player);
         ModSounds.playAtEntity(player, ModSounds.BAT_SWARM, 0.8F, 1.2F);
         return true;
     }
 
     @Override
     public void onUpdate(EntityPlayer player, int activeTicksLeft) {
+        // Enforce bat hitbox dimensions continuously
+        com.marrybye.neorism.common.events.PlayerCapabilityEventHandler.applyBatDimensions(player);
+
         // Maintain flight abilities in bat form
         if (!player.capabilities.allowFlying) {
             player.capabilities.allowFlying = true;
@@ -78,7 +80,12 @@ public class BatFormAction extends ActionBase {
         player.capabilities.setFlySpeed(0.05F);
         player.sendPlayerAbilities();
         Helper.setEntitySize(player, 0.6F, 1.8F);
+        player.height = 1.8F;
         player.eyeHeight = player.getDefaultEyeHeight();
+        player.yOffset = 1.62F;
+        if (player.boundingBox != null) {
+            player.boundingBox.maxY = player.boundingBox.minY + 1.8D;
+        }
 
         // Safe landing resistance if reverting mid-air
         if (!player.onGround) {
