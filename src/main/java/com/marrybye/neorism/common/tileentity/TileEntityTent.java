@@ -17,7 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
  */
 public class TileEntityTent extends TileEntity {
 
-    private boolean spawn = true;
+    private boolean spawn = false;
     private boolean advanced = false;
     private int spawnCooldown = 100;
 

@@ -1,22 +1,100 @@
 {
-  "variants": {
-    "": { "model": "neorism:block/tent_bl" },
-    "normal": { "model": "neorism:block/tent_bl" },
-    "meta=0": { "model": "neorism:block/tent_br", "y": 180 },
-    "meta=1": { "model": "neorism:block/tent_br", "y": 270 },
-    "meta=2": { "model": "neorism:block/tent_br" },
-    "meta=3": { "model": "neorism:block/tent_br", "y": 90 },
-    "meta=4": { "model": "neorism:block/tent_bl", "y": 180 },
-    "meta=5": { "model": "neorism:block/tent_bl", "y": 270 },
-    "meta=6": { "model": "neorism:block/tent_bl" },
-    "meta=7": { "model": "neorism:block/tent_bl", "y": 90 },
-    "meta=8": { "model": "neorism:block/tent_tl", "y": 180 },
-    "meta=9": { "model": "neorism:block/tent_tl", "y": 270 },
-    "meta=10": { "model": "neorism:block/tent_tl" },
-    "meta=11": { "model": "neorism:block/tent_tl", "y": 90 },
-    "meta=12": { "model": "neorism:block/tent_tr", "y": 180 },
-    "meta=13": { "model": "neorism:block/tent_tr", "y": 270 },
-    "meta=14": { "model": "neorism:block/tent_tr" },
-    "meta=15": { "model": "neorism:block/tent_tr", "y": 90 }
-  }
+  "multipart": [
+    {
+      "apply": { "model": "neorism:block/tent_br", "y": 180 },
+      "when": { "meta": "0" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_br", "y": 90 },
+      "when": { "meta": "1" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_br" },
+      "when": { "meta": "2" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_br", "y": 270 },
+      "when": { "meta": "3" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_bl", "y": 180 },
+      "when": { "meta": "4" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_bl", "y": 90 },
+      "when": { "meta": "5" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_bl" },
+      "when": { "meta": "6" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_bl", "y": 270 },
+      "when": { "meta": "7" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_tl", "y": 180 },
+      "when": { "meta": "8" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_tl", "y": 90 },
+      "when": { "meta": "9" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_tl" },
+      "when": { "meta": "10" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_tl", "y": 270 },
+      "when": { "meta": "11" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_tr", "y": 180 },
+      "when": { "meta": "12" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_tr", "y": 90 },
+      "when": { "meta": "13" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_tr" },
+      "when": { "meta": "14" }
+    },
+    {
+      "apply": { "model": "neorism:block/tent_tr", "y": 270 },
+      "when": { "meta": "15" }
+    },
+    {
+      "apply": { "model": "neorism:block/tentback" },
+      "when": { "meta": "8" }
+    },
+    {
+      "apply": { "model": "neorism:block/tentback", "y": 270 },
+      "when": { "meta": "9" }
+    },
+    {
+      "apply": { "model": "neorism:block/tentback", "y": 180 },
+      "when": { "meta": "10" }
+    },
+    {
+      "apply": { "model": "neorism:block/tentback", "y": 90 },
+      "when": { "meta": "11" }
+    },
+    {
+      "apply": { "model": "neorism:block/tentback_flipped", "y": 180 },
+      "when": { "meta": "12" }
+    },
+    {
+      "apply": { "model": "neorism:block/tentback_flipped", "y": 90 },
+      "when": { "meta": "13" }
+    },
+    {
+      "apply": { "model": "neorism:block/tentback_flipped" },
+      "when": { "meta": "14" }
+    },
+    {
+      "apply": { "model": "neorism:block/tentback_flipped", "y": 270 },
+      "when": { "meta": "15" }
+    }
+  ]
 }

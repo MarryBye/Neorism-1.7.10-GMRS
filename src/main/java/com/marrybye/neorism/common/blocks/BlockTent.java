@@ -3,10 +3,12 @@ package com.marrybye.neorism.common.blocks;
 import java.util.Random;
 
 import com.marrybye.neorism.Neorism;
-import com.marrybye.neorism.common.core.ModCreativeTabs;
+import com.marrybye.neorism.common.core.ModBlocks;
 import com.marrybye.neorism.common.core.ModFactions;
+import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.faction.FactionPlayerHandler;
 import com.marrybye.neorism.common.tileentity.TileEntityTent;
+import com.marrybye.neorism.common.util.ModLogger;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -14,24 +16,36 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 /**
  * Hunter Tent Block.
- * Canonical port of TeamLapen's TentBlock.
+ * Canonical port of TeamLapen's TentBlock & TentMainBlock.
  * Functions as a 2x2 multiblock shelter for hunters and spawns camp sentries.
+ *
+ * Arrangement (looking from entrance towards back in placement direction):
+ * 2 3
+ * 1 0
  */
 public class BlockTent extends BlockContainer {
 
     // Directions: 0 = SOUTH, 1 = WEST, 2 = NORTH, 3 = EAST
-    // Offsets from pos 0 (Right-Front) for pos 1 (Left-Front), pos 2 (Left-Back), pos 3 (Right-Back): {dx, dz}
+    // Offsets from pos 0 (Front-Right) for pos 1 (Front-Left), pos 2 (Back-Left), pos 3 (Back-Right): {dx, dz}
     private static final int[][][] OFFSETS_FROM_ZERO = new int[][][] {
         // SOUTH (0):
         { {1, 0}, {1, 1}, {0, 1} },
@@ -41,6 +55,18 @@ public class BlockTent extends BlockContainer {
         { {-1, 0}, {-1, -1}, {0, -1} },
         // EAST (3):
         { {0, -1}, {1, -1}, {1, 0} }
+    };
+
+    // Canonical sleep position offsets from TentBlock.offsets: [position][facing] -> {dx, dz}
+    private static final double[][][] SLEEP_OFFSETS = new double[][][] {
+        // position 0: SOUTH (0), WEST (1), NORTH (2), EAST (3)
+        { {0.0D, -0.6D}, {1.6D, 0.0D}, {1.0D, 1.6D}, {-0.6D, 1.0D} },
+        // position 1: SOUTH (0), WEST (1), NORTH (2), EAST (3)
+        { {0.0D, 1.6D}, {-0.6D, 0.0D}, {1.0D, -0.6D}, {1.6D, 1.0D} },
+        // position 2: SOUTH (0), WEST (1), NORTH (2), EAST (3)
+        { {0.0D, 0.6D}, {0.4D, 0.0D}, {1.0D, 0.4D}, {0.6D, 1.0D} },
+        // position 3: SOUTH (0), WEST (1), NORTH (2), EAST (3)
+        { {0.0D, 0.4D}, {0.6D, 0.0D}, {1.0D, 0.6D}, {0.4D, 1.0D} }
     };
 
     @SideOnly(Side.CLIENT)
@@ -55,10 +81,10 @@ public class BlockTent extends BlockContainer {
     public BlockTent() {
         super(Material.cloth);
         setBlockName("neorism.tent");
-        setHardness(1.0F);
-        setResistance(2.0F);
+        setHardness(0.6F);
+        setResistance(1.0F);
         setStepSound(soundTypeCloth);
-        setCreativeTab((net.minecraft.creativetab.CreativeTabs) null);
+        setCreativeTab((CreativeTabs) null);
     }
 
     @Override
@@ -73,13 +99,13 @@ public class BlockTent extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
-        int dir = MathHelper.floor_double((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int dir = MathHelper.floor_double((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         int[][] offs = OFFSETS_FROM_ZERO[dir];
         int x1 = x + offs[0][0], z1 = z + offs[0][1];
         int x2 = x + offs[1][0], z2 = z + offs[1][1];
         int x3 = x + offs[2][0], z3 = z + offs[2][1];
 
-        if (canReplace(world, x1, y, z1) && canReplace(world, x2, y, z2) && canReplace(world, x3, y, z3)) {
+        if (canReplaceAt(world, x1, y, z1) && canReplaceAt(world, x2, y, z2) && canReplaceAt(world, x3, y, z3)) {
             int oppDir = (dir + 2) & 3;
             world.setBlockMetadataWithNotify(x, y, z, (0 << 2) | oppDir, 3);
             world.setBlock(x1, y, z1, this, (1 << 2) | dir, 3);
@@ -88,7 +114,7 @@ public class BlockTent extends BlockContainer {
         } else {
             world.setBlockToAir(x, y, z);
             if (placer instanceof EntityPlayer && !((EntityPlayer) placer).capabilities.isCreativeMode) {
-                dropBlockAsItem(world, x, y, z, new ItemStack(com.marrybye.neorism.common.core.ModItems.itemTent));
+                dropBlockAsItem(world, x, y, z, new ItemStack(ModItems.itemTent));
             }
         }
     }
@@ -104,18 +130,62 @@ public class BlockTent extends BlockContainer {
     public static void placeTent(World world, int x, int y, int z, int dir) {
         int[][] offs = OFFSETS_FROM_ZERO[dir];
         int oppDir = (dir + 2) & 3;
-        world.setBlock(x, y, z, com.marrybye.neorism.common.core.ModBlocks.tent, (0 << 2) | oppDir, 3);
-        world.setBlock(x + offs[0][0], y, z + offs[0][1], com.marrybye.neorism.common.core.ModBlocks.tent, (1 << 2) | dir, 3);
-        world.setBlock(x + offs[1][0], y, z + offs[1][1], com.marrybye.neorism.common.core.ModBlocks.tent, (2 << 2) | dir, 3);
-        world.setBlock(x + offs[2][0], y, z + offs[2][1], com.marrybye.neorism.common.core.ModBlocks.tent, (3 << 2) | oppDir, 3);
+        world.setBlock(x, y, z, ModBlocks.tent, (0 << 2) | oppDir, 3);
+        world.setBlock(x + offs[0][0], y, z + offs[0][1], ModBlocks.tent, (1 << 2) | dir, 3);
+        world.setBlock(x + offs[1][0], y, z + offs[1][1], ModBlocks.tent, (2 << 2) | dir, 3);
+        world.setBlock(x + offs[2][0], y, z + offs[2][1], ModBlocks.tent, (3 << 2) | oppDir, 3);
     }
 
     private static boolean canReplaceAt(World world, int x, int y, int z) {
         return world.isAirBlock(x, y, z) || world.getBlock(x, y, z).isReplaceable(world, x, y, z);
     }
 
-    private boolean canReplace(World world, int x, int y, int z) {
-        return canReplaceAt(world, x, y, z);
+    private static int getPlacementDir(int pos, int facing) {
+        return (pos == 0 || pos == 3) ? ((facing + 2) & 3) : facing;
+    }
+
+    private static int[] getMainBlockCoords(int x, int z, int meta) {
+        int pos = (meta >> 2) & 3;
+        int facing = meta & 3;
+        if (pos == 0) {
+            return new int[] { x, z };
+        }
+        int tentDir = getPlacementDir(pos, facing);
+        return new int[] {
+            x - OFFSETS_FROM_ZERO[tentDir][pos - 1][0],
+            z - OFFSETS_FROM_ZERO[tentDir][pos - 1][1]
+        };
+    }
+
+    @Override
+    public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
+        if (!world.isRemote && player != null && !player.capabilities.isCreativeMode) {
+            int[] mainCoords = getMainBlockCoords(x, z, meta);
+            int x0 = mainCoords[0];
+            int z0 = mainCoords[1];
+
+            dropBlockAsItem(world, x0, y, z0, new ItemStack(ModItems.itemTent, 1));
+
+            TileEntity te = world.getTileEntity(x0, y, z0);
+            if (te instanceof TileEntityTent && ((TileEntityTent) te).isSpawner()) {
+                ItemStack bonus;
+                switch (world.rand.nextInt(4)) {
+                    case 0:
+                        bonus = new ItemStack(Blocks.planks, 1);
+                        break;
+                    case 1:
+                        bonus = new ItemStack(Items.stick, 1);
+                        break;
+                    default:
+                        bonus = new ItemStack(Blocks.wool, 1);
+                        break;
+                }
+                dropBlockAsItem(world, x0, y, z0, bonus);
+            }
+            ModLogger.debug("Hunter tent harvested by %s at [%d, %d, %d] (main=[%d, %d, %d])",
+                player.getCommandSenderName(), x, y, z, x0, y, z0);
+        }
+        super.onBlockHarvested(world, x, y, z, meta, player);
     }
 
     @Override
@@ -125,9 +195,10 @@ public class BlockTent extends BlockContainer {
             try {
                 int pos = (meta >> 2) & 3;
                 int facing = meta & 3;
-                int tentDir = (pos == 0 || pos == 3) ? ((facing + 2) & 3) : facing;
-                int x0 = (pos == 0) ? x : x - OFFSETS_FROM_ZERO[tentDir][pos - 1][0];
-                int z0 = (pos == 0) ? z : z - OFFSETS_FROM_ZERO[tentDir][pos - 1][1];
+                int tentDir = getPlacementDir(pos, facing);
+                int[] mainCoords = getMainBlockCoords(x, z, meta);
+                int x0 = mainCoords[0];
+                int z0 = mainCoords[1];
 
                 int[][] allPos = new int[][] {
                     { x0, z0 },
@@ -151,12 +222,48 @@ public class BlockTent extends BlockContainer {
 
     @Override
     public int quantityDropped(int meta, int fortune, Random random) {
-        return ((meta >> 2) & 3) == 0 ? 1 : 0;
+        return 0;
     }
 
     @Override
-    public net.minecraft.item.Item getItemDropped(int meta, Random random, int fortune) {
-        return ((meta >> 2) & 3) == 0 ? com.marrybye.neorism.common.core.ModItems.itemTent : null;
+    public Item getItemDropped(int meta, Random random, int fortune) {
+        return null;
+    }
+
+    @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+        return new ItemStack(ModItems.itemTent);
+    }
+
+    @Override
+    public void onFallenUpon(World world, int x, int y, int z, Entity entity, float fallDistance) {
+        super.onFallenUpon(world, x, y, z, entity, fallDistance * 0.7F);
+    }
+
+    @Override
+    public boolean isBed(IBlockAccess world, int x, int y, int z, EntityLivingBase player) {
+        return true;
+    }
+
+    @Override
+    public int getBedDirection(IBlockAccess world, int x, int y, int z) {
+        int meta = world.getBlockMetadata(x, y, z);
+        int thisPos = (meta >> 2) & 3;
+        int thisFacing = meta & 3;
+        if (thisPos != 0) {
+            int[] mainCoords = getMainBlockCoords(x, z, meta);
+            if (world.getBlock(mainCoords[0], y, mainCoords[1]) == this) {
+                meta = world.getBlockMetadata(mainCoords[0], y, mainCoords[1]);
+                thisPos = (meta >> 2) & 3;
+                thisFacing = meta & 3;
+            }
+        }
+        return getPlacementDir(thisPos, thisFacing);
+    }
+
+    public static void setTentSleepPosition(EntityPlayer player, int x, int y, int z, int position, int facing) {
+        double[] offset = SLEEP_OFFSETS[position & 3][facing & 3];
+        player.setPosition(x + offset[0], y + 0.0625D, z + offset[1]);
     }
 
     @Override
@@ -165,35 +272,58 @@ public class BlockTent extends BlockContainer {
             return true;
         }
 
-        int meta = world.getBlockMetadata(x, y, z);
-        int pos = (meta >> 2) & 3;
-        int facing = meta & 3;
-
-        // Delegate to position 0 if activated on another part
-        if (pos != 0) {
-            int tentDir = (pos == 3) ? ((facing + 2) & 3) : facing;
-            int x0 = x - OFFSETS_FROM_ZERO[tentDir][pos - 1][0];
-            int z0 = z - OFFSETS_FROM_ZERO[tentDir][pos - 1][1];
-            if (world.getBlock(x0, y, z0) == this) {
-                return onBlockActivated(world, x0, y, z0, player, side, hitX, hitY, hitZ);
-            }
-        }
-
         FactionPlayerHandler fph = FactionPlayerHandler.get(player);
-        if (fph == null || fph.getCurrentFaction() != ModFactions.HUNTER) {
-            player.addChatMessage(new ChatComponentTranslation("message.vampirism.tent.cant_use"));
+        if (fph == null || fph.getCurrentFaction() != ModFactions.HUNTER || fph.getCurrentLevel() == 0) {
+            player.addChatComponentMessage(new ChatComponentTranslation("message.vampirism.tent.cant_use"));
             return true;
         }
 
-        // Hunter sleep logic
-        if (world.isDaytime() && !world.isRaining()) {
-            player.addChatMessage(new ChatComponentTranslation("message.vampirism.tent.rested"));
-            player.heal(4.0F);
-        } else {
-            EntityPlayer.EnumStatus status = player.sleepInBedAt(x, y, z);
-            if (status != EntityPlayer.EnumStatus.OK) {
-                player.addChatMessage(new ChatComponentTranslation("message.vampirism.tent.occupied"));
+        int meta = world.getBlockMetadata(x, y, z);
+        int targetX = x;
+        int targetZ = z;
+        int targetMeta = meta;
+        int thisPos = (meta >> 2) & 3;
+        if (thisPos != 0) {
+            int[] mainCoords = getMainBlockCoords(x, z, meta);
+            if (world.getBlock(mainCoords[0], y, mainCoords[1]) == this) {
+                targetX = mainCoords[0];
+                targetZ = mainCoords[1];
+                targetMeta = world.getBlockMetadata(targetX, y, targetZ);
             }
+        }
+
+        if (!world.provider.canRespawnHere() || world.getBiomeGenForCoords(targetX, targetZ) == BiomeGenBase.hell) {
+            world.setBlockToAir(targetX, y, targetZ);
+            world.newExplosion(null, targetX + 0.5D, y + 0.5D, targetZ + 0.5D, 5.0F, true, true);
+            return true;
+        }
+
+        for (Object obj : world.playerEntities) {
+            EntityPlayer otherPlayer = (EntityPlayer) obj;
+            if (otherPlayer.isPlayerSleeping() && otherPlayer.playerLocation != null &&
+                otherPlayer.playerLocation.posX == targetX &&
+                otherPlayer.playerLocation.posY == y &&
+                otherPlayer.playerLocation.posZ == targetZ) {
+                player.addChatComponentMessage(new ChatComponentTranslation("message.vampirism.tent.occupied"));
+                return true;
+            }
+        }
+
+        EntityPlayer.EnumStatus status = player.sleepInBedAt(targetX, y, targetZ);
+        if (status == EntityPlayer.EnumStatus.OK) {
+            int finalPos = (targetMeta >> 2) & 3;
+            int finalFacing = targetMeta & 3;
+            setTentSleepPosition(player, targetX, y, targetZ, finalPos, finalFacing);
+            ModLogger.debug("Hunter %s sleeping in tent at [%d, %d, %d] (pos=%d, facing=%d)",
+                player.getCommandSenderName(), targetX, y, targetZ, finalPos, finalFacing);
+        } else if (status == EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW) {
+            player.addChatComponentMessage(new ChatComponentTranslation("message.vampirism.tent.night_only"));
+        } else if (status == EntityPlayer.EnumStatus.TOO_FAR_AWAY) {
+            player.addChatComponentMessage(new ChatComponentTranslation("message.vampirism.tent.too_far_away"));
+        } else if (status == EntityPlayer.EnumStatus.NOT_SAFE) {
+            player.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe"));
+        } else {
+            player.addChatComponentMessage(new ChatComponentTranslation("message.vampirism.tent.obstructed"));
         }
         return true;
     }

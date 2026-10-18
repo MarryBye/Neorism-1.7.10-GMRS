@@ -72,13 +72,13 @@ public class WorldGenHunterCamp extends WorldGenerator {
             world.setBlock(x + p[0], y, z + p[1], Blocks.stone_slab, 3, 2); // Cobble slab
         }
 
-        // Hunter Tents in 2 to 4 quadrants
-        int[][] tentOffsets = {{-3, -3}, {3, -3}, {-3, 3}, {3, 3}};
+        // Hunter Tents in 2 to 4 quadrants: {dx, dz, dir} oriented so entrances face the central campfire
+        int[][] tentOffsets = { {-3, -3, 2}, {3, -3, 3}, {-3, 3, 1}, {3, 3, 0} };
         boolean advancedCamp = rand.nextFloat() < 0.35F;
 
         for (int[] t : tentOffsets) {
-            if (rand.nextBoolean() || t[0] == -3 && t[1] == -3) {
-                placeTent(world, x + t[0], y, z + t[1], advancedCamp);
+            if (rand.nextBoolean() || (t[0] == -3 && t[1] == -3)) {
+                placeTent(world, x + t[0], y, z + t[1], t[2], advancedCamp);
             }
         }
 
@@ -127,9 +127,9 @@ public class WorldGenHunterCamp extends WorldGenerator {
         return true;
     }
 
-    private void placeTent(World world, int tx, int ty, int tz, boolean advanced) {
+    private void placeTent(World world, int tx, int ty, int tz, int dir, boolean advanced) {
         if (ModBlocks.tent != null) {
-            com.marrybye.neorism.common.blocks.BlockTent.placeTent(world, tx, ty, tz, 0);
+            com.marrybye.neorism.common.blocks.BlockTent.placeTent(world, tx, ty, tz, dir);
             TileEntityTent tentTile = (TileEntityTent) world.getTileEntity(tx, ty, tz);
             if (tentTile != null) {
                 tentTile.setSpawn(true);
