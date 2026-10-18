@@ -147,22 +147,27 @@ public class FactionMenuScreen extends GuiScreen {
         int modelY = guiTop + 72;
         GuiInventory.func_147046_a(modelX, modelY, 28, (float) (modelX) - mouseX, (float) (modelY - 45) - mouseY, player);
 
-        // 3. Draw Level Progress Bar & Label
+        // 3. Draw Level Label under Player Avatar (canonical FactionMenuScreen.extractLabels: centered at x=31, y=80)
         String factionName = factionPlayer != null ? StatCollector.translateToLocal(factionPlayer.getCurrentFaction().getTranslationKey()) : "Neutral";
         int curLevel = factionPlayer != null ? factionPlayer.getCurrentLevel() : 0;
         int maxLevel = 14;
 
-        // Level text
-        String levelText = factionName + " - Lvl " + curLevel;
-        fontRendererObj.drawString(EnumChatFormatting.GOLD + levelText, guiLeft + 8, guiTop + 76, 0xFFFFFF);
+        String lvlWord = StatCollector.translateToLocal("text.vampirism.level");
+        if (lvlWord.equals("text.vampirism.level") || fontRendererObj.getStringWidth(lvlWord + " " + curLevel) > 48) {
+            lvlWord = "Lvl";
+        }
+        String levelText = curLevel > 0 ? (lvlWord + " " + curLevel) : "Lvl 0";
+        int lvlW = fontRendererObj.getStringWidth(levelText);
+        int lvlX = guiLeft + Math.max(7, 31 - lvlW / 2);
+        int lvlColor = Helper.isVampire(player) ? 0xC02030 : (Helper.isHunter(player) ? 0x3060D0 : 0x404040);
+        fontRendererObj.drawString(levelText, lvlX, guiTop + 80, lvlColor);
 
-        // Progress bar background & fill (width 46, height 3 at guiLeft + 8, guiTop + 85)
+        // Progress bar inside bottom of avatar box (width 46, height 2 at guiLeft + 8, guiTop + 75)
         int barX = guiLeft + 8;
-        int barY = guiTop + 85;
+        int barY = guiTop + 75;
         int barW = 46;
-        int barH = 3;
-        drawRect(barX - 1, barY - 1, barX + barW + 1, barY + barH + 1, 0xFF222222);
-        drawRect(barX, barY, barX + barW, barY + barH, 0xFF444444);
+        int barH = 2;
+        drawRect(barX, barY, barX + barW, barY + barH, 0xFF333333);
         int fillW = (int) (barW * Math.min(1.0f, (float) curLevel / (float) maxLevel));
         if (fillW > 0) {
             int barColor = Helper.isVampire(player) ? 0xFFA01020 : (Helper.isHunter(player) ? 0xFF2060C0 : 0xFF20A030);
@@ -187,53 +192,46 @@ public class FactionMenuScreen extends GuiScreen {
             }
         }
 
-        // 5. Draw Right Panel: Tasks & Character Information
-        int rightX = guiLeft + 88;
+        // 5. Draw Right Panel: Faction Status & Objectives (strictly bounded within x=86..218, width=132, y=10..98)
+        int rightX = guiLeft + 86;
         int rightY = guiTop + 10;
-        String taskTitle = StatCollector.translateToLocal("gui.factionapi.faction_menu.tasks");
-        if (taskTitle.equals("gui.factionapi.faction_menu.tasks")) taskTitle = "Faction Tasks & Stats";
-        fontRendererObj.drawString(EnumChatFormatting.DARK_RED + EnumChatFormatting.BOLD.toString() + taskTitle, rightX, rightY, 0x440000);
+        int maxRightW = 132;
+        int maxRightY = guiTop + 96;
 
-        // Status lines
-        int lineY = rightY + 16;
+        String headerText = EnumChatFormatting.DARK_RED + EnumChatFormatting.BOLD.toString() +
+            fontRendererObj.trimStringToWidth(factionName + " (" + curLevel + "/" + maxLevel + ")", maxRightW);
+        fontRendererObj.drawString(headerText, rightX, rightY, 0x440000);
+
+        int lineY = rightY + 13;
         int lordLvl = factionPlayer != null ? factionPlayer.getLordLevel() : 0;
-        fontRendererObj.drawString(EnumChatFormatting.DARK_GRAY + "Lord Rank: " + EnumChatFormatting.BLACK + (lordLvl > 0 ? "Rank " + lordLvl : "None"), rightX, lineY, 0x222222);
-        lineY += 12;
+        lineY = drawBoundedLine(EnumChatFormatting.DARK_GRAY + "Lord Rank: " + EnumChatFormatting.BLACK + (lordLvl > 0 ? "Rank " + lordLvl : "None"), rightX, lineY, maxRightW, maxRightY, 0x222222);
 
         if (Helper.isVampire(player)) {
             com.marrybye.neorism.common.vampire.VampirePlayer vp = com.marrybye.neorism.common.vampire.VampirePlayer.get(player);
             int blood = vp != null ? vp.getBloodStats().getBloodLevel() : 0;
             int maxBlood = vp != null ? vp.getBloodStats().getMaxBlood() : 20;
-            fontRendererObj.drawString(EnumChatFormatting.DARK_GRAY + "Blood: " + EnumChatFormatting.RED + blood + "/" + maxBlood, rightX, lineY, 0x222222);
-            lineY += 12;
+            lineY = drawBoundedLine(EnumChatFormatting.DARK_GRAY + "Blood: " + EnumChatFormatting.RED + blood + "/" + maxBlood, rightX, lineY, maxRightW, maxRightY, 0x222222);
 
-            fontRendererObj.drawString(EnumChatFormatting.DARK_GRAY + "Next Tier: " + EnumChatFormatting.DARK_PURPLE +
-                (curLevel < 4 ? "Altar of Inspiration" : (curLevel < 14 ? "Altar of Infusion" : "Maximum")), rightX, lineY, 0x222222);
-            lineY += 16;
+            String nextAltar = curLevel < 4 ? "Altar of Inspiration" : (curLevel < 14 ? "Altar of Infusion" : "Max Level");
+            lineY = drawBoundedLine(EnumChatFormatting.DARK_GRAY + "Next: " + EnumChatFormatting.DARK_PURPLE + nextAltar, rightX, lineY, maxRightW, maxRightY, 0x222222);
+            lineY += 3;
 
-            fontRendererObj.drawString(EnumChatFormatting.GRAY + "- Quench thirst by biting prey", rightX, lineY, 0x555555);
-            lineY += 11;
-            fontRendererObj.drawString(EnumChatFormatting.GRAY + "- Avoid direct scorching sunlight", rightX, lineY, 0x555555);
-            lineY += 11;
-            fontRendererObj.drawString(EnumChatFormatting.GRAY + "- Infuse weapons at vampire altar", rightX, lineY, 0x555555);
+            lineY = drawBoundedLine(EnumChatFormatting.GRAY + "- Bite prey for blood", rightX, lineY, maxRightW, maxRightY, 0x555555);
+            lineY = drawBoundedLine(EnumChatFormatting.GRAY + "- Avoid direct sunlight", rightX, lineY, maxRightW, maxRightY, 0x555555);
+            lineY = drawBoundedLine(EnumChatFormatting.GRAY + "- Infuse at vampire altar", rightX, lineY, maxRightW, maxRightY, 0x555555);
         } else if (Helper.isHunter(player)) {
-            fontRendererObj.drawString(EnumChatFormatting.DARK_GRAY + "Equipment: " + EnumChatFormatting.BLUE + "Hunter Arsenal", rightX, lineY, 0x222222);
-            lineY += 12;
-            fontRendererObj.drawString(EnumChatFormatting.DARK_GRAY + "Next Tier: " + EnumChatFormatting.BLUE +
-                (curLevel < 14 ? "Research Table" : "Master Hunter"), rightX, lineY, 0x222222);
-            lineY += 16;
+            String nextTier = curLevel < 4 ? "Basic Hunter" : (curLevel < 14 ? "Hunter Table" : "Max Level");
+            lineY = drawBoundedLine(EnumChatFormatting.DARK_GRAY + "Next: " + EnumChatFormatting.BLUE + nextTier, rightX, lineY, maxRightW, maxRightY, 0x222222);
+            lineY += 3;
 
-            fontRendererObj.drawString(EnumChatFormatting.GRAY + "- Slay night vampires with axes", rightX, lineY, 0x555555);
-            lineY += 11;
-            fontRendererObj.drawString(EnumChatFormatting.GRAY + "- Study hunter intel at table", rightX, lineY, 0x555555);
-            lineY += 11;
-            fontRendererObj.drawString(EnumChatFormatting.GRAY + "- Craft holy water & crucifixes", rightX, lineY, 0x555555);
+            lineY = drawBoundedLine(EnumChatFormatting.GRAY + "- Slay night vampires", rightX, lineY, maxRightW, maxRightY, 0x555555);
+            lineY = drawBoundedLine(EnumChatFormatting.GRAY + "- Research at hunter table", rightX, lineY, maxRightW, maxRightY, 0x555555);
+            lineY = drawBoundedLine(EnumChatFormatting.GRAY + "- Craft stakes & crossbows", rightX, lineY, maxRightW, maxRightY, 0x555555);
         } else {
-            fontRendererObj.drawString(EnumChatFormatting.DARK_GRAY + "Status: " + EnumChatFormatting.DARK_GREEN + "Neutral Wanderer", rightX, lineY, 0x222222);
-            lineY += 16;
-            fontRendererObj.drawString(EnumChatFormatting.GRAY + "- Be bitten to become a vampire", rightX, lineY, 0x555555);
-            lineY += 11;
-            fontRendererObj.drawString(EnumChatFormatting.GRAY + "- Seek hunter instructor for training", rightX, lineY, 0x555555);
+            lineY = drawBoundedLine(EnumChatFormatting.DARK_GRAY + "Faction: " + EnumChatFormatting.DARK_GREEN + "Neutral", rightX, lineY, maxRightW, maxRightY, 0x222222);
+            lineY += 3;
+            lineY = drawBoundedLine(EnumChatFormatting.GRAY + "- Get bitten by vampire", rightX, lineY, maxRightW, maxRightY, 0x555555);
+            lineY = drawBoundedLine(EnumChatFormatting.GRAY + "- Or train with hunter", rightX, lineY, maxRightW, maxRightY, 0x555555);
         }
 
         // 6. Draw Buttons
@@ -271,6 +269,13 @@ public class FactionMenuScreen extends GuiScreen {
                 }
             }
         }
+    }
+
+    private int drawBoundedLine(String text, int x, int y, int maxWidth, int maxY, int color) {
+        if (y + 9 > maxY) return y;
+        String clipped = fontRendererObj.trimStringToWidth(text, maxWidth);
+        fontRendererObj.drawString(clipped, x, y, color);
+        return y + 11;
     }
 
     @Override

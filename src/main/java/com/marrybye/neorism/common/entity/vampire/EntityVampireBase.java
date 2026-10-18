@@ -54,9 +54,39 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
         this.tasks.addTask(7, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
+        this.targetTasks.addTask(1, new com.marrybye.neorism.common.entity.ai.EntityAIHurtByTargetFaction(this, ModFactions.VAMPIRE));
         this.targetTasks.addTask(2, new com.marrybye.neorism.common.entity.ai.EntityAIVillageCapture(this));
         this.targetTasks.addTask(3, new EntityAIAttackFaction(this, ModFactions.VAMPIRE, true));
+    }
+
+    @Override
+    public void setAttackTarget(EntityLivingBase target) {
+        if (target instanceof IVampireEntity && !(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
+            return;
+        }
+        super.setAttackTarget(target);
+    }
+
+    @Override
+    public void setRevengeTarget(EntityLivingBase target) {
+        if (target instanceof IVampireEntity && !(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
+            return;
+        }
+        super.setRevengeTarget(target);
+    }
+
+    @Override
+    public boolean attackEntityFrom(net.minecraft.util.DamageSource source, float amount) {
+        if (source != null && source.getEntity() instanceof IVampireEntity
+            && !(this instanceof EntityVampireBaron && source.getEntity() instanceof EntityVampireBaron)) {
+            return false;
+        }
+        return super.attackEntityFrom(source, amount);
+    }
+
+    public void onDrinkBlood(int amt, float saturationMod) {
+        this.bloodLevel = Math.min(this.maxBloodLevel, this.bloodLevel + amt);
+        this.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.regeneration.id, amt * 20, 0));
     }
 
     @Override
@@ -86,7 +116,8 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
 
     @Override
     public boolean isGettingSundamage() {
-        if (ignoringSundamage || this.worldObj.isRemote) return false;
+        if (isIgnoringSundamage() || this.worldObj.isRemote) return false;
+        if (this.isPotionActive(com.marrybye.neorism.common.core.ModPotions.sunscreen)) return false;
         if (!this.worldObj.isDaytime()) return false;
         if (this.isInWater()) return false;
 
@@ -123,6 +154,9 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
         super.onLivingUpdate();
 
         if (!this.worldObj.isRemote && this.isEntityAlive()) {
+            if (this.ticksExisted % 200 == 0 && this.bloodLevel > 0) {
+                this.bloodLevel--;
+            }
             if (this.isGettingSundamage()) {
                 this.setFire(8);
                 this.attackEntityFrom(ModDamageSource.SUN_DAMAGE, 2.0F);

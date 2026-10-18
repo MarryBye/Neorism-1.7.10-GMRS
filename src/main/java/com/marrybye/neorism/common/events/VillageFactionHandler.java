@@ -137,4 +137,48 @@ public class VillageFactionHandler {
             }
         }
     }
+
+    @SubscribeEvent
+    @SuppressWarnings("unchecked")
+    public void onEntityJoinWorld(net.minecraftforge.event.entity.EntityJoinWorldEvent event) {
+        if (event.world == null || event.world.isRemote) return;
+        if (!(event.entity instanceof EntityVillager) || event.entity instanceof EntityConvertedVillager) return;
+
+        EntityVillager villager = (EntityVillager) event.entity;
+        int vx = net.minecraft.util.MathHelper.floor_double(villager.posX);
+        int vy = net.minecraft.util.MathHelper.floor_double(villager.posY);
+        int vz = net.minecraft.util.MathHelper.floor_double(villager.posZ);
+
+        // If a totem already exists within 64 blocks, nothing to do
+        if (getNearbyTotem(event.world, villager.posX, villager.posY, villager.posZ, 64.0D) != null) {
+            return;
+        }
+
+        // Check if this villager belongs to a registered Village OR a newly generated mini-village (2+ villagers within 36 blocks)
+        if (event.world.villageCollectionObj != null) {
+            net.minecraft.village.Village v = event.world.villageCollectionObj.findNearestVillage(vx, vy, vz, 48);
+            if (v != null && v.getCenter() != null) {
+                com.marrybye.neorism.common.world.gen.VillageTotemCreationHandler.ensureVillageTotemNear(
+                    event.world, v.getCenter().posX, v.getCenter().posY, v.getCenter().posZ);
+                return;
+            }
+        }
+
+        AxisAlignedBB searchBox = AxisAlignedBB.getBoundingBox(
+            villager.posX - 36.0D, villager.posY - 12.0D, villager.posZ - 36.0D,
+            villager.posX + 36.0D, villager.posY + 12.0D, villager.posZ + 36.0D);
+        List<EntityVillager> nearbyVillagers = event.world.getEntitiesWithinAABB(EntityVillager.class, searchBox);
+        if (nearbyVillagers != null && nearbyVillagers.size() >= 1) {
+            int cx = vx;
+            int cz = vz;
+            for (EntityVillager other : nearbyVillagers) {
+                if (other != villager) {
+                    cx = (vx + net.minecraft.util.MathHelper.floor_double(other.posX)) / 2;
+                    cz = (vz + net.minecraft.util.MathHelper.floor_double(other.posZ)) / 2;
+                    com.marrybye.neorism.common.world.gen.VillageTotemCreationHandler.ensureVillageTotemNear(event.world, cx, vy, cz);
+                    break;
+                }
+            }
+        }
+    }
 }

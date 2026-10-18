@@ -29,7 +29,29 @@ public class Skill implements ISkill {
         this.action = action;
         this.translationKey = "skill.neorism." + skillId;
         this.descriptionTranslationKey = "skill.neorism." + skillId + ".desc";
-        this.icon = new ResourceLocation("neorism", "textures/skills/" + (iconName != null ? iconName : skillId) + ".png");
+        this.icon = resolveIcon(skillId, iconName, action);
+    }
+
+    private static ResourceLocation resolveIcon(String skillId, String iconName, IAction action) {
+        if (iconName != null && !iconName.isEmpty()) {
+            if (iconName.indexOf(':') >= 0) {
+                return new ResourceLocation(iconName);
+            }
+            if (iconName.startsWith("textures/")) {
+                return new ResourceLocation("neorism", iconName.endsWith(".png") ? iconName : (iconName + ".png"));
+            }
+            if (iconName.startsWith("actions/")) {
+                return new ResourceLocation("neorism", "textures/" + iconName + ".png");
+            }
+            return new ResourceLocation("neorism", "textures/skills/" + iconName + ".png");
+        }
+        if (action != null) {
+            if (action.getIcon() != null) {
+                return action.getIcon();
+            }
+            return new ResourceLocation("neorism", "textures/actions/" + action.getActionId() + ".png");
+        }
+        return new ResourceLocation("neorism", "textures/skills/" + skillId + ".png");
     }
 
     public Skill(String skillId, IPlayableFaction faction, int requiredLevel, int skillPointCost, boolean passive, String iconName) {
@@ -37,7 +59,7 @@ public class Skill implements ISkill {
     }
 
     public Skill(String skillId, IPlayableFaction faction, int requiredLevel, int skillPointCost, boolean passive) {
-        this(skillId, faction, requiredLevel, skillPointCost, passive, skillId, null);
+        this(skillId, faction, requiredLevel, skillPointCost, passive, null, null);
     }
 
     @Override
@@ -47,11 +69,23 @@ public class Skill implements ISkill {
 
     @Override
     public String getTranslationKey() {
+        if (!net.minecraft.util.StatCollector.canTranslate(translationKey) && action != null) {
+            String actionKey = "action.neorism." + action.getActionId();
+            if (net.minecraft.util.StatCollector.canTranslate(actionKey)) {
+                return actionKey;
+            }
+        }
         return translationKey;
     }
 
     @Override
     public String getDescriptionTranslationKey() {
+        if (!net.minecraft.util.StatCollector.canTranslate(descriptionTranslationKey) && action != null) {
+            String actionDescKey = "action.neorism." + action.getActionId() + ".desc";
+            if (net.minecraft.util.StatCollector.canTranslate(actionDescKey)) {
+                return actionDescKey;
+            }
+        }
         return descriptionTranslationKey;
     }
 

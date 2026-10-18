@@ -111,12 +111,15 @@ public class SkillsTabComponent {
 
         // 1. Draw tiled background inside canvas
         int offsetX = (int) (guiLeft + viewX + viewW / 2 + scrollX);
-        int offsetY = (int) (guiTop + viewY + 30 + scrollY);
+        int offsetY = (int) (guiTop + viewY + 20 + scrollY);
         drawTiledBackground(guiLeft + viewX, guiTop + viewY, viewW, viewH);
 
-        // 2. Draw connections
+        // 2. Draw connections (two passes: outer border then inner line, matching canonical SkillsTabComponent)
         for (SkillSegmentConnection conn : connections) {
-            conn.draw(offsetX, offsetY);
+            conn.draw(offsetX, offsetY, true);
+        }
+        for (SkillSegmentConnection conn : connections) {
+            conn.draw(offsetX, offsetY, false);
         }
 
         // 3. Draw components
@@ -158,7 +161,7 @@ public class SkillsTabComponent {
         }
 
         int offsetX = (int) (guiLeft + viewX + viewW / 2 + scrollX);
-        int offsetY = (int) (guiTop + viewY + 30 + scrollY);
+        int offsetY = (int) (guiTop + viewY + 20 + scrollY);
 
         for (SkillSegmentComponent comp : components) {
             if (comp.isMouseOver(mouseX, mouseY, offsetX, offsetY)) {

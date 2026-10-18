@@ -33,9 +33,8 @@ public class EntityAdvancedVampire extends EntityVampireBase {
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
-        this.setCurrentItemOrArmor(0, new ItemStack(ModItems.heartStriker, 1, 0));
         if (this.rand.nextBoolean()) {
-            this.setCurrentItemOrArmor(4, new ItemStack(ModItems.vampireCrown));
+            this.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.resistance.id, 1000000, 0));
         }
         ModLogger.spawn("Spawned Advanced Vampire %s at (%.1f, %.1f, %.1f)",
             this.getCommandSenderName(), this.posX, this.posY, this.posZ);
@@ -43,37 +42,30 @@ public class EntityAdvancedVampire extends EntityVampireBase {
     }
 
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
-
-        if (teleportCooldown > 0) {
-            teleportCooldown--;
-        }
-
-        // Tactical teleportation behind target if distanced
-        if (!this.worldObj.isRemote && this.getAttackTarget() != null && teleportCooldown <= 0) {
-            EntityLivingBase target = this.getAttackTarget();
-            double distSq = this.getDistanceSqToEntity(target);
-            if (distSq > 36.0D && distSq < 256.0D && this.canEntityBeSeen(target)) {
-                teleportBehind(target);
-                teleportCooldown = 100; // 5 second cooldown
+    @SuppressWarnings("unchecked")
+    public boolean attackEntityFrom(net.minecraft.util.DamageSource source, float amount) {
+        boolean flag = super.attackEntityFrom(source, amount);
+        if (flag && !this.worldObj.isRemote) {
+            // Canonical AdvancedVampireEntity.hurtServer: 1-in-4 chance when hit by a Player to cast Sunscreen (150 ticks, amp 2)
+            if (source != null && source.getEntity() instanceof net.minecraft.entity.player.EntityPlayer && this.rand.nextInt(4) == 0) {
+                this.addPotionEffect(new net.minecraft.potion.PotionEffect(com.marrybye.neorism.common.core.ModPotions.sunscreen.id, 150, 2));
+                ModLogger.combat("Advanced Vampire %s activated Sunscreen after player attack!", this.getCommandSenderName());
+            }
+            // Canonical leader behavior: rally nearby basic vampires to defend their Advanced Vampire leader
+            if (source != null && source.getEntity() instanceof EntityLivingBase) {
+                EntityLivingBase attacker = (EntityLivingBase) source.getEntity();
+                net.minecraft.util.AxisAlignedBB box = this.boundingBox.expand(16.0D, 8.0D, 16.0D);
+                java.util.List<EntityVampire> followers = this.worldObj.getEntitiesWithinAABB(EntityVampire.class, box);
+                int count = 0;
+                for (EntityVampire v : followers) {
+                    if (v.getAttackTarget() == null && count < 4) {
+                        v.setAttackTarget(attacker);
+                        count++;
+                    }
+                }
             }
         }
-    }
-
-    private void teleportBehind(EntityLivingBase target) {
-        double angle = Math.toRadians(target.rotationYaw);
-        // Position ~2 blocks behind target
-        double behindX = target.posX + Math.sin(angle) * 2.0D;
-        double behindZ = target.posZ - Math.cos(angle) * 2.0D;
-        double behindY = target.posY;
-
-        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "mob.endermen.portal", 1.0F, 1.0F);
-        this.setPositionAndUpdate(behindX, behindY, behindZ);
-        this.worldObj.playSoundEffect(behindX, behindY, behindZ, "mob.endermen.portal", 1.0F, 1.0F);
-
-        ModLogger.ai("Advanced Vampire %s teleported behind target %s!",
-            this.getCommandSenderName(), target.getCommandSenderName());
+        return flag;
     }
 
     @Override

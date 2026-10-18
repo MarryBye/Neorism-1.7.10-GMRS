@@ -98,6 +98,9 @@ public class EntityAIBiteLiving extends EntityAIBase {
 
                 if (bloodGained > 0) {
                     attacker.heal(bloodGained * 1.5F);
+                    if (attacker instanceof com.marrybye.neorism.common.entity.vampire.EntityVampireBase) {
+                        ((com.marrybye.neorism.common.entity.vampire.EntityVampireBase) attacker).onDrinkBlood(bloodGained, 1.0F);
+                    }
                     attacker.swingItem();
                     ModSounds.playAtEntity(attacker, ModSounds.BITE, 1.0F, 1.0F);
 

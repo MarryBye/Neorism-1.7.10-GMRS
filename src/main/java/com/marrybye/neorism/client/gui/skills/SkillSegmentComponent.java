@@ -125,20 +125,21 @@ public class SkillSegmentComponent {
 
     public SkillSegmentConnection.State getConnectionState() {
         if (isUnlocked()) return SkillSegmentConnection.State.UNLOCKED;
-        if (isAvailable()) return SkillSegmentConnection.State.AVAILABLE;
-        return SkillSegmentConnection.State.LOCKED;
+        if (isExclusiveLocked()) return SkillSegmentConnection.State.LOCKED;
+        if (isPrerequisitesMet()) return SkillSegmentConnection.State.AVAILABLE;
+        return SkillSegmentConnection.State.VISIBLE;
     }
 
     public boolean isMouseOver(int mouseX, int mouseY, int offsetX, int offsetY) {
         int drawX = getX() + offsetX - 13;
-        int drawY = getY() + offsetY - 13;
+        int drawY = getY() + offsetY;
         return mouseX >= drawX && mouseX <= drawX + 26 && mouseY >= drawY && mouseY <= drawY + 26;
     }
 
     public void draw(int offsetX, int offsetY, float holdProgress, boolean isHoldingThis) {
         Minecraft mc = Minecraft.getMinecraft();
         int drawX = getX() + offsetX - 13;
-        int drawY = getY() + offsetY - 13;
+        int drawY = getY() + offsetY;
 
         boolean unlocked = isUnlocked();
         boolean available = isAvailable();

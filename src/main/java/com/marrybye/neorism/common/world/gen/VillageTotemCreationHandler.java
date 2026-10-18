@@ -43,8 +43,8 @@ public class VillageTotemCreationHandler implements IVillageCreationHandler {
 
     @Override
     public PieceWeight getVillagePieceWeight(Random random, int size) {
-        // High weight with limit 1 guarantees every village gets exactly 1 Faction Totem plaza
-        return new PieceWeight(ComponentVillageTotem.class, 25, 1);
+        // High weight with limit 1 guarantees villages prioritize placing the Faction Totem plaza
+        return new PieceWeight(ComponentVillageTotem.class, 50, 1);
     }
 
     @Override
@@ -55,6 +55,117 @@ public class VillageTotemCreationHandler implements IVillageCreationHandler {
     @Override
     public Object buildComponent(PieceWeight villagePiece, Start startPiece, @SuppressWarnings("rawtypes") List pieces, Random random, int p1, int p2, int p3, int p4, int p5) {
         return ComponentVillageTotem.buildComponent(startPiece, pieces, random, p1, p2, p3, p4, p5);
+    }
+
+    /**
+     * Deterministically selects the initial controlling faction for a village at (wx, wz).
+     * 100% Vampire in Vampire Forest; otherwise 35% Vampire, 35% Hunter, 30% Neutral.
+     */
+    public static int chooseVillageFaction(World world, int wx, int wz) {
+        BiomeGenBase biome = world.getBiomeGenForCoords(wx, wz);
+        if (ModWorldGen.isVampireBiome(biome)) {
+            return TileEntityTotem.FACTION_VAMPIRE;
+        }
+        long seed = world.getSeed() ^ ((long) (wx >> 5) * 341873128712L + (long) (wz >> 5) * 132897987541L);
+        Random seededRand = new Random(seed);
+        int roll = seededRand.nextInt(100);
+        if (roll < 35) {
+            return TileEntityTotem.FACTION_VAMPIRE;
+        } else if (roll < 70) {
+            return TileEntityTotem.FACTION_HUNTER;
+        }
+        return TileEntityTotem.FACTION_NEUTRAL;
+    }
+
+    /**
+     * Places a complete 2-block Totem structure at (wx, wy, wz) and initializes the village population.
+     */
+    public static TileEntityTotem placeTotemAt(World world, int wx, int wy, int wz, Random rand) {
+        int factionId = chooseVillageFaction(world, wx, wz);
+
+        world.setBlock(wx, wy - 1, wz, Blocks.cobblestone, 0, 2);
+        world.setBlock(wx, wy, wz, ModBlocks.totem, 0, 2);
+        world.setBlock(wx, wy + 1, wz, ModBlocks.totemTop, factionId, 2);
+
+        TileEntity te = world.getTileEntity(wx, wy + 1, wz);
+        if (te instanceof TileEntityTotem) {
+            TileEntityTotem totem = (TileEntityTotem) te;
+            totem.setControllingFactionId(factionId);
+            totem.initializeGeneratedVillage(rand);
+            ModLogger.spawn("Generated Village Totem at (%d, %d, %d) controlled by factionId=%d", wx, wy + 1, wz, factionId);
+            return totem;
+        }
+        return null;
+    }
+
+    /**
+     * Fallback for mini-villages and custom village structures where ComponentVillageTotem had no road slot.
+     * Finds a clear outdoor surface spot near (centerX, centerZ) and places a Faction Totem pedestal.
+     */
+    public static TileEntityTotem ensureVillageTotemNear(World world, int centerX, int centerY, int centerZ) {
+        if (world == null || world.isRemote) return null;
+        TileEntityTotem existing = com.marrybye.neorism.common.events.VillageFactionHandler.getNearbyTotem(world, centerX, centerY, centerZ, 64.0D);
+        if (existing != null) {
+            return existing;
+        }
+
+        int bestX = centerX;
+        int bestZ = centerZ;
+        int bestY = -1;
+
+        int[][] offsets = {
+            {0, 0}, {3, 0}, {-3, 0}, {0, 3}, {0, -3},
+            {4, 4}, {-4, 4}, {4, -4}, {-4, -4},
+            {6, 0}, {-6, 0}, {0, 6}, {0, -6}
+        };
+
+        for (int[] off : offsets) {
+            int tx = centerX + off[0];
+            int tz = centerZ + off[1];
+            if (!world.getChunkProvider().chunkExists(tx >> 4, tz >> 4)) continue;
+
+            int ty = world.getTopSolidOrLiquidBlock(tx, tz);
+            if (ty < 50 || ty > 240) continue;
+
+            Block ground = world.getBlock(tx, ty - 1, tz);
+            Block at = world.getBlock(tx, ty, tz);
+            Block above = world.getBlock(tx, ty + 1, tz);
+
+            if (ground != null && ground.getMaterial().isSolid()
+                && !ground.getMaterial().isLiquid()
+                && ground != Blocks.planks
+                && ground != Blocks.cobblestone_wall
+                && !ground.isLeaves(world, tx, ty - 1, tz)
+                && !ground.isWood(world, tx, ty - 1, tz)
+                && (at.isAir(world, tx, ty, tz) || at.isReplaceable(world, tx, ty, tz))
+                && (above.isAir(world, tx, ty + 1, tz) || above.isReplaceable(world, tx, ty + 1, tz))
+                && world.canBlockSeeTheSky(tx, ty + 1, tz)) {
+                bestX = tx;
+                bestY = ty;
+                bestZ = tz;
+                break;
+            }
+        }
+
+        if (bestY < 0) {
+            bestY = Math.max(63, world.getTopSolidOrLiquidBlock(bestX, bestZ));
+        }
+
+        // Build a small 3x3 cobblestone/planks base under the fallback totem so it looks natural
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                int px = bestX + dx;
+                int pz = bestZ + dz;
+                if (world.getChunkProvider().chunkExists(px >> 4, pz >> 4)) {
+                    Block g = world.getBlock(px, bestY - 1, pz);
+                    if (g.isAir(world, px, bestY - 1, pz) || g.isReplaceable(world, px, bestY - 1, pz) || g == Blocks.grass || g == Blocks.dirt || g == Blocks.sand || g == Blocks.gravel) {
+                        world.setBlock(px, bestY - 1, pz, (dx == 0 && dz == 0) ? Blocks.planks : Blocks.cobblestone, 0, 2);
+                    }
+                }
+            }
+        }
+
+        return placeTotemAt(world, bestX, bestY, bestZ, world.rand);
     }
 
     public static class ComponentVillageTotem extends StructureVillagePieces.Village {
@@ -72,7 +183,7 @@ public class VillageTotemCreationHandler implements IVillageCreationHandler {
         }
 
         public static ComponentVillageTotem buildComponent(Start startPiece, @SuppressWarnings("rawtypes") List pieces, Random rand, int x, int y, int z, int coordBaseMode, int type) {
-            StructureBoundingBox box = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 7, 6, 7, coordBaseMode);
+            StructureBoundingBox box = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 5, 6, 5, coordBaseMode);
             if (!canVillageGoDeeper(box) || StructureComponent.findIntersecting(pieces, box) != null) {
                 return null;
             }
@@ -101,80 +212,41 @@ public class VillageTotemCreationHandler implements IVillageCreationHandler {
                 this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + 6 - 1, 0);
             }
 
-            // Clear air above plaza
-            this.fillWithBlocks(world, sbb, 0, 1, 0, 6, 5, 6, Blocks.air, Blocks.air, false);
+            // Clear air above 5x5 plaza
+            this.fillWithBlocks(world, sbb, 0, 1, 0, 4, 5, 4, Blocks.air, Blocks.air, false);
 
             // Base foundation (biome-adapted via func_151558_b for VillageNames compatibility)
             Block cobble = this.func_151558_b(Blocks.cobblestone, 0);
             Block planks = this.func_151558_b(Blocks.planks, 0);
             Block fence = this.func_151558_b(Blocks.fence, 0);
-            Block stairsN = this.func_151558_b(Blocks.stone_stairs, this.getMetadataWithOffset(Blocks.stone_stairs, 3));
-            Block stairsS = this.func_151558_b(Blocks.stone_stairs, this.getMetadataWithOffset(Blocks.stone_stairs, 2));
-            Block stairsW = this.func_151558_b(Blocks.stone_stairs, this.getMetadataWithOffset(Blocks.stone_stairs, 0));
-            Block stairsE = this.func_151558_b(Blocks.stone_stairs, this.getMetadataWithOffset(Blocks.stone_stairs, 1));
 
-            for (int x = 0; x <= 6; x++) {
-                for (int z = 0; z <= 6; z++) {
+            for (int x = 0; x <= 4; x++) {
+                for (int z = 0; z <= 4; z++) {
                     this.func_151554_b(world, cobble, 0, x, -1, z, sbb);
-                    if (x == 0 || x == 6 || z == 0 || z == 6) {
-                        this.placeBlockAtCurrentPosition(world, Blocks.gravel, 0, x, 0, z, sbb);
+                    if (x >= 1 && x <= 3 && z >= 1 && z <= 3) {
+                        this.placeBlockAtCurrentPosition(world, planks, 0, x, 0, z, sbb);
                     } else {
                         this.placeBlockAtCurrentPosition(world, cobble, 0, x, 0, z, sbb);
                     }
                 }
             }
 
-            // Raised inner platform (3x3 at center x=2..4, z=2..4)
-            for (int x = 2; x <= 4; x++) {
-                for (int z = 2; z <= 4; z++) {
-                    this.placeBlockAtCurrentPosition(world, planks, 0, x, 0, z, sbb);
-                }
-            }
-
-            // Corner pillars with torches
-            int[][] corners = { {1, 1}, {1, 5}, {5, 1}, {5, 5} };
+            // Corner pillars with torches at (0,0), (0,4), (4,0), (4,4)
+            int[][] corners = { {0, 0}, {0, 4}, {4, 0}, {4, 4} };
             for (int[] c : corners) {
                 this.placeBlockAtCurrentPosition(world, cobble, 0, c[0], 1, c[1], sbb);
                 this.placeBlockAtCurrentPosition(world, fence, 0, c[0], 2, c[1], sbb);
                 this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, c[0], 3, c[1], sbb);
             }
 
-            // Steps around the center pedestal
-            this.placeBlockAtCurrentPosition(world, stairsN, this.getMetadataWithOffset(Blocks.stone_stairs, 3), 3, 1, 2, sbb);
-            this.placeBlockAtCurrentPosition(world, stairsS, this.getMetadataWithOffset(Blocks.stone_stairs, 2), 3, 1, 4, sbb);
-            this.placeBlockAtCurrentPosition(world, stairsW, this.getMetadataWithOffset(Blocks.stone_stairs, 0), 2, 1, 3, sbb);
-            this.placeBlockAtCurrentPosition(world, stairsE, this.getMetadataWithOffset(Blocks.stone_stairs, 1), 4, 1, 3, sbb);
-
-            // Place the Totem multiblock at center (3, 1, 3) and (3, 2, 3)
-            int wx = this.getXWithOffset(3, 3);
+            // Place the Totem multiblock at center (2, 1, 2) and (2, 2, 2)
+            int wx = this.getXWithOffset(2, 2);
             int wy = this.getYWithOffset(1);
-            int wz = this.getZWithOffset(3, 3);
+            int wz = this.getZWithOffset(2, 2);
 
             if (sbb.isVecInside(wx, wy, wz) && !this.hasPlacedTotem) {
                 this.hasPlacedTotem = true;
-
-                // Canonical processor_list/totem_faction.json:
-                // 60% chance to be faction-controlled (50/50 Vampire or Hunter), 40% Neutral.
-                // If inside Vampire Forest, always Vampire.
-                BiomeGenBase biome = world.getBiomeGenForCoords(wx, wz);
-                int factionId = TileEntityTotem.FACTION_NEUTRAL;
-                if (ModWorldGen.isVampireBiome(biome)) {
-                    factionId = TileEntityTotem.FACTION_VAMPIRE;
-                } else if (rand.nextFloat() < 0.6F) {
-                    factionId = rand.nextBoolean() ? TileEntityTotem.FACTION_VAMPIRE : TileEntityTotem.FACTION_HUNTER;
-                }
-
-                world.setBlock(wx, wy, wz, ModBlocks.totem, 0, 2);
-                world.setBlock(wx, wy + 1, wz, ModBlocks.totemTop, factionId, 2);
-
-                TileEntity te = world.getTileEntity(wx, wy + 1, wz);
-                if (te instanceof TileEntityTotem) {
-                    TileEntityTotem totem = (TileEntityTotem) te;
-                    totem.setControllingFactionId(factionId);
-                    totem.initializeGeneratedVillage(rand);
-                }
-
-                ModLogger.spawn("Generated Village Totem at (%d, %d, %d) controlled by factionId=%d", wx, wy + 1, wz, factionId);
+                placeTotemAt(world, wx, wy, wz, rand);
             }
 
             return true;

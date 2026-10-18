@@ -25,6 +25,8 @@ import net.minecraft.world.World;
 public class EntityVampire extends EntityVampireBase {
 
     private static final int DATA_SKIN = 20;
+    private static final int DATA_LEVEL = 21;
+    private int angryTimer = 0;
 
     public EntityVampire(World world) {
         super(world);
@@ -34,8 +36,9 @@ public class EntityVampire extends EntityVampireBase {
     @Override
     protected void entityInit() {
         super.entityInit();
-        // Random skin index between 1 and 17 (excluding missing ones)
+        // Random skin index between 1 and 12
         this.dataWatcher.addObject(DATA_SKIN, (byte) (this.rand.nextInt(12) + 1));
+        this.dataWatcher.addObject(DATA_LEVEL, (byte) 0);
     }
 
     public int getSkinType() {
@@ -46,12 +49,59 @@ public class EntityVampire extends EntityVampireBase {
         this.dataWatcher.updateObject(DATA_SKIN, (byte) skin);
     }
 
+    public int getEntityLevel() {
+        return this.dataWatcher.getWatchableObjectByte(DATA_LEVEL);
+    }
+
+    public void setEntityLevel(int level) {
+        int clamped = Math.max(0, Math.min(2, level));
+        this.dataWatcher.updateObject(DATA_LEVEL, (byte) clamped);
+        if (!this.worldObj.isRemote) {
+            this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(24.0D + 6.0D * clamped);
+            this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(4.0D + 1.0D * clamped);
+            this.setHealth(this.getMaxHealth());
+            if (clamped == 1) {
+                this.setCurrentItemOrArmor(0, new ItemStack(Items.iron_sword));
+                this.equipmentDropChances[0] = 0.0F;
+            } else {
+                this.setCurrentItemOrArmor(0, null);
+            }
+            if (clamped == 2) {
+                this.addPotionEffect(new PotionEffect(net.minecraft.potion.Potion.resistance.id, 1000000, 1));
+            }
+        }
+    }
+
+    @Override
+    public boolean isIgnoringSundamage() {
+        float healthRatio = this.getHealth() / this.getMaxHealth();
+        return super.isIgnoringSundamage() || (this.angryTimer > 0 && healthRatio < 0.7F) || healthRatio < 0.3F;
+    }
+
+    @Override
+    public void onLivingUpdate() {
+        super.onLivingUpdate();
+        if (this.angryTimer > 0) {
+            this.angryTimer--;
+        }
+    }
+
+    @Override
+    public boolean attackEntityFrom(net.minecraft.util.DamageSource source, float amount) {
+        boolean flag = super.attackEntityFrom(source, amount);
+        if (flag && source != com.marrybye.neorism.common.core.ModDamageSource.SUN_DAMAGE) {
+            this.angryTimer = 200;
+        }
+        return flag;
+    }
+
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
         this.setSkinType(this.rand.nextInt(12) + 1);
-        ModLogger.spawn("Spawned Vampire %s (skin=%d) at (%.1f, %.1f, %.1f)",
-            this.getCommandSenderName(), this.getSkinType(), this.posX, this.posY, this.posZ);
+        this.setEntityLevel(this.rand.nextInt(3));
+        ModLogger.spawn("Spawned Vampire %s (skin=%d, level=%d) at (%.1f, %.1f, %.1f)",
+            this.getCommandSenderName(), this.getSkinType(), this.getEntityLevel(), this.posX, this.posY, this.posZ);
         return data;
     }
 

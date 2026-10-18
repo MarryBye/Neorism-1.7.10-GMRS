@@ -2,29 +2,41 @@ package com.marrybye.neorism.client.gui.skills;
 
 import java.util.*;
 
-import org.lwjgl.opengl.GL11;
+import com.marrybye.neorism.common.skills.SkillTreeLayout;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.Gui;
 
 /**
- * Renders orthogonal connections between parent and child skill nodes in the skill graph.
+ * Canonical port of de.teamlapen.faction.client.gui.screens.skills.SkillSegmentConnection.
+ * Renders orthogonal connections between parent and child skill nodes in two passes (outer border then inner fill).
  */
 @SideOnly(Side.CLIENT)
 public class SkillSegmentConnection {
 
+    private static final int ROW_GAP = SkillTreeLayout.ROW_HEIGHT - SkillTreeLayout.SKILL_SIZE;
+    private static final int UPPER_OFFSET = ROW_GAP - ROW_GAP / 3;
+    private static final int LOWER_OFFSET = ROW_GAP / 3;
+
     public enum State {
-        LOCKED(0xFF404040, 0xFF181818),
-        AVAILABLE(0xFFC0C0C0, 0xFF303030),
-        UNLOCKED(0xFF50E050, 0xFF104010);
+        VISIBLE(0xFF222222, 0xFF3F3F3F, 0),
+        LOCKED(0xFFCF0000, 0xFF6A0000, 1),
+        AVAILABLE(0xFFA7A7A7, 0xFFFFFFFF, 2),
+        UNLOCKED(0xFF008711, 0xFF005304, 3);
 
         public final int innerColor;
         public final int outerColor;
+        public final int priority;
 
-        State(int innerColor, int outerColor) {
+        State(int innerColor, int outerColor, int priority) {
             this.innerColor = innerColor;
             this.outerColor = outerColor;
+            this.priority = priority;
+        }
+
+        public int pathColor(boolean outer) {
+            return outer ? this.outerColor : this.innerColor;
         }
     }
 
@@ -42,7 +54,7 @@ public class SkillSegmentConnection {
 
         for (SkillSegmentComponent child : components) {
             if (!child.getParents().isEmpty()) {
-                Set<SkillSegmentComponent> parentSet = new HashSet<SkillSegmentComponent>(child.getParents());
+                Set<SkillSegmentComponent> parentSet = new LinkedHashSet<SkillSegmentComponent>(child.getParents());
                 List<SkillSegmentComponent> list = grouped.get(parentSet);
                 if (list == null) {
                     list = new ArrayList<SkillSegmentComponent>();
@@ -59,84 +71,111 @@ public class SkillSegmentConnection {
         return result;
     }
 
-    public void draw(int offsetX, int offsetY) {
+    public void draw(int offsetX, int offsetY, boolean outerLine) {
         if (parents.isEmpty() || children.isEmpty()) return;
 
-        // Determine highest state among children
-        State highestState = State.LOCKED;
-        for (SkillSegmentComponent c : children) {
-            State cs = c.getConnectionState();
-            if (cs.ordinal() > highestState.ordinal()) {
-                highestState = cs;
-            }
-        }
-
         int childY = children.get(0).getY() + offsetY;
-        int upperY = childY - 35;
-        int lowerY = childY - 15;
+        int upperY = childY - UPPER_OFFSET;
+        int lowerY = childY - LOWER_OFFSET;
 
-        int trunkSum = 0;
+        double sumX = 0;
         for (SkillSegmentComponent p : parents) {
-            trunkSum += p.getX() + offsetX;
+            sumX += p.getX();
         }
-        int trunkX = trunkSum / parents.size();
+        int trunkX = (int) Math.round(sumX / parents.size()) + offsetX;
+        int sharedColor = sharedState(children).pathColor(outerLine);
 
-        // 1. Draw parent stems down to junction
+        List<SkillSegmentComponent> lockedParents = new ArrayList<SkillSegmentComponent>();
+        List<SkillSegmentComponent> unlockedParents = new ArrayList<SkillSegmentComponent>();
         for (SkillSegmentComponent p : parents) {
-            int px = p.getX() + offsetX;
-            int py = p.getY() + offsetY + 24;
-            drawStem(px, py, upperY, highestState);
-        }
-
-        // 2. Horizontal junction bar across parents
-        int minParentX = trunkX;
-        int maxParentX = trunkX;
-        for (SkillSegmentComponent p : parents) {
-            int px = p.getX() + offsetX;
-            minParentX = Math.min(minParentX, px);
-            maxParentX = Math.max(maxParentX, px);
-        }
-        if (minParentX != maxParentX) {
-            drawHLine(minParentX, maxParentX, upperY, highestState);
-        }
-
-        // 3. Vertical trunk line from upperY to lowerY
-        drawVLine(trunkX, upperY, lowerY, highestState);
-
-        // 4. Branch lines to each child
-        for (SkillSegmentComponent child : children) {
-            int cx = child.getX() + offsetX;
-            State cs = child.getConnectionState();
-            if (cx != trunkX) {
-                drawHLine(Math.min(trunkX, cx), Math.max(trunkX, cx), lowerY, cs);
+            if (p.getConnectionState() == State.UNLOCKED) {
+                unlockedParents.add(p);
+            } else {
+                lockedParents.add(p);
             }
-            drawVLine(cx, lowerY, child.getY() + offsetY - 2, cs);
+        }
+
+        drawStems(lockedParents, offsetX, offsetY, trunkX, upperY, State.VISIBLE.pathColor(outerLine), outerLine);
+        drawStems(unlockedParents, offsetX, offsetY, trunkX, upperY, sharedColor, outerLine);
+
+        verticalLine(trunkX, upperY, lowerY, sharedColor, outerLine);
+
+        List<SkillSegmentComponent> sortedChildren = new ArrayList<SkillSegmentComponent>(children);
+        Collections.sort(sortedChildren, new Comparator<SkillSegmentComponent>() {
+            @Override
+            public int compare(SkillSegmentComponent a, SkillSegmentComponent b) {
+                return Integer.compare(a.getConnectionState().priority, b.getConnectionState().priority);
+            }
+        });
+
+        for (SkillSegmentComponent child : sortedChildren) {
+            int childX = child.getX() + offsetX;
+            int color = child.getConnectionState().pathColor(outerLine);
+            if (childX != trunkX) {
+                horizontalLine(Math.min(trunkX, childX), Math.max(trunkX, childX), lowerY, color, outerLine);
+            }
+            verticalLine(childX, lowerY, childY, color, outerLine);
         }
     }
 
-    private void drawStem(int x, int y1, int y2, State state) {
-        if (y2 >= y1) {
-            drawVLine(x, y1, y2, state);
+    private static void drawStems(List<SkillSegmentComponent> parents, int offsetX, int offsetY, int trunkX, int upperY, int color, boolean outerLine) {
+        if (parents.isEmpty()) return;
+
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        for (SkillSegmentComponent parent : parents) {
+            int px = parent.getX() + offsetX;
+            int py = parent.getY() + offsetY + SkillTreeLayout.SKILL_SIZE - 1;
+            verticalLine(px, py, upperY, color, outerLine);
+            if (px < minX) minX = px;
+            if (px > maxX) maxX = px;
+        }
+
+        int barLeft = Math.min(trunkX, minX);
+        int barRight = Math.max(trunkX, maxX);
+        if (barLeft != barRight) {
+            horizontalLine(barLeft, barRight, upperY, color, outerLine);
         }
     }
 
-    private void drawVLine(int x, int y1, int y2, State state) {
-        int top = Math.min(y1, y2);
-        int bottom = Math.max(y1, y2);
-        // Outer black borders
-        Gui.drawRect(x - 2, top, x - 1, bottom + 1, state.outerColor);
-        Gui.drawRect(x + 1, top, x + 2, bottom + 1, state.outerColor);
-        // Inner color line
-        Gui.drawRect(x - 1, top, x + 1, bottom + 1, state.innerColor);
+    private static State sharedState(List<SkillSegmentComponent> visibleChildren) {
+        State best = State.VISIBLE;
+        for (SkillSegmentComponent c : visibleChildren) {
+            State s = c.getConnectionState();
+            if (s.priority > best.priority) {
+                best = s;
+            }
+        }
+        return best;
     }
 
-    private void drawHLine(int x1, int x2, int y, State state) {
-        int left = Math.min(x1, x2);
-        int right = Math.max(x1, x2);
-        // Outer black borders
-        Gui.drawRect(left, y - 2, right + 1, y - 1, state.outerColor);
-        Gui.drawRect(left, y + 1, right + 1, y + 2, state.outerColor);
-        // Inner color line
-        Gui.drawRect(left, y - 1, right + 1, y + 1, state.innerColor);
+    private static void horizontalLine(int left, int right, int y, int color, boolean outerLine) {
+        if (outerLine) {
+            fillHLine(left - 1, right + 1, y - 1, color);
+            fillHLine(left - 1, right + 1, y + 1, color);
+        } else {
+            fillHLine(left, right, y, color);
+        }
+    }
+
+    private static void verticalLine(int x, int top, int bottom, int color, boolean outerLine) {
+        if (outerLine) {
+            fillVLine(x - 1, top - 2, bottom + 2, color);
+            fillVLine(x + 1, top - 2, bottom + 2, color);
+        } else {
+            fillVLine(x, top - 1, bottom + 1, color);
+        }
+    }
+
+    private static void fillHLine(int x1, int x2, int y, int color) {
+        int l = Math.min(x1, x2);
+        int r = Math.max(x1, x2);
+        Gui.drawRect(l, y, r + 1, y + 1, color);
+    }
+
+    private static void fillVLine(int x, int y1, int y2, int color) {
+        int t = Math.min(y1, y2);
+        int b = Math.max(y1, y2);
+        Gui.drawRect(x, t + 1, x + 1, b, color);
     }
 }

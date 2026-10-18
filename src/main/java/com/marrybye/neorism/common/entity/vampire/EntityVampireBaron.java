@@ -34,6 +34,18 @@ public class EntityVampireBaron extends EntityVampireBase {
     }
 
     @Override
+    public boolean attackEntityAsMob(net.minecraft.entity.Entity target) {
+        boolean flag = super.attackEntityAsMob(target);
+        if (flag && target instanceof EntityLivingBase) {
+            // Canonical VampireBaronEntity.doHurtTarget: applies Weakness II (200t) and Slowness II (100t)
+            EntityLivingBase living = (EntityLivingBase) target;
+            living.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.weakness.id, 200, 1));
+            living.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.moveSlowdown.id, 100, 1));
+        }
+        return flag;
+    }
+
+    @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
@@ -43,9 +55,12 @@ public class EntityVampireBaron extends EntityVampireBase {
             if (target != null && target.isEntityAlive()) {
                 double distSq = this.getDistanceSqToEntity(target);
 
-                // Ranged Dark Blood Projectile attack
+                // Ranged Dark Blood Projectile attack & brief Invisibility (canonical VampireBaronEntity.customServerAiStep)
                 if (--castCooldown <= 0 && distSq > 16.0D && distSq < 400.0D && this.canEntityBeSeen(target)) {
                     castDarkBlood(target);
+                    if (this.rand.nextInt(9) == 0) {
+                        this.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.invisibility.id, 60, 0));
+                    }
                     castCooldown = 50 + this.rand.nextInt(20);
                 }
 

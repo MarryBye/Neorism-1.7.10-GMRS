@@ -65,6 +65,17 @@ public class SkillTreeLayout {
         }
 
         for (Map.Entry<Integer, List<SkillSegment>> entry : rows.entrySet()) {
+            List<SkillSegment> r = entry.getValue();
+            Collections.sort(r, new Comparator<SkillSegment>() {
+                @Override
+                public int compare(SkillSegment a, SkillSegment b) {
+                    return a.getId().compareTo(b.getId());
+                }
+            });
+            entry.setValue(orderByPlacement(r));
+        }
+
+        for (Map.Entry<Integer, List<SkillSegment>> entry : rows.entrySet()) {
             List<SkillSegment> row = entry.getValue();
             final Map<SkillSegment, Placement> placeMap = layout.placements;
             Collections.sort(row, new Comparator<SkillSegment>() {
@@ -128,26 +139,68 @@ public class SkillTreeLayout {
         return layout;
     }
 
-    private static List<SkillSegment> orderByPlacement(List<SkillSegment> row) {
-        List<SkillSegment> ordered = new ArrayList<SkillSegment>(row);
-        for (int i = 0; i < row.size(); i++) {
-            SkillSegment seg = row.get(i);
-            String after = seg.getOrderAfterKey();
-            if (after != null) {
-                int targetIdx = -1;
-                for (int j = 0; j < ordered.size(); j++) {
-                    if (ordered.get(j).getId().equals(after)) {
-                        targetIdx = j;
-                        break;
+    public static List<SkillSegment> orderByPlacement(List<SkillSegment> row) {
+        if (row.size() < 2) {
+            return row;
+        }
+        Map<String, SkillSegment> byKey = new HashMap<String, SkillSegment>();
+        final Map<SkillSegment, Integer> indices = new HashMap<SkillSegment, Integer>();
+        Map<SkillSegment, List<SkillSegment>> successors = new HashMap<SkillSegment, List<SkillSegment>>();
+        Map<SkillSegment, Integer> predecessors = new HashMap<SkillSegment, Integer>();
+
+        for (SkillSegment entry : row) {
+            byKey.put(entry.getId(), entry);
+            indices.put(entry, indices.size());
+            predecessors.put(entry, 0);
+        }
+
+        for (SkillSegment entry : row) {
+            String after = entry.getOrderAfterKey();
+            if (after == null) continue;
+            SkillSegment relative = byKey.get(after);
+            if (relative == null || relative == entry) continue;
+            List<SkillSegment> list = successors.get(relative);
+            if (list == null) {
+                list = new ArrayList<SkillSegment>();
+                successors.put(relative, list);
+            }
+            list.add(entry);
+            predecessors.put(entry, predecessors.get(entry) + 1);
+        }
+
+        if (successors.isEmpty()) {
+            return row;
+        }
+
+        PriorityQueue<SkillSegment> queue = new PriorityQueue<SkillSegment>(row.size(), new Comparator<SkillSegment>() {
+            @Override
+            public int compare(SkillSegment a, SkillSegment b) {
+                return Integer.compare(indices.get(a), indices.get(b));
+            }
+        });
+        for (Map.Entry<SkillSegment, Integer> e : predecessors.entrySet()) {
+            if (e.getValue() == 0) {
+                queue.add(e.getKey());
+            }
+        }
+
+        List<SkillSegment> ordered = new ArrayList<SkillSegment>(row.size());
+        while (!queue.isEmpty()) {
+            SkillSegment entry = queue.poll();
+            ordered.add(entry);
+            List<SkillSegment> succ = successors.get(entry);
+            if (succ != null) {
+                for (SkillSegment s : succ) {
+                    int rem = predecessors.get(s) - 1;
+                    predecessors.put(s, rem);
+                    if (rem == 0) {
+                        queue.add(s);
                     }
-                }
-                if (targetIdx >= 0) {
-                    ordered.remove(seg);
-                    ordered.add(Math.min(targetIdx + 1, ordered.size()), seg);
                 }
             }
         }
-        return ordered;
+
+        return ordered.size() == row.size() ? ordered : row;
     }
 
     private static Map<SkillSegment, Integer> spreadFirstBranches(SkillTree tree, Map<SkillSegment, Placement> placements) {
