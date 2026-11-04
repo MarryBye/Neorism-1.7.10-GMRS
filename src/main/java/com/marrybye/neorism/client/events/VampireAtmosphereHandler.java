@@ -61,4 +61,23 @@ public class VampireAtmosphereHandler {
             event.setCanceled(true);
         }
     }
+
+    @SubscribeEvent
+    public void onFOVUpdate(net.minecraftforge.client.event.FOVUpdateEvent event) {
+        if (event.entity == null) return;
+        net.minecraft.entity.ai.attributes.IAttributeInstance speedAttr = event.entity.getEntityAttribute(net.minecraft.entity.SharedMonsterAttributes.movementSpeed);
+        if (speedAttr != null) {
+            // Prevent extreme 2x sniper zoom during Altar of Infusion ritual (-1.0 movement slowdown)
+            if (speedAttr.getModifier(com.marrybye.neorism.common.tileentity.TileEntityAltarInfusion.ID_MOVEMENT_SLOWDOWN) != null) {
+                event.newfov = 1.0F;
+                return;
+            }
+            // Canonical FOV normalization for Vampire movement speed boost
+            net.minecraft.entity.ai.attributes.AttributeModifier vampSpeed = speedAttr.getModifier(com.marrybye.neorism.common.vampire.LevelAttributeModifier.SPEED_MOD_UUID);
+            if (vampSpeed != null && vampSpeed.getAmount() > 0) {
+                double mult = 1.0D + vampSpeed.getAmount() * 0.65D;
+                event.newfov = (float) (event.fov / ((mult + 1.0D) / 2.0D));
+            }
+        }
+    }
 }

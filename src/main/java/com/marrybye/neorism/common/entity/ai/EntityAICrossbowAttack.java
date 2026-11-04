@@ -2,7 +2,6 @@ package com.marrybye.neorism.common.entity.ai;
 
 import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.core.ModSounds;
-import com.marrybye.neorism.common.entity.EntityHolyWaterBottle;
 import com.marrybye.neorism.common.entity.projectile.EntityQuarrel;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
@@ -80,13 +79,6 @@ public class EntityAICrossbowAttack extends EntityAIBase {
 
         if (--this.attackCooldown <= 0) {
             if (canSee) {
-                // If enemy is too close and is a vampire, throw Holy Water Bottle!
-                if (distSq < 36.0D && Helper.isVampire(target) && hunter.getRNG().nextInt(3) == 0) {
-                    throwHolyWater(target);
-                    this.attackCooldown = 40;
-                    return;
-                }
-
                 // Shoot crossbow quarrel
                 shootQuarrel(target);
                 this.attackCooldown = 35 + hunter.getRNG().nextInt(15);
@@ -102,21 +94,5 @@ public class EntityAICrossbowAttack extends EntityAIBase {
 
         ModLogger.ai("Hunter marksman %s fired quarrel at %s (distance=%.1f)",
             hunter.getCommandSenderName(), target.getCommandSenderName(), Math.sqrt(hunter.getDistanceSqToEntity(target)));
-    }
-
-    private void throwHolyWater(EntityLivingBase target) {
-        EntityHolyWaterBottle bottle = new EntityHolyWaterBottle(hunter.worldObj, hunter, 1);
-        double dx = target.posX - hunter.posX;
-        double dy = target.posY + (double) target.getEyeHeight() - 1.1D - bottle.posY;
-        double dz = target.posZ - hunter.posZ;
-        float dist = (float) Math.sqrt(dx * dx + dz * dz);
-        bottle.setThrowableHeading(dx, dy + (double) (dist * 0.15F), dz, 1.2F, 4.0F);
-
-        hunter.worldObj.playSoundAtEntity(hunter, "random.bow", 0.5F, 0.4F / (hunter.getRNG().nextFloat() * 0.4F + 0.8F));
-        hunter.worldObj.spawnEntityInWorld(bottle);
-        hunter.swingItem();
-
-        ModLogger.ai("Hunter marksman %s hurled Holy Water Bottle at approaching vampire %s!",
-            hunter.getCommandSenderName(), target.getCommandSenderName());
     }
 }

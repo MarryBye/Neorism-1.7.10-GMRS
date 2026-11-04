@@ -185,11 +185,7 @@ public class KeyBindings {
         boolean isVisionDown = keyVision.getIsKeyPressed();
         if (isVisionDown && !wasVisionKeyDown) {
             if (Helper.isVampire(mc.thePlayer)) {
-                if (mc.thePlayer.isPotionActive(Potion.nightVision.id)) {
-                    mc.thePlayer.removePotionEffect(Potion.nightVision.id);
-                } else {
-                    mc.thePlayer.addPotionEffect(new PotionEffect(Potion.nightVision.id, 999999, 0, true));
-                }
+                PacketHandler.sendToServer(new com.marrybye.neorism.common.network.packets.ToggleActionPacket("night_vision"));
             }
         }
         wasVisionKeyDown = isVisionDown;

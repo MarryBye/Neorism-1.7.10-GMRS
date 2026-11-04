@@ -288,11 +288,11 @@ public class PlayerCapabilityEventHandler {
 
     public static void applyBatDimensions(EntityPlayer player) {
         if (player == null) return;
-        Helper.setEntitySize(player, 0.6F, 0.6F);
-        player.height = 0.6F;
-        player.eyeHeight = 0.45F;
+        Helper.setEntitySize(player, 0.6F, 0.8F);
+        player.height = 0.8F;
         if (player.boundingBox != null) {
-            player.boundingBox.maxY = player.boundingBox.minY + 0.6D;
+            player.boundingBox.maxY = player.boundingBox.minY + 0.8D;
+            player.eyeHeight = (float) (player.boundingBox.minY + 0.5D - player.posY);
         }
     }
 }

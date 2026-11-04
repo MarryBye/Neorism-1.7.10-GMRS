@@ -15,25 +15,28 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 
 /**
- * Vampire Summon Bats spell (spawns distractive blood bats and blinds enemies).
+ * Vampire Summon Bats spell.
+ * Canonical port of TeamLapen's SummonBatVampireAction:
+ * Spawns an evasive swarm of bats that distract and blind nearby non-vampires.
  */
 public class SummonBatsAction extends ActionBase {
 
     public SummonBatsAction() {
-        super("summon_bats", 800, 0, false, 7);
+        super("summon_bats", 1200, 0, false, 7);
     }
 
     @Override
     public boolean onActivated(EntityPlayer player) {
         if (!player.worldObj.isRemote) {
             // Spawn distracting bats
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 8; i++) {
                 EntityBat bat = new EntityBat(player.worldObj);
                 bat.setPosition(
                     player.posX + (player.worldObj.rand.nextDouble() - 0.5D) * 3.0D,
-                    player.posY + 1.0D + player.worldObj.rand.nextDouble() * 2.0D,
+                    player.posY + 0.5D + player.worldObj.rand.nextDouble() * 1.5D,
                     player.posZ + (player.worldObj.rand.nextDouble() - 0.5D) * 3.0D
                 );
+                bat.setIsBatHanging(false);
                 player.worldObj.spawnEntityInWorld(bat);
             }
 
@@ -48,10 +51,7 @@ public class SummonBatsAction extends ActionBase {
             for (Object obj : list) {
                 if (obj instanceof EntityLivingBase && obj != player) {
                     EntityLivingBase living = (EntityLivingBase) obj;
-                    boolean isVampire = Helper.isVampire(living) ||
-                        (living instanceof IVampireEntity) ||
-                        living.getClass().getName().toLowerCase().contains("vampire");
-
+                    boolean isVampire = Helper.isVampire(living) || (living instanceof IVampireEntity);
                     if (!isVampire) {
                         living.addPotionEffect(new PotionEffect(Potion.blindness.id, 100, 0));
                     }

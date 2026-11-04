@@ -19,6 +19,8 @@ public class ModPotions {
     public static Potion noBlood;
     public static Potion freeze;
     public static Potion bleeding;
+    public static Potion lordSpeed;
+    public static Potion lordAttackSpeed;
 
     public static void init() {
         ensurePotionArrayCapacity(256);
@@ -29,6 +31,8 @@ public class ModPotions {
         noBlood = new PotionNoBlood(getNextFreePotionId());
         freeze = new PotionFreeze(getNextFreePotionId());
         bleeding = new PotionBleeding(getNextFreePotionId());
+        lordSpeed = new PotionLordSpeed(getNextFreePotionId());
+        lordAttackSpeed = new PotionLordAttackSpeed(getNextFreePotionId());
 
         ModLogger.debug("Registered Neorism potion effects: Sanguinare(id=%d), Sunscreen(id=%d), Garlic(id=%d), NoBlood(id=%d), Freeze(id=%d), Bleeding(id=%d)",
             sanguinare.id, sunscreen.id, garlic.id, noBlood.id, freeze.id, bleeding.id);

@@ -168,17 +168,17 @@ public class VillageFactionHandler {
             villager.posX - 36.0D, villager.posY - 12.0D, villager.posZ - 36.0D,
             villager.posX + 36.0D, villager.posY + 12.0D, villager.posZ + 36.0D);
         List<EntityVillager> nearbyVillagers = event.world.getEntitiesWithinAABB(EntityVillager.class, searchBox);
-        if (nearbyVillagers != null && nearbyVillagers.size() >= 1) {
-            int cx = vx;
-            int cz = vz;
+        int cx = vx;
+        int cz = vz;
+        if (nearbyVillagers != null && nearbyVillagers.size() > 1) {
             for (EntityVillager other : nearbyVillagers) {
                 if (other != villager) {
                     cx = (vx + net.minecraft.util.MathHelper.floor_double(other.posX)) / 2;
                     cz = (vz + net.minecraft.util.MathHelper.floor_double(other.posZ)) / 2;
-                    com.marrybye.neorism.common.world.gen.VillageTotemCreationHandler.ensureVillageTotemNear(event.world, cx, vy, cz);
                     break;
                 }
             }
         }
+        com.marrybye.neorism.common.world.gen.VillageTotemCreationHandler.ensureVillageTotemNear(event.world, cx, vy, cz);
     }
 }

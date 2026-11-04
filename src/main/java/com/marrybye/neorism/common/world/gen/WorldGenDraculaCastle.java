@@ -102,9 +102,19 @@ public class WorldGenDraculaCastle extends WorldGenerator {
                     }
                 }
             }
-            // Top fire brazier in tower
-            world.setBlock(x + c[0], y + wallH + 4, z + c[1], Blocks.netherrack, 0, 2);
-            world.setBlock(x + c[0], y + wallH + 5, z + c[1], Blocks.fire, 0, 2);
+            // Top lantern/brazier in tower
+            if (ModBlocks.vampireSoulLantern != null) {
+                world.setBlock(x + c[0], y + wallH + 4, z + c[1], ModBlocks.vampireSoulLantern, 0, 2);
+            } else {
+                world.setBlock(x + c[0], y + wallH + 4, z + c[1], Blocks.glowstone, 0, 2);
+            }
+        }
+
+        // Grand Chandeliers hanging from the ceiling
+        if (ModBlocks.chandelier != null) {
+            world.setBlock(x, y + wallH - 1, z, ModBlocks.chandelier, 0, 2);
+            world.setBlock(x, y + wallH - 1, z + 4, ModBlocks.chandelier, 0, 2);
+            world.setBlock(x, y + wallH - 1, z - 4, ModBlocks.chandelier, 0, 2);
         }
 
         // Throne Room Interior
@@ -138,11 +148,21 @@ public class WorldGenDraculaCastle extends WorldGenerator {
         }
 
         // Dracula's Grand Throne
-        world.setBlock(x, y + 2, throneZ + 2, Blocks.nether_brick_stairs, 2, 2);
-        world.setBlock(x - 1, y + 2, throneZ + 2, Blocks.nether_brick_fence, 0, 2);
-        world.setBlock(x + 1, y + 2, throneZ + 2, Blocks.nether_brick_fence, 0, 2);
-        world.setBlock(x, y + 3, throneZ + 2, Blocks.nether_brick, 0, 2);
-        world.setBlock(x, y + 4, throneZ + 2, Blocks.nether_brick_fence, 0, 2);
+        if (ModBlocks.throne != null) {
+            world.setBlock(x, y + 2, throneZ + 2, ModBlocks.throne, 0, 2);
+        } else {
+            world.setBlock(x, y + 2, throneZ + 2, Blocks.nether_brick_stairs, 2, 2);
+        }
+
+        // Blood Containers & Candelabras flanking the throne
+        if (ModBlocks.bloodContainer != null) {
+            world.setBlock(x - 3, y + 2, throneZ + 2, ModBlocks.bloodContainer, 0, 2);
+            world.setBlock(x + 3, y + 2, throneZ + 2, ModBlocks.bloodContainer, 0, 2);
+        }
+        if (ModBlocks.candelabra != null) {
+            world.setBlock(x - 1, y + 2, throneZ + 1, ModBlocks.candelabra, 0, 2);
+            world.setBlock(x + 1, y + 2, throneZ + 1, ModBlocks.candelabra, 0, 2);
+        }
 
         // Blood Pedestals flanking the throne
         if (ModBlocks.bloodPedestal != null) {

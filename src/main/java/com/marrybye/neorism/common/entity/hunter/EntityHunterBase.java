@@ -4,6 +4,7 @@ import com.marrybye.neorism.api.entity.IHunterEntity;
 import com.marrybye.neorism.api.faction.IFaction;
 import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.entity.ai.EntityAIAttackFaction;
+import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 
 import de.teamlapen.faction.api.world.ICaptureAttributes;
@@ -51,7 +52,7 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
 
     @Override
     public void setAttackTarget(EntityLivingBase target) {
-        if (target instanceof IHunterEntity) {
+        if (target != null && (target instanceof IHunterEntity || Helper.isHunter(target))) {
             return;
         }
         super.setAttackTarget(target);
@@ -59,7 +60,7 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
 
     @Override
     public void setRevengeTarget(EntityLivingBase target) {
-        if (target instanceof IHunterEntity) {
+        if (target != null && (target instanceof IHunterEntity || Helper.isHunter(target))) {
             return;
         }
         super.setRevengeTarget(target);
@@ -67,8 +68,15 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
 
     @Override
     public boolean attackEntityFrom(net.minecraft.util.DamageSource source, float amount) {
-        if (source != null && source.getEntity() instanceof IHunterEntity) {
-            return false;
+        if (source != null) {
+            net.minecraft.entity.Entity attacker = source.getEntity();
+            if (attacker instanceof EntityLivingBase && (attacker instanceof IHunterEntity || Helper.isHunter((EntityLivingBase) attacker))) {
+                return false;
+            }
+            net.minecraft.entity.Entity direct = source.getSourceOfDamage();
+            if (direct instanceof EntityLivingBase && (direct instanceof IHunterEntity || Helper.isHunter((EntityLivingBase) direct))) {
+                return false;
+            }
         }
         return super.attackEntityFrom(source, amount);
     }

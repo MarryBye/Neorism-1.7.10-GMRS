@@ -64,9 +64,14 @@ public class WorldGenHunterCamp extends WorldGenerator {
             }
         }
 
-        // Central Campfire
-        world.setBlock(x, y - 1, z, Blocks.netherrack, 0, 2);
-        world.setBlock(x, y, z, Blocks.fire, 0, 2);
+        // Central Campfire (Et Futurum Requiem campfire if present, otherwise netherrack fire)
+        Block campfireBlock = cpw.mods.fml.common.registry.GameRegistry.findBlock("etfuturum", "campfire");
+        if (campfireBlock != null) {
+            world.setBlock(x, y, z, campfireBlock, 0, 2);
+        } else {
+            world.setBlock(x, y - 1, z, Blocks.netherrack, 0, 2);
+            world.setBlock(x, y, z, Blocks.fire, 0, 2);
+        }
         int[][] fireSurround = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         for (int[] p : fireSurround) {
             world.setBlock(x + p[0], y, z + p[1], Blocks.stone_slab, 3, 2); // Cobble slab
@@ -94,9 +99,12 @@ public class WorldGenHunterCamp extends WorldGenerator {
             }
         }
 
-        // Workstation Area (Crafting Table + Weapon Table + Chest)
-        world.setBlock(x + 4, y, z, Blocks.crafting_table, 0, 2);
-        world.setBlock(x + 4, y, z + 1, Blocks.furnace, 2, 2);
+        // Workstation Area (Hunter Weapon Table + Alchemical Cauldron + Garlic Diffuser + Chest)
+        world.setBlock(x + 4, y, z, ModBlocks.hunterWeaponTable != null ? ModBlocks.hunterWeaponTable : Blocks.crafting_table, 0, 2);
+        world.setBlock(x + 4, y, z + 1, ModBlocks.alchemicalCauldron != null ? ModBlocks.alchemicalCauldron : Blocks.furnace, 0, 2);
+        if (ModBlocks.garlicDiffuser != null) {
+            world.setBlock(x + 4, y, z + 2, ModBlocks.garlicDiffuser, 0, 2);
+        }
         world.setBlock(x + 4, y, z - 1, Blocks.chest, 0, 2);
 
         TileEntityChest chest = (TileEntityChest) world.getTileEntity(x + 4, y, z - 1);

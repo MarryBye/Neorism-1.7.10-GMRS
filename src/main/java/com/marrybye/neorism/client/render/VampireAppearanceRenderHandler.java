@@ -53,47 +53,75 @@ public class VampireAppearanceRenderHandler {
         if (player == null || player.deathTime > 0) return;
 
         com.marrybye.neorism.common.action.ActionHandler handler = com.marrybye.neorism.common.action.ActionHandler.get(player);
-        if (handler != null && handler.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("bat_form"))) {
-            event.setCanceled(true);
-
-            Minecraft mc = Minecraft.getMinecraft();
-            if (mc.thePlayer == player && mc.gameSettings.thirdPersonView == 0) {
+        if (handler != null) {
+            // Invisibility Action: completely conceal player entity rendering
+            if (handler.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("vampire_invisibility"))) {
+                event.setCanceled(true);
                 return;
             }
 
-            if (player.isInvisible()) return;
+            // Bat Form: replace player render with vanilla bat model
+            if (handler.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("bat_form"))) {
+                event.setCanceled(true);
 
-            float partialTicks = event.partialRenderTick;
-            double renderX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosX;
-            double renderY = (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks - (player == mc.thePlayer ? (double) player.yOffset : 0.0D)) - net.minecraft.client.renderer.entity.RenderManager.renderPosY;
-            double renderZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosZ;
+                Minecraft mc = Minecraft.getMinecraft();
+                if (mc.thePlayer == player && mc.gameSettings.thirdPersonView == 0) {
+                    return;
+                }
 
-            float yaw;
-            if (player == mc.thePlayer) {
-                yaw = interpolateRotation(player.prevRotationYaw, player.rotationYaw, partialTicks);
-            } else {
-                yaw = interpolateRotation(player.prevRotationYawHead, player.rotationYawHead, partialTicks);
+                if (player.isInvisible()) return;
+
+                if (dummyBat == null || dummyBat.worldObj != player.worldObj) {
+                    dummyBat = new net.minecraft.entity.passive.EntityBat(player.worldObj);
+                }
+
+                float partialTicks = event.partialRenderTick;
+                double renderX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosX;
+                double renderY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosY;
+                double renderZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosZ;
+
+                // Sync all rotation, animation, and hurt state to dummy bat
+                dummyBat.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+                dummyBat.prevRotationYaw = player.prevRotationYaw;
+                dummyBat.rotationYaw = player.rotationYaw;
+                dummyBat.prevRotationPitch = player.prevRotationPitch;
+                dummyBat.rotationPitch = player.rotationPitch;
+                dummyBat.rotationYawHead = player.rotationYawHead;
+                dummyBat.prevRotationYawHead = player.prevRotationYawHead;
+                dummyBat.renderYawOffset = player.renderYawOffset;
+                dummyBat.prevRenderYawOffset = player.prevRenderYawOffset;
+                dummyBat.ticksExisted = player.ticksExisted;
+                dummyBat.hurtTime = player.hurtTime;
+                dummyBat.maxHurtTime = player.maxHurtTime;
+                dummyBat.attackedAtYaw = player.attackedAtYaw;
+                dummyBat.deathTime = player.deathTime;
+                dummyBat.setIsBatHanging(false);
+                dummyBat.setInvisible(false);
+
+                GL11.glPushMatrix();
+                GL11.glDisable(GL11.GL_CULL_FACE);
+                GL11.glEnable(GL11.GL_ALPHA_TEST);
+                net.minecraft.client.renderer.entity.RenderManager.instance.renderEntityWithPosYaw(
+                    dummyBat, renderX, renderY + 0.25D, renderZ, player.rotationYaw, partialTicks
+                );
+                GL11.glEnable(GL11.GL_CULL_FACE);
+                GL11.glPopMatrix();
             }
-            float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
+        }
+    }
 
-            GL11.glPushMatrix();
-            GL11.glTranslated(renderX, renderY + 0.35D, renderZ);
-            GL11.glRotatef(180.0F - yaw, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(-pitch, 1.0F, 0.0F, 0.0F);
+    @SubscribeEvent
+    public void onRenderPlayerSpecialsPre(RenderPlayerEvent.Specials.Pre event) {
+        EntityPlayer player = event.entityPlayer;
+        if (player == null) return;
 
-            float scale = 0.65F;
-            GL11.glScalef(-scale, -scale, scale);
-            GL11.glTranslatef(0.0F, -0.6F, 0.0F);
-
-            Minecraft.getMinecraft().getTextureManager().bindTexture(BAT_TEXTURE);
-            float ageInTicks = player.ticksExisted + partialTicks;
-            if (dummyBat == null || dummyBat.worldObj != player.worldObj) {
-                dummyBat = new net.minecraft.entity.passive.EntityBat(player.worldObj);
+        com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(player);
+        if (ah != null) {
+            // Cancel equipment and nametag rendering in bat form or invisibility
+            if (ah.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("bat_form")) ||
+                ah.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("vampire_invisibility"))) {
+                event.setCanceled(true);
             }
-            dummyBat.setIsBatHanging(false);
-            batModel.render(dummyBat, 0.0F, 0.0F, ageInTicks, 0.0F, 0.0F, 0.0625F);
-
-            GL11.glPopMatrix();
         }
     }
 

@@ -112,7 +112,62 @@ public class ModCreativeTabs {
         }
     };
 
-    // Backward-compatibility aliases
+    // Backward-compatibility alias
     public static final CreativeTabs tabMain = tabVampirism;
-    public static final CreativeTabs tabBooks = tabVampirism;
+
+    // Tab 4: Vampirism: Books & Leveling (Vampire Books, Hunter Intel, Case Files, Leveling Catalysts)
+    public static final CreativeTabs tabBooks = new CreativeTabs("neorism.books") {
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Item getTabIconItem() {
+            return ModItems.vampireBook != null ? ModItems.vampireBook : Items.book;
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public ItemStack getIconItemStack() {
+            if (ModItems.vampireBook != null) {
+                return new ItemStack(ModItems.vampireBook, 1, 0);
+            }
+            return new ItemStack(Items.book);
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public String getTranslatedTabLabel() {
+            if (StatCollector.canTranslate("itemGroup.neorism.books")) {
+                return StatCollector.translateToLocal("itemGroup.neorism.books");
+            }
+            return "Vampirism: Books & Leveling";
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        public void displayAllReleventItems(java.util.List list) {
+            super.displayAllReleventItems(list);
+            // Also include key leveling items & catalysts for convenience
+            if (ModItems.pureBlood != null) {
+                ModItems.pureBlood.getSubItems(ModItems.pureBlood, this, list);
+            }
+            if (ModItems.humanHeart != null) {
+                list.add(new ItemStack(ModItems.humanHeart));
+            }
+            if (ModItems.oblivionPotion != null) {
+                list.add(new ItemStack(ModItems.oblivionPotion));
+            }
+            if (ModItems.injectionSanguinare != null) {
+                list.add(new ItemStack(ModItems.injectionSanguinare));
+            }
+            if (ModItems.injectionGarlic != null) {
+                list.add(new ItemStack(ModItems.injectionGarlic));
+            }
+            if (ModItems.vampireMinionUpgradeSimple != null) list.add(new ItemStack(ModItems.vampireMinionUpgradeSimple));
+            if (ModItems.vampireMinionUpgradeEnhanced != null) list.add(new ItemStack(ModItems.vampireMinionUpgradeEnhanced));
+            if (ModItems.vampireMinionUpgradeSpecial != null) list.add(new ItemStack(ModItems.vampireMinionUpgradeSpecial));
+            if (ModItems.hunterMinionUpgradeSimple != null) list.add(new ItemStack(ModItems.hunterMinionUpgradeSimple));
+            if (ModItems.hunterMinionUpgradeEnhanced != null) list.add(new ItemStack(ModItems.hunterMinionUpgradeEnhanced));
+            if (ModItems.hunterMinionUpgradeSpecial != null) list.add(new ItemStack(ModItems.hunterMinionUpgradeSpecial));
+        }
+    };
 }

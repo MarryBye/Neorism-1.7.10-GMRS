@@ -189,6 +189,10 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
         if (creature != null && creature.canBeBitten(this)) {
             int drained = creature.onBite(this);
             if (drained > 0) {
+                com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get(player);
+                if (sh != null && sh.isSkillUnlocked("advanced_biter")) {
+                    drained += 1;
+                }
                 drinkBlood(drained, creature.getBloodSaturation());
                 ModSounds.playAtEntity(player, ModSounds.VAMPIRE_BITE, 0.7F, 1.0F);
                 ModSounds.playAtEntity(player, ModSounds.BLOOD_DRIP, 0.5F, 1.0F);

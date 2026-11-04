@@ -362,7 +362,7 @@ public class TileEntityAltarInfusion extends TileEntityNeorism implements IInven
         markDirty();
     }
 
-    private void endRitual() {
+    public void endRitual() {
         EntityPlayer target = getPlayer();
         if (target != null) {
             IAttributeInstance speedAttr = target.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
@@ -378,6 +378,18 @@ public class TileEntityAltarInfusion extends TileEntityNeorism implements IInven
 
         markForUpdate();
         markDirty();
+    }
+
+    @Override
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public net.minecraft.util.AxisAlignedBB getRenderBoundingBox() {
+        return INFINITE_EXTENT_AABB;
+    }
+
+    @Override
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public double getMaxRenderDistanceSquared() {
+        return 65536.0D;
     }
 
     public void tickSphereAnimation() {

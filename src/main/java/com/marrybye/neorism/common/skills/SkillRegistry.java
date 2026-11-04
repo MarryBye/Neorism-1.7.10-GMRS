@@ -60,21 +60,21 @@ public class SkillRegistry {
         Skill sRage = regSkill(new Skill("vampire_rage", vampireFaction, 3, 1, false, "actions/vampire_rage", ActionRegistry.getAction("vampire_rage")));
         Skill sLessThirst = regSkill(new Skill("less_blood_thirst", vampireFaction, 4, 1, true, "less_blood_thirst"));
         Skill sBloodCharge = regSkill(new Skill("blood_charge", vampireFaction, 5, 1, true, "blood_charge"));
-        Skill sBloodVision = regSkill(new Skill("blood_vision", vampireFaction, 6, 1, true, "blood_vision"));
+        Skill sBloodVision = regSkill(new Skill("blood_vision", vampireFaction, 6, 1, true, "blood_vision", ActionRegistry.getAction("blood_vision")));
         Skill sGarlicVision = regSkill(new Skill("garlic_blood_vision", vampireFaction, 7, 1, true, "blood_vision_garlic"));
-        Skill sHalfInvuln = regSkill(new Skill("half_invulnerable", vampireFaction, 8, 1, false, "actions/half_invulnerable", ActionRegistry.getAction("vampire_rage")));
+        Skill sHalfInvuln = regSkill(new Skill("half_invulnerable", vampireFaction, 8, 1, false, "actions/half_invulnerable", ActionRegistry.getAction("half_invulnerable")));
         Skill sFinisher = regSkill(new Skill("sword_finisher", vampireFaction, 9, 2, true, "sword_finisher"));
 
         // Branch 2: Biter / Agility
         Skill sAdvancedBiter = regSkill(new Skill("advanced_biter", vampireFaction, 3, 1, true, "advanced_biter"));
-        Skill sHissing = regSkill(new Skill("hissing", vampireFaction, 4, 1, false, "actions/hissing", ActionRegistry.getAction("vampire_rage")));
+        Skill sHissing = regSkill(new Skill("hissing", vampireFaction, 4, 1, false, "actions/hissing", ActionRegistry.getAction("hissing")));
         Skill sWaterResist = regSkill(new Skill("water_resistance", vampireFaction, 5, 1, true, "water_resistance"));
         Skill sAtkSpeed = regSkill(new Skill("vampire_attack_speed", vampireFaction, 6, 1, true, "vampire_attack_speed"));
         Skill sAtkDamage = regSkill(new Skill("vampire_attack_damage", vampireFaction, 6, 1, true, "vampire_attack_damage"));
         Skill sLessSun = regSkill(new Skill("less_sundamage", vampireFaction, 7, 1, true, "less_sundamage"));
         Skill sSpeed = regSkill(new Skill("vampire_speed", vampireFaction, 8, 1, true, "vampire_speed"));
-        Skill sJump = regSkill(new Skill("vampire_jump", vampireFaction, 8, 1, true, "actions/jump_boost"));
-        Skill sDarkStalker = regSkill(new Skill("dark_stalker", vampireFaction, 9, 1, true, "actions/dark_stalker"));
+        Skill sJump = regSkill(new Skill("vampire_jump", vampireFaction, 8, 1, false, "actions/jump_boost", ActionRegistry.getAction("jump_boost")));
+        Skill sDarkStalker = regSkill(new Skill("dark_stalker", vampireFaction, 9, 1, false, "actions/dark_stalker", ActionRegistry.getAction("dark_stalker")));
         Skill sInvis = regSkill(new Skill("vampire_invisibility", vampireFaction, 10, 2, false, "actions/vampire_invisibility", ActionRegistry.getAction("invisibility")));
 
         // Branch 3: Disguise / Spells
@@ -133,7 +133,7 @@ public class SkillRegistry {
         );
         Skill sLordRoot = regSkill(new Skill("vampire_lord_root", vampireFaction, 1, 0, true, "vampire_lord"));
         Skill sBetterMinions = regSkill(new Skill("vampire_minion_stats_increase", vampireFaction, 1, 1, true, "vampire_minion_stats_increase"));
-        Skill sLordSpeed = regSkill(new Skill("vampire_lord_speed", vampireFaction, 2, 1, true, "actions/lord_speed"));
+        Skill sLordSpeed = regSkill(new Skill("vampire_lord_speed", vampireFaction, 2, 1, false, "actions/lord_speed", ActionRegistry.getAction("lord_speed")));
         Skill sMinionCollect = regSkill(new Skill("vampire_minion_collect", vampireFaction, 3, 1, true, "vampire_minion_collect"));
         Skill sMinionRecovery = regSkill(new Skill("vampire_minion_recovery", vampireFaction, 4, 1, true, "factionapi:textures/skills/minion_recovery.png"));
 

@@ -208,6 +208,7 @@ public class Helper {
     }
 
     private static java.lang.reflect.Method setSizeMethod;
+    private static java.lang.reflect.Field flySpeedField;
     static {
         try {
             setSizeMethod = Entity.class.getDeclaredMethod("setSize", float.class, float.class);
@@ -219,6 +220,33 @@ public class Helper {
             } catch (Exception e2) {
                 setSizeMethod = null;
             }
+        }
+        try {
+            flySpeedField = net.minecraft.entity.player.PlayerCapabilities.class.getDeclaredField("flySpeed");
+            flySpeedField.setAccessible(true);
+        } catch (Exception e1) {
+            try {
+                flySpeedField = net.minecraft.entity.player.PlayerCapabilities.class.getDeclaredField("field_75096_f");
+                flySpeedField.setAccessible(true);
+            } catch (Exception e2) {
+                flySpeedField = null;
+            }
+        }
+    }
+
+    public static void setFlySpeed(EntityPlayer player, float speed) {
+        if (player == null || player.capabilities == null) return;
+        if (flySpeedField != null) {
+            try {
+                flySpeedField.setFloat(player.capabilities, speed);
+                return;
+            } catch (Exception ignored) {}
+        }
+        net.minecraft.nbt.NBTTagCompound tag = new net.minecraft.nbt.NBTTagCompound();
+        player.capabilities.writeCapabilitiesToNBT(tag);
+        if (tag.hasKey("abilities")) {
+            tag.getCompoundTag("abilities").setFloat("flySpeed", speed);
+            player.capabilities.readCapabilitiesFromNBT(tag);
         }
     }
 

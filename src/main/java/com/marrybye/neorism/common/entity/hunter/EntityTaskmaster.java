@@ -32,7 +32,7 @@ public class EntityTaskmaster extends EntityHunterBase {
         this.tasks.addTask(8, new net.minecraft.entity.ai.EntityAIWander(this, 0.7D));
         this.tasks.addTask(9, new net.minecraft.entity.ai.EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(10, new net.minecraft.entity.ai.EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new net.minecraft.entity.ai.EntityAIHurtByTarget(this, false));
+        this.targetTasks.addTask(1, new com.marrybye.neorism.common.entity.ai.EntityAIHurtByTargetFaction(this, com.marrybye.neorism.common.core.ModFactions.HUNTER));
     }
 
     @Override

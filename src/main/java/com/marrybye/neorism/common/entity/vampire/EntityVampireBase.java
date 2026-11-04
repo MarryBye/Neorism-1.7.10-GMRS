@@ -8,6 +8,7 @@ import com.marrybye.neorism.common.entity.ai.EntityAIAttackFaction;
 import com.marrybye.neorism.common.entity.ai.EntityAIBiteLiving;
 import com.marrybye.neorism.common.entity.ai.EntityAISunFlee;
 import com.marrybye.neorism.common.tileentity.TileEntityFogDiffuser;
+import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 
 import net.minecraft.entity.Entity;
@@ -61,7 +62,8 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
 
     @Override
     public void setAttackTarget(EntityLivingBase target) {
-        if (target instanceof IVampireEntity && !(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
+        if (target != null && (Helper.isVampire(target) || target instanceof IVampireEntity)
+            && !(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
             return;
         }
         super.setAttackTarget(target);
@@ -69,7 +71,8 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
 
     @Override
     public void setRevengeTarget(EntityLivingBase target) {
-        if (target instanceof IVampireEntity && !(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
+        if (target != null && (Helper.isVampire(target) || target instanceof IVampireEntity)
+            && !(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
             return;
         }
         super.setRevengeTarget(target);
@@ -77,9 +80,17 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
 
     @Override
     public boolean attackEntityFrom(net.minecraft.util.DamageSource source, float amount) {
-        if (source != null && source.getEntity() instanceof IVampireEntity
-            && !(this instanceof EntityVampireBaron && source.getEntity() instanceof EntityVampireBaron)) {
-            return false;
+        if (source != null) {
+            net.minecraft.entity.Entity attacker = source.getEntity();
+            if (attacker instanceof EntityLivingBase && (Helper.isVampire((EntityLivingBase) attacker) || attacker instanceof IVampireEntity)
+                && !(this instanceof EntityVampireBaron && attacker instanceof EntityVampireBaron)) {
+                return false;
+            }
+            net.minecraft.entity.Entity direct = source.getSourceOfDamage();
+            if (direct instanceof EntityLivingBase && (Helper.isVampire((EntityLivingBase) direct) || direct instanceof IVampireEntity)
+                && !(this instanceof EntityVampireBaron && direct instanceof EntityVampireBaron)) {
+                return false;
+            }
         }
         return super.attackEntityFrom(source, amount);
     }
@@ -130,6 +141,7 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
             return false;
         }
         if (TileEntityFogDiffuser.isEntityProtected(this)) return false;
+        if (com.marrybye.neorism.common.tileentity.TileEntityTotem.isEntityProtectedByVampireVillage(this)) return false;
 
         return this.worldObj.canBlockSeeTheSky(x, y, z);
     }

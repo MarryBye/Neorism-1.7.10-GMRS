@@ -10,6 +10,7 @@ import com.marrybye.neorism.common.entity.hunter.EntityHunterBase;
 import com.marrybye.neorism.common.entity.hunter.EntityHunterTrainer;
 import com.marrybye.neorism.common.entity.vampire.EntityVampireBaron;
 import com.marrybye.neorism.common.entity.vampire.EntityVampireBase;
+import com.marrybye.neorism.common.util.Helper;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,14 +37,14 @@ public class EntityAIHurtByTargetFaction extends EntityAITarget {
         if (self == null || other == null) return false;
         if (self == other) return true;
         if (faction == ModFactions.HUNTER) {
-            return other instanceof IHunterEntity;
+            return Helper.isHunter(other) || other instanceof IHunterEntity;
         }
         if (faction == ModFactions.VAMPIRE) {
             // Canonical VampireBaronEntity: Barons can duel other Barons, but normal vampires never fight vampires
             if (self instanceof EntityVampireBaron && other instanceof EntityVampireBaron) {
                 return false;
             }
-            return other instanceof IVampireEntity;
+            return Helper.isVampire(other) || other instanceof IVampireEntity;
         }
         return false;
     }

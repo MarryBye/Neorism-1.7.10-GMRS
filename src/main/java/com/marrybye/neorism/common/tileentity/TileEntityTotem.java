@@ -887,10 +887,20 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
 
     @Override
     public AxisAlignedBB getVillageArea() {
-        double r = 40.0D;
+        double r = 56.0D;
+        int cx = this.xCoord;
+        int cz = this.zCoord;
+        if (this.worldObj != null && this.worldObj.villageCollectionObj != null) {
+            net.minecraft.village.Village v = this.worldObj.villageCollectionObj.findNearestVillage(this.xCoord, this.yCoord, this.zCoord, 64);
+            if (v != null && v.getCenter() != null) {
+                r = Math.max(56.0D, v.getVillageRadius() + 16.0D);
+                cx = v.getCenter().posX;
+                cz = v.getCenter().posZ;
+            }
+        }
         return AxisAlignedBB.getBoundingBox(
-            this.xCoord - r, this.yCoord - 16, this.zCoord - r,
-            this.xCoord + r, this.yCoord + 24, this.zCoord + r
+            cx - r, this.yCoord - 32.0D, cz - r,
+            cx + r, this.yCoord + 48.0D, cz + r
         );
     }
 

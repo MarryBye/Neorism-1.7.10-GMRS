@@ -107,8 +107,8 @@ public class ActionHandler implements IExtendedEntityProperties {
         IAction action = ActionRegistry.getAction(actionId);
         if (action == null) return false;
 
-        // Toggle action: if already active, deactivate it
-        if (action.isToggle() && isActive(action)) {
+        // Lasting/toggle action: if already active, deactivate it (canonical FactionAPI toggle behaviour)
+        if (isActive(action)) {
             deactivateAction(action);
             return true;
         }
@@ -130,11 +130,11 @@ public class ActionHandler implements IExtendedEntityProperties {
         boolean success = action.onActivated(player);
         if (success) {
             int duration = action.getDuration(player);
-            if (duration > 0 || action.isToggle()) {
-                activeActions.put(action.getId(), duration > 0 ? duration : 999999);
-            }
             int cd = action.getCooldown(player);
-            if (cd > 0) {
+            if (duration > 0 || action.isToggle()) {
+                // Canonical: lasting actions do not start their cooldown until they deactivate
+                activeActions.put(action.getId(), duration > 0 ? duration : Integer.MAX_VALUE - 1);
+            } else if (cd > 0) {
                 cooldowns.put(action.getId(), cd);
             }
             dirty = true;
@@ -147,12 +147,31 @@ public class ActionHandler implements IExtendedEntityProperties {
 
     public void deactivateAction(IAction action) {
         if (action == null) return;
+        // Server authoritative: clients only mirror state through SyncActionsPacket
+        if (player.worldObj.isRemote) return;
         Integer removed = activeActions.remove(action.getId());
         if (removed != null) {
+            startLastingCooldown(action, removed);
             action.onDeactivated(player);
             dirty = true;
             ModLogger.combat("Player %s deactivated action '%s'", player.getCommandSenderName(), action.getId());
             sync();
+        }
+    }
+
+    /**
+     * Canonical FactionAPI ActionHandler#deactivateAction cooldown formula:
+     * cooldown -= cooldown * (leftTime / duration / 2)
+     */
+    private void startLastingCooldown(IAction action, int leftTime) {
+        if (cooldowns.containsKey(action.getId())) return;
+        int cooldown = action.getCooldown(player);
+        int duration = action.getDuration(player);
+        if (duration > 0 && leftTime > 0) {
+            cooldown -= (int) (cooldown * (leftTime / (float) duration / 2.0F));
+        }
+        if (cooldown > 0) {
+            cooldowns.put(action.getId(), Math.max(cooldown, 1));
         }
     }
 
@@ -172,26 +191,27 @@ public class ActionHandler implements IExtendedEntityProperties {
             }
         }
 
-        // 2. Tick active actions
+        // 2. Tick active actions (snapshot keys: actions may deactivate themselves inside onUpdate)
         if (!activeActions.isEmpty()) {
-            Iterator<Map.Entry<String, Integer>> it = activeActions.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<String, Integer> entry = it.next();
-                IAction action = ActionRegistry.getAction(entry.getKey());
-                int ticksLeft = entry.getValue() - 1;
+            for (String key : new java.util.ArrayList<String>(activeActions.keySet())) {
+                Integer current = activeActions.get(key);
+                if (current == null) continue;
+                IAction action = ActionRegistry.getAction(key);
+                int ticksLeft = current - 1;
+                activeActions.put(key, ticksLeft);
 
                 if (action != null) {
                     action.onUpdate(player, ticksLeft);
                 }
+                if (!activeActions.containsKey(key)) continue; // deactivated during update
 
                 if (ticksLeft <= 0) {
+                    activeActions.remove(key);
                     if (action != null) {
+                        startLastingCooldown(action, 0);
                         action.onDeactivated(player);
                     }
-                    it.remove();
                     dirty = true;
-                } else {
-                    entry.setValue(ticksLeft);
                 }
             }
         }
@@ -200,6 +220,21 @@ public class ActionHandler implements IExtendedEntityProperties {
         if (dirty || (player.ticksExisted % 20 == 0 && (!cooldowns.isEmpty() || !activeActions.isEmpty()))) {
             sync();
             dirty = false;
+        }
+    }
+
+    /**
+     * Deactivates every running lasting action (logout / death), so transient state such as bat flight does not leak.
+     */
+    public void deactivateAll() {
+        if (player.worldObj.isRemote) return;
+        for (String key : new java.util.ArrayList<String>(activeActions.keySet())) {
+            IAction action = ActionRegistry.getAction(key);
+            if (action != null) {
+                deactivateAction(action);
+            } else {
+                activeActions.remove(key);
+            }
         }
     }
 

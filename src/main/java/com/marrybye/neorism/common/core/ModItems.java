@@ -175,7 +175,7 @@ public class ModItems {
         vampireBook = register("vampire_book", new ItemVampireBook());
         soulOrbVampire = register("soul_orb_vampire", new ItemNeorism("soul_orb_vampire", ModCreativeTabs.tabVampirism));
         motherCore = register("mother_core", new ItemNeorism("mother_core", ModCreativeTabs.tabVampirism));
-        caseFile144 = register("case_file_144", new ItemNeorism("case_file_144", ModCreativeTabs.tabVampirism));
+        caseFile144 = register("case_file_144", new ItemNeorism("case_file_144", ModCreativeTabs.tabBooks));
         garlicFinder = register("garlic_finder", new ItemNeorism("garlic_finder", ModCreativeTabs.tabVampirism));
         oblivionPotion = register("potion_of_oblivion", new ItemOblivionPotion());
         ritualKnife = register("ritual_knife", new ItemRitualKnife());

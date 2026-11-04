@@ -69,8 +69,9 @@ public class SundamageRegistry {
             return false;
         }
 
-        // Fog Diffuser artificial mist protection
-        if (com.marrybye.neorism.common.tileentity.TileEntityFogDiffuser.isEntityProtected(entity)) {
+        // Fog Diffuser artificial mist protection & Vampire Village territory
+        if (com.marrybye.neorism.common.tileentity.TileEntityFogDiffuser.isEntityProtected(entity)
+            || com.marrybye.neorism.common.tileentity.TileEntityTotem.isEntityProtectedByVampireVillage(entity)) {
             return false;
         }
 

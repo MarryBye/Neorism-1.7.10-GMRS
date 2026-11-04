@@ -39,12 +39,10 @@ public class EntityAISunFlee extends EntityAIBase {
 
         if (this.theCreature instanceof IVampireEntity) {
             IVampireEntity v = (IVampireEntity) this.theCreature;
-            if (v.isIgnoringSundamage()) {
+            if (v.isIgnoringSundamage() || !v.isGettingSundamage()) {
                 return false;
             }
-        }
-
-        if (TileEntityFogDiffuser.isEntityProtected(this.theCreature)) {
+        } else if (!com.marrybye.neorism.common.vampire.SundamageRegistry.instance().isGettingSundamage(this.theCreature)) {
             return false;
         }
 

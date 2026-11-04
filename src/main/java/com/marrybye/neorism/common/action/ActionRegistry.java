@@ -16,13 +16,14 @@ import com.marrybye.neorism.common.util.ModLogger;
  */
 public class ActionRegistry {
 
-    private static final Map<String, IAction> ACTIONS = new HashMap<String, IAction>();
+    private static final Map<String, IAction> ACTIONS = new java.util.LinkedHashMap<String, IAction>();
 
     public static void init() {
         register(new NightVisionAction());
         register(new VampireRegenAction());
         register(new VampireRageAction());
         register(new BatFormAction());
+        register(new InfectAction());
         register(new TeleportAction());
         register(new FreezeAction());
         register(new DarkBloodProjectileAction());
@@ -30,6 +31,12 @@ public class ActionRegistry {
         register(new InvisibilityAction());
         register(new SummonBatsAction());
         register(new BloodVisionAction());
+        register(new HalfInvulnerableAction());
+        register(new HissingAction());
+        register(new JumpBoostAction());
+        register(new DarkStalkerAction());
+        register(new com.marrybye.neorism.common.action.lord.SpeedLordAction());
+        register(new com.marrybye.neorism.common.action.lord.AttackSpeedLordAction());
 
         register(new HunterAwarenessAction());
         register(new PotionResistanceAction());

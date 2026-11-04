@@ -1,73 +1,134 @@
 package com.marrybye.neorism.common.action.vampire;
 
+import java.util.UUID;
+
 import com.marrybye.neorism.common.action.ActionBase;
 import com.marrybye.neorism.common.action.ActionHandler;
+import com.marrybye.neorism.common.action.ActionRegistry;
+import com.marrybye.neorism.common.core.ModPotions;
 import com.marrybye.neorism.common.core.ModSounds;
+import com.marrybye.neorism.common.events.PlayerCapabilityEventHandler;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.vampire.SundamageRegistry;
 import com.marrybye.neorism.common.vampire.VampirePlayer;
 
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ChatComponentTranslation;
 
 /**
- * Bat Form transformation ability granting creative-like flight.
+ * Bat Form transformation ability granting agile flight.
+ * Canonical port of TeamLapen's BatVampireAction:
+ * Applies -90% health reduction, -100% armor, canonical bat flight speed,
+ * and restricts flight in sunlight, water, garlic, or when holding umbrellas.
  */
 public class BatFormAction extends ActionBase {
 
+    public static final UUID BAT_HEALTH_MOD_UUID = UUID.fromString("6a35d980-9ec8-49f9-b883-2f08a54101e9");
+
     public BatFormAction() {
-        super("bat", 100, -1, true, 3);
+        super("bat", 60, -1, true, 3);
+    }
+
+    @Override
+    public boolean canUse(EntityPlayer player) {
+        if (!super.canUse(player)) return false;
+
+        if (SundamageRegistry.instance().isGettingSundamage(player)) {
+            if (!player.worldObj.isRemote) {
+                player.addChatMessage(new ChatComponentTranslation("message.vampirism.action.bat.in_sun"));
+            }
+            return false;
+        }
+        if (SundamageRegistry.instance().isHoldingUmbrella(player)) {
+            if (!player.worldObj.isRemote) {
+                player.addChatMessage(new ChatComponentTranslation("message.vampirism.action.bat.has_umbrella"));
+            }
+            return false;
+        }
+        if (player.isPotionActive(ModPotions.garlic)) {
+            if (!player.worldObj.isRemote) {
+                player.addChatMessage(new ChatComponentTranslation("message.vampirism.action.bat.effected_by_garlic"));
+            }
+            return false;
+        }
+        if (player.isInWater()) {
+            if (!player.worldObj.isRemote) {
+                player.addChatMessage(new ChatComponentTranslation("message.vampirism.action.bat.in_water"));
+            }
+            return false;
+        }
+        if (player.ridingEntity != null) {
+            if (!player.worldObj.isRemote) {
+                player.addChatMessage(new ChatComponentTranslation("message.vampirism.action.bat.in_vehicle"));
+            }
+            return false;
+        }
+
+        ActionHandler ah = ActionHandler.get(player);
+        if (ah != null && ah.isActive(ActionRegistry.getAction("vampire_rage"))) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public boolean onActivated(EntityPlayer player) {
-        if (SundamageRegistry.instance().isHoldingUmbrella(player)) {
-            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("message.vampirism.action.bat.has_umbrella"));
-            return false;
-        }
         player.capabilities.allowFlying = true;
         player.capabilities.isFlying = true;
-        player.capabilities.setFlySpeed(0.10F);
+        Helper.setFlySpeed(player, 0.025F);
         player.sendPlayerAbilities();
-        com.marrybye.neorism.common.events.PlayerCapabilityEventHandler.applyBatDimensions(player);
+
+        // -90% health modifier in bat form
+        IAttributeInstance healthAttr = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+        if (healthAttr != null) {
+            AttributeModifier mod = healthAttr.getModifier(BAT_HEALTH_MOD_UUID);
+            if (mod != null) healthAttr.removeModifier(mod);
+            healthAttr.applyModifier(new AttributeModifier(BAT_HEALTH_MOD_UUID, "Bat Health Reduction", -0.90D, 2));
+            if (player.getHealth() > player.getMaxHealth()) {
+                player.setHealth(player.getMaxHealth());
+            }
+        }
+
+        PlayerCapabilityEventHandler.applyBatDimensions(player);
         ModSounds.playAtEntity(player, ModSounds.BAT_SWARM, 0.8F, 1.2F);
         return true;
     }
 
     @Override
     public void onUpdate(EntityPlayer player, int activeTicksLeft) {
-        // Enforce bat hitbox dimensions continuously
-        com.marrybye.neorism.common.events.PlayerCapabilityEventHandler.applyBatDimensions(player);
+        PlayerCapabilityEventHandler.applyBatDimensions(player);
 
-        // Maintain flight abilities in bat form
         if (!player.capabilities.allowFlying) {
             player.capabilities.allowFlying = true;
             player.sendPlayerAbilities();
         }
 
-        // Drop out of bat form if submerged in water
-        if (player.isInWater()) {
+        // Drop out if conditions violated
+        if (player.isInWater() || SundamageRegistry.instance().isGettingSundamage(player) ||
+            SundamageRegistry.instance().isHoldingUmbrella(player) || player.isPotionActive(ModPotions.garlic) ||
+            player.ridingEntity != null) {
             ActionHandler ah = ActionHandler.get(player);
             if (ah != null) ah.deactivateAction(this);
             return;
         }
 
-        // Continuous blood upkeep: 1 blood every 60 ticks (3 seconds)
-        if (player.ticksExisted % 60 == 0) {
+        // Blood upkeep: 1 blood every 60 ticks
+        if (!player.worldObj.isRemote && player.ticksExisted % 60 == 0) {
             VampirePlayer vp = VampirePlayer.get(player);
             if (vp != null) {
                 if (vp.getBloodStats().getBloodLevel() <= 1) {
-                    // Out of blood - force revert
                     ActionHandler ah = ActionHandler.get(player);
                     if (ah != null) ah.deactivateAction(this);
                     return;
                 }
                 vp.getBloodStats().consumeBlood(1);
             }
-        }
-
-        // Sunlight vulnerability in bat form
-        if (SundamageRegistry.isEntityInSunlight(player)) {
-            player.setFire(2);
         }
     }
 
@@ -77,8 +138,16 @@ public class BatFormAction extends ActionBase {
             player.capabilities.allowFlying = false;
             player.capabilities.isFlying = false;
         }
-        player.capabilities.setFlySpeed(0.05F);
+        Helper.setFlySpeed(player, 0.05F);
         player.sendPlayerAbilities();
+
+        // Remove health modifier
+        IAttributeInstance healthAttr = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+        if (healthAttr != null) {
+            AttributeModifier mod = healthAttr.getModifier(BAT_HEALTH_MOD_UUID);
+            if (mod != null) healthAttr.removeModifier(mod);
+        }
+
         Helper.setEntitySize(player, 0.6F, 1.8F);
         player.height = 1.8F;
         player.eyeHeight = player.getDefaultEyeHeight();
@@ -88,7 +157,7 @@ public class BatFormAction extends ActionBase {
 
         // Safe landing resistance if reverting mid-air
         if (!player.onGround) {
-            player.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.resistance.id, 60, 4));
+            player.addPotionEffect(new PotionEffect(Potion.resistance.id, 60, 4, false));
         }
 
         ModSounds.playAtEntity(player, ModSounds.BAT_SWARM, 0.8F, 0.9F);

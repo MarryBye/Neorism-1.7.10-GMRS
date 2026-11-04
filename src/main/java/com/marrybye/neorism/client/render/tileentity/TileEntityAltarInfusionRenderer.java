@@ -58,14 +58,26 @@ public class TileEntityAltarInfusionRenderer extends TileEntitySpecialRenderer {
 
         this.bindTexture(SPHERE_TEXTURE);
 
-        // Render solid / translucent emissive sphere
+        // Canonical 2-pass Solid + Emissive Sphere rendering
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.sphereModel.render(0.0625F);
+
         GL11.glEnable(GL11.GL_BLEND);
         OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        float prevLX = OpenGlHelper.lastBrightnessX;
+        float prevLY = OpenGlHelper.lastBrightnessY;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.85F);
 
         this.sphereModel.render(0.0625F);
 
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, prevLX, prevLY);
+        GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glPopMatrix();
     }
 

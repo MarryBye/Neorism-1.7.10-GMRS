@@ -56,14 +56,23 @@ public class WorldGenVampireAltarRuins extends WorldGenerator {
             }
         }
 
-        // 4 Altar Pillars
+        // 4 Altar Pillars with authentic Altar Tips and Candelabras
         int[][] pillars = {{-2, -2}, {2, -2}, {-2, 2}, {2, 2}};
         for (int[] p : pillars) {
             world.setBlock(x + p[0], y, z + p[1], ModBlocks.chiseledDarkStoneBricks, 0, 2);
             world.setBlock(x + p[0], y + 1, z + p[1], ModBlocks.darkStoneBricks, 0, 2);
-            world.setBlock(x + p[0], y + 2, z + p[1], ModBlocks.darkStoneBricks, 0, 2);
-            world.setBlock(x + p[0], y + 3, z + p[1], Blocks.netherrack, 0, 2);
-            world.setBlock(x + p[0], y + 4, z + p[1], Blocks.fire, 0, 2);
+            if (ModBlocks.altarPillar != null) {
+                world.setBlock(x + p[0], y + 2, z + p[1], ModBlocks.altarPillar, 0, 2);
+            } else {
+                world.setBlock(x + p[0], y + 2, z + p[1], ModBlocks.darkStoneBricks, 0, 2);
+            }
+            if (ModBlocks.altarTip != null) {
+                world.setBlock(x + p[0], y + 3, z + p[1], ModBlocks.altarTip, 0, 2);
+            } else if (ModBlocks.candelabra != null) {
+                world.setBlock(x + p[0], y + 3, z + p[1], ModBlocks.candelabra, 0, 2);
+            } else {
+                world.setBlock(x + p[0], y + 3, z + p[1], Blocks.glowstone, 0, 2);
+            }
         }
 
         // Central Altar of Inspiration or Blood Pedestal

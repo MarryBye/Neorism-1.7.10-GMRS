@@ -71,13 +71,23 @@ public class WorldGenVampireCrypt extends WorldGenerator {
             for (int dy = 1; dy < height; ++dy) {
                 world.setBlock(x + p[0], y + dy, z + p[1], dy == 1 ? ModBlocks.chiseledDarkStoneBricks : ModBlocks.darkStoneBricks, 0, 2);
             }
+            if (ModBlocks.candelabra != null) {
+                world.setBlock(x + p[0], y + 1, z + p[1] + (p[1] < 0 ? 1 : -1), ModBlocks.candelabra, 0, 2);
+            }
         }
 
-        // Central Dais with red coffins
-        world.setBlock(x, y + 1, z, ModBlocks.coffin, 0, 2);
-        if (ModBlocks.coffin != null) {
-            world.setBlock(x - 1, y + 1, z, ModBlocks.coffin, 0, 2);
-            world.setBlock(x + 1, y + 1, z, ModBlocks.coffin, 0, 2);
+        // Central Dais with 2-block multiblock coffin
+        placeCoffin(world, x, y + 1, z - 1, 0, ModBlocks.coffin);
+
+        // Decorative Tombstones and Bat Cages in alcoves
+        if (ModBlocks.tombstoneCross != null) {
+            world.setBlock(x - 3, y + 1, z, ModBlocks.tombstoneCross, 0, 2);
+        }
+        if (ModBlocks.tombstoneShort != null) {
+            world.setBlock(x + 3, y + 1, z, ModBlocks.tombstoneShort, 0, 2);
+        }
+        if (ModBlocks.batCage != null) {
+            world.setBlock(x, y + height - 1, z, ModBlocks.batCage, 0, 2);
         }
 
         // Side Tombs with Loot Chests
@@ -86,10 +96,12 @@ public class WorldGenVampireCrypt extends WorldGenerator {
         placeCryptChest(world, rand, x, y + 1, z - depth + 1);
         placeCryptChest(world, rand, x, y + 1, z + depth - 1);
 
-        // Spawn Vampire Baron boss inside the chamber
+        // Spawn Vampire Baron boss inside the chamber with canonical level
         EntityVampireBaron baron = new EntityVampireBaron(world);
         baron.setLocationAndAngles(x + 0.5D, y + 1, z + 0.5D, rand.nextFloat() * 360.0F, 0.0F);
         baron.onSpawnWithEgg(null);
+        int bLevel = 2 + rand.nextInt(3); // Level 2, 3, or 4 in underground crypts
+        baron.setEntityLevel(bLevel);
         baron.setHomeArea(x, y + 1, z, 8);
         baron.func_110163_bv();
         world.spawnEntityInWorld(baron);
@@ -101,6 +113,22 @@ public class WorldGenVampireCrypt extends WorldGenerator {
         return true;
     }
 
+    /**
+     * Canonical 2-block multiblock placement for Coffin: foot at (x, y, z) and head at (x+dx, y, z+dz).
+     */
+    public static void placeCoffin(World world, int x, int y, int z, int dir, Block coffinBlock) {
+        if (coffinBlock == null) return;
+        int dx = 0;
+        int dz = 0;
+        if (dir == 0) dz = 1;       // South
+        else if (dir == 1) dx = -1; // West
+        else if (dir == 2) dz = -1; // North
+        else if (dir == 3) dx = 1;  // East
+
+        world.setBlock(x, y, z, coffinBlock, dir, 2);
+        world.setBlock(x + dx, y, z + dz, coffinBlock, dir | 8, 2);
+    }
+
     private void placeCryptChest(World world, Random rand, int cx, int cy, int cz) {
         world.setBlock(cx, cy, cz, Blocks.chest, 0, 2);
         TileEntityChest chest = (TileEntityChest) world.getTileEntity(cx, cy, cz);
@@ -110,7 +138,7 @@ public class WorldGenVampireCrypt extends WorldGenerator {
                 chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.vampireBook));
             }
             if (ModItems.pureBlood != null && rand.nextFloat() < 0.7F) {
-                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.pureBlood, 1 + rand.nextInt(2)));
+                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.pureBlood, 1 + rand.nextInt(2), 2 + rand.nextInt(3)));
             }
             if (ModItems.vampireFang != null) {
                 chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.vampireFang, 2 + rand.nextInt(4)));

@@ -43,6 +43,24 @@ public class VampireCombatEventHandler {
                 ModLogger.combat("Vampire player %s took increased fire damage: %.1f -> %.1f (+%.0f%%)",
                     target.getCommandSenderName(), oldAmt, event.ammount, extraMod * 100.0D);
             }
+
+            // Half Invulnerable skill: cap incoming hits exceeding 40% max HP
+            com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get((EntityPlayer) target);
+            if (ah != null && ah.isActive(com.marrybye.neorism.common.action.ActionRegistry.getAction("half_invulnerable"))) {
+                float threshold = target.getMaxHealth() * 0.40F;
+                if (event.ammount >= threshold && event.ammount < 999.0F) {
+                    com.marrybye.neorism.common.vampire.VampirePlayer vp = com.marrybye.neorism.common.vampire.VampirePlayer.get((EntityPlayer) target);
+                    if (vp != null && vp.getBloodStats().getBloodLevel() >= 4) {
+                        vp.getBloodStats().consumeBlood(4);
+                        event.ammount = Math.min(event.ammount, threshold);
+                        ModSounds.playAtEntity(target, ModSounds.BEAM_ENTER, 0.8F, 1.2F);
+                        ModLogger.combat("Vampire %s mitigated large hit via Half Invulnerable: capped at %.1f",
+                            target.getCommandSenderName(), event.ammount);
+                    } else {
+                        ah.deactivateAction(com.marrybye.neorism.common.action.ActionRegistry.getAction("half_invulnerable"));
+                    }
+                }
+            }
         }
 
         // Shield blocking check (Et-Futurum shield mitigation)
@@ -69,9 +87,23 @@ public class VampireCombatEventHandler {
             }
         }
 
-        // Sweeping attack for Heartseeker / Heartstriker
+        // Sweeping attack for Heartseeker / Heartstriker & Sword Finisher / Stake2
         if (source.getEntity() instanceof EntityPlayer) {
             EntityPlayer attacker = (EntityPlayer) source.getEntity();
+            com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get(attacker);
+            if (sh != null) {
+                if (sh.isSkillUnlocked("sword_finisher") && target.getHealth() <= target.getMaxHealth() * 0.25F) {
+                    float oldAmt = event.ammount;
+                    event.ammount *= 1.50F;
+                    ModLogger.combat("Attacker %s executed Sword Finisher on %s (%.1f -> %.1f)",
+                        attacker.getCommandSenderName(), target.getCommandSenderName(), oldAmt, event.ammount);
+                }
+                if (sh.isSkillUnlocked("stake2") && Helper.isVampire(target)) {
+                    if (attacker.getHeldItem() != null && attacker.getHeldItem().getItem() instanceof com.marrybye.neorism.common.items.ItemStake) {
+                        event.ammount *= 1.40F;
+                    }
+                }
+            }
             if (com.marrybye.neorism.common.integration.IntegrationManager.isCombatBackportLoaded()) {
                 com.marrybye.neorism.common.integration.CombatBackportIntegration.triggerSweepAttack(attacker, target, event.ammount);
             }

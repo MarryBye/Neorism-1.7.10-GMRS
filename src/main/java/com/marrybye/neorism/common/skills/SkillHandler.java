@@ -202,6 +202,27 @@ public class SkillHandler implements IExtendedEntityProperties {
             if ("summon_bats".equals(actionId) || "summon_bat".equals(actionId)) {
                 return isSkillUnlocked("summon_bats") || isSkillUnlocked("summon_bat");
             }
+            if ("jump_boost".equals(actionId)) {
+                return isSkillUnlocked("vampire_jump") || isSkillUnlocked("jump_boost");
+            }
+            if ("dark_stalker".equals(actionId)) {
+                return isSkillUnlocked("dark_stalker");
+            }
+            if ("infect".equals(actionId)) {
+                return isSkillUnlocked("no_longer_fledgling") || isSkillUnlocked("fledgling");
+            }
+            if ("lord_speed".equals(actionId)) {
+                return Helper.getLordLevel(player) > 0 && (isSkillUnlocked("vampire_lord_speed") || isSkillUnlocked("lord_speed"));
+            }
+            if ("blood_vision".equals(actionId)) {
+                return isSkillUnlocked("blood_vision");
+            }
+            if ("half_invulnerable".equals(actionId)) {
+                return isSkillUnlocked("half_invulnerable");
+            }
+            if ("hissing".equals(actionId)) {
+                return isSkillUnlocked("hissing");
+            }
             return isSkillUnlocked(actionId);
         }
 
@@ -216,6 +237,12 @@ public class SkillHandler implements IExtendedEntityProperties {
             }
             if ("disguise_hunter".equals(actionId) || "hunter_disguise".equals(actionId)) {
                 return isSkillUnlocked("hunter_disguise") || isSkillUnlocked("disguise_hunter");
+            }
+            if ("lord_attack_speed".equals(actionId)) {
+                return Helper.getLordLevel(player) > 0;
+            }
+            if ("lord_speed".equals(actionId)) {
+                return Helper.getLordLevel(player) > 0;
             }
             return isSkillUnlocked(actionId);
         }
@@ -245,6 +272,10 @@ public class SkillHandler implements IExtendedEntityProperties {
             case "vampire_disguise":
             case "half_invulnerable":
             case "hissing":
+            case "jump_boost":
+            case "dark_stalker":
+            case "infect":
+            case "lord_speed":
                 return true;
             default:
                 return false;
@@ -260,6 +291,8 @@ public class SkillHandler implements IExtendedEntityProperties {
             case "potion_resistance_hunter":
             case "disguise_hunter":
             case "hunter_disguise":
+            case "lord_attack_speed":
+            case "lord_speed":
                 return true;
             default:
                 return false;

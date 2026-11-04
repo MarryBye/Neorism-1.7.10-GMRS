@@ -266,4 +266,10 @@ public class TileEntityAltarInspiration extends TileEntityNeorism implements IFl
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
         return new FluidTankInfo[]{tank.getInfo()};
     }
+
+    @Override
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public net.minecraft.util.AxisAlignedBB getRenderBoundingBox() {
+        return net.minecraft.util.AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1.0D, yCoord + 1.5D, zCoord + 1.0D);
+    }
 }

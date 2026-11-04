@@ -8,24 +8,21 @@ import net.minecraft.util.ChatComponentTranslation;
 
 /**
  * Vampire Disguise action. Conceals the vampire as human.
- * Ported 1:1 from TeamLapen's DisguiseVampireAction.
+ * Canonical port of TeamLapen's DisguiseVampireAction.
  */
 public class DisguiseVampireAction extends ActionBase {
 
     public DisguiseVampireAction() {
-        super("disguise_vampire", 200, -1, true, 0);
+        super("disguise_vampire", 1200, 1200, true, 0);
     }
 
     @Override
     public boolean onActivated(EntityPlayer player) {
         FactionPlayerHandler fph = FactionPlayerHandler.get(player);
         if (fph != null) {
-            boolean nextState = !fph.isDisguised();
-            fph.setDisguised(nextState);
+            fph.setDisguised(true);
             if (!player.worldObj.isRemote) {
-                player.addChatMessage(new ChatComponentTranslation(
-                    nextState ? "chat.neorism.disguise_activated" : "chat.neorism.disguise_deactivated"
-                ));
+                player.addChatMessage(new ChatComponentTranslation("chat.neorism.disguise_activated"));
             }
             return true;
         }
@@ -35,8 +32,11 @@ public class DisguiseVampireAction extends ActionBase {
     @Override
     public void onDeactivated(EntityPlayer player) {
         FactionPlayerHandler fph = FactionPlayerHandler.get(player);
-        if (fph != null && fph.isDisguised()) {
+        if (fph != null) {
             fph.setDisguised(false);
+            if (!player.worldObj.isRemote) {
+                player.addChatMessage(new ChatComponentTranslation("chat.neorism.disguise_deactivated"));
+            }
         }
     }
 }

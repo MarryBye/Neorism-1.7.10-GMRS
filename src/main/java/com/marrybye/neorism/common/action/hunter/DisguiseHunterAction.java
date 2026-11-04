@@ -7,25 +7,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentTranslation;
 
 /**
- * Hunter Disguise action. Conceals the hunter from mobs and reduces detection radius.
- * Ported 1:1 from TeamLapen's DisguiseHunterAction.
+ * Hunter Disguise action. Conceals the hunter as a villager.
+ * Canonical port of TeamLapen's DisguiseHunterAction.
  */
 public class DisguiseHunterAction extends ActionBase {
 
     public DisguiseHunterAction() {
-        super("disguise_hunter", 0, -1, true, 0);
+        super("disguise_hunter", 1200, 1200, true, 0);
     }
 
     @Override
     public boolean onActivated(EntityPlayer player) {
         FactionPlayerHandler fph = FactionPlayerHandler.get(player);
         if (fph != null) {
-            boolean nextState = !fph.isDisguised();
-            fph.setDisguised(nextState);
+            fph.setDisguised(true);
             if (!player.worldObj.isRemote) {
-                player.addChatMessage(new ChatComponentTranslation(
-                    nextState ? "chat.neorism.disguise_activated" : "chat.neorism.disguise_deactivated"
-                ));
+                player.addChatMessage(new ChatComponentTranslation("chat.neorism.disguise_activated"));
             }
             return true;
         }
@@ -35,8 +32,11 @@ public class DisguiseHunterAction extends ActionBase {
     @Override
     public void onDeactivated(EntityPlayer player) {
         FactionPlayerHandler fph = FactionPlayerHandler.get(player);
-        if (fph != null && fph.isDisguised()) {
+        if (fph != null) {
             fph.setDisguised(false);
+            if (!player.worldObj.isRemote) {
+                player.addChatMessage(new ChatComponentTranslation("chat.neorism.disguise_deactivated"));
+            }
         }
     }
 }

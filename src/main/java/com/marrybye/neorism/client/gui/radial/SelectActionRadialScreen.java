@@ -87,7 +87,8 @@ public class SelectActionRadialScreen extends GuiRadialMenu {
         if (ah == null) return;
 
         for (int i = 0; i < numberOfSlices; i++) {
-            IRadialMenuSlot slot = slots.get(i);
+            // Same slice -> slot mapping as GuiRadialMenu#drawScreen (slot 0 is drawn at the top)
+            IRadialMenuSlot slot = slots.get((i + numberOfSlices / 2) % numberOfSlices);
             IAction action = slot.getAction();
             if (action == null) continue;
 
@@ -100,7 +101,7 @@ public class SelectActionRadialScreen extends GuiRadialMenu {
             } else if (ah.isOnCooldown(action)) {
                 int cdRemain = ah.getCooldownRemaining(action);
                 int cdTotal = action.getCooldown(player);
-                float fraction = cdTotal > 0 ? (float) cdRemain / cdTotal : 0.5f;
+                float fraction = cdTotal > 0 ? Math.min(1.0f, (float) cdRemain / cdTotal) : 0.5f;
                 float cooldownRadius = radiusIn + (radiusOut - radiusIn) * fraction;
                 // Red/dark cooldown shade
                 drawSlice(centerX, centerY, 0, radiusIn, cooldownRadius, sliceLeft, sliceRight, 200, 50, 50, 110);

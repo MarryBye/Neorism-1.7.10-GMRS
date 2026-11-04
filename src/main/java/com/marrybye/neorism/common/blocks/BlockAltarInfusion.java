@@ -85,6 +85,9 @@ public class BlockAltarInfusion extends BlockModeled implements ITileEntityProvi
         TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof TileEntityAltarInfusion) {
             TileEntityAltarInfusion altar = (TileEntityAltarInfusion) te;
+            if (altar.isRunning()) {
+                altar.endRitual();
+            }
             for (int i = 0; i < altar.getSizeInventory(); i++) {
                 ItemStack stack = altar.getStackInSlot(i);
                 if (stack != null && !world.isRemote) {
