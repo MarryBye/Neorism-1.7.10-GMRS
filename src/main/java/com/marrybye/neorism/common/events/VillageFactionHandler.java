@@ -63,12 +63,28 @@ public class VillageFactionHandler {
         EntityVillager villager = (EntityVillager) event.target;
         World world = player.worldObj;
 
-        TileEntityTotem totem = getNearbyTotem(world, villager.posX, villager.posY, villager.posZ, 48.0D);
-        if (totem == null) return;
+        TileEntityTotem totem = getNearbyTotem(world, villager.posX, villager.posY, villager.posZ, 64.0D);
+        int controllingFaction = totem != null ? totem.getControllingFactionId() : TileEntityTotem.FACTION_NEUTRAL;
 
-        int controllingFaction = totem.getControllingFactionId();
+        boolean isVampire = Helper.isVampire(player);
+        boolean isHunter = Helper.isHunter(player);
 
-        if (controllingFaction == TileEntityTotem.FACTION_VAMPIRE && Helper.isVampire(player)) {
+        // Rule 1: In neutral territory (no totem or FACTION_NEUTRAL), only Humans and Hunters can trade. Vampires CANNOT.
+        if (controllingFaction == TileEntityTotem.FACTION_NEUTRAL) {
+            if (isVampire) {
+                event.setCanceled(true);
+                player.addChatMessage(new ChatComponentTranslation("chat.neorism.villager_vampire_trade_refused"));
+                return;
+            }
+        }
+        // Rule 2: In Vampire territory, only Vampires can trade. Humans and Hunters CANNOT.
+        else if (controllingFaction == TileEntityTotem.FACTION_VAMPIRE) {
+            if (!isVampire) {
+                event.setCanceled(true);
+                player.addChatMessage(new ChatComponentTranslation("chat.neorism.converted_villager_refuse_human"));
+                return;
+            }
+
             // Vampire territory: shift-right-click feeds on villager peacefully
             if (player.isSneaking() && player.getCurrentEquippedItem() == null) {
                 VampirePlayer vp = VampirePlayer.get(player);
@@ -79,9 +95,22 @@ public class VillageFactionHandler {
                     event.setCanceled(true);
                     ModLogger.debug("Vampire %s peacefully drank blood in Vampire village at [%d, %d, %d]",
                         player.getCommandSenderName(), (int) villager.posX, (int) villager.posY, (int) villager.posZ);
+                    return;
                 }
             }
-        } else if (controllingFaction == TileEntityTotem.FACTION_HUNTER && Helper.isHunter(player)) {
+        }
+        // Rule 3: In Hunter territory, only Hunters can trade.
+        else if (controllingFaction == TileEntityTotem.FACTION_HUNTER) {
+            if (!isHunter) {
+                event.setCanceled(true);
+                if (isVampire) {
+                    player.addChatMessage(new ChatComponentTranslation("chat.neorism.hunter_village_vampire_refused"));
+                } else {
+                    player.addChatMessage(new ChatComponentTranslation("chat.neorism.hunter_village_human_refused"));
+                }
+                return;
+            }
+
             // Hunter territory: friendly greeting and trade discount
             if (com.marrybye.neorism.common.integration.IntegrationManager.isVillagerTradesLoaded()) {
                 com.marrybye.neorism.common.integration.VillagerTradesBackportIntegration.applyHunterDiscounts(villager, player);

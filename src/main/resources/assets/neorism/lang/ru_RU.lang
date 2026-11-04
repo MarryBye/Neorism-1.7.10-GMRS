@@ -5584,6 +5584,10 @@ chat.neorism.injection_already_hunter=Вы уже состоите в орден
 chat.neorism.fang_already_vampire=Вампир не может повторно заразиться собственным ядом.
 chat.neorism.fang_already_infected=В ваших венах уже кипит вирус Сангвинаре. Ждите завершения инкубации.
 chat.neorism.fang_pricked=Вы укололи палец о клык вампира... Сангвинаре Вампирис медленно проникает в кровь!
+chat.neorism.villager_vampire_trade_refused=Житель в ужасе пятится от ваших клыков и отказывается торговать!
+chat.neorism.converted_villager_refuse_human=Бледный житель злобно шипит, обнажая острые зубы, и отказывается торговать со смертными.
+chat.neorism.hunter_village_vampire_refused=Стражники-охотники целятся в вас из арбалетов: «Вампирам здесь не рады!»
+chat.neorism.hunter_village_human_refused=Форпост охотников ведёт дела только с членами Гильдии Охотников.
 
 # Skills & Keys
 key.neorism.skills=Древо навыков фракции

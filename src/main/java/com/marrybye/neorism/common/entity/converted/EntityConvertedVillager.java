@@ -56,8 +56,12 @@ public class EntityConvertedVillager extends EntityVillager implements IVampireE
             return true;
         }
 
-        if (Helper.isHunter(player)) {
-            player.addChatMessage(new ChatComponentTranslation("chat.neorism.converted_villager_fear_hunter"));
+        if (!Helper.isVampire(player)) {
+            if (Helper.isHunter(player)) {
+                player.addChatMessage(new ChatComponentTranslation("chat.neorism.converted_villager_fear_hunter"));
+            } else {
+                player.addChatMessage(new ChatComponentTranslation("chat.neorism.converted_villager_refuse_human"));
+            }
             return true;
         }
 

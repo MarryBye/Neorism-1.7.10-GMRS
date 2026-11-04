@@ -5581,6 +5581,10 @@ chat.neorism.totem_raid_captured=The village has been conquered by the %s!
 chat.neorism.totem_raid_defended=The village defenders successfully repelled the invaders!
 chat.neorism.peaceful_feed=You drink blood peacefully from the cooperative villager.
 chat.neorism.villager_hunter_greeting=Greetings, Hunter! Our village is safe thanks to your guild.
+chat.neorism.villager_vampire_trade_refused=The villager recoils in terror from your fangs and refuses to trade!
+chat.neorism.converted_villager_refuse_human=The pale villager hisses through sharp teeth, refusing to trade with mortals.
+chat.neorism.hunter_village_vampire_refused=The hunter guards glare at you with loaded crossbows: "Vampires are not welcome here!"
+chat.neorism.hunter_village_human_refused=The hunter outpost deals strictly with licensed members of the Hunter Guild.
 
 entity.neorism.vampire.name=Vampire
 entity.neorism.advanced_vampire.name=Advanced Vampire

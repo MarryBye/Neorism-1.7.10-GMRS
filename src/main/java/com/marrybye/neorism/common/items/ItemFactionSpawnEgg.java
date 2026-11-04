@@ -12,6 +12,7 @@ import com.marrybye.neorism.common.entity.vampire.EntityAdvancedVampire;
 import com.marrybye.neorism.common.entity.vampire.EntityVampire;
 import com.marrybye.neorism.common.entity.vampire.EntityVampireBaron;
 import com.marrybye.neorism.common.entity.vampire.EntityVampireBaroness;
+import com.marrybye.neorism.common.entity.vampire.EntityVampireTaskmaster;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -88,14 +89,16 @@ public class ItemFactionSpawnEgg extends ItemNeorism {
     private static Entity createRandomEntity(World world, Type type) {
         if (type == Type.VAMPIRE) {
             int roll = rand.nextInt(100);
-            if (roll < 60) {
+            if (roll < 55) {
                 return new EntityVampire(world);
-            } else if (roll < 85) {
+            } else if (roll < 78) {
                 return new EntityAdvancedVampire(world);
-            } else if (roll < 95) {
+            } else if (roll < 88) {
                 return new EntityVampireBaron(world);
-            } else {
+            } else if (roll < 94) {
                 return new EntityVampireBaroness(world);
+            } else {
+                return new EntityVampireTaskmaster(world);
             }
         } else {
             int roll = rand.nextInt(100);

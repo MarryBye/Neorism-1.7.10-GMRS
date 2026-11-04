@@ -1,5 +1,7 @@
 package com.marrybye.neorism.common.entity.vampire;
 
+import java.util.Random;
+
 import com.marrybye.neorism.api.entity.IVampireEntity;
 import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.entity.ai.EntityAIHurtByTargetFaction;
@@ -33,6 +35,14 @@ public class EntityVampireBaron extends EntityVampireBase {
     private static final int WATCHER_LADY = 21;
     private static final int WATCHER_ENRAGED = 22;
 
+    public static final int ABILITY_NONE = 0;
+    public static final int ABILITY_BAT_SWARM = 1;
+    public static final int ABILITY_BLOOD_SIPHON = 2;
+    public static final int ABILITY_SHADOW_DASH = 3;
+    public static final int ABILITY_VAMPIRE_RAGE = 4;
+
+    private int specialAbility = ABILITY_NONE;
+    private int abilityCooldown = 80;
     private int castCooldown = 40;
     private String baronBaseName = null;
 
@@ -201,6 +211,20 @@ public class EntityVampireBaron extends EntityVampireBase {
         return flag;
     }
 
+    public void initSpecialAbility() {
+        if (this.specialAbility == ABILITY_NONE) {
+            this.specialAbility = 1 + this.rand.nextInt(4);
+        }
+    }
+
+    public int getSpecialAbility() {
+        return this.specialAbility;
+    }
+
+    public void setSpecialAbility(int ability) {
+        this.specialAbility = ability;
+    }
+
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
@@ -209,11 +233,19 @@ public class EntityVampireBaron extends EntityVampireBase {
             if (this.baronBaseName == null) {
                 generateBaronName();
             }
+            if (this.specialAbility == ABILITY_NONE) {
+                initSpecialAbility();
+            }
 
             EntityLivingBase target = this.getAttackTarget();
 
             if (target != null && target.isEntityAlive()) {
                 double distSq = this.getDistanceSqToEntity(target);
+
+                // Special Combat Ability execution
+                if (--abilityCooldown <= 0) {
+                    useSpecialAbility(target, distSq);
+                }
 
                 // Ranged Dark Blood Projectile attack (canonical BaronAIAttackRanged)
                 if (--castCooldown <= 0 && distSq > 16.0D && distSq < 400.0D && this.canEntityBeSeen(target)) {
@@ -224,6 +256,86 @@ public class EntityVampireBaron extends EntityVampireBase {
                     castCooldown = 50 + this.rand.nextInt(20);
                 }
             }
+        }
+    }
+
+    private void useSpecialAbility(EntityLivingBase target, double distSq) {
+        switch (this.specialAbility) {
+            case ABILITY_BAT_SWARM: {
+                if (distSq < 256.0D && this.canEntityBeSeen(target)) {
+                    this.worldObj.playSoundAtEntity(this, "mob.bat.takeoff", 1.2F, 0.8F);
+                    this.worldObj.playSoundAtEntity(target, "mob.wither.shoot", 0.7F, 1.4F);
+                    target.addPotionEffect(new PotionEffect(Potion.blindness.id, 80, 0));
+                    target.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 80, 1));
+                    for (int i = 0; i < 4; i++) {
+                        net.minecraft.entity.passive.EntityBat bat = new net.minecraft.entity.passive.EntityBat(this.worldObj);
+                        bat.setPosition(target.posX + (this.rand.nextDouble() - 0.5D) * 3.0D,
+                            target.posY + 1.0D + this.rand.nextDouble() * 1.5D,
+                            target.posZ + (this.rand.nextDouble() - 0.5D) * 3.0D);
+                        this.worldObj.spawnEntityInWorld(bat);
+                    }
+                    this.swingItem();
+                    abilityCooldown = 180 + this.rand.nextInt(60);
+                    ModLogger.combat("Vampire Baron %s unleashed Bat Swarm on %s", this.getCommandSenderName(), target.getCommandSenderName());
+                }
+                break;
+            }
+            case ABILITY_BLOOD_SIPHON: {
+                if (this.getHealth() < this.getMaxHealth() * 0.75F && distSq < 144.0D) {
+                    this.worldObj.playSoundAtEntity(this, "random.drink", 1.0F, 0.8F);
+                    this.worldObj.playSoundAtEntity(this, "mob.endermen.scream", 0.7F, 0.6F);
+                    target.attackEntityFrom(net.minecraft.util.DamageSource.magic, 4.0F);
+                    this.heal(18.0F);
+                    this.addPotionEffect(new PotionEffect(Potion.regeneration.id, 60, 1));
+                    if (this.worldObj instanceof net.minecraft.world.WorldServer) {
+                        net.minecraft.world.WorldServer ws = (net.minecraft.world.WorldServer) this.worldObj;
+                        ws.func_147487_a("heart", this.posX, this.posY + 1.8D, this.posZ, 8, 0.4D, 0.4D, 0.4D, 0.0D);
+                        ws.func_147487_a("reddust", target.posX, target.posY + 1.0D, target.posZ, 12, 0.3D, 0.5D, 0.3D, 0.0D);
+                    }
+                    abilityCooldown = 220 + this.rand.nextInt(80);
+                    ModLogger.combat("Vampire Baron %s channeled Blood Siphon on %s", this.getCommandSenderName(), target.getCommandSenderName());
+                }
+                break;
+            }
+            case ABILITY_SHADOW_DASH: {
+                if (distSq > 36.0D && this.canEntityBeSeen(target)) {
+                    double yawRad = Math.toRadians(target.rotationYaw);
+                    double nx = target.posX - Math.sin(yawRad) * 2.2D;
+                    double nz = target.posZ + Math.cos(yawRad) * 2.2D;
+                    double ny = target.posY;
+
+                    this.worldObj.playSoundAtEntity(this, "mob.endermen.portal", 1.0F, 0.8F);
+                    if (this.worldObj instanceof net.minecraft.world.WorldServer) {
+                        net.minecraft.world.WorldServer ws = (net.minecraft.world.WorldServer) this.worldObj;
+                        ws.func_147487_a("largesmoke", this.posX, this.posY + 1.0D, this.posZ, 15, 0.3D, 0.5D, 0.3D, 0.05D);
+                        ws.func_147487_a("portal", nx, ny + 1.0D, nz, 20, 0.4D, 0.6D, 0.4D, 0.1D);
+                    }
+                    this.setPositionAndUpdate(nx, ny, nz);
+                    target.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 40, 1));
+                    this.swingItem();
+                    abilityCooldown = 160 + this.rand.nextInt(60);
+                    ModLogger.combat("Vampire Baron %s executed Shadow Dash behind %s", this.getCommandSenderName(), target.getCommandSenderName());
+                }
+                break;
+            }
+            case ABILITY_VAMPIRE_RAGE: {
+                if (this.getHealth() < this.getMaxHealth() * 0.5F) {
+                    this.worldObj.playSoundAtEntity(this, "mob.wolf.growl", 1.5F, 0.6F);
+                    this.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 140, 1));
+                    this.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 140, 1));
+                    this.addPotionEffect(new PotionEffect(Potion.resistance.id, 140, 0));
+                    if (this.worldObj instanceof net.minecraft.world.WorldServer) {
+                        net.minecraft.world.WorldServer ws = (net.minecraft.world.WorldServer) this.worldObj;
+                        ws.func_147487_a("flame", this.posX, this.posY + 1.5D, this.posZ, 12, 0.3D, 0.4D, 0.3D, 0.02D);
+                        ws.func_147487_a("angryVillager", this.posX, this.posY + 2.0D, this.posZ, 5, 0.3D, 0.3D, 0.3D, 0.0D);
+                    }
+                    abilityCooldown = 260 + this.rand.nextInt(100);
+                    ModLogger.combat("Vampire Baron %s entered Vampire Rage", this.getCommandSenderName());
+                }
+                break;
+            }
+            default:
+                break;
         }
     }
 
@@ -268,6 +380,7 @@ public class EntityVampireBaron extends EntityVampireBase {
         super.writeEntityToNBT(nbt);
         nbt.setInteger("level", getEntityLevel());
         nbt.setBoolean("lady", isLady());
+        nbt.setInteger("specialAbility", this.specialAbility);
         if (baronBaseName != null) {
             nbt.setString("baronBaseName", baronBaseName);
         }
@@ -282,9 +395,38 @@ public class EntityVampireBaron extends EntityVampireBase {
         if (nbt.hasKey("lady")) {
             setLady(nbt.getBoolean("lady"));
         }
+        if (nbt.hasKey("specialAbility")) {
+            this.specialAbility = nbt.getInteger("specialAbility");
+        }
         if (nbt.hasKey("baronBaseName")) {
             this.baronBaseName = nbt.getString("baronBaseName");
             updateCustomNameTag();
+        }
+    }
+
+    public static int getRandomBaronLevel(World world, double x, double y, double z, Random rand) {
+        EntityPlayer nearest = world.getClosestPlayer(x, y, z, 128.0D);
+        int playerLevel = (nearest != null) ? Helper.getLevel(nearest) : 0;
+        float r = rand.nextFloat();
+        if (playerLevel >= 12) {
+            if (r < 0.15F) return 0;
+            if (r < 0.35F) return 1;
+            if (r < 0.60F) return 2;
+            if (r < 0.85F) return 3;
+            return 4;
+        } else if (playerLevel >= 8) {
+            if (r < 0.25F) return 0;
+            if (r < 0.55F) return 1;
+            if (r < 0.80F) return 2;
+            if (r < 0.94F) return 3;
+            return 4;
+        } else {
+            // Default weighted progression: Tier 1 is common, Tier 5 is rare
+            if (r < 0.38F) return 0; // Tier 1: 38%
+            if (r < 0.65F) return 1; // Tier 2: 27%
+            if (r < 0.83F) return 2; // Tier 3: 18%
+            if (r < 0.94F) return 3; // Tier 4: 11%
+            return 4;                // Tier 5: 6%
         }
     }
 
@@ -310,8 +452,9 @@ public class EntityVampireBaron extends EntityVampireBase {
     public net.minecraft.entity.IEntityLivingData onSpawnWithEgg(net.minecraft.entity.IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
         this.setLady(this.rand.nextBoolean());
-        this.setEntityLevel(this.rand.nextInt(MAX_LEVEL + 1));
+        this.setEntityLevel(getRandomBaronLevel(this.worldObj, this.posX, this.posY, this.posZ, this.rand));
         this.generateBaronName();
+        this.initSpecialAbility();
         return data;
     }
 

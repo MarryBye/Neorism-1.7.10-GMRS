@@ -21,6 +21,7 @@ import com.marrybye.neorism.common.entity.hunter.EntityTaskmaster;
 import com.marrybye.neorism.common.entity.vampire.EntityAdvancedVampire;
 import com.marrybye.neorism.common.entity.vampire.EntityVampire;
 import com.marrybye.neorism.common.entity.vampire.EntityVampireBase;
+import com.marrybye.neorism.common.entity.vampire.EntityVampireTaskmaster;
 import com.marrybye.neorism.common.faction.FactionPlayerHandler;
 import com.marrybye.neorism.common.faction.village.FactionVillage;
 import com.marrybye.neorism.common.util.Helper;
@@ -587,18 +588,17 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
             }
         }
 
-        // Taskmaster spawn
-        List<EntityTaskmaster> taskmasters = this.worldObj.getEntitiesWithinAABB(EntityTaskmaster.class, area);
-        if (taskmasters.isEmpty()) {
-            EntityTaskmaster tm = new EntityTaskmaster(this.worldObj);
-            tm.onSpawnWithEgg(null);
-            tm.setHomeArea(this.xCoord, this.yCoord, this.zCoord, 24);
-            tm.func_110163_bv();
-            spawnEntityInVillage(tm);
-        }
-
-        // Hunter Trainer & Guards
+        // Faction-specific Taskmaster and Trainer/Guard spawn
         if (this.controllingFactionId == FACTION_HUNTER) {
+            List<EntityTaskmaster> taskmasters = this.worldObj.getEntitiesWithinAABB(EntityTaskmaster.class, area);
+            if (taskmasters.isEmpty()) {
+                EntityTaskmaster tm = new EntityTaskmaster(this.worldObj);
+                tm.onSpawnWithEgg(null);
+                tm.setHomeArea(this.xCoord, this.yCoord, this.zCoord, 24);
+                tm.func_110163_bv();
+                spawnEntityInVillage(tm);
+            }
+
             List<EntityHunterTrainer> trainers = this.worldObj.getEntitiesWithinAABB(EntityHunterTrainer.class, area);
             if (trainers.isEmpty()) {
                 EntityHunterTrainer trainer = new EntityHunterTrainer(this.worldObj);
@@ -613,6 +613,15 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
                 spawnCaptureEntity(FACTION_HUNTER);
             }
         } else if (this.controllingFactionId == FACTION_VAMPIRE) {
+            List<EntityVampireTaskmaster> taskmasters = this.worldObj.getEntitiesWithinAABB(EntityVampireTaskmaster.class, area);
+            if (taskmasters.isEmpty()) {
+                EntityVampireTaskmaster tm = new EntityVampireTaskmaster(this.worldObj);
+                tm.onSpawnWithEgg(null);
+                tm.setHomeArea(this.xCoord, this.yCoord, this.zCoord, 24);
+                tm.func_110163_bv();
+                spawnEntityInVillage(tm);
+            }
+
             List<EntityVampireBase> guards = this.worldObj.getEntitiesWithinAABB(EntityVampireBase.class, area);
             if (guards.size() < 6) {
                 spawnCaptureEntity(FACTION_VAMPIRE);
@@ -636,7 +645,7 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
 
         for (EntityLivingBase entity : entities) {
             if (!entity.isEntityAlive()) continue;
-            if (entity instanceof EntityTaskmaster || entity instanceof EntityHunterTrainer) continue;
+            if (entity instanceof EntityTaskmaster || entity instanceof EntityHunterTrainer || entity instanceof EntityVampireTaskmaster) continue;
 
             int fId = getEntityFactionId(entity);
             if (fId == FACTION_NEUTRAL) continue;
@@ -805,27 +814,41 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
     }
 
     private boolean spawnEntityInVillage(EntityCreature entity) {
-        for (int attempt = 0; attempt < 25; attempt++) {
-            double rx = this.xCoord + 0.5D + (this.worldObj.rand.nextDouble() - 0.5D) * 36.0D;
-            double rz = this.zCoord + 0.5D + (this.worldObj.rand.nextDouble() - 0.5D) * 36.0D;
+        for (int attempt = 0; attempt < 35; attempt++) {
+            // Pick an angle and distance between 4 and 16 blocks away from totem to prevent stacking
+            double angle = this.worldObj.rand.nextDouble() * Math.PI * 2.0D;
+            double distance = 4.0D + this.worldObj.rand.nextDouble() * 12.0D;
+            double rx = this.xCoord + 0.5D + Math.cos(angle) * distance;
+            double rz = this.zCoord + 0.5D + Math.sin(angle) * distance;
             int bx = MathHelper.floor_double(rx);
             int bz = MathHelper.floor_double(rz);
             int by = this.worldObj.getTopSolidOrLiquidBlock(bx, bz);
-            if (by <= 0 || Math.abs(by - this.yCoord) > 18) {
+            if (by <= 0 || Math.abs(by - this.yCoord) > 16) {
                 by = this.yCoord;
             }
             Block ground = this.worldObj.getBlock(bx, by - 1, bz);
-            if (ground != null && ground.getMaterial().isSolid() && this.worldObj.isAirBlock(bx, by, bz) && this.worldObj.isAirBlock(bx, by + 1, bz)) {
+            if (ground != null && ground.getMaterial().isSolid()
+                && !this.worldObj.getBlock(bx, by, bz).getMaterial().isLiquid()
+                && this.worldObj.isAirBlock(bx, by, bz)
+                && this.worldObj.isAirBlock(bx, by + 1, bz)) {
                 entity.setLocationAndAngles(bx + 0.5D, by, bz + 0.5D, this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+                entity.motionX = (this.worldObj.rand.nextDouble() - 0.5D) * 0.1D;
+                entity.motionZ = (this.worldObj.rand.nextDouble() - 0.5D) * 0.1D;
                 this.worldObj.spawnEntityInWorld(entity);
                 return true;
             }
         }
-        entity.setLocationAndAngles(
-            this.xCoord + 0.5D + (this.worldObj.rand.nextDouble() - 0.5D) * 6.0D,
-            this.yCoord,
-            this.zCoord + 0.5D + (this.worldObj.rand.nextDouble() - 0.5D) * 6.0D,
-            this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+        // Fallback: spawn 4-6 blocks away at surface level (NEVER directly at totem xCoord, yCoord, zCoord)
+        double fallbackAngle = this.worldObj.rand.nextDouble() * Math.PI * 2.0D;
+        int fx = MathHelper.floor_double(this.xCoord + 0.5D + Math.cos(fallbackAngle) * 5.0D);
+        int fz = MathHelper.floor_double(this.zCoord + 0.5D + Math.sin(fallbackAngle) * 5.0D);
+        int fy = this.worldObj.getTopSolidOrLiquidBlock(fx, fz);
+        if (fy <= 0 || Math.abs(fy - this.yCoord) > 16) {
+            fy = this.yCoord;
+        }
+        entity.setLocationAndAngles(fx + 0.5D, fy, fz + 0.5D, this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+        entity.motionX = (this.worldObj.rand.nextDouble() - 0.5D) * 0.1D;
+        entity.motionZ = (this.worldObj.rand.nextDouble() - 0.5D) * 0.1D;
         this.worldObj.spawnEntityInWorld(entity);
         return true;
     }
@@ -886,6 +909,10 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
             for (EntityHunterTrainer t : trainers) {
                 t.setDead();
             }
+            List<EntityTaskmaster> taskmasters = this.worldObj.getEntitiesWithinAABB(EntityTaskmaster.class, area);
+            for (EntityTaskmaster tm : taskmasters) {
+                tm.setDead();
+            }
         } else if (newFactionId == FACTION_HUNTER) {
             // Canonical Hunter capture: cure converted villagers, apply garlic blood protection, spawn Hunter Trainer
             for (EntityVillager v : new ArrayList<EntityVillager>(villagers)) {
@@ -904,6 +931,10 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
                 if (ext != null) {
                     ext.setPoisonousBlood(ExtendedCreature.POISONOUS_BLOOD_DOSE_DURATION);
                 }
+            }
+            List<EntityVampireTaskmaster> vTaskmasters = this.worldObj.getEntitiesWithinAABB(EntityVampireTaskmaster.class, area);
+            for (EntityVampireTaskmaster vtm : vTaskmasters) {
+                vtm.setDead();
             }
         }
 

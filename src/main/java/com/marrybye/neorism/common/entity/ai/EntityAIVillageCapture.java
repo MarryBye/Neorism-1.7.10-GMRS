@@ -60,9 +60,11 @@ public class EntityAIVillageCapture extends EntityAIBase {
     @Override
     public void startExecuting() {
         this.creature.setAttackTarget(this.targetMob);
-        ICaptureAttributes info = this.captureEntity.getCaptureInfo();
-        if (info != null && this.creature.getNavigator().noPath()) {
-            this.creature.getNavigator().tryMoveToXYZ(info.getX() + 0.5D, info.getY(), info.getZ() + 0.5D, 1.0D);
+        if (this.captureEntity.isAttackingVillage()) {
+            ICaptureAttributes info = this.captureEntity.getCaptureInfo();
+            if (info != null && this.creature.getNavigator().noPath()) {
+                this.creature.getNavigator().tryMoveToXYZ(info.getX() + 0.5D, info.getY(), info.getZ() + 0.5D, 1.0D);
+            }
         }
     }
 

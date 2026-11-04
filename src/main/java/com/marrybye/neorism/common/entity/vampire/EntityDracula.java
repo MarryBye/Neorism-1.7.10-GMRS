@@ -10,6 +10,7 @@ import com.marrybye.neorism.api.entity.IVampireEntity;
 import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.entity.projectile.EntityDarkBloodProjectile;
+import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 import com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager;
 
@@ -23,10 +24,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 /**
@@ -150,13 +154,21 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
                         summonVampireMinion();
                     }
                 } else if (phase == 2) {
-                    // Phase 2: Barrage of dark blood projectiles
-                    if (phaseCooldown <= 0 && distSq > 9.0D && distSq < 400.0D && this.canEntityBeSeen(target)) {
-                        fireBloodBarrage(target);
-                        phaseCooldown = 40;
+                    // Phase 2: Barrage of dark blood projectiles, Bat Swarm Dash & Backstab
+                    if (phaseCooldown <= 0 && this.canEntityBeSeen(target)) {
+                        if (distSq > 36.0D && this.rand.nextInt(3) == 0) {
+                            backstabTeleport(target);
+                            phaseCooldown = 40;
+                        } else if (distSq < 100.0D && this.rand.nextInt(3) == 0) {
+                            batSwarmDash(target);
+                            phaseCooldown = 50;
+                        } else if (distSq > 9.0D && distSq < 400.0D) {
+                            fireBloodBarrage(target);
+                            phaseCooldown = 35;
+                        }
                     }
                 } else if (phase == 3) {
-                    // Phase 3: Blood Rage particles & Blood Siphon
+                    // Phase 3: Blood Rage particles, Multi-target Blood Siphon & Ring Projectiles
                     if (this.ticksExisted % 10 == 0) {
                         this.worldObj.spawnParticle("flame",
                             this.posX + (this.rand.nextDouble() - 0.5D) * 1.5D,
@@ -164,10 +176,19 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
                             this.posZ + (this.rand.nextDouble() - 0.5D) * 1.5D, 0, 0.05, 0);
                     }
 
-                    // Blood Siphon channel attack
-                    if (phaseCooldown <= 0 && distSq < 144.0D && this.canEntityBeSeen(target)) {
-                        channelBloodSiphon(target);
-                        phaseCooldown = 50;
+                    // Passive regeneration in Phase 3 if injured
+                    if (this.ticksExisted % 40 == 0 && this.getHealth() < this.getMaxHealth() * 0.8F) {
+                        this.heal(3.0F);
+                    }
+
+                    if (phaseCooldown <= 0) {
+                        if (this.rand.nextInt(3) == 0) {
+                            fireRadialBloodRing();
+                            phaseCooldown = 60;
+                        } else if (distSq < 144.0D) {
+                            channelBloodSiphon(target);
+                            phaseCooldown = 45;
+                        }
                     }
                 }
             }
@@ -301,22 +322,117 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
         this.swingItem();
     }
 
-    private void channelBloodSiphon(EntityLivingBase target) {
-        // Drain 4.0F damage from target and heal Dracula
-        target.attackEntityFrom(DamageSource.causeMobDamage(this), 4.0F);
-        this.heal(4.0F);
+    private void backstabTeleport(EntityLivingBase target) {
+        Vec3 look = target.getLookVec();
+        double behindX = target.posX - look.xCoord * 1.5D;
+        double behindY = target.posY;
+        double behindZ = target.posZ - look.zCoord * 1.5D;
 
-        // Visual siphon particles
-        for (int i = 0; i < 5; i++) {
-            double px = target.posX + (this.rand.nextDouble() - 0.5D) * 0.8D;
-            double py = target.posY + this.rand.nextDouble() * 1.5D;
-            double pz = target.posZ + (this.rand.nextDouble() - 0.5D) * 0.8D;
-            double vx = (this.posX - target.posX) * 0.1D;
-            double vy = (this.posY + 1.0D - target.posY) * 0.1D;
-            double vz = (this.posZ - target.posZ) * 0.1D;
-            this.worldObj.spawnParticle("reddust", px, py, pz, vx, vy, vz);
+        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "mob.endermen.portal", 1.5F, 0.8F);
+        this.worldObj.spawnParticle("largesmoke", this.posX, this.posY + 1.0D, this.posZ, 0, 0, 0);
+
+        this.setPositionAndUpdate(behindX, behindY, behindZ);
+        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "mob.endermen.portal", 1.5F, 0.8F);
+        this.worldObj.spawnParticle("largesmoke", this.posX, this.posY + 1.0D, this.posZ, 0, 0, 0);
+
+        this.faceEntity(target, 360.0F, 360.0F);
+        this.attackEntityAsMob(target);
+        this.swingItem();
+        ModLogger.combat("Lord Dracula performed Backstab on %s!", target.getCommandSenderName());
+    }
+
+    private void batSwarmDash(EntityLivingBase target) {
+        double dx = target.posX - this.posX;
+        double dz = target.posZ - this.posZ;
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        if (dist < 0.1D) return;
+
+        double dirX = dx / dist;
+        double dirZ = dz / dist;
+        double destX = target.posX + dirX * 3.5D;
+        double destY = target.posY;
+        double destZ = target.posZ + dirZ * 3.5D;
+
+        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "mob.bat.takeoff", 2.0F, 0.6F);
+
+        // Particle trail & damage along the dash line
+        int steps = (int) Math.ceil(dist + 3.5D) * 2;
+        for (int i = 0; i <= steps; i++) {
+            double px = this.posX + dirX * (dist + 3.5D) * ((double) i / steps);
+            double py = this.posY + 1.0D;
+            double pz = this.posZ + dirZ * (dist + 3.5D) * ((double) i / steps);
+            this.worldObj.spawnParticle("largesmoke", px, py, pz, 0, 0.05, 0);
         }
-        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.eat", 1.0F, 0.6F);
+
+        // Damage and blind entities along path
+        List<?> victims = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class,
+                this.boundingBox.addCoord(dx + dirX * 3.5D, 0.0D, dz + dirZ * 3.5D).expand(1.5D, 1.5D, 1.5D));
+        for (Object obj : victims) {
+            if (obj != this && obj instanceof EntityLivingBase) {
+                EntityLivingBase victim = (EntityLivingBase) obj;
+                if (!Helper.isVampire(victim)) {
+                    victim.attackEntityFrom(DamageSource.causeMobDamage(this), 8.0F);
+                    victim.addPotionEffect(new PotionEffect(Potion.blindness.id, 60, 0));
+                }
+            }
+        }
+
+        this.setPositionAndUpdate(destX, destY, destZ);
+        this.faceEntity(target, 360.0F, 360.0F);
+        this.swingItem();
+        ModLogger.combat("Lord Dracula dashed through %s with bat swarm!", target.getCommandSenderName());
+    }
+
+    private void fireRadialBloodRing() {
+        int count = 8;
+        for (int i = 0; i < count; i++) {
+            double angle = (2.0D * Math.PI * i) / count;
+            double dirX = Math.cos(angle);
+            double dirZ = Math.sin(angle);
+
+            EntityDarkBloodProjectile projectile = new EntityDarkBloodProjectile(this.worldObj, this, 7.5F);
+            projectile.setThrowableHeading(dirX, 0.1D, dirZ, 1.2F, 1.0F);
+            this.worldObj.spawnEntityInWorld(projectile);
+        }
+        this.worldObj.playSoundAtEntity(this, "mob.ghast.fireball", 1.5F, 0.9F);
+        this.swingItem();
+        ModLogger.combat("Lord Dracula unleashed Radial Blood Ring!");
+    }
+
+    private void channelBloodSiphon(EntityLivingBase target) {
+        // Drains blood from living non-vampires within 12 blocks, heals Dracula
+        List<?> victims = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(12.0D, 4.0D, 12.0D));
+        float totalDrained = 0.0F;
+
+        for (Object obj : victims) {
+            if (obj != this && obj instanceof EntityLivingBase) {
+                EntityLivingBase victim = (EntityLivingBase) obj;
+                if (Helper.isVampire(victim)) continue;
+                if (victim instanceof EntityPlayer) {
+                    EntityPlayer p = (EntityPlayer) victim;
+                    if (p.capabilities.isCreativeMode) continue;
+                }
+                if (victim.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this), 3.0F)) {
+                    totalDrained += 3.0F;
+                    // Visual siphon particles towards Dracula
+                    for (int i = 0; i < 4; i++) {
+                        double px = victim.posX + (this.rand.nextDouble() - 0.5D) * 0.8D;
+                        double py = victim.posY + this.rand.nextDouble() * 1.5D;
+                        double pz = victim.posZ + (this.rand.nextDouble() - 0.5D) * 0.8D;
+                        double vx = (this.posX - victim.posX) * 0.1D;
+                        double vy = (this.posY + 1.2D - victim.posY) * 0.1D;
+                        double vz = (this.posZ - victim.posZ) * 0.1D;
+                        this.worldObj.spawnParticle("reddust", px, py, pz, vx, vy, vz);
+                    }
+                }
+            }
+        }
+
+        if (totalDrained > 0.0F) {
+            this.heal(totalDrained * 1.5F);
+            this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.eat", 1.0F, 0.6F);
+            ModLogger.combat("Lord Dracula siphoned %.1f blood and healed %.1f HP!", totalDrained, totalDrained * 1.5F);
+        }
     }
 
     @Override

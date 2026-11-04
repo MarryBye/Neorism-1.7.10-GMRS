@@ -71,7 +71,7 @@ public class ItemBloodFinder extends ItemNeorism {
             int next = (current + 2) % 6 - 1; // cycles -1, 0, 1, 2, 3, 4
             setTargetLevel(stack, next);
 
-            String levelName = next < 0 ? "Любой (1-5)" : String.format("Уровень %d (для Чистой крови %d)", next + 1, next);
+            String levelName = next < 0 ? "Любой (1-5)" : String.format("Уровень %d (Чистая кровь %d ур.)", next + 1, next + 1);
             player.addChatMessage(new ChatComponentText(
                 EnumChatFormatting.DARK_RED + "[Blood Finder] " + EnumChatFormatting.YELLOW + "Целевой ранг: " + EnumChatFormatting.GOLD + levelName));
             world.playSoundAtEntity(player, "random.click", 0.6F, 1.4F);
@@ -127,7 +127,7 @@ public class ItemBloodFinder extends ItemNeorism {
                 }
             }
         } else {
-            String targetDesc = targetLvl < 0 ? "баронов любого уровня" : String.format("баронов ранга %d", targetLvl + 1);
+            String targetDesc = targetLvl < 0 ? "баронов любого уровня" : String.format("баронов ранга %d (Чистая кровь %d ур.)", targetLvl + 1, targetLvl + 1);
             player.addChatMessage(new ChatComponentText(
                 EnumChatFormatting.DARK_GRAY + "[Blood Finder] " + EnumChatFormatting.GRAY + "Поблизости не обнаружено " + targetDesc + " (продолжайте поиски в вампирском лесу)."));
             world.playSoundAtEntity(player, "mob.fizz", 0.4F, 1.2F);
@@ -153,7 +153,7 @@ public class ItemBloodFinder extends ItemNeorism {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean advanced) {
         int targetLvl = getTargetLevel(stack);
-        String levelName = targetLvl < 0 ? "Любой (1-5)" : String.format("Ранг %d (Чистая кровь %d)", targetLvl + 1, targetLvl);
+        String levelName = targetLvl < 0 ? "Любой (1-5)" : String.format("Ранг %d (Чистая кровь %d ур.)", targetLvl + 1, targetLvl + 1);
         list.add(EnumChatFormatting.GRAY + "Отслеживание: " + EnumChatFormatting.GOLD + levelName);
         list.add(EnumChatFormatting.DARK_GRAY + "ПКМ: Сканировать местность в радиусе 160м");
         list.add(EnumChatFormatting.DARK_GRAY + "Shift + ПКМ: Сменить искомый ранг Барона");

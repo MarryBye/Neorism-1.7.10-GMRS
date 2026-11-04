@@ -24,12 +24,14 @@ public class ModWorldGen implements IWorldGenerator {
 
     // Canonical salts and grid spacing/separation from ModStructures.createStructureSets
     private static final int SALT_HUNTER_CAMP = 1724616580;
+    private static final int SALT_HUNTER_OUTPOST = 36413509;
     private static final int SALT_VAMPIRE_ALTAR = 573190874;
     private static final int SALT_CRYPT = 643510199;
     private static final int SALT_VELMORRA_PORTAL = 362367473;
 
     private final WorldGenVampireCrypt cryptGen = new WorldGenVampireCrypt();
     private final WorldGenHunterCamp campGen = new WorldGenHunterCamp();
+    private final WorldGenHunterTower towerGen = new WorldGenHunterTower();
     private final WorldGenVampireAltarRuins altarGen = new WorldGenVampireAltarRuins();
     private final WorldGenVelmorraPortal portalGen = new WorldGenVelmorraPortal();
 
@@ -100,6 +102,18 @@ public class ModWorldGen implements IWorldGenerator {
                 if (world.villageCollectionObj == null || world.villageCollectionObj.findNearestVillage(centerX, 64, centerZ, 48) == null) {
                     if (campGen.generate(world, random, centerX, 0, centerZ)) {
                         ModLogger.spawn("Generated Hunter Camp at (%d, %d)", centerX, centerZ);
+                    }
+                }
+            }
+        }
+
+        // 5. Hunter Outpost Tower: Canonical HUNTER_OUTPOST (spacing = 45, separation = 25, salt = 36413509)
+        // Canonical biomes: Plains, Forest, Desert, Badlands, Vampire Forest
+        if (Config.generateHunterTower && (isValidHunterCampBiome(biome) || isVampireForest)) {
+            if (isStructureChunk(seed, chunkX, chunkZ, 45, 25, SALT_HUNTER_OUTPOST, false)) {
+                if (world.villageCollectionObj == null || world.villageCollectionObj.findNearestVillage(centerX, 64, centerZ, 48) == null) {
+                    if (towerGen.generate(world, random, centerX, 0, centerZ)) {
+                        ModLogger.spawn("Generated Hunter Outpost Tower at (%d, %d)", centerX, centerZ);
                     }
                 }
             }

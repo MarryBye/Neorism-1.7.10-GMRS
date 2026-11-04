@@ -25,6 +25,7 @@ public class Config {
     public static boolean generateVampireForest = true;
     public static boolean generateVampireCrypt = true;
     public static boolean generateHunterCamp = true;
+    public static boolean generateHunterTower = true;
     public static boolean generateAltarRuins = true;
     public static boolean generateDraculaCastle = true;
 
@@ -66,6 +67,12 @@ public class Config {
             CATEGORY_WORLD,
             true,
             "Enable generation of surface Hunter Camps and Outposts"
+        );
+        generateHunterTower = configuration.getBoolean(
+            "generateHunterTower",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of fortified Hunter Watchtowers"
         );
         generateAltarRuins = configuration.getBoolean(
             "generateAltarRuins",
