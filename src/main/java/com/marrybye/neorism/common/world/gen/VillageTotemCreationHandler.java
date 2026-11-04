@@ -131,12 +131,10 @@ public class VillageTotemCreationHandler implements IVillageCreationHandler {
             Block at = world.getBlock(tx, ty, tz);
             Block above = world.getBlock(tx, ty + 1, tz);
 
-            if (ground != null && ground.getMaterial().isSolid()
-                && !ground.getMaterial().isLiquid()
-                && ground != Blocks.planks
-                && ground != Blocks.cobblestone_wall
-                && !ground.isLeaves(world, tx, ty - 1, tz)
-                && !ground.isWood(world, tx, ty - 1, tz)
+            boolean isNaturalGround = (ground == Blocks.grass || ground == Blocks.dirt || ground == Blocks.sand || ground == Blocks.gravel
+                || ground == ModBlocks.cursedGrass || ground == ModBlocks.cursedEarth);
+
+            if (isNaturalGround
                 && (at.isAir(world, tx, ty, tz) || at.isReplaceable(world, tx, ty, tz))
                 && (above.isAir(world, tx, ty + 1, tz) || above.isReplaceable(world, tx, ty + 1, tz))
                 && world.canBlockSeeTheSky(tx, ty + 1, tz)) {
@@ -148,7 +146,8 @@ public class VillageTotemCreationHandler implements IVillageCreationHandler {
         }
 
         if (bestY < 0) {
-            bestY = Math.max(63, world.getTopSolidOrLiquidBlock(bestX, bestZ));
+            // No suitable natural outdoor ground spot found; do not place on house roofs!
+            return null;
         }
 
         // Build a small 3x3 cobblestone/planks base under the fallback totem so it looks natural

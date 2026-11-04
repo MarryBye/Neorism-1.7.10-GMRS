@@ -2113,6 +2113,12 @@ item.neorism.garlic_finder.name=Garlic Finder
 item.neorism:garlic_finder.name=Garlic Finder
 item.garlic_finder.name=Garlic Finder
 item.vampirism.garlic_finder.name=Garlic Finder
+item.vampirism.blood_finder=Blood Finder
+item.neorism.blood_finder=Blood Finder
+item.neorism.blood_finder.name=Blood Finder
+item.neorism:blood_finder.name=Blood Finder
+item.blood_finder.name=Blood Finder
+item.vampirism.blood_finder.name=Blood Finder
 item.vampirism.oil_bottle=Oil
 item.neorism.oil_bottle=Oil
 item.neorism.oil_bottle.name=Oil
@@ -5994,3 +6000,41 @@ text.neorism.short_level=Lvl
 
 
 
+tile.velmorra_portal.name=Velmorra Gateway
+tile.velmorra_altar.name=Velmorra Altar
+tile.chalice.name=Ritual Chalice
+tile.throne.name=Grand Throne
+entity.neorism.vampire_taskmaster.name=Vampire Taskmaster
+entity.neorism.sit.name=Throne Seat
+
+chat.neorism.vampire_taskmaster_hunter=Begone, hunter! You have no place among the blood nobility.
+chat.neorism.vampire_taskmaster_mortal=You are merely cattle. Seek the sanguine curse before requesting an audience.
+chat.neorism.vampire_taskmaster_need_lvl14=You must achieve Vampire Level 14 before ascending to nobility.
+chat.neorism.lord_req_1=Ascension to Lord Rank 1 requires 5 Pure Blood (Tier 5) and 32 Gold Ingots.
+chat.neorism.lord_req_2=Ascension to Lord Rank 2 requires 5 Pure Blood (Tier 5) and 48 Gold Ingots.
+chat.neorism.lord_req_3=Ascension to Lord Rank 3 requires 5 Pure Blood (Tier 5) and 48 Gold Ingots.
+chat.neorism.lord_req_4=Ascension to Lord Rank 4 requires 10 Pure Blood (Tier 5) and 64 Gold Ingots.
+chat.neorism.lord_req_5=Ascension to Lord Rank 5 requires 10 Pure Blood (Tier 5) and 16 Gold Blocks.
+chat.neorism.lord_max_rank=You have attained Supreme Lord Rank. The Veil of Velmorra awaits your conquest!
+chat.neorism.lord_advancement=You have advanced to Lord Rank %d!
+chat.neorism.minion_upgraded=Minion upgraded to level %d!
+chat.neorism.minion_upgrade_invalid_level=This minion cannot use this tier of upgrade.
+
+dialogue.vampirism.vampire_minion.require_lord=Only a Vampire Lord can bind minions.
+dialogue.vampirism.vampire_minion.no_free_slot=You have reached your maximum minion capacity.
+dialogue.vampirism.vampire.minion.start_serving1=I shall obey and serve you, my Lord!
+dialogue.vampirism.hunter_minion.require_lord=Only a Hunter Lord can enlist minions.
+dialogue.vampirism.hunter_minion.no_free_slot=You cannot enlist any more hunter companions.
+dialogue.vampirism.hunter.minion.start_serving1=At your command, Master Hunter!
+
+message.vampirism.chalice_empty=The chalice is empty. Offer pure, vampire, or sovereign blood to awaken the master.
+message.vampirism.chalice_filled=The chalice brims with sacrificial blood.
+message.vampirism.dracula_awakened=Lord Dracula awakens from the eternal slumber!
+message.vampirism.velmorra_altar.weak=You are not worthy to pierce the Veil. You must be Vampire Lord Rank 5.
+message.vampirism.velmorra_altar.need_infused_knife=The altar requires a sacrifice using an Infused Ritual Knife.
+message.vampirism.velmorra_altar.activated=The blood sacrifice was accepted! The Velmorra Gateway is open!
+message.vampirism.velmorra_altar.no_frame=No intact gothic portal frame found nearby to ignite.
+message.vampirism.velmorra_altar.hint=Velmorra Altar: Right-click with an Infused Ritual Knife as a Rank 5 Vampire Lord.
+
+message.neorism.veil_whispers=Whispers of the Veil guide you %s (~%d blocks)...
+message.neorism.veil_whispers_none=The Veil is silent. No portal ruins detected in this region.

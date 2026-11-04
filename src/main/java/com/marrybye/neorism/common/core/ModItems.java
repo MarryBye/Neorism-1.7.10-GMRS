@@ -78,6 +78,7 @@ public class ModItems {
     public static Item motherCore;
     public static Item caseFile144;
     public static Item garlicFinder;
+    public static Item bloodFinder;
     public static Item oblivionPotion;
     public static Item ritualKnife;
     public static Item syringeEmpty;
@@ -176,7 +177,8 @@ public class ModItems {
         soulOrbVampire = register("soul_orb_vampire", new ItemNeorism("soul_orb_vampire", ModCreativeTabs.tabVampirism));
         motherCore = register("mother_core", new ItemNeorism("mother_core", ModCreativeTabs.tabVampirism));
         caseFile144 = register("case_file_144", new ItemNeorism("case_file_144", ModCreativeTabs.tabBooks));
-        garlicFinder = register("garlic_finder", new ItemNeorism("garlic_finder", ModCreativeTabs.tabVampirism));
+        garlicFinder = register("garlic_finder", new com.marrybye.neorism.common.items.ItemGarlicFinder());
+        bloodFinder = register("blood_finder", new com.marrybye.neorism.common.items.ItemBloodFinder());
         oblivionPotion = register("potion_of_oblivion", new ItemOblivionPotion());
         ritualKnife = register("ritual_knife", new ItemRitualKnife());
 

@@ -106,6 +106,54 @@ public class EntityVampire extends EntityVampireBase {
     }
 
     @Override
+    public boolean interact(EntityPlayer player) {
+        if (this.isEntityAlive() && !player.isSneaking()) {
+            ItemStack heldItem = player.getHeldItem();
+            if (heldItem != null && heldItem.getItem() == ModItems.vampireMinionBinding) {
+                if (!this.worldObj.isRemote) {
+                    FactionPlayerHandler fph = FactionPlayerHandler.get(player);
+                    if (fph == null || !fph.isVampire() || fph.getLordLevel() < 1) {
+                        player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("dialogue.vampirism.vampire_minion.require_lord"));
+                        return true;
+                    }
+                    com.marrybye.neorism.common.entity.minion.MinionWorldData wd = com.marrybye.neorism.common.entity.minion.MinionWorldData.get(this.worldObj);
+                    if (wd != null) {
+                        com.marrybye.neorism.common.entity.minion.PlayerMinionController controller = wd.getOrCreateController(player.getUniqueID());
+                        controller.setMaxMinions(fph.getMaxMinions());
+                        if (!controller.hasFreeMinionSlot()) {
+                            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("dialogue.vampirism.vampire_minion.no_free_slot"));
+                            return true;
+                        }
+                        com.marrybye.neorism.common.entity.minion.MinionData data = new com.marrybye.neorism.common.entity.minion.MinionData("Vampire Minion", this.getSkinType());
+                        int slot = controller.createNewMinionSlot(data);
+                        if (slot < 0) {
+                            return true;
+                        }
+                        com.marrybye.neorism.common.entity.minion.EntityVampireMinion minion = new com.marrybye.neorism.common.entity.minion.EntityVampireMinion(this.worldObj);
+                        minion.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+                        minion.bindMinion(player.getUniqueID(), slot, data);
+                        if (!player.capabilities.isCreativeMode) {
+                            heldItem.stackSize--;
+                            if (heldItem.stackSize <= 0) {
+                                player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                            }
+                        }
+                        this.worldObj.spawnEntityInWorld(minion);
+                        for (int i = 0; i < 15; i++) {
+                            this.worldObj.spawnParticle("smoke", this.posX + (this.rand.nextDouble() - 0.5D), this.posY + 1.0D, this.posZ + (this.rand.nextDouble() - 0.5D), 0.0D, 0.1D, 0.0D);
+                        }
+                        this.worldObj.playSoundAtEntity(minion, "random.pop", 1.0F, 1.0F);
+                        player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("dialogue.vampirism.vampire.minion.start_serving1"));
+                        this.setDead();
+                    }
+                }
+                return true;
+            }
+        }
+        return super.interact(player);
+    }
+
+    @Override
     public boolean attackEntityAsMob(Entity target) {
         boolean flag = super.attackEntityAsMob(target);
         if (flag) {

@@ -2107,6 +2107,12 @@ item.neorism.garlic_finder.name=Локатор чеснока
 item.neorism:garlic_finder.name=Локатор чеснока
 item.garlic_finder.name=Локатор чеснока
 item.vampirism.garlic_finder.name=Локатор чеснока
+item.vampirism.blood_finder=Искатель Крови
+item.neorism.blood_finder=Искатель Крови
+item.neorism.blood_finder.name=Искатель Крови
+item.neorism:blood_finder.name=Искатель Крови
+item.blood_finder.name=Искатель Крови
+item.vampirism.blood_finder.name=Искатель Крови
 item.vampirism.oil_bottle=Масло
 item.neorism.oil_bottle=Масло
 item.neorism.oil_bottle.name=Масло
@@ -5915,3 +5921,41 @@ text.neorism.short_level=Ур.
 
 
 
+tile.velmorra_portal.name=Врата Велморры
+tile.velmorra_altar.name=Алтарь Велморры
+tile.chalice.name=Ритуальная чаша
+tile.throne.name=Величественный трон
+entity.neorism.vampire_taskmaster.name=Распорядитель вампиров
+entity.neorism.sit.name=Тронное место
+
+chat.neorism.vampire_taskmaster_hunter=Убирайся, охотник! Тебе не место среди благородных лордов крови.
+chat.neorism.vampire_taskmaster_mortal=Ты лишь скот. Прими проклятие крови, прежде чем просить аудиенции.
+chat.neorism.vampire_taskmaster_need_lvl14=Достигните 14 уровня вампира, прежде чем возноситься в ряды знати.
+chat.neorism.lord_req_1=Для 1 ранга лорда требуется 5 чистой крови (5 ур.) и 32 золотых слитка.
+chat.neorism.lord_req_2=Для 2 ранга лорда требуется 5 чистой крови (5 ур.) и 48 золотых слитков.
+chat.neorism.lord_req_3=Для 3 ранга лорда требуется 5 чистой крови (5 ур.) и 48 золотых слитков.
+chat.neorism.lord_req_4=Для 4 ранга лорда требуется 10 чистой крови (5 ур.) и 64 золотых слитка.
+chat.neorism.lord_req_5=Для 5 ранга лорда требуется 10 чистой крови (5 ур.) и 16 золотых блоков.
+chat.neorism.lord_max_rank=Вы достигли высшего ранга Лорда. Врата Велморры ждут вашего триумфа!
+chat.neorism.lord_advancement=Вы возвысились до %d ранга Лорда!
+chat.neorism.minion_upgraded=Подручный улучшен до %d уровня!
+chat.neorism.minion_upgrade_invalid_level=Подручный не подходит по уровню для этого улучшения.
+
+dialogue.vampirism.vampire_minion.require_lord=Только Лорд вампиров может подчинять себе миньонов.
+dialogue.vampirism.vampire_minion.no_free_slot=Вы достигли лимита подчинённых миньонов.
+dialogue.vampirism.vampire.minion.start_serving1=Слушаюсь и повинуюсь, мой Лорд!
+dialogue.vampirism.hunter_minion.require_lord=Только Лорд охотников может вербовать бойцов.
+dialogue.vampirism.hunter_minion.no_free_slot=Вы не можете взять больше бойцов в отряд.
+dialogue.vampirism.hunter.minion.start_serving1=К вашим услугам, Мастер Охотник!
+
+message.vampirism.chalice_empty=Чаша пуста. Пожертвуйте чистую кровь, чтобы пробудить повелителя.
+message.vampirism.chalice_filled=Чаша наполнена жертвенной кровью.
+message.vampirism.dracula_awakened=Лорд Дракула пробудился от векового сна!
+message.vampirism.velmorra_altar.weak=Вы недостаточно могущественны. Требуется 5 ранг Лорда вампиров.
+message.vampirism.velmorra_altar.need_infused_knife=Алтарь требует жертву зачарованным ритуальным кинжалом.
+message.vampirism.velmorra_altar.activated=Кровавая жертва принята! Врата Велморры открыты!
+message.vampirism.velmorra_altar.no_frame=Поблизости не найдена неповреждённая готическая арка врат.
+message.vampirism.velmorra_altar.hint=Алтарь Велморры: Нажмите ПКМ зачарованным кинжалом, будучи Лордом 5 ранга.
+
+message.neorism.veil_whispers=Шёпот Завесы зовёт вас на %s (~%d блоков)...
+message.neorism.veil_whispers_none=Завеса безмолвна. Врат Велморры поблизости не обнаружено.

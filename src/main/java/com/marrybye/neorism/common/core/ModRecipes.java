@@ -346,6 +346,26 @@ public class ModRecipes {
             'G', Items.gold_ingot
         );
 
+        // Garlic Finder
+        GameRegistry.addRecipe(new ItemStack(ModItems.garlicFinder),
+            "III",
+            "IGI",
+            "ICI",
+            'I', Items.iron_ingot,
+            'G', ModItems.garlic,
+            'C', Items.compass
+        );
+
+        // Blood Finder / Baron Locator
+        GameRegistry.addRecipe(new ItemStack(ModItems.bloodFinder),
+            "III",
+            "IBI",
+            "ICI",
+            'I', ModItems.bloodInfusedIron,
+            'B', ModItems.bloodBottle,
+            'C', Items.compass
+        );
+
         // Injections
         GameRegistry.addShapelessRecipe(new ItemStack(ModItems.injectionSanguinare),
             Items.glass_bottle,

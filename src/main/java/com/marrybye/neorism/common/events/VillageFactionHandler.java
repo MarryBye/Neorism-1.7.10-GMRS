@@ -149,36 +149,55 @@ public class VillageFactionHandler {
         int vy = net.minecraft.util.MathHelper.floor_double(villager.posY);
         int vz = net.minecraft.util.MathHelper.floor_double(villager.posZ);
 
-        // If a totem already exists within 64 blocks, nothing to do
-        if (getNearbyTotem(event.world, villager.posX, villager.posY, villager.posZ, 64.0D) != null) {
+        // Prevent duplicate totems: check active and nearby loaded totems in a wide 128-block radius
+        for (TileEntityTotem totem : TileEntityTotem.ACTIVE_TOTEMS) {
+            if (totem != null && totem.getWorldObj() == event.world && !totem.isInvalid()) {
+                if (totem.getDistanceFrom(villager.posX, villager.posY, villager.posZ) <= 128.0D * 128.0D) {
+                    return;
+                }
+            }
+        }
+        if (getNearbyTotem(event.world, villager.posX, villager.posY, villager.posZ, 128.0D) != null) {
             return;
         }
 
-        // Check if this villager belongs to a registered Village OR a newly generated mini-village (2+ villagers within 36 blocks)
+        // Check if this villager belongs to a registered Village
         if (event.world.villageCollectionObj != null) {
-            net.minecraft.village.Village v = event.world.villageCollectionObj.findNearestVillage(vx, vy, vz, 48);
+            net.minecraft.village.Village v = event.world.villageCollectionObj.findNearestVillage(vx, vy, vz, 96);
             if (v != null && v.getCenter() != null) {
+                double vRadius = Math.max(128.0D, v.getVillageRadius() + 48.0D);
+                if (getNearbyTotem(event.world, v.getCenter().posX, v.getCenter().posY, v.getCenter().posZ, vRadius) != null) {
+                    return;
+                }
+                for (TileEntityTotem totem : TileEntityTotem.ACTIVE_TOTEMS) {
+                    if (totem != null && totem.getWorldObj() == event.world && !totem.isInvalid()) {
+                        if (totem.getDistanceFrom(v.getCenter().posX, v.getCenter().posY, v.getCenter().posZ) <= vRadius * vRadius) {
+                            return;
+                        }
+                    }
+                }
                 com.marrybye.neorism.common.world.gen.VillageTotemCreationHandler.ensureVillageTotemNear(
                     event.world, v.getCenter().posX, v.getCenter().posY, v.getCenter().posZ);
                 return;
             }
         }
 
+        // Fallback for custom mini-villages without a vanilla Village object: requires at least 2 villagers gathered together
         AxisAlignedBB searchBox = AxisAlignedBB.getBoundingBox(
-            villager.posX - 36.0D, villager.posY - 12.0D, villager.posZ - 36.0D,
-            villager.posX + 36.0D, villager.posY + 12.0D, villager.posZ + 36.0D);
+            villager.posX - 32.0D, villager.posY - 12.0D, villager.posZ - 32.0D,
+            villager.posX + 32.0D, villager.posY + 12.0D, villager.posZ + 32.0D);
         List<EntityVillager> nearbyVillagers = event.world.getEntitiesWithinAABB(EntityVillager.class, searchBox);
-        int cx = vx;
-        int cz = vz;
-        if (nearbyVillagers != null && nearbyVillagers.size() > 1) {
+        if (nearbyVillagers != null && nearbyVillagers.size() >= 2) {
+            int cx = vx;
+            int cz = vz;
             for (EntityVillager other : nearbyVillagers) {
                 if (other != villager) {
                     cx = (vx + net.minecraft.util.MathHelper.floor_double(other.posX)) / 2;
                     cz = (vz + net.minecraft.util.MathHelper.floor_double(other.posZ)) / 2;
+                    com.marrybye.neorism.common.world.gen.VillageTotemCreationHandler.ensureVillageTotemNear(event.world, cx, vy, cz);
                     break;
                 }
             }
         }
-        com.marrybye.neorism.common.world.gen.VillageTotemCreationHandler.ensureVillageTotemNear(event.world, cx, vy, cz);
     }
 }

@@ -38,12 +38,11 @@ public class ModBiomes {
 
         vampireForest = new BiomeGenVampireForest(biomeId);
 
-        // Register to BiomeDictionary
-        BiomeDictionary.registerBiomeType(vampireForest, Type.SPOOKY, Type.DEAD, Type.FOREST, Type.MAGICAL, Type.DENSE);
+        // Register to BiomeDictionary (canonical: cold spooky dense coniferous forest)
+        BiomeDictionary.registerBiomeType(vampireForest, Type.SPOOKY, Type.FOREST, Type.MAGICAL, Type.DENSE, Type.COLD, Type.CONIFEROUS);
 
-        // Register to Overworld BiomeManager (canonical OverworldModifications replaces cool taiga climate points)
-        BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(vampireForest, 10));
-        BiomeManager.addSpawnBiome(vampireForest);
+        // Register to Overworld BiomeManager with canonical weight 4 (rare taiga replacement)
+        BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(vampireForest, 4));
 
         ModLogger.info("Initialized Vampire Forest biome with ID {}", biomeId);
     }

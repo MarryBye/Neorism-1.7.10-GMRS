@@ -308,8 +308,15 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
     }
 
     public void setLordLevel(int lordLevel) {
+        int oldLord = this.lordLevel;
         int max = getMaxLordLevel();
         this.lordLevel = Math.max(0, Math.min(lordLevel, max));
+        if (this.lordLevel > oldLord) {
+            com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get(player);
+            if (sh != null) {
+                sh.addSkillPoints((this.lordLevel - oldLord) * 2);
+            }
+        }
         com.marrybye.neorism.common.util.ScoreboardUtil.updateScore(player, com.marrybye.neorism.common.util.ScoreboardUtil.CRITERIA_LORD, this.lordLevel);
         player.refreshDisplayName();
         ModLogger.leveling("Player %s lord rank updated to %d (faction: %s)",
@@ -398,7 +405,7 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
 
     @Override
     public int getMaxMinions() {
-        return getLordLevel() * 2;
+        return getLordLevel() * 1;
     }
 
     @Override

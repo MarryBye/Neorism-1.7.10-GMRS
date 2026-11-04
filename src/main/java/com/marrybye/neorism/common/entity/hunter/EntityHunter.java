@@ -75,6 +75,54 @@ public class EntityHunter extends EntityHunterBase {
     }
 
     @Override
+    public boolean interact(net.minecraft.entity.player.EntityPlayer player) {
+        if (this.isEntityAlive() && !player.isSneaking()) {
+            ItemStack heldItem = player.getHeldItem();
+            if (heldItem != null && heldItem.getItem() == ModItems.hunterMinionEquipment) {
+                if (!this.worldObj.isRemote) {
+                    com.marrybye.neorism.common.faction.FactionPlayerHandler fph = com.marrybye.neorism.common.faction.FactionPlayerHandler.get(player);
+                    if (fph == null || !fph.isHunter() || fph.getLordLevel() < 1) {
+                        player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("dialogue.vampirism.hunter_minion.require_lord"));
+                        return true;
+                    }
+                    com.marrybye.neorism.common.entity.minion.MinionWorldData wd = com.marrybye.neorism.common.entity.minion.MinionWorldData.get(this.worldObj);
+                    if (wd != null) {
+                        com.marrybye.neorism.common.entity.minion.PlayerMinionController controller = wd.getOrCreateController(player.getUniqueID());
+                        controller.setMaxMinions(fph.getMaxMinions());
+                        if (!controller.hasFreeMinionSlot()) {
+                            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("dialogue.vampirism.hunter_minion.no_free_slot"));
+                            return true;
+                        }
+                        com.marrybye.neorism.common.entity.minion.MinionData data = new com.marrybye.neorism.common.entity.minion.MinionData("Hunter Minion", this.getSkinType());
+                        int slot = controller.createNewMinionSlot(data);
+                        if (slot < 0) {
+                            return true;
+                        }
+                        com.marrybye.neorism.common.entity.minion.EntityHunterMinion minion = new com.marrybye.neorism.common.entity.minion.EntityHunterMinion(this.worldObj);
+                        minion.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+                        minion.bindMinion(player.getUniqueID(), slot, data);
+                        if (!player.capabilities.isCreativeMode) {
+                            heldItem.stackSize--;
+                            if (heldItem.stackSize <= 0) {
+                                player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                            }
+                        }
+                        this.worldObj.spawnEntityInWorld(minion);
+                        for (int i = 0; i < 15; i++) {
+                            this.worldObj.spawnParticle("smoke", this.posX + (this.rand.nextDouble() - 0.5D), this.posY + 1.0D, this.posZ + (this.rand.nextDouble() - 0.5D), 0.0D, 0.1D, 0.0D);
+                        }
+                        this.worldObj.playSoundAtEntity(minion, "random.pop", 1.0F, 1.0F);
+                        player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("dialogue.vampirism.hunter.minion.start_serving1"));
+                        this.setDead();
+                    }
+                }
+                return true;
+            }
+        }
+        return super.interact(player);
+    }
+
+    @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (this.rand.nextInt(2) == 0) {
             this.dropItem(ModItems.stake, 1 + this.rand.nextInt(2));

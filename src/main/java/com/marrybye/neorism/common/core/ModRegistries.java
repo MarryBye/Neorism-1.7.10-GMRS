@@ -29,6 +29,7 @@ public class ModRegistries {
         ModAchievements.init();
         ModRecipes.init();
         com.marrybye.neorism.common.world.gen.ModWorldGen.init();
+        com.marrybye.neorism.common.world.dimensions.velmorra.WorldProviderVelmorra.register();
         com.marrybye.neorism.common.action.ActionRegistry.init();
         com.marrybye.neorism.common.skills.SkillRegistry.init();
 

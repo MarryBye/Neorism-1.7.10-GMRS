@@ -56,6 +56,14 @@ public class EntityAIAttackFaction extends EntityAINearestAttackableTarget {
 
                 if (faction == ModFactions.VAMPIRE) {
                     if (living instanceof IHunterEntity) return true;
+                    // In vampire-controlled villages, villagers are protected citizens/thralls and must NOT be attacked
+                    if (living instanceof net.minecraft.entity.passive.EntityVillager) {
+                        com.marrybye.neorism.common.tileentity.TileEntityTotem totem =
+                            com.marrybye.neorism.common.events.VillageFactionHandler.getNearbyTotem(living.worldObj, living.posX, living.posY, living.posZ, 64.0D);
+                        if (totem != null && totem.getControllingFactionId() == com.marrybye.neorism.common.tileentity.TileEntityTotem.FACTION_VAMPIRE) {
+                            return false;
+                        }
+                    }
                     // Canonical BasicVampireEntity: biteable non-vampire creatures when hungry for blood
                     if (!isBaronOrBoss && creature instanceof IVampireEntity && ((IVampireEntity) creature).wantsBlood()) {
                         if (living instanceof IVampireEntity) return false;

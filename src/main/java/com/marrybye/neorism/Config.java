@@ -21,6 +21,7 @@ public class Config {
     // --- World Generation ---
     public static final String CATEGORY_WORLD = "world";
     public static int biomeVampireForestId = 115;
+    public static int dimensionVelmorraId = -25;
     public static boolean generateVampireForest = true;
     public static boolean generateVampireCrypt = true;
     public static boolean generateHunterCamp = true;
@@ -39,6 +40,14 @@ public class Config {
             40,
             255,
             "Biome ID for the Vampire Forest"
+        );
+        dimensionVelmorraId = configuration.getInt(
+            "dimensionVelmorraId",
+            CATEGORY_WORLD,
+            -25,
+            -1000,
+            1000,
+            "Dimension ID for Velmorra (Dracula's Realm)"
         );
         generateVampireForest = configuration.getBoolean(
             "generateVampireForest",

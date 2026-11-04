@@ -76,6 +76,25 @@ public class ItemPureBlood extends ItemNeorism {
                     ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 1.0F, 1.0F);
                     ModLogger.combat("Vampire %s drank Pure Blood Tier %d (+%d blood)",
                         player.getCommandSenderName(), tier + 1, bloodAmount);
+
+                    if (Helper.getLordLevel(player) >= 1) {
+                        net.minecraft.util.ChunkCoordinates portalPos = com.marrybye.neorism.common.world.gen.WorldGenVelmorraPortal.getNearestPortal((int) player.posX, (int) player.posZ);
+                        if (portalPos != null) {
+                            double dx = portalPos.posX - player.posX;
+                            double dz = portalPos.posZ - player.posZ;
+                            double dist = Math.sqrt(dx * dx + dz * dz);
+                            String heading = ItemBloodFinder.getDirectionString(dx, dz);
+                            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("message.neorism.veil_whispers", heading, (int) dist));
+                            double normX = dx / Math.max(1.0D, dist);
+                            double normZ = dz / Math.max(1.0D, dist);
+                            for (int i = 0; i < 15; i++) {
+                                world.spawnParticle("portal", player.posX + normX * (i * 0.4D), player.posY + 1.2D, player.posZ + normZ * (i * 0.4D), normX * 0.2D, 0.05D, normZ * 0.2D);
+                                world.spawnParticle("reddust", player.posX + normX * (i * 0.4D), player.posY + 1.2D, player.posZ + normZ * (i * 0.4D), 0.5D, 0.0D, 0.0D);
+                            }
+                        } else {
+                            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("message.neorism.veil_whispers_none"));
+                        }
+                    }
                 }
             } else {
                 // Mortals suffer poison and confusion from consuming concentrated unholy blood

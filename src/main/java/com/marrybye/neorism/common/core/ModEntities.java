@@ -43,6 +43,7 @@ public class ModEntities {
         EntityRegistry.registerModEntity(EntityHolyWaterBottle.class, "holy_water_bottle", ++nextEntityId, Neorism.instance, 64, 10, true);
         EntityRegistry.registerModEntity(EntityDarkBloodProjectile.class, "dark_blood_projectile", ++nextEntityId, Neorism.instance, 64, 10, true);
         EntityRegistry.registerModEntity(EntityQuarrel.class, "quarrel", ++nextEntityId, Neorism.instance, 64, 10, true);
+        EntityRegistry.registerModEntity(com.marrybye.neorism.common.entity.EntitySit.class, "sit", ++nextEntityId, Neorism.instance, 64, 10, false);
 
         // Vampires
         registerMob(EntityVampire.class, "vampire", 0x3d0000, 0x8b0000);
@@ -52,6 +53,7 @@ public class ModEntities {
         registerMob(EntityBloodBat.class, "blood_bat", 0x200000, 0xdd0000);
         registerMob(EntityDracula.class, "dracula", 0x050000, 0xff0000);
         registerMob(EntityVampireMother.class, "vampire_mother", 0x0a0005, 0xee0055);
+        registerMob(com.marrybye.neorism.common.entity.vampire.EntityVampireTaskmaster.class, "vampire_taskmaster", 0x2b0000, 0x990000);
         registerMob(com.marrybye.neorism.common.entity.minion.EntityVampireMinion.class, "vampire_minion", 0x330000, 0x660000);
 
         // Hunters

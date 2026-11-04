@@ -196,6 +196,33 @@ public abstract class EntityMinionBase extends EntityCreature implements IMinion
     public boolean interact(EntityPlayer player) {
         if (isLord(player)) {
             if (!worldObj.isRemote) {
+                ItemStack held = player.getHeldItem();
+                if (held != null && held.getItem() instanceof com.marrybye.neorism.common.items.ItemMinionUpgrade) {
+                    com.marrybye.neorism.common.items.ItemMinionUpgrade upgrade = (com.marrybye.neorism.common.items.ItemMinionUpgrade) held.getItem();
+                    if (upgrade.getFaction() == this.getFaction()) {
+                        MinionData md = getMinionData();
+                        if (md != null && md.getLevel() >= upgrade.getMinLevel() && md.getLevel() <= upgrade.getMaxLevel()) {
+                            if (!player.capabilities.isCreativeMode) {
+                                held.stackSize--;
+                                if (held.stackSize <= 0) {
+                                    player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                                }
+                            }
+                            md.setLevel(md.getLevel() + 1);
+                            updateAttributesFromData();
+                            this.setHealth(this.getMaxHealth());
+                            worldObj.playSoundAtEntity(this, "random.levelup", 1.0F, 1.0F);
+                            for (int i = 0; i < 12; i++) {
+                                worldObj.spawnParticle("heart", posX + (rand.nextDouble() - 0.5D) * 0.6D, posY + 1.2D + rand.nextDouble() * 0.5D, posZ + (rand.nextDouble() - 0.5D) * 0.6D, 0.0D, 0.1D, 0.0D);
+                            }
+                            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("chat.neorism.minion_upgraded", md.getLevel()));
+                            return true;
+                        } else {
+                            player.addChatMessage(new net.minecraft.util.ChatComponentTranslation("chat.neorism.minion_upgrade_invalid_level"));
+                            return true;
+                        }
+                    }
+                }
                 syncDataToController();
                 player.openGui(Neorism.instance, 100, worldObj, this.getEntityId(), 0, 0);
             }

@@ -289,6 +289,7 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
             IPlayableFaction attacking = getFactionById(this.attackingFactionId);
             player.addChatMessage(new ChatComponentTranslation("chat.neorism.totem_raid_in_progress",
                 attacking.getName(), this.raidProgress));
+            highlightRaidEnemies(player, playerFactionId);
             return true;
         }
 
@@ -348,6 +349,87 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
             this.xCoord, this.yCoord, this.zCoord, getVillageName(),
             initiator != null ? initiator.getCommandSenderName() : "RandomEvent",
             attacking.getName(), this.capturePhase);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void highlightRaidEnemies(EntityPlayer player, int playerFactionId) {
+        if (this.worldObj == null || player == null) return;
+        AxisAlignedBB area = getVillageArea();
+        List<EntityLivingBase> list = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, area);
+        List<EntityLivingBase> enemies = new ArrayList<EntityLivingBase>();
+
+        for (EntityLivingBase entity : list) {
+            if (entity == null || !entity.isEntityAlive() || entity == player) continue;
+            boolean isEnemy = false;
+            if (playerFactionId == this.attackingFactionId) {
+                // Player is attacking -> enemies are defenders
+                if (entity instanceof IHunterEntity || Helper.isHunter(entity)) isEnemy = true;
+                else if (this.controllingFactionId == FACTION_VAMPIRE && (entity instanceof IVampireEntity || Helper.isVampire(entity))) isEnemy = true;
+            } else if (playerFactionId == this.controllingFactionId) {
+                // Player is defending -> enemies are attackers
+                if (this.attackingFactionId == FACTION_VAMPIRE && (entity instanceof IVampireEntity || Helper.isVampire(entity))) isEnemy = true;
+                else if (this.attackingFactionId == FACTION_HUNTER && (entity instanceof IHunterEntity || Helper.isHunter(entity))) isEnemy = true;
+            } else {
+                // Neutral player -> show all active raid combatants
+                if (entity instanceof IVillageCaptureEntity || entity instanceof IHunterEntity || entity instanceof IVampireEntity) isEnemy = true;
+            }
+            if (isEnemy) {
+                enemies.add(entity);
+            }
+        }
+
+        if (enemies.isEmpty()) {
+            player.addChatMessage(new net.minecraft.util.ChatComponentText("§a[Тотем] В зоне деревни врагов не обнаружено!"));
+            return;
+        }
+
+        player.addChatMessage(new net.minecraft.util.ChatComponentText(
+            String.format("§e[Тотем] Обнаружено врагов: §c%d§e:", enemies.size())));
+
+        this.worldObj.playSoundEffect(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, "random.orb", 1.0F, 1.2F);
+
+        int count = 0;
+        for (EntityLivingBase enemy : enemies) {
+            double dx = enemy.posX - player.posX;
+            double dy = enemy.posY - player.posY;
+            double dz = enemy.posZ - player.posZ;
+            int dist = (int) Math.round(Math.sqrt(dx * dx + dy * dy + dz * dz));
+            String dirStr = getDirectionString(dx, dz);
+
+            if (count < 8) {
+                String enemyName = enemy.getCommandSenderName();
+                player.addChatMessage(new net.minecraft.util.ChatComponentText(
+                    String.format(" §c• §f%s §7[x: %d, y: %d, z: %d] §e~%dм §6(%s)",
+                        enemyName, (int) enemy.posX, (int) enemy.posY, (int) enemy.posZ, dist, dirStr)));
+            }
+
+            // Spawn vertical particle beam above enemy so it can be spotted easily
+            if (this.worldObj instanceof net.minecraft.world.WorldServer) {
+                net.minecraft.world.WorldServer ws = (net.minecraft.world.WorldServer) this.worldObj;
+                for (double py = 0.5D; py <= 5.0D; py += 0.5D) {
+                    ws.func_147487_a("flame", enemy.posX, enemy.posY + py, enemy.posZ, 2, 0.1D, 0.1D, 0.1D, 0.01D);
+                    ws.func_147487_a("reddust", enemy.posX, enemy.posY + py, enemy.posZ, 2, 0.1D, 0.1D, 0.1D, 0.0D);
+                }
+            }
+            count++;
+        }
+        if (enemies.size() > 8) {
+            player.addChatMessage(new net.minecraft.util.ChatComponentText(
+                String.format(" §7... и ещё %d противников", enemies.size() - 8)));
+        }
+    }
+
+    private static String getDirectionString(double dx, double dz) {
+        double angle = Math.toDegrees(Math.atan2(-dx, dz));
+        if (angle < 0) angle += 360.0D;
+        if (angle >= 337.5D || angle < 22.5D) return "Север";
+        if (angle >= 22.5D && angle < 67.5D) return "Северо-Восток";
+        if (angle >= 67.5D && angle < 112.5D) return "Восток";
+        if (angle >= 112.5D && angle < 157.5D) return "Юго-Восток";
+        if (angle >= 157.5D && angle < 202.5D) return "Юг";
+        if (angle >= 202.5D && angle < 247.5D) return "Юго-Запад";
+        if (angle >= 247.5D && angle < 292.5D) return "Запад";
+        return "Северо-Запад";
     }
 
     @Override

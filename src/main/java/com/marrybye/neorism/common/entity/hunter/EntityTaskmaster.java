@@ -58,6 +58,48 @@ public class EntityTaskmaster extends EntityHunterBase {
             return true;
         }
 
+        // Hunter Lord Advancement for Level 14 Hunters
+        if (Helper.isHunter(player) && Helper.getLevel(player) >= 14) {
+            FactionPlayerHandler fph = FactionPlayerHandler.get(player);
+            int lordLvl = fph != null ? fph.getLordLevel() : 0;
+
+            if (lordLvl == 0 && countItem(player, Items.gold_ingot) >= 32 && countItem(player, ModItems.vampireFang) >= 16) {
+                consumeItem(player, Items.gold_ingot, 32);
+                consumeItem(player, ModItems.vampireFang, 16);
+                fph.setLordLevel(1);
+                player.inventory.addItemStackToInventory(new ItemStack(ModItems.hunterMinionEquipment, 1));
+                advanceHunterLord(player, 1);
+                return true;
+            } else if (lordLvl == 1 && countItem(player, Items.gold_ingot) >= 32 && countItem(player, ModItems.vampireFang) >= 24) {
+                consumeItem(player, Items.gold_ingot, 32);
+                consumeItem(player, ModItems.vampireFang, 24);
+                fph.setLordLevel(2);
+                player.inventory.addItemStackToInventory(new ItemStack(ModItems.hunterMinionUpgradeSimple, 1));
+                advanceHunterLord(player, 2);
+                return true;
+            } else if (lordLvl == 2 && countItem(player, Items.gold_ingot) >= 32 && countItem(player, ModItems.vampireFang) >= 32) {
+                consumeItem(player, Items.gold_ingot, 32);
+                consumeItem(player, ModItems.vampireFang, 32);
+                fph.setLordLevel(3);
+                player.inventory.addItemStackToInventory(new ItemStack(ModItems.hunterMinionUpgradeEnhanced, 1));
+                advanceHunterLord(player, 3);
+                return true;
+            } else if (lordLvl == 3 && countItem(player, Items.gold_ingot) >= 64 && countItem(player, ModItems.vampireFang) >= 48) {
+                consumeItem(player, Items.gold_ingot, 64);
+                consumeItem(player, ModItems.vampireFang, 48);
+                fph.setLordLevel(4);
+                advanceHunterLord(player, 4);
+                return true;
+            } else if (lordLvl == 4 && countItem(player, Items.gold_ingot) >= 64 && countItem(player, Item.getItemFromBlock(net.minecraft.init.Blocks.gold_block)) >= 16) {
+                consumeItem(player, Items.gold_ingot, 64);
+                consumeItem(player, Item.getItemFromBlock(net.minecraft.init.Blocks.gold_block), 16);
+                fph.setLordLevel(5);
+                player.inventory.addItemStackToInventory(new ItemStack(ModItems.hunterMinionUpgradeSpecial, 1));
+                advanceHunterLord(player, 5);
+                return true;
+            }
+        }
+
         // Bounty Turn-in: 4 Vampire Fangs -> 1 Hunter Intel & 2 Emeralds
         if (countItem(player, ModItems.vampireFang) >= 4) {
             consumeItem(player, ModItems.vampireFang, 4);
@@ -73,6 +115,13 @@ public class EntityTaskmaster extends EntityHunterBase {
         }
 
         return super.interact(player);
+    }
+
+    private void advanceHunterLord(EntityPlayer player, int rank) {
+        this.worldObj.playSoundAtEntity(player, "random.levelup", 1.0F, 1.0F);
+        player.addChatMessage(new ChatComponentTranslation("chat.neorism.lord_advancement", rank));
+        ModLogger.leveling("Player %s promoted to Hunter Lord Rank %d by Hunter Taskmaster",
+            player.getCommandSenderName(), rank);
     }
 
     private int countItem(EntityPlayer player, Item item) {

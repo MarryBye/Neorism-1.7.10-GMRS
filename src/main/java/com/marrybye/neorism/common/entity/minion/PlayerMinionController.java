@@ -47,6 +47,19 @@ public class PlayerMinionController {
         return null;
     }
 
+    public boolean hasFreeMinionSlot() {
+        return minions.size() < maxMinions;
+    }
+
+    public int createNewMinionSlot(MinionData data) {
+        if (!hasFreeMinionSlot() || data == null) {
+            return -1;
+        }
+        int slot = minions.size();
+        minions.add(data);
+        return slot;
+    }
+
     public MinionData createMinionSlot(String name) {
         if (minions.size() >= maxMinions) {
             return null;

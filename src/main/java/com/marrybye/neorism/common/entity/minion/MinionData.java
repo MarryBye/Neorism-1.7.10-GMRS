@@ -36,6 +36,11 @@ public class MinionData {
         this.currentTaskDesc = ModMinionTasks.FOLLOW_LORD.activateTask(null, null, this);
     }
 
+    public MinionData(String name, int skinType) {
+        this(name);
+        this.skinType = skinType;
+    }
+
     public String getName() {
         return name;
     }

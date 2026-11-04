@@ -37,9 +37,9 @@ public class ClientProxy extends CommonProxy {
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new com.marrybye.neorism.client.events.BloodVisionHandler()
         );
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
-            new com.marrybye.neorism.client.events.VampireAtmosphereHandler()
-        );
+        com.marrybye.neorism.client.events.VampireAtmosphereHandler atmosphereHandler = new com.marrybye.neorism.client.events.VampireAtmosphereHandler();
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(atmosphereHandler);
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(atmosphereHandler);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new com.marrybye.neorism.client.render.VampireAppearanceRenderHandler()
         );
@@ -87,6 +87,14 @@ public class ClientProxy extends CommonProxy {
         cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
             com.marrybye.neorism.common.entity.vampire.EntityVampireMother.class,
             new com.marrybye.neorism.client.render.entity.RenderVampireMother()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.vampire.EntityVampireTaskmaster.class,
+            new com.marrybye.neorism.client.render.entity.RenderVampire()
+        );
+        cpw.mods.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+            com.marrybye.neorism.common.entity.EntitySit.class,
+            new com.marrybye.neorism.client.render.entity.RenderSit()
         );
 
         // Hunters

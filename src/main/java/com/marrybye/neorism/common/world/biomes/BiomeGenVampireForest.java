@@ -54,7 +54,6 @@ public class BiomeGenVampireForest extends BiomeGenBase {
 
         this.spawnableMonsterList.add(new SpawnListEntry(EntityVampire.class, 80, 1, 3));
         this.spawnableMonsterList.add(new SpawnListEntry(EntityVampireBaron.class, 27, 1, 1));
-        this.spawnableMonsterList.add(new SpawnListEntry(com.marrybye.neorism.common.entity.vampire.EntityAdvancedVampire.class, 27, 1, 2));
         this.spawnableCaveCreatureList.add(new SpawnListEntry(EntityBloodBat.class, 60, 2, 4));
     }
 

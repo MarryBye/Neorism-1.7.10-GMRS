@@ -137,6 +137,7 @@ public class ModBlocks {
     public static Block batCage;
     public static Block ancientTrophy;
     public static Block velmorraAltar;
+    public static Block velmorraPortal;
 
     // Category 2: Hunter Functional Blocks & Coffins
     public static Block hunterTable;
@@ -261,10 +262,11 @@ public class ModBlocks {
         tombstoneCross = register("tombstone_cross", new BlockNeorismDecor("tombstone_cross", "tombstone_cross", Material.rock, ModCreativeTabs.tabVampirism, 0.1F, 0.0F, 0.3F, 0.9F, 1.0F, 0.7F, true));
         graveCage = register("grave_cage", new BlockNeorismDecor("grave_cage", "bat_cage", Material.iron, ModCreativeTabs.tabVampirism, 0.05F, 0.0F, 0.05F, 0.95F, 0.95F, 0.95F, true));
         vampireRack = register("vampire_rack", new BlockNeorismDecor("vampire_rack", "vampire_rack", Material.wood, ModCreativeTabs.tabVampirism, 0.0F, 0.0F, 0.0F, 1.0F, 0.8F, 1.0F, true));
-        throne = register("throne", new BlockNeorismDecor("throne", "throne", Material.wood, ModCreativeTabs.tabVampirism, 0.1F, 0.0F, 0.1F, 0.9F, 1.0F, 0.9F, true));
+        throne = register("throne", new com.marrybye.neorism.common.blocks.BlockThrone());
         batCage = register("bat_cage", new BlockNeorismDecor("bat_cage", "bat_cage", Material.iron, ModCreativeTabs.tabVampirism, 0.15F, 0.0F, 0.15F, 0.85F, 0.9F, 0.85F, true));
         ancientTrophy = register("mother_trophy", new BlockNeorismDecor("mother_trophy", "vulnerable_remains", Material.rock, ModCreativeTabs.tabVampirism, 0.2F, 0.0F, 0.2F, 0.8F, 0.8F, 0.8F, false).setLightLevel(0.1F));
-        velmorraAltar = register("velmorra_altar", new BlockNeorismDecor("velmorra_altar", "velmorra_altar_bloody", Material.rock, ModCreativeTabs.tabVampirism, 0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F, true));
+        velmorraAltar = register("velmorra_altar", new com.marrybye.neorism.common.blocks.BlockVelmorraAltar());
+        velmorraPortal = register("velmorra_portal", new com.marrybye.neorism.common.blocks.BlockVelmorraPortal());
         tent = registerBlockOnly("tent", new com.marrybye.neorism.common.blocks.BlockTent());
 
         // Category 2: Hunter Functional Blocks & 16 Coffins
@@ -297,7 +299,7 @@ public class ModBlocks {
         fogDiffuser = register("fog_diffuser", new BlockFogDiffuser());
         totem = register("totem_base", new BlockTotem());
         totemTop = register("totem_top", new com.marrybye.neorism.common.blocks.BlockTotemTop());
-        chalice = register("chalice", new BlockNeorismDecor("chalice", "chalice", Material.iron, ModCreativeTabs.tabVampire, 0.25F, 0.0F, 0.25F, 0.75F, 0.7F, 0.75F, false));
+        chalice = register("chalice", new com.marrybye.neorism.common.blocks.BlockChalice());
         bloodGrinder = register("blood_grinder", new BlockModeled("blood_grinder", "blood_grinder_top", Material.wood, ModCreativeTabs.tabVampire).setHardness(3.0F));
         bloodSieve = register("blood_sieve", new BlockModeled("blood_sieve", "blood_sieve_top", Material.wood, ModCreativeTabs.tabVampire).setHardness(3.0F));
         infuser = register("blood_infuser", new BlockModeled("blood_infuser", "infuser", Material.iron, ModCreativeTabs.tabVampire).setHardness(3.0F));

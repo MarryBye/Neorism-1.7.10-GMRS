@@ -26,15 +26,15 @@ public class ModWorldGen implements IWorldGenerator {
     private static final int SALT_HUNTER_CAMP = 1724616580;
     private static final int SALT_VAMPIRE_ALTAR = 573190874;
     private static final int SALT_CRYPT = 643510199;
-    private static final int SALT_DRACULA_CASTLE = 1937195837;
+    private static final int SALT_VELMORRA_PORTAL = 362367473;
 
     private final WorldGenVampireCrypt cryptGen = new WorldGenVampireCrypt();
     private final WorldGenHunterCamp campGen = new WorldGenHunterCamp();
     private final WorldGenVampireAltarRuins altarGen = new WorldGenVampireAltarRuins();
-    private final WorldGenDraculaCastle castleGen = new WorldGenDraculaCastle();
+    private final WorldGenVelmorraPortal portalGen = new WorldGenVelmorraPortal();
 
-    // Tracks generated Dracula Castle macro-regions per world seed so a Vampire Forest never gets multiple castles
-    private static final Set<String> generatedCastleRegions = new HashSet<String>();
+    // Tracks generated Velmorra Portal macro-regions per world seed so a Vampire Forest never gets duplicate portals
+    private static final Set<String> generatedPortalRegions = new HashSet<String>();
 
     public static void init() {
         GameRegistry.registerWorldGenerator(new ModWorldGen(), 10);
@@ -57,16 +57,16 @@ public class ModWorldGen implements IWorldGenerator {
 
         boolean isVampireForest = isVampireBiome(biome);
 
-        // 1. Dracula Castle: Canonical SingleOccurrence / landmark placement in Vampire Forest (1 per 64x64 chunk macro-region, min 48 chunk separation)
+        // 1. Velmorra Portal Ruins: Canonical SingleOccurrence / landmark placement in Vampire Forest (1 per 48x48 chunk macro-region)
         if (Config.generateDraculaCastle && isVampireForest) {
-            if (isStructureChunk(seed, chunkX, chunkZ, 64, 48, SALT_DRACULA_CASTLE, false)) {
-                int macroX = Math.floorDiv(chunkX, 64);
-                int macroZ = Math.floorDiv(chunkZ, 64);
+            if (isStructureChunk(seed, chunkX, chunkZ, 48, 32, SALT_VELMORRA_PORTAL, false)) {
+                int macroX = Math.floorDiv(chunkX, 48);
+                int macroZ = Math.floorDiv(chunkZ, 48);
                 String regionKey = seed + ":" + macroX + ":" + macroZ;
-                if (!generatedCastleRegions.contains(regionKey)) {
-                    if (castleGen.generate(world, random, centerX, 0, centerZ)) {
-                        generatedCastleRegions.add(regionKey);
-                        ModLogger.spawn("Generated Dracula Castle at chunk (%d, %d) [block %d, %d]", chunkX, chunkZ, centerX, centerZ);
+                if (!generatedPortalRegions.contains(regionKey)) {
+                    if (portalGen.generate(world, random, centerX, 0, centerZ)) {
+                        generatedPortalRegions.add(regionKey);
+                        ModLogger.spawn("Generated Velmorra Portal Ruins at chunk (%d, %d) [block %d, %d]", chunkX, chunkZ, centerX, centerZ);
                     }
                 }
             }
