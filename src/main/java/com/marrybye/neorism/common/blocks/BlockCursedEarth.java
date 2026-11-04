@@ -56,6 +56,11 @@ public class BlockCursedEarth extends BlockNeorism {
     }
 
     @Override
+    public boolean canSustainPlant(net.minecraft.world.IBlockAccess world, int x, int y, int z, net.minecraftforge.common.util.ForgeDirection direction, net.minecraftforge.common.IPlantable plantable) {
+        return true;
+    }
+
+    @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         ItemStack held = player.getHeldItem();
         if (held != null && held.getItem() instanceof com.marrybye.neorism.common.items.ItemHolyWater) {

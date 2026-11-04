@@ -115,9 +115,16 @@ public class Helper {
      */
     public static boolean isEntityInVampireBiome(Entity entity) {
         if (entity == null || entity.worldObj == null) return false;
-        net.minecraft.world.biome.BiomeGenBase biome =
-            entity.worldObj.getBiomeGenForCoords((int) entity.posX, (int) entity.posZ);
-        return biome != null && biome.biomeName != null && biome.biomeName.toLowerCase().contains("vampire");
+        return isVampireBiome(entity.worldObj.getBiomeGenForCoords((int) entity.posX, (int) entity.posZ));
+    }
+
+    /**
+     * Checks if a biome is a vampiric biome.
+     */
+    public static boolean isVampireBiome(net.minecraft.world.biome.BiomeGenBase biome) {
+        if (biome == null) return false;
+        return biome == com.marrybye.neorism.common.core.ModBiomes.vampireForest
+            || (biome.biomeName != null && biome.biomeName.toLowerCase().contains("vampire"));
     }
 
     /**

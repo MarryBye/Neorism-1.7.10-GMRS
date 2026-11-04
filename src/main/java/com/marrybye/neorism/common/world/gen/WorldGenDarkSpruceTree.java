@@ -15,8 +15,15 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
  */
 public class WorldGenDarkSpruceTree extends WorldGenAbstractTree {
 
+    private final Block logBlock;
+
     public WorldGenDarkSpruceTree(boolean notify) {
+        this(notify, ModBlocks.darkSpruceLog);
+    }
+
+    public WorldGenDarkSpruceTree(boolean notify, Block logBlock) {
         super(notify);
+        this.logBlock = logBlock != null ? logBlock : ModBlocks.darkSpruceLog;
     }
 
     @Override
@@ -58,7 +65,7 @@ public class WorldGenDarkSpruceTree extends WorldGenAbstractTree {
 
         // Generate trunk
         for (int h = 0; h < height; ++h) {
-            setBlockAndNotifyAdequately(world, x, y + h, z, ModBlocks.darkSpruceLog, 0);
+            setBlockAndNotifyAdequately(world, x, y + h, z, this.logBlock, 0);
         }
 
         // Generate foliage (spruce cone)

@@ -176,6 +176,18 @@ public class EntityBloodBat extends EntityBat implements IVampireEntity, IMob {
     }
 
     @Override
+    public boolean getCanSpawnHere() {
+        int x = MathHelper.floor_double(this.posX);
+        int z = MathHelper.floor_double(this.posZ);
+        net.minecraft.world.biome.BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(x, z);
+        if (Helper.isVampireBiome(biome)) {
+            return this.worldObj.checkNoEntityCollision(this.boundingBox)
+                && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty();
+        }
+        return super.getCanSpawnHere();
+    }
+
+    @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (this.rand.nextInt(2) == 0) {
             this.dropItem(ModItems.vampireFang, 1);

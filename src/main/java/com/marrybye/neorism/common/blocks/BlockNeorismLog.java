@@ -50,6 +50,35 @@ public class BlockNeorismLog extends BlockRotatedPillar {
     }
 
     @Override
+    public boolean canSustainLeaves(net.minecraft.world.IBlockAccess world, int x, int y, int z) {
+        return true;
+    }
+
+    @Override
+    public boolean isWood(net.minecraft.world.IBlockAccess world, int x, int y, int z) {
+        return true;
+    }
+
+    @Override
+    public void breakBlock(net.minecraft.world.World world, int x, int y, int z, net.minecraft.block.Block block, int meta) {
+        byte b0 = 4;
+        int i1 = b0 + 1;
+        if (world.checkChunksExist(x - i1, y - i1, z - i1, x + i1, y + i1, z + i1)) {
+            for (int dx = -b0; dx <= b0; ++dx) {
+                for (int dy = -b0; dy <= b0; ++dy) {
+                    for (int dz = -b0; dz <= b0; ++dz) {
+                        net.minecraft.block.Block b = world.getBlock(x + dx, y + dy, z + dz);
+                        if (b.isLeaves(world, x + dx, y + dy, z + dz)) {
+                            b.beginLeavesDecay(world, x + dx, y + dy, z + dz);
+                        }
+                    }
+                }
+            }
+        }
+        super.breakBlock(world, x, y, z, block, meta);
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     protected IIcon getSideIcon(int side) {
         return sideIcon;

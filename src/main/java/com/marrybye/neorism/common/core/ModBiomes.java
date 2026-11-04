@@ -20,11 +20,6 @@ public class ModBiomes {
     public static BiomeGenVampireForest vampireForest;
 
     public static void init() {
-        if (!Config.generateVampireForest) {
-            ModLogger.info("Vampire Forest generation is disabled in config");
-            return;
-        }
-
         int biomeId = Config.biomeVampireForestId;
         if (BiomeGenBase.getBiome(biomeId) != null) {
             ModLogger.warn("Biome ID {} already taken! Finding next available slot...", biomeId);
@@ -41,9 +36,12 @@ public class ModBiomes {
         // Register to BiomeDictionary (canonical: cold spooky dense coniferous forest)
         BiomeDictionary.registerBiomeType(vampireForest, Type.SPOOKY, Type.FOREST, Type.MAGICAL, Type.DENSE, Type.COLD, Type.CONIFEROUS);
 
-        // Register to Overworld BiomeManager with canonical weight 4 (rare taiga replacement)
-        BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(vampireForest, 4));
-
-        ModLogger.info("Initialized Vampire Forest biome with ID {}", biomeId);
+        if (Config.generateVampireForest) {
+            // Register to Overworld BiomeManager with canonical weight 4 (rare taiga replacement)
+            BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(vampireForest, 4));
+            ModLogger.info("Initialized Vampire Forest biome with ID {} and Overworld weight 4", biomeId);
+        } else {
+            ModLogger.info("Initialized Vampire Forest biome with ID {} (Overworld generation disabled)", biomeId);
+        }
     }
 }

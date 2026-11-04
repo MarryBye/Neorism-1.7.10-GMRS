@@ -19,8 +19,8 @@ public class ModRegistries {
         ModFluids.init();
         ModBlocks.init();
         ModItems.init();
-        ModEntities.init();
         ModBiomes.init();
+        ModEntities.init();
         PacketHandler.init();
     }
 

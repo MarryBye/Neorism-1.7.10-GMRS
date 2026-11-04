@@ -226,11 +226,27 @@ public class EntityVampireBaron extends EntityVampireBase {
     @Override
     public boolean getCanSpawnHere() {
         int x = MathHelper.floor_double(this.posX);
+        int y = MathHelper.floor_double(this.boundingBox.minY);
         int z = MathHelper.floor_double(this.posZ);
-        if (!com.marrybye.neorism.common.world.gen.ModWorldGen.isVampireBiome(this.worldObj.getBiomeGenForCoords(x, z))) {
+        if (y < 60) {
+            return false;
+        }
+        if (!Helper.isVampireBiome(this.worldObj.getBiomeGenForCoords(x, z))) {
+            return false;
+        }
+        net.minecraft.block.Block ground = this.worldObj.getBlock(x, y - 1, z);
+        if (ground != com.marrybye.neorism.common.core.ModBlocks.cursedGrass && ground != com.marrybye.neorism.common.core.ModBlocks.cursedEarth) {
             return false;
         }
         return super.getCanSpawnHere();
+    }
+
+    @Override
+    public net.minecraft.entity.IEntityLivingData onSpawnWithEgg(net.minecraft.entity.IEntityLivingData data) {
+        data = super.onSpawnWithEgg(data);
+        this.setLady(this.rand.nextBoolean());
+        this.setEntityLevel(this.rand.nextInt(MAX_LEVEL + 1));
+        return data;
     }
 
     @Override
