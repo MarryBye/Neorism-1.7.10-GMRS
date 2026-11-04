@@ -17,6 +17,7 @@ public class RenderConvertedVillager extends RenderVillager {
 
     public RenderConvertedVillager() {
         super();
+        this.setRenderPassModel(new net.minecraft.client.model.ModelVillager(0.01F));
     }
 
     @Override

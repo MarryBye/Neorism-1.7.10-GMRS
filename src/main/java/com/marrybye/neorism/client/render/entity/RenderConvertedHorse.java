@@ -18,6 +18,7 @@ public class RenderConvertedHorse extends RenderHorse {
 
     public RenderConvertedHorse() {
         super(new ModelHorse(), 0.75F);
+        this.setRenderPassModel(new ModelHorse());
     }
 
     @Override

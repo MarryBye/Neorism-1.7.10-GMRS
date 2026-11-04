@@ -77,19 +77,20 @@ public class VampireAppearanceRenderHandler {
 
                 float partialTicks = event.partialRenderTick;
                 double renderX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosX;
-                double renderY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosY;
+                double renderY = (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks - (double) player.yOffset) - net.minecraft.client.renderer.entity.RenderManager.renderPosY;
                 double renderZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks - net.minecraft.client.renderer.entity.RenderManager.renderPosZ;
 
-                // Sync all rotation, animation, and hurt state to dummy bat
-                dummyBat.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+                // Sync all rotation, animation, and hurt state to dummy bat.
+                // Sync body yaw to rotationYaw so the bat always turns with the player crosshair.
+                dummyBat.setLocationAndAngles(player.posX, player.posY - player.yOffset, player.posZ, player.rotationYaw, player.rotationPitch);
                 dummyBat.prevRotationYaw = player.prevRotationYaw;
                 dummyBat.rotationYaw = player.rotationYaw;
                 dummyBat.prevRotationPitch = player.prevRotationPitch;
                 dummyBat.rotationPitch = player.rotationPitch;
-                dummyBat.rotationYawHead = player.rotationYawHead;
-                dummyBat.prevRotationYawHead = player.prevRotationYawHead;
-                dummyBat.renderYawOffset = player.renderYawOffset;
-                dummyBat.prevRenderYawOffset = player.prevRenderYawOffset;
+                dummyBat.rotationYawHead = player.rotationYaw;
+                dummyBat.prevRotationYawHead = player.prevRotationYaw;
+                dummyBat.renderYawOffset = player.rotationYaw;
+                dummyBat.prevRenderYawOffset = player.prevRotationYaw;
                 dummyBat.ticksExisted = player.ticksExisted;
                 dummyBat.hurtTime = player.hurtTime;
                 dummyBat.maxHurtTime = player.maxHurtTime;
@@ -102,7 +103,7 @@ public class VampireAppearanceRenderHandler {
                 GL11.glDisable(GL11.GL_CULL_FACE);
                 GL11.glEnable(GL11.GL_ALPHA_TEST);
                 net.minecraft.client.renderer.entity.RenderManager.instance.renderEntityWithPosYaw(
-                    dummyBat, renderX, renderY + 0.25D, renderZ, player.rotationYaw, partialTicks
+                    dummyBat, renderX, renderY + 0.1D, renderZ, player.rotationYaw, partialTicks
                 );
                 GL11.glEnable(GL11.GL_CULL_FACE);
                 GL11.glPopMatrix();

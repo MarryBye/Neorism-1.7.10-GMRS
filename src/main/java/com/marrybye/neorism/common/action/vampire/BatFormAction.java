@@ -150,9 +150,14 @@ public class BatFormAction extends ActionBase {
 
         Helper.setEntitySize(player, 0.6F, 1.8F);
         player.height = 1.8F;
+        player.yOffset = 1.62F;
         player.eyeHeight = player.getDefaultEyeHeight();
         if (player.boundingBox != null) {
-            player.boundingBox.maxY = player.boundingBox.minY + 1.8D;
+            float f = 0.6F / 2.0F;
+            player.boundingBox.setBounds(
+                player.posX - (double) f, player.boundingBox.minY, player.posZ - (double) f,
+                player.posX + (double) f, player.boundingBox.minY + 1.8D, player.posZ + (double) f
+            );
         }
 
         // Safe landing resistance if reverting mid-air

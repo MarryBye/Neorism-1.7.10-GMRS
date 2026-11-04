@@ -261,9 +261,11 @@ public class Helper {
         entity.width = width;
         entity.height = height;
         if (entity.boundingBox != null) {
-            entity.boundingBox.maxX = entity.boundingBox.minX + (double) width;
-            entity.boundingBox.maxZ = entity.boundingBox.minZ + (double) width;
-            entity.boundingBox.maxY = entity.boundingBox.minY + (double) height;
+            float f = width / 2.0F;
+            entity.boundingBox.setBounds(
+                entity.posX - (double) f, entity.posY - (double) entity.yOffset + (double) entity.ySize, entity.posZ - (double) f,
+                entity.posX + (double) f, entity.posY - (double) entity.yOffset + (double) entity.ySize + (double) height, entity.posZ + (double) f
+            );
         }
     }
 }

@@ -290,9 +290,14 @@ public class PlayerCapabilityEventHandler {
         if (player == null) return;
         Helper.setEntitySize(player, 0.6F, 0.8F);
         player.height = 0.8F;
+        player.yOffset = 0.45F;
+        player.eyeHeight = 0.51F;
         if (player.boundingBox != null) {
-            player.boundingBox.maxY = player.boundingBox.minY + 0.8D;
-            player.eyeHeight = (float) (player.boundingBox.minY + 0.5D - player.posY);
+            float f = 0.6F / 2.0F;
+            player.boundingBox.setBounds(
+                player.posX - (double) f, player.boundingBox.minY, player.posZ - (double) f,
+                player.posX + (double) f, player.boundingBox.minY + 0.8D, player.posZ + (double) f
+            );
         }
     }
 }

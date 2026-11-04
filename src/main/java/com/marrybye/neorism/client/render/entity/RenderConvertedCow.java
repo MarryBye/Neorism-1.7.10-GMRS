@@ -18,6 +18,7 @@ public class RenderConvertedCow extends RenderCow {
 
     public RenderConvertedCow() {
         super(new ModelCow(), 0.7F);
+        this.setRenderPassModel(new ModelCow());
     }
 
     @Override

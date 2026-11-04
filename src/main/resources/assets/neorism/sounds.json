@@ -25,19 +25,19 @@
   "ambient.velmorra_rumble": {
     "sounds": [
       {
-        "name": "mob/wither/idle1",
+        "name": "minecraft:mob/wither/idle1",
         "pitch": 0.4
       },
       {
-        "name": "mob/wither/idle2",
+        "name": "minecraft:mob/wither/idle2",
         "pitch": 0.4
       },
       {
-        "name": "mob/wither/idle3",
+        "name": "minecraft:mob/wither/idle3",
         "pitch": 0.4
       },
       {
-        "name": "mob/wither/idle4",
+        "name": "minecraft:mob/wither/idle4",
         "pitch": 0.4
       }
     ]
@@ -132,19 +132,19 @@
   "entity.dracula.hurt": {
     "sounds": [
       {
-        "name": "mob/endermen/hit1",
+        "name": "minecraft:mob/endermen/hit1",
         "pitch": 0.6
       },
       {
-        "name": "mob/endermen/hit2",
+        "name": "minecraft:mob/endermen/hit2",
         "pitch": 0.6
       },
       {
-        "name": "mob/endermen/hit3",
+        "name": "minecraft:mob/endermen/hit3",
         "pitch": 0.6
       },
       {
-        "name": "mob/endermen/hit4",
+        "name": "minecraft:mob/endermen/hit4",
         "pitch": 0.6
       }
     ],
@@ -171,7 +171,7 @@
   "entity.dracula.transform": {
     "sounds": [
       {
-        "name": "mob/wither/spawn",
+        "name": "minecraft:mob/wither/spawn",
         "pitch": 1.3,
         "volume": 0.8
       }
@@ -181,19 +181,19 @@
   "entity.dracula.transform_end": {
     "sounds": [
       {
-        "name": "random/explode1",
+        "name": "minecraft:random/explode1",
         "pitch": 0.7
       },
       {
-        "name": "random/explode2",
+        "name": "minecraft:random/explode2",
         "pitch": 0.7
       },
       {
-        "name": "random/explode3",
+        "name": "minecraft:random/explode3",
         "pitch": 0.7
       },
       {
-        "name": "random/explode4",
+        "name": "minecraft:random/explode4",
         "pitch": 0.7
       }
     ],
@@ -201,19 +201,19 @@
   },
   "entity.ghost.ambient": {
     "sounds": [
-      "mob/ghast/moan"
+      "minecraft:mob/ghast/moan"
     ],
     "subtitle": "subtitles.neorism.ghost.ambient"
   },
   "entity.ghost.death": {
     "sounds": [
-      "mob/ghast/death"
+      "minecraft:mob/ghast/death"
     ],
     "subtitle": "subtitles.neorism.ghost.death"
   },
   "entity.ghost.hurt": {
     "sounds": [
-      "mob/ghast/scream"
+      "minecraft:mob/ghast/scream"
     ],
     "subtitle": "subtitles.neorism.ghost.hurt"
   },
@@ -232,7 +232,7 @@
   "entity.remains_defender.ambient": {
     "sounds": [
       {
-        "name": "random/orb",
+        "name": "minecraft:random/orb",
         "pitch": 0.5,
         "volume": 0.5
       }
@@ -241,18 +241,18 @@
   },
   "entity.remains_defender.death": {
     "sounds": [
-      "dig/glass1",
-      "dig/glass2",
-      "dig/glass3"
+      "minecraft:dig/glass1",
+      "minecraft:dig/glass2",
+      "minecraft:dig/glass3"
     ],
     "subtitle": "subtitles.neorism.remains_defender.death"
   },
   "entity.remains_defender.hit": {
     "sounds": [
-      "dig/stone1",
-      "dig/stone2",
-      "dig/stone3",
-      "dig/stone4"
+      "minecraft:dig/stone1",
+      "minecraft:dig/stone2",
+      "minecraft:dig/stone3",
+      "minecraft:dig/stone4"
     ],
     "subtitle": "subtitles.neorism.remains_defender.hit"
   },

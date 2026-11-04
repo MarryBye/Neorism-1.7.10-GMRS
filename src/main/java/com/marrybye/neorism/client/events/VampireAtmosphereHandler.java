@@ -102,9 +102,10 @@ public class VampireAtmosphereHandler {
         if (event.entity == null) return;
         net.minecraft.entity.ai.attributes.IAttributeInstance speedAttr = event.entity.getEntityAttribute(net.minecraft.entity.SharedMonsterAttributes.movementSpeed);
         if (speedAttr != null) {
-            // Prevent extreme 2x sniper zoom during Altar of Infusion ritual (-1.0 movement slowdown)
+            // Prevent extreme 2x sniper zoom during Altar of Infusion ritual (-1.0 movement slowdown).
+            // In 1.7.10, vanilla multiplies base fov by 0.5 when speed is 0. Multiplying by 2.0F cancels this slowdown zoom completely.
             if (speedAttr.getModifier(com.marrybye.neorism.common.tileentity.TileEntityAltarInfusion.ID_MOVEMENT_SLOWDOWN) != null) {
-                event.newfov = 1.0F;
+                event.newfov = event.fov * 2.0F;
                 return;
             }
             // Canonical FOV normalization for Vampire movement speed boost

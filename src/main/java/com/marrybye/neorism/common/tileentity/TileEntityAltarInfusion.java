@@ -383,7 +383,11 @@ public class TileEntityAltarInfusion extends TileEntityNeorism implements IInven
     @Override
     @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
     public net.minecraft.util.AxisAlignedBB getRenderBoundingBox() {
-        return INFINITE_EXTENT_AABB;
+        // Finite generous bounding box so Angelica/Sodium occlusion/frustum culler never drops the rising sphere or beam visuals
+        return net.minecraft.util.AxisAlignedBB.getBoundingBox(
+            xCoord - 8.0D, yCoord - 1.0D, zCoord - 8.0D,
+            xCoord + 9.0D, yCoord + 12.0D, zCoord + 9.0D
+        );
     }
 
     @Override

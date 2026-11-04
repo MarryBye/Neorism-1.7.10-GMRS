@@ -112,9 +112,8 @@ public class GuiRadialMenu extends GuiScreen {
 
         // Center hover text
         if (selectedItem != -1) {
-            int adjusted = ((selectedItem + (numberOfSlices / 2 + 1)) % numberOfSlices) - 1;
-            adjusted = adjusted == -1 ? numberOfSlices - 1 : adjusted;
-            IRadialMenuSlot slot = slots.get(adjusted);
+            int slotIndex = (selectedItem + numberOfSlices / 2) % numberOfSlices;
+            IRadialMenuSlot slot = slots.get(slotIndex);
             if (slot != null && slot.getSlotName() != null) {
                 drawCenteredString(fontRendererObj, slot.getSlotName(), centerX, centerY - 4, 0xFFFFFF);
             }
@@ -234,9 +233,8 @@ public class GuiRadialMenu extends GuiScreen {
     protected void activateSelected() {
         if (selectedItem != -1 && !slots.isEmpty()) {
             int numberOfSlices = slots.size();
-            int adjusted = ((selectedItem + (numberOfSlices / 2 + 1)) % numberOfSlices) - 1;
-            adjusted = adjusted == -1 ? numberOfSlices - 1 : adjusted;
-            radialMenu.setCurrentSlot(adjusted);
+            int slotIndex = (selectedItem + numberOfSlices / 2) % numberOfSlices;
+            radialMenu.setCurrentSlot(slotIndex);
         }
         mc.displayGuiScreen(null);
     }
