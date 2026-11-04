@@ -194,14 +194,7 @@ public class KeyBindings {
         boolean isWingsDown = keyWings.getIsKeyPressed();
         if (isWingsDown && !wasWingsKeyDown) {
             if (Helper.isVampire(mc.thePlayer)) {
-                FactionPlayerHandler fph = FactionPlayerHandler.get(mc.thePlayer);
-                if (fph != null && (fph.getCurrentLevel() >= 14 || fph.getLordLevel() > 0 || mc.thePlayer.capabilities.isCreativeMode)) {
-                    mc.thePlayer.capabilities.allowFlying = !mc.thePlayer.capabilities.allowFlying;
-                    if (!mc.thePlayer.capabilities.allowFlying) {
-                        mc.thePlayer.capabilities.isFlying = false;
-                    }
-                    mc.thePlayer.sendPlayerAbilities();
-                }
+                PacketHandler.sendToServer(new com.marrybye.neorism.common.network.packets.ToggleWingsPacket());
             }
         }
         wasWingsKeyDown = isWingsDown;

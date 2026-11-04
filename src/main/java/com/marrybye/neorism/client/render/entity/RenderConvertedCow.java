@@ -24,6 +24,7 @@ public class RenderConvertedCow extends RenderCow {
     @Override
     protected int shouldRenderPass(EntityLivingBase entity, int pass, float partialTickTime) {
         if (pass == 0) {
+            this.setRenderPassModel(this.mainModel);
             this.bindTexture(OVERLAY);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

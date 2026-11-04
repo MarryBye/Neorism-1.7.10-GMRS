@@ -347,7 +347,7 @@ public class BlockTent extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
-        blockIcon = register.registerIcon(Neorism.MODID + ":item_tent");
+        blockIcon = register.registerIcon(Neorism.MODID + ":tent_back");
         iconBack = register.registerIcon(Neorism.MODID + ":tent_back");
         iconSide = register.registerIcon(Neorism.MODID + ":wool_colored_white");
         iconTop = register.registerIcon(Neorism.MODID + ":wool_colored_gray");

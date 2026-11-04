@@ -81,7 +81,7 @@ public class BatFormAction extends ActionBase {
     public boolean onActivated(EntityPlayer player) {
         player.capabilities.allowFlying = true;
         player.capabilities.isFlying = true;
-        Helper.setFlySpeed(player, 0.025F);
+        Helper.setFlySpeed(player, 0.05F);
         player.sendPlayerAbilities();
 
         // -90% health modifier in bat form
@@ -106,6 +106,10 @@ public class BatFormAction extends ActionBase {
 
         if (!player.capabilities.allowFlying) {
             player.capabilities.allowFlying = true;
+            player.sendPlayerAbilities();
+        }
+        if (!player.onGround && !player.capabilities.isFlying) {
+            player.capabilities.isFlying = true;
             player.sendPlayerAbilities();
         }
 

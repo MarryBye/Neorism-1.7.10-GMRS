@@ -93,6 +93,9 @@ public class VampireAtmosphereHandler {
         float currentNear = event.farPlaneDistance * 0.75F * (1.0F - fade) + targetNear * fade;
         float currentFar = event.farPlaneDistance * (1.0F - fade) + targetFar * fade;
 
+        currentNear = Math.max(0.0F, currentNear);
+        currentFar = Math.max(currentNear + 1.0F, currentFar);
+
         GL11.glFogf(GL11.GL_FOG_START, currentNear);
         GL11.glFogf(GL11.GL_FOG_END, currentFar);
     }

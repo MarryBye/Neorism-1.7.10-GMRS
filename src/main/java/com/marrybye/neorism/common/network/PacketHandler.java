@@ -38,6 +38,7 @@ public class PacketHandler {
         registerMessage(com.marrybye.neorism.common.network.packets.SelectMinionTaskPacket.Handler.class, com.marrybye.neorism.common.network.packets.SelectMinionTaskPacket.class, Side.SERVER);
         registerMessage(com.marrybye.neorism.common.network.packets.AppearancePacket.ServerHandler.class, com.marrybye.neorism.common.network.packets.AppearancePacket.class, Side.SERVER);
         registerMessage(com.marrybye.neorism.common.network.packets.AppearancePacket.ClientHandler.class, com.marrybye.neorism.common.network.packets.AppearancePacket.class, Side.CLIENT);
+        registerMessage(com.marrybye.neorism.common.network.packets.ToggleWingsPacket.Handler.class, com.marrybye.neorism.common.network.packets.ToggleWingsPacket.class, Side.SERVER);
     }
 
     public static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(

@@ -67,8 +67,11 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
             return;
         }
         if (target instanceof net.minecraft.entity.passive.EntityVillager) {
+            if (com.marrybye.neorism.common.tileentity.TileEntityTotem.isEntityProtectedByVampireVillage(target)) {
+                return;
+            }
             com.marrybye.neorism.common.tileentity.TileEntityTotem totem =
-                com.marrybye.neorism.common.events.VillageFactionHandler.getNearbyTotem(target.worldObj, target.posX, target.posY, target.posZ, 64.0D);
+                com.marrybye.neorism.common.events.VillageFactionHandler.getNearbyTotem(target.worldObj, target.posX, target.posY, target.posZ, 96.0D);
             if (totem != null && totem.getControllingFactionId() == com.marrybye.neorism.common.tileentity.TileEntityTotem.FACTION_VAMPIRE) {
                 return;
             }
@@ -83,8 +86,11 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
             return;
         }
         if (target instanceof net.minecraft.entity.passive.EntityVillager) {
+            if (com.marrybye.neorism.common.tileentity.TileEntityTotem.isEntityProtectedByVampireVillage(target)) {
+                return;
+            }
             com.marrybye.neorism.common.tileentity.TileEntityTotem totem =
-                com.marrybye.neorism.common.events.VillageFactionHandler.getNearbyTotem(target.worldObj, target.posX, target.posY, target.posZ, 64.0D);
+                com.marrybye.neorism.common.events.VillageFactionHandler.getNearbyTotem(target.worldObj, target.posX, target.posY, target.posZ, 96.0D);
             if (totem != null && totem.getControllingFactionId() == com.marrybye.neorism.common.tileentity.TileEntityTotem.FACTION_VAMPIRE) {
                 return;
             }

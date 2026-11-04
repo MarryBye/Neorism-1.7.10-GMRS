@@ -267,14 +267,14 @@ public class ModBlocks {
         ancientTrophy = register("mother_trophy", new BlockNeorismDecor("mother_trophy", "vulnerable_remains", Material.rock, ModCreativeTabs.tabVampirism, 0.2F, 0.0F, 0.2F, 0.8F, 0.8F, 0.8F, false).setLightLevel(0.1F));
         velmorraAltar = register("velmorra_altar", new com.marrybye.neorism.common.blocks.BlockVelmorraAltar());
         velmorraPortal = register("velmorra_portal", new com.marrybye.neorism.common.blocks.BlockVelmorraPortal());
-        tent = registerBlockOnly("tent", new com.marrybye.neorism.common.blocks.BlockTent());
+        tent = register("tent", new com.marrybye.neorism.common.blocks.BlockTent());
 
         // Category 2: Hunter Functional Blocks & 16 Coffins
         hunterTable = register("hunter_table", new com.marrybye.neorism.common.blocks.BlockHunterTable());
         hunterWeaponTable = register("weapon_table", new BlockModeled("weapon_table", "weapon_table_hammer", Material.iron, ModCreativeTabs.tabHunter).setHardness(3.0F));
         alchemicalCauldron = register("alchemical_cauldron", new com.marrybye.neorism.common.blocks.BlockAlchemicalCauldron());
         vaporStill = register("vapor_still", new BlockNeorismDecor("vapor_still", "vapor_still", Material.iron, ModCreativeTabs.tabHunter, 0.1F, 0.0F, 0.1F, 0.9F, 0.9F, 0.9F, true));
-        alchemyTable = register("alchemy_table", new BlockNeorismDecor("alchemy_table", "alchemical_cauldron_side", Material.iron, ModCreativeTabs.tabHunter, 0.0F, 0.0F, 0.0F, 1.0F, 0.9F, 1.0F, true).setLightLevel(0.2F));
+        alchemyTable = register("alchemy_table", new BlockNeorismDecor("alchemy_table", "cauldron_side", Material.iron, ModCreativeTabs.tabHunter, 0.0F, 0.0F, 0.0F, 1.0F, 0.9F, 1.0F, true).setLightLevel(0.2F));
         injectionChair = register("injection_chair", new BlockNeorismDecor("injection_chair", "coffin_base", Material.wood, ModCreativeTabs.tabHunter, 0.1F, 0.0F, 0.1F, 0.9F, 0.9F, 0.9F, true));
         altarCleansing = register("altar_cleansing", new BlockNeorismDecor("altar_cleansing", "altar_pillar_stone", Material.wood, ModCreativeTabs.tabHunter, 0.1F, 0.0F, 0.1F, 0.9F, 0.8F, 0.9F, true));
         garlicDiffuser = register("garlic_diffuser_normal", new BlockGarlicDiffuser());
