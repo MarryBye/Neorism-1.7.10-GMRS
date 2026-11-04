@@ -278,6 +278,19 @@ public class PlayerCapabilityEventHandler {
     }
 
     @SubscribeEvent
+    public void onWorldTick(TickEvent.WorldTickEvent event) {
+        if (event.phase == TickEvent.Phase.END && !event.world.isRemote) {
+            if (event.world.provider.dimensionId == com.marrybye.neorism.Config.dimensionVelmorraId) {
+                com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager mgr =
+                    com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager.get(event.world);
+                if (mgr != null) {
+                    mgr.tick();
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.player == null) return;
         com.marrybye.neorism.common.action.ActionHandler ah = com.marrybye.neorism.common.action.ActionHandler.get(event.player);

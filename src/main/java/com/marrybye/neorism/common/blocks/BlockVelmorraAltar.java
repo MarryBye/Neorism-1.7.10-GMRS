@@ -16,6 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
@@ -128,6 +129,14 @@ public class BlockVelmorraAltar extends Block {
         return false;
     }
 
+    private boolean isFrameBlock(Block b) {
+        return b == ModBlocks.darkStoneBricks ||
+               b == ModBlocks.darkStoneTiles ||
+               b == ModBlocks.darkStone ||
+               b == Blocks.stonebrick ||
+               b == Blocks.obsidian;
+    }
+
     private boolean isPortalOpeningZ(World world, int x, int y, int z) {
         // 3 wide along X, 4 high
         for (int ox = 0; ox < 3; ox++) {
@@ -136,6 +145,15 @@ public class BlockVelmorraAltar extends Block {
                     return false;
                 }
             }
+        }
+        // Validate surrounding frame
+        for (int ox = 0; ox < 3; ox++) {
+            if (!isFrameBlock(world.getBlock(x + ox, y - 1, z))) return false;
+            if (!isFrameBlock(world.getBlock(x + ox, y + 4, z))) return false;
+        }
+        for (int oy = 0; oy < 4; oy++) {
+            if (!isFrameBlock(world.getBlock(x - 1, y + oy, z))) return false;
+            if (!isFrameBlock(world.getBlock(x + 3, y + oy, z))) return false;
         }
         return true;
     }
@@ -156,6 +174,15 @@ public class BlockVelmorraAltar extends Block {
                     return false;
                 }
             }
+        }
+        // Validate surrounding frame
+        for (int oz = 0; oz < 3; oz++) {
+            if (!isFrameBlock(world.getBlock(x, y - 1, z + oz))) return false;
+            if (!isFrameBlock(world.getBlock(x, y + 4, z + oz))) return false;
+        }
+        for (int oy = 0; oy < 4; oy++) {
+            if (!isFrameBlock(world.getBlock(x, y + oy, z - 1))) return false;
+            if (!isFrameBlock(world.getBlock(x, y + oy, z + 3))) return false;
         }
         return true;
     }

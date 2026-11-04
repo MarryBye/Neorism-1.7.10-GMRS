@@ -37,6 +37,7 @@ public class ModSounds {
     public static final String DRACULA_DEATH = "neorism:entity.dracula.death";
     public static final String DRACULA_TELEPORT = "neorism:entity.dracula.teleport";
     public static final String DRACULA_TRANSFORM = "neorism:entity.dracula.transform";
+    public static final String DRACULA_TRANSFORM_END = "neorism:entity.dracula.transform_end";
     public static final String RAGE = "neorism:fx.rage";
     public static final String HEARTBEAT = "neorism:fx.heartbeat";
     public static final String SIZZLE = "random.fizz";

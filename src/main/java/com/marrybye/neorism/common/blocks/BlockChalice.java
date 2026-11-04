@@ -3,6 +3,7 @@ package com.marrybye.neorism.common.blocks;
 import java.util.List;
 import java.util.Random;
 
+import com.marrybye.neorism.Config;
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.core.ModBlocks;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
@@ -112,7 +113,16 @@ public class BlockChalice extends Block {
     }
 
     private void checkAndAwakenDracula(World world, int x, int y, int z, EntityPlayer player) {
-        // Count filled chalices in 24 block radius
+        if (world.provider.dimensionId == Config.dimensionVelmorraId) {
+            com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager mgr =
+                com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager.get(world);
+            if (mgr != null) {
+                mgr.onChaliceFilled(x, y, z);
+                return;
+            }
+        }
+
+        // Fallback for non-Velmorra testing
         int filledCount = 0;
         int r = 24;
         for (int dx = -r; dx <= r; dx++) {

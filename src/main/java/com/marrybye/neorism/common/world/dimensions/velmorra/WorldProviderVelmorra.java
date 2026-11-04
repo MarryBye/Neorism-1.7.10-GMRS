@@ -27,7 +27,7 @@ public class WorldProviderVelmorra extends WorldProvider {
 
     @Override
     public void registerWorldChunkManager() {
-        this.worldChunkMgr = new WorldChunkManagerHell(ModBiomes.vampireForest, 0.0F);
+        this.worldChunkMgr = new WorldChunkManagerHell(ModBiomes.velmorra, 0.0F);
         this.dimensionId = Config.dimensionVelmorraId;
         this.hasNoSky = false;
     }

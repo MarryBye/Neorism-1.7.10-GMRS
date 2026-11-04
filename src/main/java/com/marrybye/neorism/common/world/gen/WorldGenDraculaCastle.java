@@ -23,31 +23,15 @@ public class WorldGenDraculaCastle extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random rand, int x, int y, int z) {
-        y = world.getTopSolidOrLiquidBlock(x, z);
-        if (y < 60 || y > 120) {
+        boolean isVelmorra = world.provider instanceof com.marrybye.neorism.common.world.dimensions.velmorra.WorldProviderVelmorra;
+        if (!isVelmorra) {
             return false;
         }
-
-        Block centerGround = world.getBlock(x, y - 1, z);
-        if (centerGround != ModBlocks.cursedGrass && centerGround != ModBlocks.cursedEarth && centerGround != Blocks.grass && centerGround != Blocks.dirt) {
-            return false;
-        }
+        y = 65;
 
         int halfW = 12; // 25 blocks wide
         int halfD = 12; // 25 blocks deep
         int wallH = 7;
-
-        // Verify all 4 corners are in Vampire Forest and not in water/cliffs
-        int[][] checkCorners = {{-halfW, -halfD}, {halfW, -halfD}, {-halfW, halfD}, {halfW, halfD}};
-        for (int[] c : checkCorners) {
-            if (!ModWorldGen.isVampireBiome(world.getBiomeGenForCoords(x + c[0], z + c[1]))) {
-                return false;
-            }
-            int cy = world.getTopSolidOrLiquidBlock(x + c[0], z + c[1]);
-            if (Math.abs(cy - y) > 6 || world.getBlock(x + c[0], cy - 1, z + c[1]).getMaterial().isLiquid()) {
-                return false;
-            }
-        }
 
         // Level foundation
         for (int dx = -halfW; dx <= halfW; ++dx) {
@@ -165,20 +149,28 @@ public class WorldGenDraculaCastle extends WorldGenerator {
         }
 
         // Blood Pedestals flanking the throne
-        if (ModBlocks.bloodPedestal != null) {
-            world.setBlock(x - 2, y + 2, throneZ + 2, ModBlocks.bloodPedestal, 0, 2);
-            world.setBlock(x + 2, y + 2, throneZ + 2, ModBlocks.bloodPedestal, 0, 2);
+        // 4 Ritual Chalices surrounding the throne arena (canonical summoning altar)
+        if (ModBlocks.chalice != null) {
+            world.setBlock(x - 3, y + 2, throneZ - 2, ModBlocks.chalice, 0, 2);
+            world.setBlock(x + 3, y + 2, throneZ - 2, ModBlocks.chalice, 0, 2);
+            world.setBlock(x - 3, y + 2, throneZ + 2, ModBlocks.chalice, 0, 2);
+            world.setBlock(x + 3, y + 2, throneZ + 2, ModBlocks.chalice, 0, 2);
+
+            if (isVelmorra) {
+                com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager mgr =
+                    com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager.get(world);
+                if (mgr != null) {
+                    mgr.registerChalice(x - 3, y + 2, throneZ - 2);
+                    mgr.registerChalice(x + 3, y + 2, throneZ - 2);
+                    mgr.registerChalice(x - 3, y + 2, throneZ + 2);
+                    mgr.registerChalice(x + 3, y + 2, throneZ + 2);
+                }
+            }
         }
 
         // Royal Vampire Loot Chests behind the throne
         placeRoyalChest(world, rand, x - 2, y + 2, throneZ + 3);
         placeRoyalChest(world, rand, x + 2, y + 2, throneZ + 3);
-
-        // Spawn Dracula Boss at the Throne
-        EntityDracula dracula = new EntityDracula(world);
-        dracula.setLocationAndAngles(x + 0.5D, y + 2, throneZ + 1.5D, 180.0F, 0.0F);
-        dracula.onSpawnWithEgg(null);
-        world.spawnEntityInWorld(dracula);
 
         return true;
     }

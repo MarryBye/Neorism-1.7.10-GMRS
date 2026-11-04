@@ -93,13 +93,10 @@ public class ChunkProviderVelmorra implements IChunkProvider {
             castleGenerated = true;
             WorldGenDraculaCastle castle = new WorldGenDraculaCastle();
             castle.generate(worldObj, rand, 0, 65, 0);
-
-            // Generate return portal back to Overworld near entrance at (0, 65, -28)
-            placeReturnPortal(0, 65, -28);
         }
     }
 
-    private void placeReturnPortal(int x, int y, int z) {
+    public static void placeReturnPortal(World worldObj, int x, int y, int z) {
         // Gothic Arch Portal Frame
         for (int dx = -2; dx <= 2; dx++) {
             for (int dy = 0; dy <= 4; dy++) {
@@ -139,7 +136,8 @@ public class ChunkProviderVelmorra implements IChunkProvider {
     @Override
     @SuppressWarnings("rawtypes")
     public List getPossibleCreatures(EnumCreatureType creatureType, int x, int y, int z) {
-        return null;
+        BiomeGenBase biome = worldObj.getBiomeGenForCoords(x, z);
+        return biome != null ? biome.getSpawnableList(creatureType) : null;
     }
 
     @Override

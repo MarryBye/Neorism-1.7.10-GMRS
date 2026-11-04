@@ -18,6 +18,7 @@ import net.minecraftforge.common.BiomeManager.BiomeType;
 public class ModBiomes {
 
     public static BiomeGenVampireForest vampireForest;
+    public static com.marrybye.neorism.common.world.biomes.BiomeGenVelmorra velmorra;
 
     public static void init() {
         int biomeId = Config.biomeVampireForestId;
@@ -43,5 +44,19 @@ public class ModBiomes {
         } else {
             ModLogger.info("Initialized Vampire Forest biome with ID {} (Overworld generation disabled)", biomeId);
         }
+
+        // Initialize dedicated Velmorra Dimension Biome
+        int velmorraBiomeId = 116;
+        if (BiomeGenBase.getBiome(velmorraBiomeId) != null) {
+            for (int i = 40; i < 256; i++) {
+                if (BiomeGenBase.getBiome(i) == null && i != biomeId) {
+                    velmorraBiomeId = i;
+                    break;
+                }
+            }
+        }
+        velmorra = new com.marrybye.neorism.common.world.biomes.BiomeGenVelmorra(velmorraBiomeId);
+        BiomeDictionary.registerBiomeType(velmorra, Type.SPOOKY, Type.MAGICAL, Type.WASTELAND, Type.END);
+        ModLogger.info("Initialized Velmorra biome with ID {}", velmorraBiomeId);
     }
 }

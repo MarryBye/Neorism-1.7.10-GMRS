@@ -73,15 +73,41 @@ public class BlockVelmorraPortal extends BlockBreakable {
             if (targetWorld == null) return;
 
             if (targetDim == Config.dimensionVelmorraId) {
+                // Save entry portal coordinates in Overworld so the player returns to the exact location
+                player.getEntityData().setInteger("VelmorraReturnX", x);
+                player.getEntityData().setInteger("VelmorraReturnY", y);
+                player.getEntityData().setInteger("VelmorraReturnZ", z);
+
                 server.getConfigurationManager().transferPlayerToDimension(player, targetDim,
                     new TeleporterVelmorra(targetWorld, 0.5D, 65.0D, -26.0D));
             } else {
-                // Return to Overworld: spawn at world spawn or nearest bed
-                int sx = targetWorld.getSpawnPoint().posX;
-                int sy = targetWorld.getTopSolidOrLiquidBlock(sx, targetWorld.getSpawnPoint().posZ);
-                int sz = targetWorld.getSpawnPoint().posZ;
+                // Return to Overworld: retrieve saved portal coordinates or fall back to bed/spawn
+                double tx, ty, tz;
+                if (player.getEntityData().hasKey("VelmorraReturnX")) {
+                    int rx = player.getEntityData().getInteger("VelmorraReturnX");
+                    int ry = player.getEntityData().getInteger("VelmorraReturnY");
+                    int rz = player.getEntityData().getInteger("VelmorraReturnZ");
+                    tx = rx + 0.5D;
+                    ty = ry;
+                    tz = rz + (targetWorld.isAirBlock(rx, ry, rz + 2) ? 1.5D : -1.5D);
+                } else {
+                    net.minecraft.util.ChunkCoordinates bed = player.getBedLocation(0);
+                    net.minecraft.util.ChunkCoordinates coords = bed != null ? net.minecraft.entity.player.EntityPlayer.verifyRespawnCoordinates(targetWorld, bed, player.isSpawnForced(0)) : null;
+                    if (coords != null) {
+                        tx = coords.posX + 0.5D;
+                        ty = coords.posY + 0.1D;
+                        tz = coords.posZ + 0.5D;
+                    } else {
+                        int sx = targetWorld.getSpawnPoint().posX;
+                        int sy = targetWorld.getTopSolidOrLiquidBlock(sx, targetWorld.getSpawnPoint().posZ);
+                        int sz = targetWorld.getSpawnPoint().posZ;
+                        tx = sx + 0.5D;
+                        ty = sy + 1.0D;
+                        tz = sz + 0.5D;
+                    }
+                }
                 server.getConfigurationManager().transferPlayerToDimension(player, targetDim,
-                    new TeleporterVelmorra(targetWorld, sx + 0.5D, sy + 1.0D, sz + 0.5D));
+                    new TeleporterVelmorra(targetWorld, tx, ty, tz));
             }
         }
     }

@@ -39,6 +39,8 @@ public class VampireAtmosphereHandler {
         EntityPlayer player = mc.thePlayer;
         BiomeGenBase biome = mc.theWorld.getBiomeGenForCoords((int) player.posX, (int) player.posZ);
         boolean inVampireFog = (biome == ModBiomes.vampireForest)
+            || (biome == ModBiomes.velmorra)
+            || (player.dimension == com.marrybye.neorism.Config.dimensionVelmorraId)
             || (biome != null && biome.biomeName != null && biome.biomeName.toLowerCase().contains("vampire"))
             || com.marrybye.neorism.common.tileentity.TileEntityFogDiffuser.isEntityProtected(player)
             || com.marrybye.neorism.common.tileentity.TileEntityTotem.isEntityProtectedByVampireVillage(player);
