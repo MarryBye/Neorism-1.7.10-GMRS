@@ -62,9 +62,12 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
 
     @Override
     public void setAttackTarget(EntityLivingBase target) {
-        if (target != null && (Helper.isVampire(target) || target instanceof IVampireEntity)
-            && !(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
-            return;
+        if (target != null && !(target instanceof EntityPlayer)) {
+            if (Helper.isVampire(target) || target instanceof IVampireEntity) {
+                if (!(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
+                    return;
+                }
+            }
         }
         if (target instanceof net.minecraft.entity.passive.EntityVillager) {
             if (com.marrybye.neorism.common.tileentity.TileEntityTotem.isEntityProtectedByVampireVillage(target)) {
@@ -81,9 +84,12 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
 
     @Override
     public void setRevengeTarget(EntityLivingBase target) {
-        if (target != null && (Helper.isVampire(target) || target instanceof IVampireEntity)
-            && !(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
-            return;
+        if (target != null && !(target instanceof EntityPlayer)) {
+            if (Helper.isVampire(target) || target instanceof IVampireEntity) {
+                if (!(this instanceof EntityVampireBaron && target instanceof EntityVampireBaron)) {
+                    return;
+                }
+            }
         }
         if (target instanceof net.minecraft.entity.passive.EntityVillager) {
             if (com.marrybye.neorism.common.tileentity.TileEntityTotem.isEntityProtectedByVampireVillage(target)) {
@@ -102,14 +108,21 @@ public abstract class EntityVampireBase extends EntityCreature implements IVampi
     public boolean attackEntityFrom(net.minecraft.util.DamageSource source, float amount) {
         if (source != null) {
             net.minecraft.entity.Entity attacker = source.getEntity();
-            if (attacker instanceof EntityLivingBase && (Helper.isVampire((EntityLivingBase) attacker) || attacker instanceof IVampireEntity)
-                && !(this instanceof EntityVampireBaron && attacker instanceof EntityVampireBaron)) {
-                return false;
+            // Prevent mob-vs-mob friendly fire within vampire faction, but NEVER block player attacks
+            if (attacker instanceof EntityLivingBase && !(attacker instanceof EntityPlayer)) {
+                if (Helper.isVampire((EntityLivingBase) attacker) || attacker instanceof IVampireEntity) {
+                    if (!(this instanceof EntityVampireBaron && attacker instanceof EntityVampireBaron)) {
+                        return false;
+                    }
+                }
             }
             net.minecraft.entity.Entity direct = source.getSourceOfDamage();
-            if (direct instanceof EntityLivingBase && (Helper.isVampire((EntityLivingBase) direct) || direct instanceof IVampireEntity)
-                && !(this instanceof EntityVampireBaron && direct instanceof EntityVampireBaron)) {
-                return false;
+            if (direct instanceof EntityLivingBase && !(direct instanceof EntityPlayer)) {
+                if (Helper.isVampire((EntityLivingBase) direct) || direct instanceof IVampireEntity) {
+                    if (!(this instanceof EntityVampireBaron && direct instanceof EntityVampireBaron)) {
+                        return false;
+                    }
+                }
             }
         }
         return super.attackEntityFrom(source, amount);

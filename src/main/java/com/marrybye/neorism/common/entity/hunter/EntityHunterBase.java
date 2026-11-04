@@ -52,7 +52,7 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
 
     @Override
     public void setAttackTarget(EntityLivingBase target) {
-        if (target != null && (target instanceof IHunterEntity || Helper.isHunter(target))) {
+        if (target != null && !(target instanceof net.minecraft.entity.player.EntityPlayer) && (target instanceof IHunterEntity || Helper.isHunter(target))) {
             return;
         }
         super.setAttackTarget(target);
@@ -60,7 +60,7 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
 
     @Override
     public void setRevengeTarget(EntityLivingBase target) {
-        if (target != null && (target instanceof IHunterEntity || Helper.isHunter(target))) {
+        if (target != null && !(target instanceof net.minecraft.entity.player.EntityPlayer) && (target instanceof IHunterEntity || Helper.isHunter(target))) {
             return;
         }
         super.setRevengeTarget(target);
@@ -70,11 +70,11 @@ public abstract class EntityHunterBase extends EntityCreature implements IHunter
     public boolean attackEntityFrom(net.minecraft.util.DamageSource source, float amount) {
         if (source != null) {
             net.minecraft.entity.Entity attacker = source.getEntity();
-            if (attacker instanceof EntityLivingBase && (attacker instanceof IHunterEntity || Helper.isHunter((EntityLivingBase) attacker))) {
+            if (attacker instanceof EntityLivingBase && !(attacker instanceof net.minecraft.entity.player.EntityPlayer) && (attacker instanceof IHunterEntity || Helper.isHunter((EntityLivingBase) attacker))) {
                 return false;
             }
             net.minecraft.entity.Entity direct = source.getSourceOfDamage();
-            if (direct instanceof EntityLivingBase && (direct instanceof IHunterEntity || Helper.isHunter((EntityLivingBase) direct))) {
+            if (direct instanceof EntityLivingBase && !(direct instanceof net.minecraft.entity.player.EntityPlayer) && (direct instanceof IHunterEntity || Helper.isHunter((EntityLivingBase) direct))) {
                 return false;
             }
         }

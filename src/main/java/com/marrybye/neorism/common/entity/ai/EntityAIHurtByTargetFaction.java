@@ -36,6 +36,9 @@ public class EntityAIHurtByTargetFaction extends EntityAITarget {
     public static boolean isSameFactionMob(EntityLivingBase self, EntityLivingBase other, IFaction faction) {
         if (self == null || other == null) return false;
         if (self == other) return true;
+        if (other instanceof net.minecraft.entity.player.EntityPlayer) {
+            return false;
+        }
         if (faction == ModFactions.HUNTER) {
             return Helper.isHunter(other) || other instanceof IHunterEntity;
         }
@@ -80,6 +83,10 @@ public class EntityAIHurtByTargetFaction extends EntityAITarget {
             this.taskOwner.posX + dist, this.taskOwner.posY + 10.0D, this.taskOwner.posZ + dist);
 
         if (this.faction == ModFactions.HUNTER) {
+            if (Helper.isHunter(attacker)) {
+                super.startExecuting();
+                return;
+            }
             // Canonical HunterHurtByTargetGoal: alert all Basic and Advanced Hunters (excluding HunterTrainer)
             List<EntityHunterBase> allies = this.taskOwner.worldObj.getEntitiesWithinAABB(EntityHunterBase.class, alertBox);
             for (EntityHunterBase ally : allies) {
@@ -91,6 +98,10 @@ public class EntityAIHurtByTargetFaction extends EntityAITarget {
                 }
             }
         } else if (this.faction == ModFactions.VAMPIRE) {
+            if (Helper.isVampire(attacker)) {
+                super.startExecuting();
+                return;
+            }
             // Canonical VampireHurtByTargetGoal: alert all Basic and Advanced Vampires (excluding Barons)
             List<EntityVampireBase> allies = this.taskOwner.worldObj.getEntitiesWithinAABB(EntityVampireBase.class, alertBox);
             for (EntityVampireBase ally : allies) {

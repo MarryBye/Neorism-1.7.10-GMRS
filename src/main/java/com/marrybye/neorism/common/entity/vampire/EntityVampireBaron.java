@@ -34,11 +34,32 @@ public class EntityVampireBaron extends EntityVampireBase {
     private static final int WATCHER_ENRAGED = 22;
 
     private int castCooldown = 40;
+    private String baronBaseName = null;
+
+    private static final String[] MALE_FIRST_NAMES = {
+        "Влад", "Виктор", "Кассиан", "Люсьен", "Алистер", "Винсент", "Дамиан",
+        "Морбиус", "Бальтазар", "Габриэль", "Раду", "Родерик", "Валериус", "Малакар", "Корнелиус"
+    };
+
+    private static final String[] FEMALE_FIRST_NAMES = {
+        "Кармилла", "Элизабета", "Ленора", "Серафина", "Морвенна", "Изольда", "Розалинда",
+        "Лилит", "Ванесса", "Вивьен", "Аурелия", "Селена", "Доротея", "Элеонора", "Моргана"
+    };
+
+    private static final String[] PARTICLES = {
+        "фон", "де", "ван", "цу", "де ла", "дю"
+    };
+
+    private static final String[] SURNAMES = {
+        "Дракула", "Цепеш", "Батори", "Карнштейн", "Корвинус", "Равенлофт", "Карштайн",
+        "Сангвис", "Найтшейд", "Блэквуд", "Шадоуэнд", "Мортис", "Вейн", "Мальморт", "Бладворт"
+    };
 
     public EntityVampireBaron(World world) {
         super(world);
         this.setSize(0.7F, 2.1F);
         this.experienceValue = 35;
+        this.setAlwaysRenderNameTag(true);
     }
 
     @Override
@@ -47,6 +68,35 @@ public class EntityVampireBaron extends EntityVampireBase {
         this.dataWatcher.addObject(WATCHER_LEVEL, Integer.valueOf(0));
         this.dataWatcher.addObject(WATCHER_LADY, Byte.valueOf((byte) 0));
         this.dataWatcher.addObject(WATCHER_ENRAGED, Byte.valueOf((byte) 0));
+    }
+
+    public void generateBaronName() {
+        boolean lady = isLady();
+        String firstName = lady
+            ? FEMALE_FIRST_NAMES[this.rand.nextInt(FEMALE_FIRST_NAMES.length)]
+            : MALE_FIRST_NAMES[this.rand.nextInt(MALE_FIRST_NAMES.length)];
+        String surname = SURNAMES[this.rand.nextInt(SURNAMES.length)];
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(lady ? "Баронесса " : "Барон ");
+        sb.append(firstName).append(" ");
+        if (this.rand.nextFloat() < 0.45F) {
+            String particle = PARTICLES[this.rand.nextInt(PARTICLES.length)];
+            sb.append(particle).append(" ");
+        }
+        sb.append(surname);
+        this.baronBaseName = sb.toString();
+        updateCustomNameTag();
+    }
+
+    public void updateCustomNameTag() {
+        if (this.baronBaseName == null) {
+            generateBaronName();
+            return;
+        }
+        int displayLevel = getEntityLevel() + 1; // 1 to 5
+        this.setCustomNameTag(this.baronBaseName + " (Ур. " + displayLevel + ")");
+        this.setAlwaysRenderNameTag(true);
     }
 
     @Override
@@ -84,6 +134,7 @@ public class EntityVampireBaron extends EntityVampireBase {
         this.dataWatcher.updateObject(WATCHER_LEVEL, Integer.valueOf(clamped));
         this.experienceValue = 20 + 5 * clamped;
         this.updateAttributesForLevel();
+        this.updateCustomNameTag();
     }
 
     public boolean isLady() {
@@ -92,6 +143,9 @@ public class EntityVampireBaron extends EntityVampireBase {
 
     public void setLady(boolean lady) {
         this.dataWatcher.updateObject(WATCHER_LADY, Byte.valueOf((byte) (lady ? 1 : 0)));
+        if (this.baronBaseName != null) {
+            this.generateBaronName();
+        }
     }
 
     public boolean isEnraged() {
@@ -152,6 +206,10 @@ public class EntityVampireBaron extends EntityVampireBase {
         super.onLivingUpdate();
 
         if (!this.worldObj.isRemote && this.isEntityAlive()) {
+            if (this.baronBaseName == null) {
+                generateBaronName();
+            }
+
             EntityLivingBase target = this.getAttackTarget();
 
             if (target != null && target.isEntityAlive()) {
@@ -210,6 +268,9 @@ public class EntityVampireBaron extends EntityVampireBase {
         super.writeEntityToNBT(nbt);
         nbt.setInteger("level", getEntityLevel());
         nbt.setBoolean("lady", isLady());
+        if (baronBaseName != null) {
+            nbt.setString("baronBaseName", baronBaseName);
+        }
     }
 
     @Override
@@ -220,6 +281,10 @@ public class EntityVampireBaron extends EntityVampireBase {
         }
         if (nbt.hasKey("lady")) {
             setLady(nbt.getBoolean("lady"));
+        }
+        if (nbt.hasKey("baronBaseName")) {
+            this.baronBaseName = nbt.getString("baronBaseName");
+            updateCustomNameTag();
         }
     }
 
@@ -246,6 +311,7 @@ public class EntityVampireBaron extends EntityVampireBase {
         data = super.onSpawnWithEgg(data);
         this.setLady(this.rand.nextBoolean());
         this.setEntityLevel(this.rand.nextInt(MAX_LEVEL + 1));
+        this.generateBaronName();
         return data;
     }
 
