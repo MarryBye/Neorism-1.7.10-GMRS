@@ -321,13 +321,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
 
     @Override
     public boolean attackEntityAsMob(Entity target) {
-        boolean flag = super.attackEntityAsMob(target);
-        if (flag) {
-            float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-            this.heal(damage * (getPhase() == 3 ? 0.5F : 0.25F));
-            this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.eat", 1.0F, 0.7F);
-        }
-        return flag;
+        return super.attackEntityAsMob(target);
     }
 
     @Override
@@ -418,20 +412,14 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
 
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
-        // Guaranteed Sovereign Blood
-        this.dropItem(ModItems.sovereignBlood, 1);
+        // Canonical Dracula drop: 15 to 48 Sovereign Blood
+        int count = 15 + this.rand.nextInt(34);
+        if (looting > 0) {
+            count += this.rand.nextInt(looting * 4);
+        }
+        this.dropItem(ModItems.sovereignBlood, count);
 
-        // Ancient Vampire Grimoire (Tier 9)
-        this.entityDropItem(new ItemStack(ModItems.vampireBook, 1, 8), 0.0F);
-
-        // Ultimate Heart Striker sword
-        this.entityDropItem(new ItemStack(ModItems.heartStriker, 1, 2), 0.0F);
-
-        // Pure blood and fangs
-        this.entityDropItem(new ItemStack(ModItems.pureBlood, 3, 4), 0.0F);
-        this.dropItem(ModItems.vampireFang, 6 + this.rand.nextInt(6));
-
-        ModLogger.combat("Lord Dracula defeated! Dropped Sovereign Blood, Tier 9 Book, and Ultimate Heart Striker.");
+        ModLogger.combat("Lord Dracula defeated! Dropped %d Sovereign Blood.", count);
     }
 
     public int getPhase() {

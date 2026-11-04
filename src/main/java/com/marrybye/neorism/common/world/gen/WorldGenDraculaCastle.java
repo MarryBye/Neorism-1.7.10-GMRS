@@ -179,21 +179,21 @@ public class WorldGenDraculaCastle extends WorldGenerator {
         world.setBlock(cx, cy, cz, Blocks.chest, 0, 2);
         TileEntityChest chest = (TileEntityChest) world.getTileEntity(cx, cy, cz);
         if (chest != null) {
-            if (ModItems.sovereignBlood != null) {
-                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.sovereignBlood));
+            if (ModItems.vampireBloodBottle != null) {
+                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.vampireBloodBottle, 1 + rand.nextInt(3)));
             }
             if (ModItems.pureBlood != null) {
-                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.pureBlood, 2 + rand.nextInt(3)));
+                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.pureBlood, 1 + rand.nextInt(2), 3 + rand.nextInt(2)));
             }
             if (ModItems.vampireBook != null) {
-                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.vampireBook, 1 + rand.nextInt(2)));
+                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.vampireBook, 1));
             }
-            if (ModItems.bloodInfusedNetherite != null && rand.nextFloat() < 0.4F) {
-                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.bloodInfusedNetherite));
+            if (ModItems.vampireCrown != null && rand.nextFloat() < 0.3F) {
+                chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ModItems.vampireCrown));
             }
             chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.diamond, 2 + rand.nextInt(4)));
             chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.emerald, 3 + rand.nextInt(6)));
-            chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Blocks.gold_block, 1 + rand.nextInt(2)));
+            chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.gold_ingot, 4 + rand.nextInt(8)));
         }
     }
 }

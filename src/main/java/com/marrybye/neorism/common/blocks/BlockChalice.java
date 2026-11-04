@@ -107,7 +107,7 @@ public class BlockChalice extends Block {
             return true;
         }
         if (item instanceof ItemBloodBottle) {
-            return ItemBloodBottle.getBlood(stack) > 0;
+            return ItemBloodBottle.getBlood(stack) >= ItemBloodBottle.MAX_BLOOD;
         }
         return false;
     }
