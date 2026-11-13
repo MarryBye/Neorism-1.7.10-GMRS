@@ -103,7 +103,6 @@ public class ItemHolyWater extends ItemNeorism implements IItemWithTier, IFactio
                 // Non-vampires: cure infection
                 if (player.isPotionActive(ModPotions.sanguinare)) {
                     player.removePotionEffect(ModPotions.sanguinare.id);
-                    ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 1.0F, 1.0F);
                     ModLogger.combat("Player %s was cured of Sanguinare Vampiris by drinking holy water",
                         player.getCommandSenderName());
                 }

@@ -67,10 +67,39 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
         setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
+    public int getTierMaxDamage(ItemStack stack) {
+        int meta = Math.max(0, Math.min(stack != null ? stack.getItemDamage() : 0, TYPES - 1));
+        return DURABILITY[meta];
+    }
+
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int meta = Math.max(0, Math.min(stack.getItemDamage(), TYPES - 1));
-        return DURABILITY[meta];
+        return 0;
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return DurabilityHelper.getDurabilityForDisplay(stack, getTierMaxDamage(stack));
+    }
+
+    @Override
+    public int getDisplayDamage(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack);
+    }
+
+    @Override
+    public boolean isDamaged(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public boolean isItemTool(ItemStack stack) {
+        return true;
     }
 
     @Override
@@ -155,11 +184,11 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
 
                 if (!player.capabilities.isCreativeMode) {
                     setClipAmmo(stack, clipAmmo - 1, isHeavy);
-                    stack.damageItem(1, player);
+                    DurabilityHelper.damageStack(stack, 1, player, getTierMaxDamage(stack));
                 }
 
                 // If clip emptied, try reloading next clip from inventory
-                if (clipAmmo - 1 <= 0 && !player.capabilities.isCreativeMode) {
+                if (stack.stackSize > 0 && clipAmmo - 1 <= 0 && !player.capabilities.isCreativeMode) {
                     reloadClipFromInventory(stack, player);
                 }
                 return stack;
@@ -238,7 +267,7 @@ public class ItemCrossbow extends ItemBow implements IFactionRestriction {
                 }
             }
 
-            stack.damageItem(1, player);
+            DurabilityHelper.damageStack(stack, 1, player, getTierMaxDamage(stack));
         }
     }
 

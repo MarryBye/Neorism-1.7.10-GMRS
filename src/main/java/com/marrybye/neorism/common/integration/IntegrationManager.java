@@ -47,9 +47,8 @@ public class IntegrationManager {
             HodgepodgeIntegration.init();
         }
 
-        if (neiLoaded) {
-            NEIIntegration.init();
-        }
+        // NEI discovers NEIConfig via IConfigureNEI automatically on the client side;
+        // never invoke NEIConfig from common postInit (prevents dedicated-server crashes and duplicate registration).
 
         ModLogger.debug("Cross-mod integrations complete: [EtFuturum: %b, CombatBackport: %b, VillagerTrades: %b, VillageNames: %b, Hodgepodge: %b, NEI: %b]",
             etFuturumLoaded, combatBackportLoaded, villagerTradesLoaded, villageNamesLoaded, hodgepodgeLoaded, neiLoaded);

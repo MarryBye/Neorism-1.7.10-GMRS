@@ -1,5 +1,7 @@
 package com.marrybye.neorism.common.items;
 
+import java.util.List;
+
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
 import com.marrybye.neorism.common.core.ModSounds;
@@ -7,11 +9,14 @@ import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 import com.marrybye.neorism.common.vampire.VampirePlayer;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -59,7 +64,6 @@ public class ItemHumanHeart extends ItemFood {
                 float sat = weak ? 0.9F : 1.5F;
                 vp.drinkBlood(blood, sat);
                 world.playSoundAtEntity(player, "random.burp", 0.5F, player.getRNG().nextFloat() * 0.1F + 0.9F);
-                ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 0.8F, 1.0F);
                 ModLogger.combat("Vampire %s consumed %s human heart (+%d blood, %.1f sat)",
                     player.getCommandSenderName(), weak ? "weak" : "pure", blood, sat);
             }
@@ -78,5 +82,17 @@ public class ItemHumanHeart extends ItemFood {
             return StatCollector.translateToLocal(key).trim();
         }
         return super.getItemStackDisplayName(stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+        int blood = weak ? 10 : 20;
+        tooltip.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocalFormatted("tooltip.neorism.human_heart.vampire", blood));
+        if (!weak) {
+            tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.human_heart.altar"));
+        }
+        tooltip.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal("tooltip.neorism.human_heart.mortal"));
     }
 }

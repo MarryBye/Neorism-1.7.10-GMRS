@@ -1,18 +1,14 @@
 package com.marrybye.neorism.common.integration;
 
-import com.marrybye.neorism.common.integration.nei.NEIConfig;
 import com.marrybye.neorism.common.util.ModLogger;
 
 /**
- * Dispatcher for NEI integration.
+ * Status helper for NEI integration.
+ * Actual handler registration happens solely client-side via {@code NEIConfig} (IConfigureNEI).
  */
 public class NEIIntegration {
 
     public static void init() {
-        try {
-            new NEIConfig().loadConfig();
-        } catch (Throwable t) {
-            ModLogger.error("Failed to initialize NEI integration: %s", t.getMessage());
-        }
+        ModLogger.debug("NEI detected; client plugin is loaded automatically via IConfigureNEI.");
     }
 }

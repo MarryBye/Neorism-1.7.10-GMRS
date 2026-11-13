@@ -12,16 +12,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ISpecialArmor;
 
 import com.marrybye.neorism.api.faction.IFaction;
 import com.marrybye.neorism.api.items.IItemWithTier;
@@ -35,7 +38,7 @@ import com.marrybye.neorism.common.faction.IFactionRestriction;
  * Grants movement speed attribute bonuses and protection against vampire attacks.
  * Ported 1:1 from TeamLapen's HunterArmorItem.java.
  */
-public class ItemHunterArmor extends ItemArmor implements IItemWithTier, IFactionRestriction {
+public class ItemHunterArmor extends ItemArmor implements IItemWithTier, IFactionRestriction, ISpecialArmor {
 
     public static final int TIERS = 3;
     private static final String[] SLOTS = {"head", "chest", "legs", "feet"};
@@ -55,11 +58,53 @@ public class ItemHunterArmor extends ItemArmor implements IItemWithTier, IFactio
         setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
+    public int getTierMaxDamage(ItemStack stack) {
+        int tier = Math.max(0, Math.min(stack != null ? stack.getItemDamage() : 0, TIERS - 1));
+        return 200 + tier * 250;
+    }
+
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
-        int baseDurability = 200 + tier * 250;
-        return baseDurability;
+        return 0;
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return DurabilityHelper.getDurabilityForDisplay(stack, getTierMaxDamage(stack));
+    }
+
+    @Override
+    public int getDisplayDamage(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack);
+    }
+
+    @Override
+    public boolean isDamaged(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
+        if (source != null && source.isUnblockable()) {
+            return new ArmorProperties(0, 0.0D, 0);
+        }
+        int absorbMax = Math.max(1, getTierMaxDamage(armor) + 1 - DurabilityHelper.getWearDamage(armor));
+        return new ArmorProperties(0, this.damageReduceAmount / 25.0D, absorbMax);
+    }
+
+    @Override
+    public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
+        return this.damageReduceAmount;
+    }
+
+    @Override
+    public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
+        DurabilityHelper.damageStack(stack, damage, entity, getTierMaxDamage(stack));
     }
 
     @Override

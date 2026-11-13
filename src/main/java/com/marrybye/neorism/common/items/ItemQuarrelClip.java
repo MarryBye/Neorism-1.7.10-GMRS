@@ -45,7 +45,7 @@ public class ItemQuarrelClip extends Item {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey("ammo")) {
             return stack.getTagCompound().getInteger("ammo");
         }
-        return MAX_AMMO; // Default full
+        return 0; // Freshly crafted clips start empty unless ammo NBT is explicitly set
     }
 
     public static void setAmmoCount(ItemStack stack, int ammo) {
@@ -87,9 +87,17 @@ public class ItemQuarrelClip extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List list) {
+        ItemStack emptyNormal = new ItemStack(item, 1, 0);
+        setAmmoCount(emptyNormal, 0);
+        list.add(emptyNormal);
+
         ItemStack normal = new ItemStack(item, 1, 0);
         setAmmoCount(normal, MAX_AMMO);
         list.add(normal);
+
+        ItemStack emptyHeavy = new ItemStack(item, 1, 1);
+        setAmmoCount(emptyHeavy, 0);
+        list.add(emptyHeavy);
 
         ItemStack heavy = new ItemStack(item, 1, 1);
         setAmmoCount(heavy, MAX_AMMO);

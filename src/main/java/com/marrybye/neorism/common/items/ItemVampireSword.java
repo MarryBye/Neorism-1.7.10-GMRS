@@ -16,6 +16,7 @@ import com.marrybye.neorism.common.vampire.VampirePlayer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -41,10 +42,39 @@ public abstract class ItemVampireSword extends ItemSword implements IItemWithTie
         setMaxDamage(0);
     }
 
+    public int getTierMaxDamage(ItemStack stack) {
+        int tierIdx = Math.max(0, Math.min(stack != null ? stack.getItemDamage() : 0, TIERS - 1));
+        return MAX_DURABILITY[tierIdx];
+    }
+
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int tierIdx = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
-        return MAX_DURABILITY[tierIdx];
+        return 0;
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return DurabilityHelper.getDurabilityForDisplay(stack, getTierMaxDamage(stack));
+    }
+
+    @Override
+    public int getDisplayDamage(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack);
+    }
+
+    @Override
+    public boolean isDamaged(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public boolean isItemTool(ItemStack stack) {
+        return true;
     }
 
     @Override
@@ -170,7 +200,15 @@ public abstract class ItemVampireSword extends ItemSword implements IItemWithTie
             }
         }
 
-        stack.damageItem(1, attacker);
+        DurabilityHelper.damageStack(stack, 1, attacker, getTierMaxDamage(stack));
+        return true;
+    }
+
+    @Override
+    public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase entity) {
+        if (block != null && block.getBlockHardness(world, x, y, z) != 0.0F) {
+            DurabilityHelper.damageStack(stack, 2, entity, getTierMaxDamage(stack));
+        }
         return true;
     }
 

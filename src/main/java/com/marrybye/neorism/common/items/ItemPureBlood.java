@@ -73,7 +73,6 @@ public class ItemPureBlood extends ItemNeorism {
                 VampirePlayer vp = VampirePlayer.get(player);
                 if (vp != null && vp.getBloodStats() != null) {
                     vp.getBloodStats().addBlood(bloodAmount, sat);
-                    ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 1.0F, 1.0F);
                     ModLogger.combat("Vampire %s drank Pure Blood Tier %d (+%d blood)",
                         player.getCommandSenderName(), tier + 1, bloodAmount);
 

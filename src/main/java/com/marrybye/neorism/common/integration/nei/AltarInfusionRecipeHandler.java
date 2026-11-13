@@ -1,54 +1,58 @@
 package com.marrybye.neorism.common.integration.nei;
 
 import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.marrybye.neorism.client.gui.GuiAltarInfusion;
+import com.marrybye.neorism.common.core.ModBlocks;
 import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.vampire.VampireLeveling;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- * NEI Recipe Handler for Vampire Altar of Infusion Rituals.
+ * NEI Recipe Handler for Vampire Altar of Infusion Rituals (Vampire Levels 5-14).
  */
 public class AltarInfusionRecipeHandler extends TemplateRecipeHandler {
 
     public class CachedInfusionRecipe extends CachedRecipe {
         private final List<PositionedStack> inputs = new ArrayList<PositionedStack>();
-        private final PositionedStack result;
+        private final PositionedStack altarStack;
         public final int targetLevel;
         public final int pureBloodTier;
-        public final int hearts;
+        public final int pureBloodQuantity;
+        public final int structurePoints;
 
         public CachedInfusionRecipe(VampireLeveling.AltarInfusionRequirement req) {
             this.targetLevel = req.getTargetLevel();
             this.pureBloodTier = req.getPureBloodLevel();
-            this.hearts = req.getHumanHeartQuantity();
+            this.pureBloodQuantity = req.getPureBloodQuantity();
+            this.structurePoints = req.getRequiredStructurePoints();
 
-            // Pure blood flask (slot 0)
+            // Slot 0: Pure Blood (GUI 44, 34 -> NEI 39, 23)
             if (req.getPureBloodQuantity() > 0) {
-                inputs.add(new PositionedStack(new ItemStack(ModItems.pureBlood, req.getPureBloodQuantity(), req.getPureBloodLevel()), 25, 6));
+                inputs.add(new PositionedStack(new ItemStack(ModItems.pureBlood, req.getPureBloodQuantity(), req.getPureBloodLevel()), 39, 23));
             }
 
-            // Human hearts (slot 1)
+            // Slot 1: Human Heart (GUI 80, 34 -> NEI 75, 23)
             if (req.getHumanHeartQuantity() > 0) {
-                inputs.add(new PositionedStack(new ItemStack(ModItems.humanHeart, req.getHumanHeartQuantity()), 43, 6));
+                inputs.add(new PositionedStack(new ItemStack(ModItems.humanHeart, req.getHumanHeartQuantity()), 75, 23));
             }
 
-            // Vampire book (slot 2)
+            // Slot 2: Vampire Book (GUI 116, 34 -> NEI 111, 23)
             if (req.getVampireBookQuantity() > 0) {
-                inputs.add(new PositionedStack(new ItemStack(ModItems.vampireBook, req.getVampireBookQuantity()), 34, 24));
+                inputs.add(new PositionedStack(new ItemStack(ModItems.vampireBook, req.getVampireBookQuantity()), 111, 23));
             }
 
-            // Ritual reward: represented by next level pure blood flask
-            this.result = new PositionedStack(new ItemStack(ModItems.pureBlood, 1, Math.min(4, req.getPureBloodLevel())), 119, 15);
+            // Visual indicator of Altar of Infusion (NOT returned from getResult() so R on ingredients never matches a fake item)
+            this.altarStack = new PositionedStack(new ItemStack(ModBlocks.altarInfusion), 141, 23);
         }
 
         @Override
@@ -58,7 +62,12 @@ public class AltarInfusionRecipeHandler extends TemplateRecipeHandler {
 
         @Override
         public PositionedStack getResult() {
-            return this.result;
+            return null;
+        }
+
+        @Override
+        public List<PositionedStack> getOtherStacks() {
+            return Collections.singletonList(this.altarStack);
         }
     }
 
@@ -69,7 +78,7 @@ public class AltarInfusionRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public String getGuiTexture() {
-        return "textures/gui/container/crafting_table.png";
+        return "neorism:textures/gui/container/altar_of_infusion.png";
     }
 
     @Override
@@ -89,18 +98,23 @@ public class AltarInfusionRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadTransferRects() {
-        this.transferRects.add(new RecipeTransferRect(new Rectangle(74, 15, 24, 17), getOverlayIdentifier()));
+        this.transferRects.add(new RecipeTransferRect(new Rectangle(136, 20, 24, 22), getOverlayIdentifier()));
     }
 
     @Override
     public void drawExtras(int recipe) {
-        this.drawProgressBar(74, 15, 176, 14, 24, 17, 40, 0); // arrow
         CachedInfusionRecipe r = (CachedInfusionRecipe) this.arecipes.get(recipe);
         if (r != null) {
-            String ritualText = "Vampire Level " + r.targetLevel;
-            String bloodText = "Blood Tier: " + (r.pureBloodTier + 1);
-            GuiDraw.drawString(ritualText, 25, 46, 0x8A0303, false);
-            GuiDraw.drawString(bloodText, 100, 46, 0x404040, false);
+            String lvlText = StatCollector.translateToLocalFormatted("nei.neorism.altar_infusion.level", r.targetLevel);
+            String bloodTier = r.pureBloodQuantity > 0 ? String.valueOf(r.pureBloodTier + 1) : "-";
+            String bloodText = StatCollector.translateToLocalFormatted("nei.neorism.altar_infusion.blood_tier", bloodTier);
+            String ptsText = StatCollector.translateToLocalFormatted("nei.neorism.altar_infusion.structure_points", r.structurePoints);
+            String pillarHint = StatCollector.translateToLocal("nei.neorism.altar_infusion.pillar_hint");
+
+            GuiDraw.drawString(lvlText, 8, 6, 0x8A0303, false);
+            GuiDraw.drawString(bloodText, 92, 6, 0x404040, false);
+            GuiDraw.drawString(ptsText, 8, 44, 0x404040, false);
+            GuiDraw.drawString(pillarHint, 8, 54, 0x555555, false);
         }
     }
 
@@ -126,17 +140,21 @@ public class AltarInfusionRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        for (CachedInfusionRecipe r : getCraftingList()) {
-            if (NEIServerUtils.areStacksSameTypeCrafting(r.getResult().item, result)) {
-                this.arecipes.add(r);
-            }
-        }
+        // Altar Infusion advances player Vampire Level, never crafts an item.
     }
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
+        if (ingredient == null) return;
+        Item item = ingredient.getItem();
+        boolean isAltarPart = item == Item.getItemFromBlock(ModBlocks.altarInfusion)
+            || item == Item.getItemFromBlock(ModBlocks.altarPillar)
+            || item == Item.getItemFromBlock(ModBlocks.altarTip);
+
         for (CachedInfusionRecipe r : getCraftingList()) {
-            if (r.contains(r.getIngredients(), ingredient)) {
+            if (isAltarPart || r.contains(r.getIngredients(), ingredient)) {
+                this.arecipes.add(r);
+            } else if (item == ModItems.pureBlood && r.pureBloodQuantity > 0 && ingredient.getItemDamage() >= r.pureBloodTier) {
                 this.arecipes.add(r);
             }
         }

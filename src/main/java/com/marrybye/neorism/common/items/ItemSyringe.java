@@ -11,6 +11,8 @@ import com.marrybye.neorism.common.util.ModLogger;
 import com.marrybye.neorism.common.vampire.BloodStats;
 import com.marrybye.neorism.common.vampire.VampirePlayer;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 /**
@@ -139,5 +143,20 @@ public class ItemSyringe extends ItemNeorism {
             }
         }
         return stack;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+        String key;
+        if (syringeType == SyringeType.EMPTY) {
+            key = "tooltip.vampirism.syringe_empty";
+        } else if (syringeType == SyringeType.BLOOD) {
+            key = "tooltip.vampirism.syringe_blood";
+        } else {
+            key = "tooltip.neorism.serum_injection";
+        }
+        com.marrybye.neorism.client.events.TooltipEventHandler.addWrappedTranslation(tooltip, key, EnumChatFormatting.GRAY);
     }
 }

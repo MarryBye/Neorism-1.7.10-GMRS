@@ -31,26 +31,26 @@ public class HunterTableRecipeHandler extends TemplateRecipeHandler {
             this.requiredTableTier = req.requiredTableTier;
             this.targetLevel = targetLevel;
 
-            // Slot 0: Book
-            inputs.add(new PositionedStack(new ItemStack(Items.book), 25, 6));
+            // Slot 0: Book (GUI 15, 28 -> NEI 10, 17)
+            inputs.add(new PositionedStack(new ItemStack(Items.book, req.bookQuantity), 10, 17));
 
-            // Slot 1: Vampire Fangs
+            // Slot 1: Vampire Fangs (GUI 42, 28 -> NEI 37, 17)
             if (req.vampireFangQuantity > 0) {
-                inputs.add(new PositionedStack(new ItemStack(ModItems.vampireFang, req.vampireFangQuantity), 43, 6));
+                inputs.add(new PositionedStack(new ItemStack(ModItems.vampireFang, req.vampireFangQuantity), 37, 17));
             }
 
-            // Slot 2: Pure Blood Flask
+            // Slot 2: Pure Blood Flask (GUI 69, 28 -> NEI 64, 17)
             if (req.pureBloodQuantity > 0 && req.pureBloodLevel >= 0) {
-                inputs.add(new PositionedStack(new ItemStack(ModItems.pureBlood, req.pureBloodQuantity, req.pureBloodLevel), 25, 24));
+                inputs.add(new PositionedStack(new ItemStack(ModItems.pureBlood, req.pureBloodQuantity, req.pureBloodLevel), 64, 17));
             }
 
-            // Slot 3: Vampire Book
+            // Slot 3: Vampire Book (GUI 96, 28 -> NEI 91, 17)
             if (req.vampireBookQuantity > 0) {
-                inputs.add(new PositionedStack(new ItemStack(ModItems.vampireBook, req.vampireBookQuantity), 43, 24));
+                inputs.add(new PositionedStack(new ItemStack(ModItems.vampireBook, req.vampireBookQuantity), 91, 17));
             }
 
-            // Result: Hunter Intel
-            this.result = new PositionedStack(new ItemStack(ModItems.hunterIntel, 1, req.resultIntelTier), 119, 15);
+            // Slot 4: Hunter Intel (GUI 146, 28 -> NEI 141, 17)
+            this.result = new PositionedStack(new ItemStack(ModItems.hunterIntel, 1, req.resultIntelTier), 141, 17);
         }
 
         @Override
@@ -71,7 +71,7 @@ public class HunterTableRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public String getGuiTexture() {
-        return "textures/gui/container/crafting_table.png";
+        return "neorism:textures/gui/container/hunter_table.png";
     }
 
     @Override
@@ -91,18 +91,17 @@ public class HunterTableRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void loadTransferRects() {
-        this.transferRects.add(new RecipeTransferRect(new Rectangle(74, 15, 24, 17), getOverlayIdentifier()));
+        this.transferRects.add(new RecipeTransferRect(new Rectangle(113, 17, 24, 16), getOverlayIdentifier()));
     }
 
     @Override
     public void drawExtras(int recipe) {
-        this.drawProgressBar(74, 15, 176, 14, 24, 17, 40, 0); // arrow
         CachedHunterTableRecipe r = (CachedHunterTableRecipe) this.arecipes.get(recipe);
         if (r != null) {
-            String tierText = "Table Tier: " + (r.requiredTableTier + 1);
-            String levelText = "For Lvl: " + r.targetLevel;
-            GuiDraw.drawString(tierText, 25, 46, 0x404040, false);
-            GuiDraw.drawString(levelText, 100, 46, 0x006600, false);
+            String tierText = StatCollector.translateToLocalFormatted("nei.neorism.hunter_table.tier", r.requiredTableTier + 1);
+            String levelText = StatCollector.translateToLocalFormatted("nei.neorism.hunter_table.level", r.targetLevel);
+            GuiDraw.drawString(tierText, 10, 48, 0x404040, false);
+            GuiDraw.drawString(levelText, 95, 48, 0x006600, false);
         }
     }
 

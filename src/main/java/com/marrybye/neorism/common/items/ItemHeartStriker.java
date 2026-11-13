@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
-import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.faction.FactionRestriction;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
@@ -62,7 +61,6 @@ public class ItemHeartStriker extends ItemVampireSword {
                     vp.getBloodStats().addBlood(1, 0.5F);
                 }
 
-                ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 0.8F, 1.2F);
                 ModLogger.combat("Heart Striker (Tier %d) siphoned %.1f HP for %s",
                     tier + 1, heal, player.getCommandSenderName());
             }

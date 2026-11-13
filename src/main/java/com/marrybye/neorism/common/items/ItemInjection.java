@@ -1,5 +1,7 @@
 package com.marrybye.neorism.common.items;
 
+import java.util.List;
+
 import com.marrybye.neorism.common.core.ModDamageSource;
 import com.marrybye.neorism.common.core.ModFactions;
 import com.marrybye.neorism.common.core.ModPotions;
@@ -9,11 +11,14 @@ import com.marrybye.neorism.common.faction.FactionPlayerHandler;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 /**
@@ -109,5 +114,13 @@ public class ItemInjection extends ItemNeorism {
             }
         }
         return super.itemInteractionForEntity(stack, player, target);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+        String key = (type == Type.GARLIC) ? "tooltip.vampirism.injection_garlic" : "tooltip.vampirism.injection_sanguinare";
+        com.marrybye.neorism.client.events.TooltipEventHandler.addWrappedTranslation(tooltip, key, EnumChatFormatting.GRAY);
     }
 }

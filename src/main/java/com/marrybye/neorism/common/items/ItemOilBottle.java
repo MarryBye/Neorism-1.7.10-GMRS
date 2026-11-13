@@ -3,7 +3,10 @@ package com.marrybye.neorism.common.items;
 import java.util.List;
 
 import com.marrybye.neorism.Neorism;
+import com.marrybye.neorism.api.faction.IFaction;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
+import com.marrybye.neorism.common.core.ModFactions;
+import com.marrybye.neorism.common.faction.IFactionRestriction;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,7 +14,10 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
@@ -19,8 +25,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 /**
- * Alchemical Weapon Oil Bottles crafted in the cauldron and applied to hunter and vampire blades.
- * Ported 1:1 from TeamLapen's ModOils.java and OilBottleItem.java.
+ * Alchemical Oil Bottles crafted in the cauldron and applied to hunter weapons, armor, or tools.
+ * Ported from TeamLapen's ModOils.java and OilBottleItem.java.
  */
 public class ItemOilBottle extends Item {
 
@@ -89,10 +95,65 @@ public class ItemOilBottle extends Item {
     }
 
     public static int getMetaForOil(String oilType) {
+        if (oilType == null) return -1;
         for (int i = 0; i < OIL_NAMES.length; i++) {
             if (OIL_NAMES[i].equalsIgnoreCase(oilType)) return i;
         }
-        return 0;
+        return -1;
+    }
+
+    /**
+     * Oils that can be applied to melee weapons (canonical EffectWeaponOils available in 1.7.10
+     * plus Neorism combat oils: garlic, spitfire, vampire_killer, bleeding).
+     */
+    public static boolean isWeaponOil(int meta) {
+        return (meta >= 3 && meta <= 14) || meta == 17 || (meta >= 21 && meta <= 24);
+    }
+
+    /**
+     * Smelting oil (meta 18) applies to pickaxes.
+     */
+    public static boolean isToolOil(int meta) {
+        return meta == 18;
+    }
+
+    /**
+     * Evasion oil (meta 20) applies to armor.
+     */
+    public static boolean isArmorOil(int meta) {
+        return meta == 20;
+    }
+
+    public static boolean isApplicableOil(int meta) {
+        return isWeaponOil(meta) || isToolOil(meta) || isArmorOil(meta);
+    }
+
+    /**
+     * Canonical applicability check matching TeamLapen's ApplicableOilRecipe:
+     * rejects crafting-only/quarrel-only oils (plant, vampire_blood, sovereign_blood, teleport, etc.)
+     * and forbids non-hunter (e.g. vampire-restricted) weapons and armor.
+     */
+    public static boolean canApplyOil(int oilMeta, ItemStack target) {
+        if (target == null || target.getItem() == null || !isApplicableOil(oilMeta)) {
+            return false;
+        }
+        Item item = target.getItem();
+        if (item instanceof IFactionRestriction) {
+            IFaction req = ((IFactionRestriction) item).getRequiredFaction(target);
+            if (req != null && req != ModFactions.HUNTER) {
+                return false;
+            }
+        }
+        if (isWeaponOil(oilMeta)) {
+            return (item instanceof ItemSword || item instanceof ItemHunterAxe) && !(item instanceof ItemVampireSword);
+        }
+        if (isToolOil(oilMeta)) {
+            return item instanceof ItemPickaxe || item.getToolClasses(target).contains("pickaxe");
+        }
+        if (isArmorOil(oilMeta)) {
+            return item instanceof ItemArmor;
+        }
+        return false;
     }
 
     public static String getAppliedOilType(ItemStack stack) {
@@ -109,16 +170,58 @@ public class ItemOilBottle extends Item {
         return 0;
     }
 
+    public static void applyOil(ItemStack target, int oilMeta) {
+        if (target == null) return;
+        if (!target.hasTagCompound()) {
+            target.setTagCompound(new NBTTagCompound());
+        }
+        target.getTagCompound().setString("appliedOil", getOilType(oilMeta));
+        target.getTagCompound().setInteger("oilCharges", CHARGES_PER_BOTTLE);
+    }
+
     public static void consumeOilCharge(ItemStack stack) {
         if (stack != null && stack.hasTagCompound() && stack.getTagCompound().hasKey("oilCharges")) {
             int charges = stack.getTagCompound().getInteger("oilCharges") - 1;
             if (charges <= 0) {
                 stack.getTagCompound().removeTag("appliedOil");
                 stack.getTagCompound().removeTag("oilCharges");
+                if (stack.getTagCompound().hasNoTags()) {
+                    stack.setTagCompound(null);
+                }
             } else {
                 stack.getTagCompound().setInteger("oilCharges", charges);
             }
         }
+    }
+
+    public static String getLocalizedOilName(String type) {
+        if (type == null || type.isEmpty()) return "";
+        String[] keys = {
+            "oil.neorism." + type,
+            "oil.vampirism." + type,
+            "item.neorism.oil." + type + ".name"
+        };
+        for (String key : keys) {
+            if (StatCollector.canTranslate(key)) {
+                return StatCollector.translateToLocal(key).trim();
+            }
+        }
+        return "Oil of " + type;
+    }
+
+    public static String getLocalizedOilDesc(String type) {
+        if (type == null || type.isEmpty()) return null;
+        String[] keys = {
+            "oil.neorism." + type + ".desc",
+            "oil.vampirism." + type + ".desc",
+            "item.neorism.oil." + type + ".desc"
+        };
+        for (String key : keys) {
+            if (StatCollector.canTranslate(key)) {
+                return StatCollector.translateToLocal(key).trim();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -128,16 +231,7 @@ public class ItemOilBottle extends Item {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        String type = getOilType(stack.getItemDamage());
-        String key = "oil.neorism." + type;
-        if (StatCollector.canTranslate(key)) {
-            return StatCollector.translateToLocal(key);
-        }
-        String vampKey = "oil.vampirism." + type;
-        if (StatCollector.canTranslate(vampKey)) {
-            return StatCollector.translateToLocal(vampKey);
-        }
-        return "Oil of " + type;
+        return getLocalizedOilName(getOilType(stack.getItemDamage()));
     }
 
     @Override
@@ -176,6 +270,7 @@ public class ItemOilBottle extends Item {
 
     @Override
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     public void getSubItems(Item item, CreativeTabs tab, List list) {
         for (int i = 0; i < TYPES; i++) {
             list.add(new ItemStack(item, 1, i));
@@ -184,32 +279,37 @@ public class ItemOilBottle extends Item {
 
     @Override
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean advanced) {
         int meta = stack.getItemDamage();
-        String descKey = "oil.neorism." + getOilType(meta) + ".desc";
-        if (StatCollector.canTranslate(descKey)) {
-            list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal(descKey));
+        String type = getOilType(meta);
+        String desc = getLocalizedOilDesc(type);
+        if (desc != null && !desc.isEmpty()) {
+            list.add(EnumChatFormatting.GRAY + desc);
         }
-        list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.neorism.oil.charges") + ": " + CHARGES_PER_BOTTLE);
-        list.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("tooltip.neorism.oil.apply_hint"));
+        if (isApplicableOil(meta)) {
+            list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.neorism.oil.charges") + ": " + CHARGES_PER_BOTTLE);
+            list.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("tooltip.neorism.oil.apply_hint"));
+        }
     }
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        // Try applying to weapon in hotbar slots
+        int oilMeta = stack.getItemDamage();
+        if (!isApplicableOil(oilMeta)) {
+            return stack;
+        }
         for (int i = 0; i < 9; i++) {
             ItemStack slot = player.inventory.getStackInSlot(i);
-            if (slot != null && slot != stack) {
-                if (slot.getItem() instanceof ItemVampireSword || slot.getItem() instanceof ItemHunterAxe) {
-                    if (!slot.hasTagCompound()) slot.setTagCompound(new NBTTagCompound());
-                    slot.getTagCompound().setString("appliedOil", getOilType(stack.getItemDamage()));
-                    slot.getTagCompound().setInteger("oilCharges", CHARGES_PER_BOTTLE);
+            if (slot != null && slot != stack && canApplyOil(oilMeta, slot)) {
+                if (!world.isRemote) {
+                    applyOil(slot, oilMeta);
                     world.playSoundAtEntity(player, "random.fizz", 0.5F, 1.5F);
                     if (!player.capabilities.isCreativeMode) {
                         stack.stackSize--;
                     }
-                    return stack;
                 }
+                return stack;
             }
         }
         return stack;

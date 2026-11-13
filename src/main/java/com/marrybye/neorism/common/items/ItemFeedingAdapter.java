@@ -1,14 +1,19 @@
 package com.marrybye.neorism.common.items;
 
+import java.util.List;
+
 import com.marrybye.neorism.common.core.ModCreativeTabs;
 import com.marrybye.neorism.common.core.ModItems;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.vampire.BloodStats;
 import com.marrybye.neorism.common.vampire.VampirePlayer;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 /**
@@ -71,5 +76,12 @@ public class ItemFeedingAdapter extends ItemNeorism {
             }
         }
         return null;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+        com.marrybye.neorism.client.events.TooltipEventHandler.addWrappedTranslation(tooltip, "tooltip.neorism.feeding_adapter", EnumChatFormatting.GRAY);
     }
 }

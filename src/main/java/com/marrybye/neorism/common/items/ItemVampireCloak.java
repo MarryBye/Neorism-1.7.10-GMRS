@@ -10,13 +10,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.ISpecialArmor;
 
 import com.marrybye.neorism.api.faction.IFaction;
 import com.marrybye.neorism.common.core.ModFactions;
@@ -30,7 +33,7 @@ import net.minecraft.potion.PotionEffect;
  * Vampire Cloak wearable armor in 16 dye colors (metadata 0 to 15).
  * Distinctive vampire mantle providing nocturnal camouflage and noble prestige.
  */
-public class ItemVampireCloak extends ItemArmor implements IFactionRestriction {
+public class ItemVampireCloak extends ItemArmor implements IFactionRestriction, ISpecialArmor {
 
     public static final String[] COLORS = {
         "black", "red", "green", "brown", "blue", "purple", "cyan", "light_gray",
@@ -48,9 +51,52 @@ public class ItemVampireCloak extends ItemArmor implements IFactionRestriction {
         setCreativeTab(ModCreativeTabs.tabVampire);
     }
 
+    public int getTierMaxDamage(ItemStack stack) {
+        return 350;
+    }
+
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return 350;
+        return 0;
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return DurabilityHelper.getDurabilityForDisplay(stack, getTierMaxDamage(stack));
+    }
+
+    @Override
+    public int getDisplayDamage(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack);
+    }
+
+    @Override
+    public boolean isDamaged(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
+        if (source != null && source.isUnblockable()) {
+            return new ArmorProperties(0, 0.0D, 0);
+        }
+        int absorbMax = Math.max(1, getTierMaxDamage(armor) + 1 - DurabilityHelper.getWearDamage(armor));
+        return new ArmorProperties(0, this.damageReduceAmount / 25.0D, absorbMax);
+    }
+
+    @Override
+    public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
+        return this.damageReduceAmount;
+    }
+
+    @Override
+    public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
+        DurabilityHelper.damageStack(stack, damage, entity, getTierMaxDamage(stack));
     }
 
     @Override

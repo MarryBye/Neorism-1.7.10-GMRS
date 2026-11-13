@@ -1,5 +1,7 @@
 package com.marrybye.neorism.common.items;
 
+import java.util.List;
+
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
 import com.marrybye.neorism.common.core.ModDamageSource;
@@ -8,11 +10,14 @@ import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -59,7 +64,6 @@ public class ItemGarlicBread extends ItemFood {
             // Canonical ModConsumables.GARLIC: Cures Sanguinare Vampiris
             if (player.isPotionActive(ModPotions.sanguinare)) {
                 player.removePotionEffect(ModPotions.sanguinare.id);
-                ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 1.0F, 1.0F);
                 ModLogger.combat("Player %s cured Sanguinare Vampiris by eating Garlic Bread", player.getCommandSenderName());
             }
             // Hunter bonus: nutrition 8, saturation 0.8F (+2 hunger, +0.1F saturation over base 6/0.7F)
@@ -67,5 +71,13 @@ public class ItemGarlicBread extends ItemFood {
                 player.getFoodStats().addStats(2, 0.1F);
             }
         }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+        tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.garlic_bread.desc"));
+        tooltip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.neorism.garlic.vampire_harm"));
     }
 }

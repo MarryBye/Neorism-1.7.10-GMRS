@@ -1,13 +1,19 @@
 package com.marrybye.neorism.common.items;
 
+import java.util.List;
+
 import com.marrybye.neorism.common.core.ModPotions;
 import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.util.Helper;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 /**
@@ -41,5 +47,13 @@ public class ItemVampireFang extends ItemNeorism {
             }
         }
         return stack;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+        tooltip.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tooltip.neorism.vampire_fang.desc1"));
+        tooltip.add(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("tooltip.neorism.vampire_fang.desc2"));
     }
 }

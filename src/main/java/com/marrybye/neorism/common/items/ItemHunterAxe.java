@@ -17,6 +17,7 @@ import com.marrybye.neorism.common.util.ModLogger;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +29,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 
 /**
  * Canonical Hunter Axe weapon with 3 tiers (Normal, Enhanced, Ultimate).
@@ -51,10 +53,39 @@ public class ItemHunterAxe extends ItemSword implements IItemWithTier, IFactionR
         setCreativeTab(ModCreativeTabs.tabHunter);
     }
 
+    public int getTierMaxDamage(ItemStack stack) {
+        int tier = Math.max(0, Math.min(stack != null ? stack.getItemDamage() : 0, TIERS - 1));
+        return MAX_DURABILITY[tier];
+    }
+
     @Override
     public int getMaxDamage(ItemStack stack) {
-        int tier = Math.max(0, Math.min(stack.getItemDamage(), TIERS - 1));
-        return MAX_DURABILITY[tier];
+        return 0;
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return DurabilityHelper.getDurabilityForDisplay(stack, getTierMaxDamage(stack));
+    }
+
+    @Override
+    public int getDisplayDamage(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack);
+    }
+
+    @Override
+    public boolean isDamaged(ItemStack stack) {
+        return DurabilityHelper.getWearDamage(stack) > 0;
+    }
+
+    @Override
+    public boolean isItemTool(ItemStack stack) {
+        return true;
     }
 
     @Override
@@ -125,7 +156,15 @@ public class ItemHunterAxe extends ItemSword implements IItemWithTier, IFactionR
             }
         }
 
-        stack.damageItem(1, attacker);
+        DurabilityHelper.damageStack(stack, 1, attacker, getTierMaxDamage(stack));
+        return true;
+    }
+
+    @Override
+    public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase entity) {
+        if (block != null && block.getBlockHardness(world, x, y, z) != 0.0F) {
+            DurabilityHelper.damageStack(stack, 2, entity, getTierMaxDamage(stack));
+        }
         return true;
     }
 
