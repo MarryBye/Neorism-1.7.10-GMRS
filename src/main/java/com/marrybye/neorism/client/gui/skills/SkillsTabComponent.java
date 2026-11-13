@@ -92,7 +92,9 @@ public class SkillsTabComponent {
             maxAllowedX = -layout.getMinX() + 40 + halfW;
         }
         scrollX = MathHelper.clamp_float(scrollX, Math.min(minAllowedX, maxAllowedX), Math.max(minAllowedX, maxAllowedX));
-        scrollY = MathHelper.clamp_float(scrollY, -300, 60);
+        int minAllowedY = layout != null ? Math.min(20, viewH - layout.getHeight() - 40) : -300;
+        int maxAllowedY = 40;
+        scrollY = MathHelper.clamp_float(scrollY, Math.min(minAllowedY, maxAllowedY), Math.max(minAllowedY, maxAllowedY));
     }
 
     public void drawContents(int guiLeft, int guiTop, int viewX, int viewY, int viewW, int viewH,

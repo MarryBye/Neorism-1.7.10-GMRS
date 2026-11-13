@@ -253,15 +253,13 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
             sh.resetSkills();
             sh.setPrimaryAction("");
             sh.setSecondaryAction("");
-            sh.setSkillPoints(this.currentFaction.isNeutral() ? 0 : this.currentLevel);
-        } else if (this.currentLevel > oldLevel && sh != null) {
-            sh.addSkillPoints(this.currentLevel - oldLevel);
+            this.lordLevel = 0;
         }
-
         if (this.currentFaction.isNeutral()) {
             this.lordLevel = 0;
             this.disguised = false;
         }
+        recalculateSkillPoints();
         ModLogger.leveling("Player %s faction changed to %s (level %d)",
             player.getCommandSenderName(), this.currentFaction.getId(), this.currentLevel);
         com.marrybye.neorism.common.vampire.VampirePlayer vp =
@@ -283,15 +281,8 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
 
     public void setLevel(int level) {
         int max = currentFaction.getMaxLevel();
-        int oldLevel = this.currentLevel;
         this.currentLevel = Math.max(0, Math.min(level, max));
-        if (this.currentLevel > oldLevel) {
-            com.marrybye.neorism.common.skills.SkillHandler sh =
-                com.marrybye.neorism.common.skills.SkillHandler.get(player);
-            if (sh != null) {
-                sh.addSkillPoints(this.currentLevel - oldLevel);
-            }
-        }
+        recalculateSkillPoints();
         ModLogger.leveling("Player %s level updated to %d (faction: %s)",
             player.getCommandSenderName(), this.currentLevel, this.currentFaction.getId());
         com.marrybye.neorism.common.vampire.VampirePlayer vp =
@@ -308,20 +299,33 @@ public class FactionPlayerHandler implements IExtendedEntityProperties, IFaction
     }
 
     public void setLordLevel(int lordLevel) {
-        int oldLord = this.lordLevel;
         int max = getMaxLordLevel();
         this.lordLevel = Math.max(0, Math.min(lordLevel, max));
-        if (this.lordLevel > oldLord) {
-            com.marrybye.neorism.common.skills.SkillHandler sh = com.marrybye.neorism.common.skills.SkillHandler.get(player);
-            if (sh != null) {
-                sh.addSkillPoints((this.lordLevel - oldLord) * 2);
-            }
-        }
+        recalculateSkillPoints();
         com.marrybye.neorism.common.util.ScoreboardUtil.updateScore(player, com.marrybye.neorism.common.util.ScoreboardUtil.CRITERIA_LORD, this.lordLevel);
         player.refreshDisplayName();
         ModLogger.leveling("Player %s lord rank updated to %d (faction: %s)",
             player.getCommandSenderName(), this.lordLevel, this.currentFaction.getId());
         sync();
+    }
+
+    /**
+     * Canonical FactionSkillPointProvider formula:
+     * (level - 1) * 2 + (lordLevel - 1) * 2, minus already spent points.
+     */
+    public void recalculateSkillPoints() {
+        com.marrybye.neorism.common.skills.SkillHandler sh =
+            com.marrybye.neorism.common.skills.SkillHandler.get(player);
+        if (sh == null) return;
+        int total = 0;
+        if (this.currentFaction != null && !this.currentFaction.isNeutral()) {
+            total = Math.max(0, this.currentLevel - 1) * 2 + Math.max(0, this.lordLevel - 1) * 2;
+        }
+        int spent = sh.getSpentSkillPoints();
+        int remaining = Math.max(0, total - spent);
+        sh.setSkillPoints(remaining);
+        ModLogger.leveling("Recalculated skill points for %s: total=%d, spent=%d, remaining=%d",
+            player.getCommandSenderName(), total, spent, remaining);
     }
 
     public void setDisguised(boolean disguised) {

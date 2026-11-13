@@ -129,6 +129,19 @@ public class SkillHandler implements IExtendedEntityProperties {
         }
     }
 
+    public int getSpentSkillPoints() {
+        int spent = 0;
+        for (String skillId : unlockedSkills) {
+            if (!forceUnlockedSkills.contains(skillId)) {
+                ISkill skill = SkillRegistry.getSkill(skillId);
+                if (skill != null) {
+                    spent += skill.getSkillPointCost();
+                }
+            }
+        }
+        return spent;
+    }
+
     public boolean isSkillUnlocked(String skillId) {
         if (skillId == null || skillId.isEmpty()) return false;
         if ("vampire_level_root".equals(skillId) || "vampire".equals(skillId)) {
@@ -232,6 +245,9 @@ public class SkillHandler implements IExtendedEntityProperties {
             if ("lord_speed".equals(actionId)) {
                 return Helper.getLordLevel(player) > 0 && (isSkillUnlocked("vampire_lord_speed") || isSkillUnlocked("lord_speed"));
             }
+            if ("lord_attack_speed".equals(actionId)) {
+                return Helper.getLordLevel(player) > 0 && (isSkillUnlocked("vampire_lord_attack_speed") || isSkillUnlocked("lord_attack_speed"));
+            }
             if ("blood_vision".equals(actionId)) {
                 return isSkillUnlocked("blood_vision");
             }
@@ -257,10 +273,10 @@ public class SkillHandler implements IExtendedEntityProperties {
                 return isSkillUnlocked("hunter_disguise") || isSkillUnlocked("disguise_hunter");
             }
             if ("lord_attack_speed".equals(actionId)) {
-                return Helper.getLordLevel(player) > 0;
+                return Helper.getLordLevel(player) > 0 && (isSkillUnlocked("hunter_lord_attack_speed") || isSkillUnlocked("lord_attack_speed"));
             }
             if ("lord_speed".equals(actionId)) {
-                return Helper.getLordLevel(player) > 0;
+                return Helper.getLordLevel(player) > 0 && (isSkillUnlocked("hunter_lord_speed") || isSkillUnlocked("lord_speed"));
             }
             return isSkillUnlocked(actionId);
         }
@@ -294,6 +310,7 @@ public class SkillHandler implements IExtendedEntityProperties {
             case "dark_stalker":
             case "infect":
             case "lord_speed":
+            case "lord_attack_speed":
                 return true;
             default:
                 return false;

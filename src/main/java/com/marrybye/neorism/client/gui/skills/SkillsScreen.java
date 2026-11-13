@@ -296,6 +296,15 @@ public class SkillsScreen extends GuiScreen {
     }
 
     @Override
+    public void handleMouseInput() {
+        super.handleMouseInput();
+        int dWheel = org.lwjgl.input.Mouse.getEventDWheel();
+        if (dWheel != 0 && selectedTab != null) {
+            selectedTab.scroll(0, dWheel > 0 ? 18 : -18, CANVAS_W, CANVAS_H);
+        }
+    }
+
+    @Override
     public void updateScreen() {
         super.updateScreen();
 
