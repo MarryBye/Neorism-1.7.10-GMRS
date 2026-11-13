@@ -44,7 +44,7 @@ public abstract class RenderBiped64 extends RenderBiped {
         if (this.wideModel == this.slimModel) {
             return (this.wideModel instanceof ModelBiped64) && ((ModelBiped64) this.wideModel).slim;
         }
-        ResourceLocation tex = this.getEntityTexture(entity);
+        ResourceLocation tex = this.getEntityTexture((net.minecraft.entity.Entity) entity);
         return tex != null && tex.getResourcePath().endsWith("_slim.png");
     }
 

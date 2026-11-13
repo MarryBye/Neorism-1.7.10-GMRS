@@ -267,9 +267,9 @@
   },
   "entity.remains_defender.death": {
     "sounds": [
-      "minecraft:dig/glass1",
-      "minecraft:dig/glass2",
-      "minecraft:dig/glass3"
+      "minecraft:random/glass1",
+      "minecraft:random/glass2",
+      "minecraft:random/glass3"
     ],
     "subtitle": "subtitles.neorism.remains_defender.death"
   },

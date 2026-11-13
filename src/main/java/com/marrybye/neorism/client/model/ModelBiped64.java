@@ -40,6 +40,7 @@ public class ModelBiped64 extends ModelBiped {
 
     public ModelBiped64(float modelSize, float yOffset, int width, int height, boolean slim) {
         super(modelSize, yOffset, width, height);
+        this.boxList.clear();
         this.slim = slim;
         this.textureWidth = width;
         this.textureHeight = height;

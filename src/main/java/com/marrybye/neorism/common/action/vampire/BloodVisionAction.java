@@ -4,6 +4,7 @@ import com.marrybye.neorism.common.action.ActionBase;
 import com.marrybye.neorism.common.util.Helper;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Blood Vision ability.
@@ -12,8 +13,15 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public class BloodVisionAction extends ActionBase {
 
+    private static final ResourceLocation ICON = new ResourceLocation("neorism", "textures/skills/blood_vision.png");
+
     public BloodVisionAction() {
         super("blood_vision", 40, 0, true, 0);
+    }
+
+    @Override
+    public ResourceLocation getIcon() {
+        return ICON;
     }
 
     @Override

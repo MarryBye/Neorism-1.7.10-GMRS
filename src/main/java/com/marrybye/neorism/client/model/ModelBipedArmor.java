@@ -24,6 +24,9 @@ public class ModelBipedArmor extends ModelBiped {
         this.slim = slim;
 
         if (slim) {
+            this.boxList.remove(this.bipedRightArm);
+            this.boxList.remove(this.bipedLeftArm);
+
             this.bipedRightArm = new ModelRenderer(this, 40, 16);
             this.bipedRightArm.addBox(-2.0F, -2.0F, -2.0F, 3, 12, 4, modelSize);
             this.bipedRightArm.setRotationPoint(-5.0F, 2.5F, 0.0F);
