@@ -5,7 +5,6 @@ import java.util.Random;
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.core.ModBlocks;
 import com.marrybye.neorism.common.core.ModCreativeTabs;
-import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.faction.FactionPlayerHandler;
 import com.marrybye.neorism.common.items.ItemRitualKnife;
 
@@ -77,7 +76,6 @@ public class BlockVelmorraAltar extends Block {
             player.attackEntityFrom(DamageSource.generic, 7.5F);
             world.setBlockMetadataWithNotify(x, y, z, 1, 3);
             world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 1.0F, 0.8F);
-            ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 1.0F, 1.0F);
 
             FactionPlayerHandler fph = FactionPlayerHandler.get(player);
             if (fph == null || !fph.isVampire() || fph.getLordLevel() < 5) {

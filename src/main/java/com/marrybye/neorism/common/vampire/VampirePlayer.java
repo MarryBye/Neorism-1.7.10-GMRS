@@ -194,8 +194,7 @@ public class VampirePlayer implements IExtendedEntityProperties, IVampireEntity 
                     drained += 1;
                 }
                 drinkBlood(drained, creature.getBloodSaturation());
-                ModSounds.playAtEntity(player, ModSounds.VAMPIRE_BITE, 0.7F, 1.0F);
-                ModSounds.playAtEntity(player, ModSounds.BLOOD_DRIP, 0.5F, 1.0F);
+                ModSounds.playAtEntity(player, ModSounds.VAMPIRE_FEEDING, 0.8F, 1.0F);
             } else {
                 endFeeding();
             }

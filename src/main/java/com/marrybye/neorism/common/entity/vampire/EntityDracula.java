@@ -14,6 +14,8 @@ import com.marrybye.neorism.common.util.Helper;
 import com.marrybye.neorism.common.util.ModLogger;
 import com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -104,6 +106,11 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
             playerCount, this.fightScale, this.getMaxHealth());
     }
 
+    @SideOnly(Side.CLIENT)
+    private void updateClientBossStatus() {
+        BossStatus.setBossStatus(this, true);
+    }
+
     @Override
     public IChatComponent func_145748_c_() {
         String title = this.getCommandSenderName();
@@ -121,8 +128,10 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
-        // Update Boss Health Bar
-        BossStatus.setBossStatus(this, true);
+        // Update Boss Health Bar on client only
+        if (this.worldObj.isRemote) {
+            updateClientBossStatus();
+        }
 
         if (!this.worldObj.isRemote && this.isEntityAlive()) {
             if (isTransforming) {
@@ -328,11 +337,11 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
         double behindY = target.posY;
         double behindZ = target.posZ - look.zCoord * 1.5D;
 
-        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "mob.endermen.portal", 1.5F, 0.8F);
+        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, ModSounds.DRACULA_TELEPORT, 2.0F, 1.0F);
         this.worldObj.spawnParticle("largesmoke", this.posX, this.posY + 1.0D, this.posZ, 0, 0, 0);
 
         this.setPositionAndUpdate(behindX, behindY, behindZ);
-        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "mob.endermen.portal", 1.5F, 0.8F);
+        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, ModSounds.DRACULA_TELEPORT, 2.0F, 1.0F);
         this.worldObj.spawnParticle("largesmoke", this.posX, this.posY + 1.0D, this.posZ, 0, 0, 0);
 
         this.faceEntity(target, 360.0F, 360.0F);
@@ -353,7 +362,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
         double destY = target.posY;
         double destZ = target.posZ + dirZ * 3.5D;
 
-        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "mob.bat.takeoff", 2.0F, 0.6F);
+        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, ModSounds.BAT_SWARM, 2.0F, 1.0F);
 
         // Particle trail & damage along the dash line
         int steps = (int) Math.ceil(dist + 3.5D) * 2;
@@ -430,7 +439,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
 
         if (totalDrained > 0.0F) {
             this.heal(totalDrained * 1.5F);
-            this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.eat", 1.0F, 0.6F);
+            this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, ModSounds.DRACULA_SIPHON, 2.0F, 1.0F);
             ModLogger.combat("Lord Dracula siphoned %.1f blood and healed %.1f HP!", totalDrained, totalDrained * 1.5F);
         }
     }
@@ -542,6 +551,43 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
         return this.worldObj != null && this.worldObj.isRemote
             ? this.dataWatcher.getWatchableObjectByte(DATA_PHASE)
             : this.phase;
+    }
+
+    /**
+     * Debug helper to switch Dracula directly to phase 1, 2, or 3 with canonical stats.
+     */
+    public void debugSetPhase(int target) {
+        int clamped = Math.max(1, Math.min(3, target));
+        this.isTransforming = false;
+        this.transformTicks = 0;
+        this.mistForm = false;
+        this.mistTicks = 0;
+        this.phaseCooldown = 0;
+        this.phase = clamped;
+        this.targetPhase = clamped;
+        this.dataWatcher.updateObject(DATA_PHASE, Byte.valueOf((byte) clamped));
+
+        double hp;
+        double dmg;
+        double speed;
+        if (clamped == 1) {
+            hp = 50.0D * this.fightScale;
+            dmg = 10.0D;
+            speed = 0.35D;
+        } else if (clamped == 2) {
+            hp = 100.0D * this.fightScale;
+            dmg = 15.0D;
+            speed = 0.35D;
+        } else {
+            hp = 200.0D * this.fightScale;
+            dmg = 22.0D;
+            speed = 0.42D;
+        }
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(hp);
+        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(dmg);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(speed);
+        this.setHealth(this.getMaxHealth());
+        ModLogger.combat("Debug: Lord Dracula switched to Phase %d (HP: %.0f)", clamped, this.getMaxHealth());
     }
 
     @Override

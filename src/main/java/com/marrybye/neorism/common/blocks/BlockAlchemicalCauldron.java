@@ -3,9 +3,12 @@ package com.marrybye.neorism.common.blocks;
 import java.util.Random;
 
 import com.marrybye.neorism.Neorism;
+import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.network.ModGuiHandler;
 import com.marrybye.neorism.common.tileentity.TileEntityAlchemicalCauldron;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
@@ -45,6 +48,20 @@ public class BlockAlchemicalCauldron extends BlockModeled implements ITileEntity
 
         player.openGui(Neorism.instance, ModGuiHandler.GUI_ALCHEMICAL_CAULDRON, world, x, y, z);
         return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof TileEntityAlchemicalCauldron && ((TileEntityAlchemicalCauldron) te).isBurning()) {
+            // Canonical AlchemicalCauldronBlock.animateTick boiling sound
+            world.playSound(x + 0.5D, y, z + 0.5D, ModSounds.BOILING, 0.05F, 1.0F, false);
+            double px = x + 0.3D + rand.nextDouble() * 0.4D;
+            double py = y + 0.75D;
+            double pz = z + 0.3D + rand.nextDouble() * 0.4D;
+            world.spawnParticle("bubble", px, py, pz, 0.0D, 0.04D, 0.0D);
+        }
     }
 
     @Override

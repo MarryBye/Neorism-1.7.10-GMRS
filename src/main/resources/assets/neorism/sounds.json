@@ -14,10 +14,26 @@
       }
     ]
   },
+  "ambient.ghosty": {
+    "sounds": [
+      {
+        "name": "neorism:cc/ambient/ghosty_ambient",
+        "stream": true
+      }
+    ]
+  },
   "ambient.mother": {
     "sounds": [
       {
         "name": "neorism:reserved/ambient/mother",
+        "stream": true
+      }
+    ]
+  },
+  "ambient.scary": {
+    "sounds": [
+      {
+        "name": "neorism:cc/ambient/scary",
         "stream": true
       }
     ]
@@ -201,7 +217,13 @@
   },
   "entity.ghost.ambient": {
     "sounds": [
-      "minecraft:mob/ghast/moan"
+      "minecraft:mob/ghast/moan1",
+      "minecraft:mob/ghast/moan2",
+      "minecraft:mob/ghast/moan3",
+      "minecraft:mob/ghast/moan4",
+      "minecraft:mob/ghast/moan5",
+      "minecraft:mob/ghast/moan6",
+      "minecraft:mob/ghast/moan7"
     ],
     "subtitle": "subtitles.neorism.ghost.ambient"
   },
@@ -213,7 +235,11 @@
   },
   "entity.ghost.hurt": {
     "sounds": [
-      "minecraft:mob/ghast/scream"
+      "minecraft:mob/ghast/scream1",
+      "minecraft:mob/ghast/scream2",
+      "minecraft:mob/ghast/scream3",
+      "minecraft:mob/ghast/scream4",
+      "minecraft:mob/ghast/scream5"
     ],
     "subtitle": "subtitles.neorism.ghost.hurt"
   },
@@ -286,6 +312,15 @@
       "neorism:reserved/fx/freeze"
     ],
     "subtitle": "subtitles.neorism.freeze"
+  },
+  "fx.heartbeat": {
+    "sounds": [
+      {
+        "name": "minecraft:note/bd",
+        "pitch": 0.5,
+        "volume": 0.7
+      }
+    ]
   },
   "fx.mother_death": {
     "sounds": [

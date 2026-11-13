@@ -28,6 +28,16 @@ public class Config {
     public static boolean generateHunterTower = true;
     public static boolean generateAltarRuins = true;
     public static boolean generateDraculaCastle = true;
+    public static boolean generateVelmorraPortal = true;
+    public static boolean generateVampireHut = true;
+    public static boolean generateVampireDungeon = true;
+    public static boolean generateMotherTree = true;
+
+    // --- Garlic Diffuser Balance ---
+    public static int garlicDiffuserStartupTime = 100;
+    public static int garlicDiffuserNormalDist = 0;
+    public static int garlicDiffuserEnhancedDist = 1;
+    public static int garlicDiffuserWeakDist = 2;
 
     public static void synchronizeConfiguration(File configFile) {
         configuration = new Configuration(configFile);
@@ -85,6 +95,63 @@ public class Config {
             CATEGORY_WORLD,
             true,
             "Enable generation of Dracula Castle boss arenas in Vampire Forests"
+        );
+        generateVelmorraPortal = configuration.getBoolean(
+            "generateVelmorraPortal",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of Velmorra Portal Ruins in Vampire Forests"
+        );
+        generateVampireHut = configuration.getBoolean(
+            "generateVampireHut",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of Vampire Huts in Vampire Forests"
+        );
+        generateVampireDungeon = configuration.getBoolean(
+            "generateVampireDungeon",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of subterranean Vampire Dungeons"
+        );
+        generateMotherTree = configuration.getBoolean(
+            "generateMotherTree",
+            CATEGORY_WORLD,
+            true,
+            "Enable generation of rare Mother Trees in Vampire Forests"
+        );
+
+        garlicDiffuserStartupTime = configuration.getInt(
+            "garlicDiffuserStartupTime",
+            CATEGORY_WORLD,
+            100,
+            1,
+            24000,
+            "Time in seconds for a Garlic Diffuser to boot up (canonical 100s)"
+        );
+        garlicDiffuserNormalDist = configuration.getInt(
+            "garlicDiffuserNormalDist",
+            CATEGORY_WORLD,
+            0,
+            0,
+            5,
+            "Chunk distance radius around a Normal Garlic Diffuser (0 = 1x1 chunk)"
+        );
+        garlicDiffuserEnhancedDist = configuration.getInt(
+            "garlicDiffuserEnhancedDist",
+            CATEGORY_WORLD,
+            1,
+            0,
+            5,
+            "Chunk distance radius around a Strong Garlic Diffuser (1 = 3x3 chunks)"
+        );
+        garlicDiffuserWeakDist = configuration.getInt(
+            "garlicDiffuserWeakDist",
+            CATEGORY_WORLD,
+            2,
+            0,
+            5,
+            "Chunk distance radius around a Long Garlic Diffuser (2 = 5x5 chunks)"
         );
 
         // Debug settings

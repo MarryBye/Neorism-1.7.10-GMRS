@@ -80,6 +80,7 @@ public class BlockVelmorraPortal extends BlockBreakable {
 
                 server.getConfigurationManager().transferPlayerToDimension(player, targetDim,
                     new TeleporterVelmorra(targetWorld, 0.5D, 65.0D, -26.0D));
+                targetWorld.playSoundAtEntity(player, "portal.travel", 0.7F, 1.0F);
             } else {
                 // Return to Overworld: retrieve saved portal coordinates or fall back to bed/spawn
                 double tx, ty, tz;
@@ -108,6 +109,7 @@ public class BlockVelmorraPortal extends BlockBreakable {
                 }
                 server.getConfigurationManager().transferPlayerToDimension(player, targetDim,
                     new TeleporterVelmorra(targetWorld, tx, ty, tz));
+                targetWorld.playSoundAtEntity(player, "portal.travel", 0.7F, 1.0F);
             }
         }
     }
@@ -115,6 +117,9 @@ public class BlockVelmorraPortal extends BlockBreakable {
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+        if (rand.nextInt(100) == 0) {
+            world.playSound(x + 0.5D, y + 0.5D, z + 0.5D, "portal.portal", 0.5F, rand.nextFloat() * 0.4F + 0.8F, false);
+        }
         for (int i = 0; i < 4; ++i) {
             double px = x + rand.nextFloat();
             double py = y + rand.nextFloat();

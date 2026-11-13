@@ -232,6 +232,11 @@ public class PlayerCapabilityEventHandler {
                     if (vp != null) {
                         vp.onSanguinareFinished();
                     }
+                } else {
+                    ExtendedCreature ext = ExtendedCreature.get(event.entityLiving);
+                    if (ext != null) {
+                        ext.makeVampire();
+                    }
                 }
             }
         }
@@ -241,6 +246,8 @@ public class PlayerCapabilityEventHandler {
     public void onWorldUnload(net.minecraftforge.event.world.WorldEvent.Unload event) {
         if (!event.world.isRemote && event.world.provider.dimensionId == 0) {
             com.marrybye.neorism.common.world.garlic.GarlicHandler.instance().clearCache();
+            com.marrybye.neorism.common.world.gen.WorldGenVelmorraPortal.clearCache();
+            com.marrybye.neorism.common.world.gen.ModWorldGen.clearCache();
         }
     }
 

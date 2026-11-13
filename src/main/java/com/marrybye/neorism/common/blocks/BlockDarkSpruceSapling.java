@@ -17,12 +17,21 @@ import net.minecraft.world.World;
 
 public class BlockDarkSpruceSapling extends BlockBush implements IGrowable {
 
+    private final String saplingName;
+    private final boolean useCursedLog;
+
     @SideOnly(Side.CLIENT)
     private IIcon icon;
 
     public BlockDarkSpruceSapling() {
+        this("dark_spruce_sapling", false);
+    }
+
+    public BlockDarkSpruceSapling(String name, boolean useCursedLog) {
         super();
-        setBlockName("neorism.dark_spruce_sapling");
+        this.saplingName = name;
+        this.useCursedLog = useCursedLog;
+        setBlockName("neorism." + name);
         setStepSound(soundTypeGrass);
         setCreativeTab(ModCreativeTabs.tabMain);
         float f = 0.4F;
@@ -39,7 +48,9 @@ public class BlockDarkSpruceSapling extends BlockBush implements IGrowable {
 
     public void growTree(World world, int x, int y, int z, Random rand) {
         world.setBlock(x, y, z, Blocks.air, 0, 4);
-        com.marrybye.neorism.common.world.gen.WorldGenDarkSpruceTree treeGen = new com.marrybye.neorism.common.world.gen.WorldGenDarkSpruceTree(true);
+        net.minecraft.block.Block targetLog = this.useCursedLog && ModBlocks.cursedSpruceLog != null
+            ? ModBlocks.cursedSpruceLog : ModBlocks.darkSpruceLog;
+        com.marrybye.neorism.common.world.gen.WorldGenDarkSpruceTree treeGen = new com.marrybye.neorism.common.world.gen.WorldGenDarkSpruceTree(true, targetLog);
         if (!treeGen.generate(world, rand, x, y, z)) {
             world.setBlock(x, y, z, this, 0, 4);
         }
@@ -63,7 +74,7 @@ public class BlockDarkSpruceSapling extends BlockBush implements IGrowable {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
-        icon = register.registerIcon(Neorism.MODID + ":dark_spruce_sapling");
+        icon = register.registerIcon(Neorism.MODID + ":" + this.saplingName);
     }
 
     @Override

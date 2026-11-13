@@ -96,8 +96,10 @@ public class WorldGenVampireCrypt extends WorldGenerator {
         placeCryptChest(world, rand, x, y + 1, z - depth + 1);
         placeCryptChest(world, rand, x, y + 1, z + depth - 1);
 
-        // Spawn Vampire Baron boss inside the chamber with canonical level
-        EntityVampireBaron baron = new EntityVampireBaron(world);
+        // Spawn Vampire Baron or Baroness boss inside the chamber with canonical level
+        com.marrybye.neorism.common.entity.vampire.EntityVampireBaron baron = rand.nextBoolean()
+            ? new com.marrybye.neorism.common.entity.vampire.EntityVampireBaroness(world)
+            : new EntityVampireBaron(world);
         baron.setLocationAndAngles(x + 0.5D, y + 1, z + 0.5D, rand.nextFloat() * 360.0F, 0.0F);
         baron.onSpawnWithEgg(null);
         int bLevel = 2 + rand.nextInt(3); // Level 2, 3, or 4 in underground crypts

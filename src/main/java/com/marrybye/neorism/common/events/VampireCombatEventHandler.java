@@ -126,7 +126,6 @@ public class VampireCombatEventHandler {
                             // 24000 ticks = 20 minutes (1 in-game Minecraft day)
                             targetPlayer.addPotionEffect(new PotionEffect(ModPotions.sanguinare.id, 24000, 0));
                             targetPlayer.addChatMessage(new ChatComponentTranslation("chat.neorism.contracted_sanguinare"));
-                            ModSounds.playAtEntity(targetPlayer, ModSounds.HEARTBEAT, 1.0F, 1.0F);
                             ModLogger.combat("Neutral player %s contracted Sanguinare Vampiris from %s",
                                 targetPlayer.getCommandSenderName(), attacker.getCommandSenderName());
                         }

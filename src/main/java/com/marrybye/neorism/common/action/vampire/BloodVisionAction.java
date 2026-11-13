@@ -1,7 +1,6 @@
 package com.marrybye.neorism.common.action.vampire;
 
 import com.marrybye.neorism.common.action.ActionBase;
-import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.util.Helper;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,9 +18,7 @@ public class BloodVisionAction extends ActionBase {
 
     @Override
     public boolean onActivated(EntityPlayer player) {
-        if (!Helper.isVampire(player)) return false;
-        ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 0.8F, 1.0F);
-        return true;
+        return Helper.isVampire(player);
     }
 
     @Override

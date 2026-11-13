@@ -1,7 +1,6 @@
 package com.marrybye.neorism.common.action.vampire;
 
 import com.marrybye.neorism.common.action.ActionBase;
-import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.util.Helper;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +29,6 @@ public class VampireRageAction extends ActionBase {
         player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, duration, 0, false));
         player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, duration, 2, false));
         player.addPotionEffect(new PotionEffect(Potion.digSpeed.id, duration, 0, false));
-        ModSounds.playAtEntity(player, ModSounds.RAGE, 1.0F, 1.0F);
         return true;
     }
 

@@ -4,11 +4,14 @@ import java.util.Random;
 
 import com.marrybye.neorism.common.core.ModBlocks;
 import com.marrybye.neorism.common.entity.converted.EntityConvertedCow;
+import com.marrybye.neorism.common.entity.converted.EntityConvertedHorse;
 import com.marrybye.neorism.common.entity.converted.EntityConvertedSheep;
 import com.marrybye.neorism.common.entity.vampire.EntityBloodBat;
 import com.marrybye.neorism.common.entity.vampire.EntityVampire;
 import com.marrybye.neorism.common.entity.vampire.EntityVampireBaron;
+import com.marrybye.neorism.common.entity.vampire.EntityVampireBaroness;
 import com.marrybye.neorism.common.world.gen.WorldGenDarkSpruceTree;
+import com.marrybye.neorism.common.world.gen.WorldGenGiantRoot;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,6 +31,7 @@ public class BiomeGenVampireForest extends BiomeGenBase {
     private final WorldGenDarkSpruceTree cursedSpruceGen = new WorldGenDarkSpruceTree(false, ModBlocks.cursedSpruceLog);
     private final WorldGenMinable cursedEarthGen = new WorldGenMinable(ModBlocks.cursedEarth, 33);
     private final WorldGenMinable darkStoneGen = new WorldGenMinable(ModBlocks.darkStone, 16);
+    private final WorldGenGiantRoot giantRootGen = new WorldGenGiantRoot();
 
     public BiomeGenVampireForest(int id) {
         super(id);
@@ -55,12 +59,14 @@ public class BiomeGenVampireForest extends BiomeGenBase {
         this.spawnableCaveCreatureList.clear();
 
         this.spawnableMonsterList.add(new SpawnListEntry(EntityVampire.class, 80, 1, 3));
-        this.spawnableMonsterList.add(new SpawnListEntry(EntityVampireBaron.class, 27, 1, 1));
+        this.spawnableMonsterList.add(new SpawnListEntry(EntityVampireBaron.class, 14, 1, 1));
+        this.spawnableMonsterList.add(new SpawnListEntry(EntityVampireBaroness.class, 13, 1, 1));
         this.spawnableCaveCreatureList.add(new SpawnListEntry(EntityBloodBat.class, 60, 2, 4));
 
-        // Canonical converted fauna spawns
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityConvertedCow.class, 40, 3, 6));
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityConvertedSheep.class, 40, 3, 6));
+        // Canonical converted fauna spawns (total creature weight 80 matching dummy_creature)
+        this.spawnableCreatureList.add(new SpawnListEntry(EntityConvertedCow.class, 35, 3, 6));
+        this.spawnableCreatureList.add(new SpawnListEntry(EntityConvertedSheep.class, 35, 3, 6));
+        this.spawnableCreatureList.add(new SpawnListEntry(EntityConvertedHorse.class, 10, 1, 3));
     }
 
     @Override
@@ -99,6 +105,14 @@ public class BiomeGenVampireForest extends BiomeGenBase {
             int oz = chunkZ + rand.nextInt(16);
             cursedEarthGen.generate(world, rand, ox, oy, oz);
             darkStoneGen.generate(world, rand, ox, oy, oz);
+        }
+
+        // Canonical Giant Dark Stone Root (rarity_filter chance = 3); keep origin inside [chunkX+12..chunkX+19] so +-10 drift/radius stays in [chunkX..chunkX+31]
+        if (rand.nextInt(3) == 0) {
+            int gx = chunkX + 12 + rand.nextInt(8);
+            int gz = chunkZ + 12 + rand.nextInt(8);
+            int gy = world.getTopSolidOrLiquidBlock(gx, gz);
+            giantRootGen.generate(world, rand, gx, gy, gz);
         }
     }
 

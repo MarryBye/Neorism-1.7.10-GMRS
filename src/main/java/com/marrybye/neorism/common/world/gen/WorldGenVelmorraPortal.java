@@ -21,6 +21,10 @@ public class WorldGenVelmorraPortal extends WorldGenerator {
 
     public static final List<ChunkCoordinates> GENERATED_PORTALS = new ArrayList<ChunkCoordinates>();
 
+    public static void clearCache() {
+        GENERATED_PORTALS.clear();
+    }
+
     public static ChunkCoordinates getNearestPortal(int px, int pz) {
         if (GENERATED_PORTALS.isEmpty()) {
             return null;

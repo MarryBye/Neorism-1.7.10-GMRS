@@ -4,11 +4,16 @@ import com.marrybye.neorism.api.entity.IBiteableEntity;
 import com.marrybye.neorism.api.entity.IVampireEntity;
 import com.marrybye.neorism.common.core.ModDamageSource;
 import com.marrybye.neorism.common.core.ModPotions;
+import com.marrybye.neorism.common.entity.converted.EntityConvertedCow;
+import com.marrybye.neorism.common.entity.converted.EntityConvertedHorse;
+import com.marrybye.neorism.common.entity.converted.EntityConvertedSheep;
+import com.marrybye.neorism.common.entity.converted.EntityConvertedVillager;
 import com.marrybye.neorism.common.util.ModLogger;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -37,7 +42,9 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
 
     public ExtendedCreature(EntityLivingBase entity) {
         this.entity = entity;
-        this.canBecomeVampire = entity instanceof EntityVillager;
+        this.canBecomeVampire = !(entity instanceof IVampireEntity)
+            && (entity instanceof EntityVillager || entity instanceof EntityHorse
+                || entity instanceof EntityCow || entity instanceof EntitySheep);
     }
 
     public static ExtendedCreature get(Entity entity) {
@@ -191,8 +198,8 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
         if (blood <= 0) {
             ModLogger.combat("Creature %s died from complete blood loss", entity.getCommandSenderName());
             entity.attackEntityFrom(ModDamageSource.NO_BLOOD, 1000.0F);
-        } else if (entity instanceof EntityVillager) {
-            // 20% chance to contract Sanguinare Vampiris
+        } else if (canBecomeVampire) {
+            // 20% chance to contract Sanguinare Vampiris when bitten
             if (entity.worldObj.rand.nextInt(5) == 0 && biter != null) {
                 tryInfect(biter);
             }
@@ -233,11 +240,63 @@ public class ExtendedCreature implements IExtendedEntityProperties, IBiteableEnt
     public boolean tryInfect(IVampireEntity vampire) {
         if (canBeInfected(vampire)) {
             entity.addPotionEffect(new PotionEffect(ModPotions.sanguinare.id, 2400, 0));
-            ModLogger.combat("Villager %s contracted Sanguinare Vampiris from vampire bite",
+            ModLogger.combat("Creature %s contracted Sanguinare Vampiris from vampire bite",
                 entity.getCommandSenderName());
             return true;
         }
         return false;
+    }
+
+    /**
+     * Converts this creature into its canonical converted vampire counterpart when Sanguinare completes.
+     */
+    public EntityLivingBase makeVampire() {
+        if (!canBecomeVampire || entity == null || entity.worldObj == null || entity.worldObj.isRemote || entity.isDead) {
+            return null;
+        }
+        this.blood = -1;
+        EntityLivingBase converted = null;
+        if (entity instanceof EntityVillager) {
+            EntityConvertedVillager cv = new EntityConvertedVillager(entity.worldObj);
+            cv.setProfession(((EntityVillager) entity).getProfession());
+            converted = cv;
+        } else if (entity instanceof EntityHorse) {
+            EntityHorse src = (EntityHorse) entity;
+            EntityConvertedHorse ch = new EntityConvertedHorse(entity.worldObj);
+            ch.setHorseVariant(src.getHorseVariant());
+            ch.setHorseTamed(src.isTame());
+            if (src.func_152119_ch() != null && !src.func_152119_ch().isEmpty()) {
+                ch.func_152120_b(src.func_152119_ch());
+            }
+            ch.setHorseSaddled(src.isHorseSaddled());
+            converted = ch;
+        } else if (entity instanceof EntityCow) {
+            converted = new EntityConvertedCow(entity.worldObj);
+        } else if (entity instanceof EntitySheep) {
+            EntityConvertedSheep cs = new EntityConvertedSheep(entity.worldObj);
+            cs.setFleeceColor(((EntitySheep) entity).getFleeceColor());
+            converted = cs;
+        }
+
+        if (converted != null) {
+            converted.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+            converted.rotationYawHead = entity.rotationYawHead;
+            if (entity instanceof EntityAgeable && converted instanceof EntityAgeable) {
+                ((EntityAgeable) converted).setGrowingAge(((EntityAgeable) entity).getGrowingAge());
+            }
+            if (entity instanceof EntityLiving && converted instanceof EntityLiving) {
+                EntityLiving srcLiving = (EntityLiving) entity;
+                if (srcLiving.hasCustomNameTag()) {
+                    ((EntityLiving) converted).setCustomNameTag(srcLiving.getCustomNameTag());
+                }
+            }
+            entity.setDead();
+            entity.worldObj.spawnEntityInWorld(converted);
+            ModLogger.spawn("Converted %s into %s at (%.1f, %.1f, %.1f)",
+                entity.getCommandSenderName(), converted.getCommandSenderName(),
+                converted.posX, converted.posY, converted.posZ);
+        }
+        return converted;
     }
 
     @Override

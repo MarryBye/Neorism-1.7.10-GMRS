@@ -140,30 +140,37 @@ public class WorldGenDraculaCastle extends WorldGenerator {
 
         // Blood Containers & Candelabras flanking the throne
         if (ModBlocks.bloodContainer != null) {
-            world.setBlock(x - 3, y + 2, throneZ + 2, ModBlocks.bloodContainer, 0, 2);
-            world.setBlock(x + 3, y + 2, throneZ + 2, ModBlocks.bloodContainer, 0, 2);
+            world.setBlock(x - 2, y + 2, throneZ + 2, ModBlocks.bloodContainer, 0, 2);
+            world.setBlock(x + 2, y + 2, throneZ + 2, ModBlocks.bloodContainer, 0, 2);
         }
         if (ModBlocks.candelabra != null) {
             world.setBlock(x - 1, y + 2, throneZ + 1, ModBlocks.candelabra, 0, 2);
             world.setBlock(x + 1, y + 2, throneZ + 1, ModBlocks.candelabra, 0, 2);
         }
 
-        // Blood Pedestals flanking the throne
-        // 4 Ritual Chalices surrounding the throne arena (canonical summoning altar)
+        // 4 Ritual Chalices surrounding the throne arena on chiseled pedestals (canonical summoning altar)
         if (ModBlocks.chalice != null) {
-            world.setBlock(x - 3, y + 2, throneZ - 2, ModBlocks.chalice, 0, 2);
-            world.setBlock(x + 3, y + 2, throneZ - 2, ModBlocks.chalice, 0, 2);
-            world.setBlock(x - 3, y + 2, throneZ + 2, ModBlocks.chalice, 0, 2);
-            world.setBlock(x + 3, y + 2, throneZ + 2, ModBlocks.chalice, 0, 2);
+            Block pedestalBlock = ModBlocks.chiseledDarkStoneBricks != null ? ModBlocks.chiseledDarkStoneBricks : Blocks.stonebrick;
+            int[][] chaliceCoords = {
+                {x - 3, throneZ - 2},
+                {x + 3, throneZ - 2},
+                {x - 3, throneZ + 2},
+                {x + 3, throneZ + 2}
+            };
+            for (int[] c : chaliceCoords) {
+                world.setBlock(c[0], y, c[1], pedestalBlock, 0, 2);
+                world.setBlock(c[0], y + 1, c[1], pedestalBlock, 0, 2);
+                world.setBlock(c[0], y + 2, c[1], ModBlocks.chalice, 0, 2);
+                world.setBlockToAir(c[0], y + 3, c[1]);
+            }
 
             if (isVelmorra) {
                 com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager mgr =
                     com.marrybye.neorism.common.world.dimensions.velmorra.DraculaFightManager.get(world);
                 if (mgr != null) {
-                    mgr.registerChalice(x - 3, y + 2, throneZ - 2);
-                    mgr.registerChalice(x + 3, y + 2, throneZ - 2);
-                    mgr.registerChalice(x - 3, y + 2, throneZ + 2);
-                    mgr.registerChalice(x + 3, y + 2, throneZ + 2);
+                    for (int[] c : chaliceCoords) {
+                        mgr.registerChalice(c[0], y + 2, c[1]);
+                    }
                 }
             }
         }

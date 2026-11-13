@@ -32,12 +32,18 @@ public class GarlicHandler {
         public final int z;
         public final EnumStrength strength;
         public final int radius;
+        public final int chunkRadius;
 
         public GarlicEntry(int x, int y, int z, EnumStrength strength) {
+            this(x, y, z, strength, -1);
+        }
+
+        public GarlicEntry(int x, int y, int z, EnumStrength strength, int chunkRadius) {
             this.x = x;
             this.y = y;
             this.z = z;
             this.strength = strength;
+            this.chunkRadius = chunkRadius;
             switch (strength) {
                 case STRONG:
                     this.radius = 16;
@@ -58,6 +64,10 @@ public class GarlicHandler {
     }
 
     public synchronized void registerGarlicBlock(World world, int x, int y, int z, EnumStrength strength) {
+        registerGarlicBlock(world, x, y, z, strength, -1);
+    }
+
+    public synchronized void registerGarlicBlock(World world, int x, int y, int z, EnumStrength strength, int chunkRadius) {
         if (world == null || strength == null || strength == EnumStrength.NONE) return;
         int dim = world.provider.dimensionId;
         Map<Long, GarlicEntry> dimMap = emitters.get(dim);
@@ -65,8 +75,9 @@ public class GarlicHandler {
             dimMap = new HashMap<Long, GarlicEntry>();
             emitters.put(dim, dimMap);
         }
-        dimMap.put(blockKey(x, y, z), new GarlicEntry(x, y, z, strength));
-        ModLogger.debug("Registered garlic emitter at [%d, %d, %d] (strength: %s) in dim %d", x, y, z, strength.getName(), dim);
+        dimMap.put(blockKey(x, y, z), new GarlicEntry(x, y, z, strength, chunkRadius));
+        ModLogger.debug("Registered garlic emitter at [%d, %d, %d] (strength: %s, chunkRadius: %d) in dim %d",
+            x, y, z, strength.getName(), chunkRadius, dim);
     }
 
     public synchronized void removeGarlicBlock(World world, int x, int y, int z) {
@@ -88,13 +99,22 @@ public class GarlicHandler {
         Map<Long, GarlicEntry> dimMap = emitters.get(dim);
         if (dimMap == null || dimMap.isEmpty()) return EnumStrength.NONE;
 
+        int targetChunkX = x >> 4;
+        int targetChunkZ = z >> 4;
         EnumStrength maxStrength = EnumStrength.NONE;
         for (GarlicEntry entry : dimMap.values()) {
-            double dx = entry.x - x;
-            double dy = entry.y - y;
-            double dz = entry.z - z;
-            double distSq = dx * dx + dy * dy + dz * dz;
-            if (distSq <= entry.radius * entry.radius) {
+            boolean inRange;
+            if (entry.chunkRadius >= 0) {
+                int chunkDist = Math.max(Math.abs((entry.x >> 4) - targetChunkX), Math.abs((entry.z >> 4) - targetChunkZ));
+                inRange = chunkDist <= entry.chunkRadius;
+            } else {
+                double dx = entry.x - x;
+                double dy = entry.y - y;
+                double dz = entry.z - z;
+                double distSq = dx * dx + dy * dy + dz * dz;
+                inRange = distSq <= entry.radius * entry.radius;
+            }
+            if (inRange) {
                 if (entry.strength.isStrongerThan(maxStrength)) {
                     maxStrength = entry.strength;
                     if (maxStrength == EnumStrength.STRONG) {

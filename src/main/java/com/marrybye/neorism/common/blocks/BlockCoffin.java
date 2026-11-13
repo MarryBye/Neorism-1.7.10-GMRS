@@ -144,7 +144,7 @@ public class BlockCoffin extends BlockModeled implements ITileEntityProvider {
                 if (!world.isRemote) {
                     coffin.toggleClosed();
                     world.playSoundEffect(footX + 0.5D, y + 0.5D, footZ + 0.5D,
-                        "neorism:cc/block/coffin_lid_slide", 0.8F, 1.0F);
+                        com.marrybye.neorism.common.core.ModSounds.COFFIN_LID, 0.8F, 1.0F);
                 }
                 return true;
             }

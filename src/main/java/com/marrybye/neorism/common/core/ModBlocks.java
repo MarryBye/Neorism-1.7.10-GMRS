@@ -56,6 +56,7 @@ public class ModBlocks {
     public static Block crackedDarkStoneBricks;
     public static Block vampireOrchid;
     public static Block cursedRoots;
+    public static Block garlic;
     public static Block tent;
 
     public static Block darkSprucePlanks;
@@ -177,6 +178,7 @@ public class ModBlocks {
         cursedEarthPath = register("cursed_earth_path", new BlockCursedEarthPath());
         vampireOrchid = register("vampire_orchid", new com.marrybye.neorism.common.blocks.BlockVampireOrchid());
         cursedRoots = register("cursed_roots", new com.marrybye.neorism.common.blocks.BlockCursedRoots());
+        garlic = registerBlockOnly("garlic", new com.marrybye.neorism.common.blocks.BlockGarlic());
         hangingRoots = register("cursed_hanging_roots", new BlockNeorismDecor("cursed_hanging_roots", "cursed_hanging_roots", Material.plants, ModCreativeTabs.tabVampirism, 0.2F, 0.0F, 0.2F, 0.8F, 1.0F, 0.8F, false));
         directCursedBark = register("direct_cursed_bark", new BlockNeorism("direct_cursed_bark", "cursed_spruce_log", Material.wood).setHardness(2.0F));
 
@@ -196,7 +198,7 @@ public class ModBlocks {
         darkSprucePressurePlate = register("dark_spruce_pressure_plate", new BlockNeorismPressurePlate("dark_spruce_pressure_plate", "dark_spruce_planks", ModCreativeTabs.tabVampirism));
         darkSpruceButton = register("dark_spruce_button", new BlockNeorismButton("dark_spruce_button", darkSprucePlanks, "dark_spruce_planks", ModCreativeTabs.tabVampirism));
 
-        cursedSpruceSapling = register("cursed_spruce_sapling", new BlockDarkSpruceSapling());
+        cursedSpruceSapling = register("cursed_spruce_sapling", new BlockDarkSpruceSapling("cursed_spruce_sapling", true));
         cursedSprucePlanks = register("cursed_spruce_planks", new BlockNeorism("cursed_spruce_planks", Material.wood).setHardness(2.0F));
         cursedSpruceLog = register("cursed_spruce_log", new BlockNeorismLog("cursed_spruce_log", "cursed_spruce_log", "cursed_spruce_log_top", ModCreativeTabs.tabVampirism));
         cursedSpruceWood = register("cursed_spruce_wood", new BlockNeorismLog("cursed_spruce_wood", "cursed_spruce_log", "cursed_spruce_log", ModCreativeTabs.tabVampirism));
@@ -277,9 +279,18 @@ public class ModBlocks {
         alchemyTable = register("alchemy_table", new BlockNeorismDecor("alchemy_table", "cauldron_side", Material.iron, ModCreativeTabs.tabHunter, 0.0F, 0.0F, 0.0F, 1.0F, 0.9F, 1.0F, true).setLightLevel(0.2F));
         injectionChair = register("injection_chair", new BlockNeorismDecor("injection_chair", "coffin_base", Material.wood, ModCreativeTabs.tabHunter, 0.1F, 0.0F, 0.1F, 0.9F, 0.9F, 0.9F, true));
         altarCleansing = register("altar_cleansing", new BlockNeorismDecor("altar_cleansing", "altar_pillar_stone", Material.wood, ModCreativeTabs.tabHunter, 0.1F, 0.0F, 0.1F, 0.9F, 0.8F, 0.9F, true));
-        garlicDiffuser = register("garlic_diffuser_normal", new BlockGarlicDiffuser());
-        garlicDiffuserLong = register("garlic_diffuser_long", new BlockGarlicDiffuser());
-        garlicDiffuserStrong = register("garlic_diffuser_strong", new BlockGarlicDiffuser());
+        garlicDiffuser = register("garlic_diffuser_normal", new BlockGarlicDiffuser(
+            "garlic_diffuser_normal",
+            com.marrybye.neorism.common.world.garlic.EnumStrength.WEAK,
+            com.marrybye.neorism.Config.garlicDiffuserNormalDist));
+        garlicDiffuserLong = register("garlic_diffuser_long", new BlockGarlicDiffuser(
+            "garlic_diffuser_long",
+            com.marrybye.neorism.common.world.garlic.EnumStrength.WEAK,
+            com.marrybye.neorism.Config.garlicDiffuserWeakDist));
+        garlicDiffuserStrong = register("garlic_diffuser_strong", new BlockGarlicDiffuser(
+            "garlic_diffuser_strong",
+            com.marrybye.neorism.common.world.garlic.EnumStrength.MEDIUM,
+            com.marrybye.neorism.Config.garlicDiffuserEnhancedDist));
         sunscreenBeacon = register("sunscreen_beacon", new BlockNeorismDecor("sunscreen_beacon", "sunscreen_beacon", Material.iron, ModCreativeTabs.tabHunter).setLightLevel(1.0F));
 
         coffin = register("coffin_red", new BlockCoffin("red"));

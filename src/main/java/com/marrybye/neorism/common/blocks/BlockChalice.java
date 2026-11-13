@@ -81,7 +81,6 @@ public class BlockChalice extends Block {
 
                     world.setBlockMetadataWithNotify(x, y, z, 1, 3);
                     world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "game.potion.smash", 1.0F, 0.8F);
-                    ModSounds.playAtEntity(player, ModSounds.HEARTBEAT, 1.0F, 1.0F);
 
                     checkAndAwakenDracula(world, x, y, z, player);
                 }
@@ -150,7 +149,7 @@ public class BlockChalice extends Block {
                 dracula.onSpawnWithEgg(null);
                 world.spawnEntityInWorld(dracula);
 
-                world.playSoundEffect(x + 0.5D, y + 1.0D, z + 0.5D, Neorism.MODID + ":entity.vampire.scream", 2.0F, 0.6F);
+                world.playSoundEffect(x + 0.5D, y + 1.0D, z + 0.5D, ModSounds.VAMPIRE_SCREAM, 2.0F, 0.6F);
 
                 List<?> players = world.getEntitiesWithinAABB(EntityPlayer.class, arenaAABB);
                 for (Object pObj : players) {

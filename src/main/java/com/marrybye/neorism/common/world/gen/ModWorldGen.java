@@ -28,19 +28,29 @@ public class ModWorldGen implements IWorldGenerator {
     private static final int SALT_VAMPIRE_ALTAR = 573190874;
     private static final int SALT_CRYPT = 643510199;
     private static final int SALT_VELMORRA_PORTAL = 362367473;
+    private static final int SALT_VAMPIRE_HUT = 1937195837;
+    private static final int SALT_MOTHER_TREE = 1897236459;
 
     private final WorldGenVampireCrypt cryptGen = new WorldGenVampireCrypt();
     private final WorldGenHunterCamp campGen = new WorldGenHunterCamp();
     private final WorldGenHunterTower towerGen = new WorldGenHunterTower();
     private final WorldGenVampireAltarRuins altarGen = new WorldGenVampireAltarRuins();
     private final WorldGenVelmorraPortal portalGen = new WorldGenVelmorraPortal();
+    private final WorldGenVampireHut hutGen = new WorldGenVampireHut();
+    private final WorldGenVampireDungeon dungeonGen = new WorldGenVampireDungeon();
+    private final WorldGenMotherTree motherTreeGen = new WorldGenMotherTree();
 
     // Tracks generated Velmorra Portal macro-regions per world seed so a Vampire Forest never gets duplicate portals
     private static final Set<String> generatedPortalRegions = new HashSet<String>();
 
+    public static void clearCache() {
+        generatedPortalRegions.clear();
+    }
+
     public static void init() {
         GameRegistry.registerWorldGenerator(new ModWorldGen(), 10);
         VillageTotemCreationHandler.init();
+        VillageHunterTrainerCreationHandler.init();
     }
 
     @Override
@@ -60,7 +70,7 @@ public class ModWorldGen implements IWorldGenerator {
         boolean isVampireForest = isVampireBiome(biome);
 
         // 1. Velmorra Portal Ruins: Canonical SingleOccurrence / landmark placement in Vampire Forest (1 per 48x48 chunk macro-region)
-        if (Config.generateDraculaCastle && isVampireForest) {
+        if (Config.generateVelmorraPortal && isVampireForest) {
             if (isStructureChunk(seed, chunkX, chunkZ, 48, 32, SALT_VELMORRA_PORTAL, false)) {
                 int macroX = Math.floorDiv(chunkX, 48);
                 int macroZ = Math.floorDiv(chunkZ, 48);
@@ -116,6 +126,30 @@ public class ModWorldGen implements IWorldGenerator {
                         ModLogger.spawn("Generated Hunter Outpost Tower at (%d, %d)", centerX, centerZ);
                     }
                 }
+            }
+        }
+
+        // 6. Vampire Hut: Canonical VAMPIRE_HUT (spacing = 32, separation = 10, salt = 1937195837) in Vampire Forest
+        if (Config.generateVampireHut && isVampireForest) {
+            if (isStructureChunk(seed, chunkX, chunkZ, 32, 10, SALT_VAMPIRE_HUT, false)) {
+                hutGen.generate(world, random, centerX, 0, centerZ);
+            }
+        }
+
+        // 7. Mother Tree Boss Structure: Canonical MOTHER (spacing = 48, separation = 6, salt = 1897236459, triangular) in Vampire Forest
+        if (Config.generateMotherTree && isVampireForest) {
+            if (isStructureChunk(seed, chunkX, chunkZ, 48, 6, SALT_MOTHER_TREE, true)) {
+                motherTreeGen.generate(world, random, centerX, 0, centerZ);
+            }
+        }
+
+        // 8. Underground Vampire Dungeon: Canonical count = 3 attempts per Overworld chunk
+        if (Config.generateVampireDungeon) {
+            for (int attempt = 0; attempt < 3; attempt++) {
+                int dx = chunkX * 16 + random.nextInt(16) + 8;
+                int dy = 8 + random.nextInt(56);
+                int dz = chunkZ * 16 + random.nextInt(16) + 8;
+                dungeonGen.generate(world, random, dx, dy, dz);
             }
         }
     }

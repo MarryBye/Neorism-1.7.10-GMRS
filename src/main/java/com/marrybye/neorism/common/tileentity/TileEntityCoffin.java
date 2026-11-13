@@ -80,7 +80,7 @@ public class TileEntityCoffin extends TileEntityNeorism {
         // Heal vampire
         player.heal(player.getMaxHealth());
         worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D,
-            "neorism:cc/block/coffin_lid_slide", 0.9F, 1.0F);
+            com.marrybye.neorism.common.core.ModSounds.COFFIN_LID, 0.9F, 1.0F);
 
         player.addChatMessage(new ChatComponentTranslation("chat.neorism.coffin_woke_up"));
         ModLogger.combat("Vampire %s slept in coffin at [%d,%d,%d] until dusk",

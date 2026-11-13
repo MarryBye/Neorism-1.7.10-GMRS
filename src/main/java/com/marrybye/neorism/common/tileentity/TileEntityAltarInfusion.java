@@ -283,6 +283,9 @@ public class TileEntityAltarInfusion extends TileEntityNeorism implements IInven
 
         if (worldObj.isRemote) {
             tickSphereAnimation();
+            if (isRunning() && (this.runTime == DURATION_TICK - 1 || this.runTime % 40 == 0)) {
+                worldObj.playSound(xCoord + 0.5D, yCoord + 1.0D, zCoord + 0.5D, ModSounds.SPHERE_SPINNING, 0.75F, 1.0F, false);
+            }
         }
     }
 
@@ -318,7 +321,7 @@ public class TileEntityAltarInfusion extends TileEntityNeorism implements IInven
         if (this.runTime == DURATION_TICK - 200) {
             EntityPlayer player = getPlayer();
             if (player != null) {
-                worldObj.playSound(player.posX, player.posY, player.posZ, "neorism:beam_enter", 1.0F, 1.0F, false);
+                worldObj.playSound(player.posX, player.posY, player.posZ, ModSounds.BEAM_ENTER_PLAYER, 1.0F, 1.0F, false);
             }
         }
     }

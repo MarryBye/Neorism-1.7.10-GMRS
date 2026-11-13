@@ -3,6 +3,7 @@ package com.marrybye.neorism.client.events;
 import org.lwjgl.opengl.GL11;
 
 import com.marrybye.neorism.common.core.ModBiomes;
+import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.util.Helper;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -10,8 +11,11 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 
@@ -26,6 +30,8 @@ public class VampireAtmosphereHandler {
     public static final int VAMPIRE_BIOME_FADE_TICKS = 60; // 3 seconds fade
     private int vampireBiomeTicks = 0;
     private float vampireBiomeFogDistanceMultiplier = 1.0F;
+    private ISound currentForestAmbient = null;
+    private int forestAmbientCooldown = 200;
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -33,6 +39,8 @@ public class VampireAtmosphereHandler {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null || mc.theWorld == null) {
             vampireBiomeTicks = 0;
+            currentForestAmbient = null;
+            forestAmbientCooldown = 200;
             return;
         }
 
@@ -60,6 +68,27 @@ public class VampireAtmosphereHandler {
             vampireBiomeFogDistanceMultiplier = 2.0F;
         } else {
             vampireBiomeFogDistanceMultiplier = 1.0F;
+        }
+
+        // Canonical Vampire Forest background music/ambient (vampire_forest.json: 12000..24000 tick delay)
+        boolean inVampireForest = (biome == ModBiomes.vampireForest)
+            || (biome != null && biome.biomeName != null && biome.biomeName.toLowerCase().contains("vampire"));
+        if (inVampireForest && !mc.isGamePaused()) {
+            if (currentForestAmbient == null || !mc.getSoundHandler().isSoundPlaying(currentForestAmbient)) {
+                if (--forestAmbientCooldown <= 0) {
+                    currentForestAmbient = PositionedSoundRecord.func_147673_a(new ResourceLocation(ModSounds.VAMPIRE_FOREST_AMBIENT));
+                    mc.getSoundHandler().playSound(currentForestAmbient);
+                    forestAmbientCooldown = 12000 + mc.theWorld.rand.nextInt(12001);
+                }
+            }
+        } else {
+            if (currentForestAmbient != null && mc.getSoundHandler().isSoundPlaying(currentForestAmbient)) {
+                mc.getSoundHandler().stopSound(currentForestAmbient);
+            }
+            currentForestAmbient = null;
+            if (forestAmbientCooldown > 200) {
+                forestAmbientCooldown = 200;
+            }
         }
     }
 
