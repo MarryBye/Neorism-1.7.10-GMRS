@@ -79,7 +79,7 @@ public class BlockVelmorraPortal extends BlockBreakable {
                 player.getEntityData().setInteger("VelmorraReturnZ", z);
 
                 server.getConfigurationManager().transferPlayerToDimension(player, targetDim,
-                    new TeleporterVelmorra(targetWorld, 0.5D, 65.0D, -26.0D));
+                    new TeleporterVelmorra(targetWorld, 0.5D, 65.0D, -34.0D));
                 targetWorld.playSoundAtEntity(player, "portal.travel", 0.7F, 1.0F);
             } else {
                 // Return to Overworld: retrieve saved portal coordinates or fall back to bed/spawn

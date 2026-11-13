@@ -79,11 +79,11 @@ public class WorldProviderVelmorra extends WorldProvider {
 
     @Override
     public ChunkCoordinates getEntrancePortalLocation() {
-        return new ChunkCoordinates(0, 65, -30);
+        return new ChunkCoordinates(0, 65, -34);
     }
 
     @Override
     public ChunkCoordinates getSpawnPoint() {
-        return new ChunkCoordinates(0, 65, -30);
+        return new ChunkCoordinates(0, 65, -34);
     }
 }

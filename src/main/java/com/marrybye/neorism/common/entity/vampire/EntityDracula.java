@@ -46,8 +46,10 @@ import net.minecraft.world.World;
 public class EntityDracula extends EntityVampireBase implements IBossDisplayData {
 
     private static final int DATA_PHASE = 21;
+    private static final int DATA_DORMANT = 22;
 
     private int phase = 1;
+    private boolean dormant = false;
     private float fightScale = 1.0F;
     private int phaseCooldown = 0;
 
@@ -85,6 +87,23 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
     protected void entityInit() {
         super.entityInit();
         this.dataWatcher.addObject(DATA_PHASE, Byte.valueOf((byte) 1));
+        this.dataWatcher.addObject(DATA_DORMANT, Byte.valueOf((byte) 0));
+    }
+
+    public boolean isDormant() {
+        return this.worldObj != null && this.worldObj.isRemote
+            ? this.dataWatcher.getWatchableObjectByte(DATA_DORMANT) != 0
+            : this.dormant;
+    }
+
+    public void setDormant(boolean dormant) {
+        this.dormant = dormant;
+        this.dataWatcher.updateObject(DATA_DORMANT, Byte.valueOf((byte) (dormant ? 1 : 0)));
+        if (dormant) {
+            this.setAttackTarget(null);
+            this.motionX = 0.0D;
+            this.motionZ = 0.0D;
+        }
     }
 
     @Override
@@ -97,6 +116,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
     }
 
     public void startFight(int playerCount) {
+        this.setDormant(false);
         this.fightScale = 1.0F + 0.5F * (playerCount - 1);
         this.phase = 1;
         this.dataWatcher.updateObject(DATA_PHASE, Byte.valueOf((byte) 1));
@@ -128,12 +148,24 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
-        // Update Boss Health Bar on client only
+        // Update Boss Health Bar on client only once awakened
         if (this.worldObj.isRemote) {
-            updateClientBossStatus();
+            if (!isDormant()) {
+                updateClientBossStatus();
+            }
         }
 
         if (!this.worldObj.isRemote && this.isEntityAlive()) {
+            if (this.dormant) {
+                this.motionX = 0.0D;
+                this.motionZ = 0.0D;
+                this.setAttackTarget(null);
+                EntityPlayer nearest = this.worldObj.getClosestPlayerToEntity(this, 16.0D);
+                if (nearest != null) {
+                    this.getLookHelper().setLookPositionWithEntity(nearest, 30.0F, 30.0F);
+                }
+                return;
+            }
             if (isTransforming) {
                 tickTransformation();
                 return;
@@ -446,11 +478,28 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
 
     @Override
     public boolean attackEntityAsMob(Entity target) {
+        if (this.dormant) return false;
         return super.attackEntityAsMob(target);
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (this.dormant && !this.worldObj.isRemote) {
+            if (source.getEntity() instanceof EntityPlayer) {
+                if (this.worldObj.provider.dimensionId == Config.dimensionVelmorraId) {
+                    DraculaFightManager mgr = DraculaFightManager.get(this.worldObj);
+                    if (mgr != null && mgr.getState() == DraculaFightManager.State.NONE) {
+                        mgr.awakenDracula(this);
+                    } else {
+                        this.startFight(Math.max(1, this.worldObj.playerEntities.size()));
+                    }
+                } else {
+                    this.startFight(1);
+                }
+            } else {
+                return false;
+            }
+        }
         // Complete immunity during transformation and mist form
         if (this.isTransforming || this.mistForm) {
             return false;
@@ -594,6 +643,7 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
         tag.setInteger("Phase", this.phase);
+        tag.setBoolean("Dormant", this.dormant);
         tag.setFloat("FightScale", this.fightScale);
         tag.setBoolean("IsTransforming", this.isTransforming);
         tag.setInteger("TransformTicks", this.transformTicks);
@@ -607,6 +657,9 @@ public class EntityDracula extends EntityVampireBase implements IBossDisplayData
         if (tag.hasKey("Phase")) {
             this.phase = Math.max(1, Math.min(3, tag.getInteger("Phase")));
             this.dataWatcher.updateObject(DATA_PHASE, Byte.valueOf((byte) this.phase));
+        }
+        if (tag.hasKey("Dormant")) {
+            this.setDormant(tag.getBoolean("Dormant"));
         }
         if (tag.hasKey("FightScale")) {
             this.fightScale = tag.getFloat("FightScale");

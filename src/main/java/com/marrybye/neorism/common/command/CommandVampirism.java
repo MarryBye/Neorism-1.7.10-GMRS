@@ -305,10 +305,10 @@ public class CommandVampirism extends CommandBase {
                 target.getEntityData().setInteger("VelmorraReturnY", (int) Math.floor(target.posY));
                 target.getEntityData().setInteger("VelmorraReturnZ", (int) Math.floor(target.posZ));
                 server.getConfigurationManager().transferPlayerToDimension(
-                    target, Config.dimensionVelmorraId, new TeleporterVelmorra(velmorra, 0.5D, 65.0D, -26.0D)
+                    target, Config.dimensionVelmorraId, new TeleporterVelmorra(velmorra, 0.5D, 65.0D, -34.0D)
                 );
             } else {
-                target.playerNetServerHandler.setPlayerLocation(0.5D, 65.0D, -26.0D, target.rotationYaw, 0.0F);
+                target.playerNetServerHandler.setPlayerLocation(0.5D, 65.0D, -34.0D, target.rotationYaw, 0.0F);
             }
 
             ModLogger.debug("Command /vampirism velmorra tp executed by %s for %s (dim=%d)",

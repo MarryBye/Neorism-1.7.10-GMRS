@@ -111,11 +111,11 @@ public class DraculaFightManager extends WorldSavedData {
             }
         }
 
-        // If not all registered, scan nearby arena (around chunk center)
+        // If not all registered, scan nearby arena (around throne hall)
         if (filled < 4) {
-            for (int dx = -10; dx <= 10; dx++) {
-                for (int dy = -4; dy <= 6; dy++) {
-                    for (int dz = 0; dz <= 16; dz++) {
+            for (int dx = -12; dx <= 12; dx++) {
+                for (int dy = 0; dy <= 6; dy++) {
+                    for (int dz = 10; dz <= 26; dz++) {
                         if (world.getBlock(dx, 65 + dy, dz) == ModBlocks.chalice) {
                             chalicePositions.add(new ChunkCoordinates(dx, 65 + dy, dz));
                             if (world.getBlockMetadata(dx, 65 + dy, dz) == 1) {
@@ -138,8 +138,26 @@ public class DraculaFightManager extends WorldSavedData {
         return true;
     }
 
+    public void awakenDracula(EntityDracula existing) {
+        if (state != State.NONE) return;
+        activateFight(existing);
+    }
+
     public void startFight() {
         if (state != State.NONE) return;
+        AxisAlignedBB castleBB = AxisAlignedBB.getBoundingBox(-45, 50, -45, 45, 110, 45);
+        List<?> existingList = world.getEntitiesWithinAABB(EntityDracula.class, castleBB);
+        EntityDracula existing = null;
+        for (Object o : existingList) {
+            if (o instanceof EntityDracula && ((EntityDracula) o).isEntityAlive()) {
+                existing = (EntityDracula) o;
+                break;
+            }
+        }
+        activateFight(existing);
+    }
+
+    private void activateFight(EntityDracula dracula) {
         state = State.FIGHTING;
         deathTicks = 0;
         warningsSent = 0;
@@ -153,17 +171,21 @@ public class DraculaFightManager extends WorldSavedData {
 
         int playerCount = Math.max(1, world.playerEntities.size());
 
-        // Spawn Dracula in front of the throne
-        EntityDracula dracula = new EntityDracula(world);
-        dracula.setLocationAndAngles(0.5D, 67.0D, 8.0D, 180.0F, 0.0F);
-        dracula.onSpawnWithEgg(null);
-        dracula.startFight(playerCount);
-        world.spawnEntityInWorld(dracula);
+        if (dracula == null) {
+            // Spawn Dracula in front of the throne
+            dracula = new EntityDracula(world);
+            dracula.setLocationAndAngles(0.5D, 67.0D, 21.5D, 180.0F, 0.0F);
+            dracula.onSpawnWithEgg(null);
+            dracula.startFight(playerCount);
+            world.spawnEntityInWorld(dracula);
+        } else {
+            dracula.startFight(playerCount);
+        }
         this.draculaId = dracula.getPersistentID();
 
         // Theatrical summoning effects
-        world.addWeatherEffect(new EntityLightningBolt(world, 0.5D, 68.0D, 8.0D));
-        world.playSoundEffect(0.5D, 67.0D, 8.0D, ModSounds.VAMPIRE_SCREAM, 2.0F, 0.6F);
+        world.addWeatherEffect(new EntityLightningBolt(world, dracula.posX, dracula.posY + 1.0D, dracula.posZ));
+        world.playSoundEffect(dracula.posX, dracula.posY, dracula.posZ, ModSounds.VAMPIRE_SCREAM, 2.0F, 0.6F);
 
         broadcastMessage("message.vampirism.dracula.summoned");
         ModLogger.combat("Dracula Fight started with %d players!", playerCount);
@@ -177,8 +199,8 @@ public class DraculaFightManager extends WorldSavedData {
         warningsSent = 0;
         draculaId = null;
 
-        // 1. Open return portal at castle entrance
-        ChunkProviderVelmorra.placeReturnPortal(world, 0, 65, -28);
+        // 1. Open return portal on the grand avenue in front of the gatehouse
+        ChunkProviderVelmorra.placeReturnPortal(world, 0, 65, -31);
 
         // 2. Broadcast victory and portal opened messages
         broadcastMessage("message.vampirism.dracula.defeated");
@@ -239,7 +261,7 @@ public class DraculaFightManager extends WorldSavedData {
         } else if (state == State.FIGHTING) {
             // Verify Dracula is still alive
             if (world.getTotalWorldTime() % 40 == 0) {
-                AxisAlignedBB castleBB = AxisAlignedBB.getBoundingBox(-32, 50, -32, 32, 90, 32);
+                AxisAlignedBB castleBB = AxisAlignedBB.getBoundingBox(-45, 50, -45, 45, 110, 45);
                 List<?> draculas = world.getEntitiesWithinAABB(EntityDracula.class, castleBB);
                 if (draculas.isEmpty()) {
                     // Dracula disappeared or died without triggering death callback
