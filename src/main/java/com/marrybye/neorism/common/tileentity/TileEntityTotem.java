@@ -880,6 +880,75 @@ public class TileEntityTotem extends TileEntity implements ITotem, ICaptureAttri
     }
 
     /**
+     * Finds the nearest loaded, valid TileEntityTotem in the given world within maxRadius
+     * (or whose village area contains the given coordinates).
+     */
+    public static TileEntityTotem getTotemNear(net.minecraft.world.World world, double x, double y, double z, double maxRadius) {
+        if (world == null) return null;
+        TileEntityTotem best = null;
+        double bestDistSq = maxRadius * maxRadius;
+        net.minecraft.util.Vec3 posVec = net.minecraft.util.Vec3.createVectorHelper(x, y, z);
+        for (TileEntityTotem totem : ACTIVE_TOTEMS) {
+            if (totem == null || totem.worldObj != world || totem.isInvalid()) continue;
+            double dx = (totem.xCoord + 0.5D) - x;
+            double dy = (totem.yCoord + 0.5D) - y;
+            double dz = (totem.zCoord + 0.5D) - z;
+            double distSq = dx * dx + dy * dy + dz * dz;
+            if (distSq <= bestDistSq || totem.getVillageArea().isVecInside(posVec)) {
+                if (best == null || distSq < bestDistSq) {
+                    best = totem;
+                    bestDistSq = distSq;
+                }
+            }
+        }
+        return best;
+    }
+
+    /**
+     * Immediately forces this village totem to belong to the specified faction ID.
+     * Canonical port of TotemBlockEntity.setForcedFaction -> completeCapture(false, true).
+     */
+    @SuppressWarnings("unchecked")
+    public void forceFaction(int factionId) {
+        if (this.worldObj == null || this.worldObj.isRemote) return;
+        if (factionId == FACTION_NEUTRAL) {
+            AxisAlignedBB area = getVillageArea();
+            List<EntityVillager> villagers = this.worldObj.getEntitiesWithinAABB(EntityVillager.class, area);
+            for (EntityVillager v : new ArrayList<EntityVillager>(villagers)) {
+                if (v.isDead) continue;
+                if (v.isPotionActive(ModPotions.sanguinare)) {
+                    v.removePotionEffect(ModPotions.sanguinare.id);
+                }
+                if (v instanceof EntityConvertedVillager) {
+                    EntityVillager cured = new EntityVillager(this.worldObj, v.getProfession());
+                    cured.copyLocationAndAnglesFrom(v);
+                    v.setDead();
+                    this.worldObj.spawnEntityInWorld(cured);
+                    v = cured;
+                }
+                ExtendedCreature ext = ExtendedCreature.get(v);
+                if (ext != null) {
+                    ext.setPoisonousBlood(0);
+                }
+            }
+            List<EntityHunterTrainer> trainers = this.worldObj.getEntitiesWithinAABB(EntityHunterTrainer.class, area);
+            for (EntityHunterTrainer t : trainers) t.setDead();
+            List<EntityTaskmaster> taskmasters = this.worldObj.getEntitiesWithinAABB(EntityTaskmaster.class, area);
+            for (EntityTaskmaster tm : taskmasters) tm.setDead();
+            List<EntityVampireTaskmaster> vTaskmasters = this.worldObj.getEntitiesWithinAABB(EntityVampireTaskmaster.class, area);
+            for (EntityVampireTaskmaster vtm : vTaskmasters) vtm.setDead();
+
+            this.setControllingFactionId(FACTION_NEUTRAL);
+            this.breakCapture();
+            ModLogger.combat("Totem [%d, %d, %d] (%s) forced to Neutral",
+                this.xCoord, this.yCoord, this.zCoord, getVillageName());
+            return;
+        }
+        this.attackingFactionId = factionId;
+        completeCapture(false, true);
+    }
+
+    /**
      * Canonical TotemBlockEntity.completeCapture & VillageEventHandler.onUpdateCreaturesOnCapture:
      * Flips controlling faction, converts/cures villagers, spawns trainer/taskmaster, and announces victory.
      */

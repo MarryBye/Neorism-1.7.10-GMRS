@@ -32,6 +32,7 @@ public class SkillHandler implements IExtendedEntityProperties {
     private final EntityPlayer player;
     private int skillPoints = 0;
     private final Set<String> unlockedSkills = new HashSet<String>();
+    private final Set<String> forceUnlockedSkills = new HashSet<String>();
     private String primaryAction = "";
     private String secondaryAction = "";
 
@@ -66,6 +67,13 @@ public class SkillHandler implements IExtendedEntityProperties {
             list.appendTag(new NBTTagString(skillId));
         }
         tag.setTag("unlockedSkills", list);
+
+        NBTTagList forcedList = new NBTTagList();
+        for (String skillId : forceUnlockedSkills) {
+            forcedList.appendTag(new NBTTagString(skillId));
+        }
+        tag.setTag("ForceUnlockedSkills", forcedList);
+
         compound.setTag("NeorismSkills", tag);
     }
 
@@ -82,6 +90,14 @@ public class SkillHandler implements IExtendedEntityProperties {
             for (int i = 0; i < list.tagCount(); i++) {
                 this.unlockedSkills.add(list.getStringTagAt(i));
             }
+
+            this.forceUnlockedSkills.clear();
+            if (tag.hasKey("ForceUnlockedSkills")) {
+                NBTTagList forcedList = tag.getTagList("ForceUnlockedSkills", Constants.NBT.TAG_STRING);
+                for (int i = 0; i < forcedList.tagCount(); i++) {
+                    this.forceUnlockedSkills.add(forcedList.getStringTagAt(i));
+                }
+            }
         }
     }
 
@@ -92,6 +108,8 @@ public class SkillHandler implements IExtendedEntityProperties {
             this.secondaryAction = old.secondaryAction;
             this.unlockedSkills.clear();
             this.unlockedSkills.addAll(old.unlockedSkills);
+            this.forceUnlockedSkills.clear();
+            this.forceUnlockedSkills.addAll(old.forceUnlockedSkills);
         }
     }
 
@@ -315,12 +333,64 @@ public class SkillHandler implements IExtendedEntityProperties {
         return true;
     }
 
+    /**
+     * Force-unlocks a registered skill for the player's current faction, bypassing skill point,
+     * level, and prerequisite checks (used by admin/debug commands with 'force' or 'enable all').
+     */
+    public boolean forceUnlockSkill(String skillId) {
+        return forceUnlockSkill(skillId, true);
+    }
+
+    /**
+     * Force-unlocks a registered skill for the player's current faction with optional network sync.
+     */
+    public boolean forceUnlockSkill(String skillId, boolean doSync) {
+        if (skillId == null || skillId.isEmpty()) return false;
+        ISkill skill = SkillRegistry.getSkill(skillId);
+        if (skill == null) return false;
+        FactionPlayerHandler fph = FactionPlayerHandler.get(player);
+        if (fph == null) return false;
+        if (skill.getFaction() != null && !skill.getFaction().equals(fph.getCurrentFaction())) {
+            return false;
+        }
+        if (isSkillUnlocked(skillId)) return false;
+
+        unlockedSkills.add(skillId);
+        forceUnlockedSkills.add(skillId);
+        ModLogger.leveling("Player %s force-unlocked skill '%s'",
+            player.getCommandSenderName(), skillId);
+        if (doSync) {
+            sync();
+        }
+        return true;
+    }
+
+    /**
+     * Force-unlocks a batch of skills and sends a single sync packet at the end.
+     */
+    public int forceUnlockAllSkills(java.util.Collection<ISkill> skills) {
+        if (skills == null || skills.isEmpty()) return 0;
+        int count = 0;
+        for (ISkill skill : skills) {
+            if (skill != null && forceUnlockSkill(skill.getSkillId(), false)) {
+                count++;
+            }
+        }
+        if (count > 0) {
+            sync();
+        }
+        return count;
+    }
+
     public boolean forgetSkill(String skillId) {
         if (!unlockedSkills.contains(skillId)) return false;
-        ISkill skill = SkillRegistry.getSkill(skillId);
-        int refund = skill != null ? skill.getSkillPointCost() : 1;
         unlockedSkills.remove(skillId);
-        skillPoints += refund;
+        int refund = 0;
+        if (!forceUnlockedSkills.remove(skillId)) {
+            ISkill skill = SkillRegistry.getSkill(skillId);
+            refund = skill != null ? skill.getSkillPointCost() : 1;
+            skillPoints += refund;
+        }
         ModLogger.leveling("Player %s forgot skill '%s' (refund: %d, total points: %d)",
             player.getCommandSenderName(), skillId, refund, skillPoints);
         sync();
@@ -328,8 +398,15 @@ public class SkillHandler implements IExtendedEntityProperties {
     }
 
     public void resetSkills() {
-        int refund = unlockedSkills.size();
+        int refund = 0;
+        for (String skillId : unlockedSkills) {
+            if (!forceUnlockedSkills.contains(skillId)) {
+                ISkill skill = SkillRegistry.getSkill(skillId);
+                refund += skill != null ? skill.getSkillPointCost() : 1;
+            }
+        }
         unlockedSkills.clear();
+        forceUnlockedSkills.clear();
         skillPoints += refund;
         ModLogger.leveling("Player %s reset skills (refunded %d points, total: %d)",
             player.getCommandSenderName(), refund, skillPoints);

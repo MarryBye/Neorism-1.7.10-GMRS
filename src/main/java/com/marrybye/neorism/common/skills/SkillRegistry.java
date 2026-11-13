@@ -246,6 +246,21 @@ public class SkillRegistry {
         return SKILLS.get(id);
     }
 
+    public static Collection<ISkill> getAllSkills() {
+        return Collections.unmodifiableCollection(SKILLS.values());
+    }
+
+    public static Collection<ISkill> getSkillsForFaction(IPlayableFaction faction) {
+        List<ISkill> list = new ArrayList<ISkill>();
+        if (faction == null) return list;
+        for (ISkill skill : SKILLS.values()) {
+            if (faction.equals(skill.getFaction())) {
+                list.add(skill);
+            }
+        }
+        return list;
+    }
+
     public static ISkillSegment getSegment(String id) {
         return SEGMENTS.get(id);
     }

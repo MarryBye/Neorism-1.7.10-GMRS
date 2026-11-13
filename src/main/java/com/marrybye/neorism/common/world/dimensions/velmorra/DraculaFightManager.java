@@ -10,6 +10,7 @@ import com.marrybye.neorism.Config;
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.common.achievement.ModAchievements;
 import com.marrybye.neorism.common.core.ModBlocks;
+import com.marrybye.neorism.common.core.ModSounds;
 import com.marrybye.neorism.common.entity.vampire.EntityDracula;
 import com.marrybye.neorism.common.util.ModLogger;
 
@@ -65,6 +66,7 @@ public class DraculaFightManager extends WorldSavedData {
     private State state = State.NONE;
     private int deathTicks = 0;
     private int warningsSent = 0;
+    private int rumbleCooldown = 0;
     private UUID draculaId = null;
     private final Set<ChunkCoordinates> chalicePositions = new HashSet<ChunkCoordinates>();
 
@@ -130,6 +132,12 @@ public class DraculaFightManager extends WorldSavedData {
         }
     }
 
+    public boolean debugStartFight() {
+        if (state != State.NONE) return false;
+        startFight();
+        return true;
+    }
+
     public void startFight() {
         if (state != State.NONE) return;
         state = State.FIGHTING;
@@ -155,7 +163,7 @@ public class DraculaFightManager extends WorldSavedData {
 
         // Theatrical summoning effects
         world.addWeatherEffect(new EntityLightningBolt(world, 0.5D, 68.0D, 8.0D));
-        world.playSoundEffect(0.5D, 67.0D, 8.0D, Neorism.MODID + ":entity.vampire.scream", 2.0F, 0.6F);
+        world.playSoundEffect(0.5D, 67.0D, 8.0D, ModSounds.VAMPIRE_SCREAM, 2.0F, 0.6F);
 
         broadcastMessage("message.vampirism.dracula.summoned");
         ModLogger.combat("Dracula Fight started with %d players!", playerCount);
@@ -196,6 +204,20 @@ public class DraculaFightManager extends WorldSavedData {
 
         if (state == State.DEAD) {
             deathTicks++;
+
+            // Canonical VelmorraCollapseHandler ambient rumble scaling with eased collapse progress
+            if (--rumbleCooldown <= 0) {
+                float progress = Math.min(1.0F, Math.max(0.0F, (float) deathTicks / (float) COLLAPSE_DURATION));
+                float p = progress * progress;
+                rumbleCooldown = 300 - (int) (200 * p) + world.rand.nextInt(100);
+                float volume = 0.5F + 1.5F * p;
+                float pitch = 0.5F + world.rand.nextFloat() * 0.3F;
+                for (Object pObj : world.playerEntities) {
+                    if (pObj instanceof EntityPlayer) {
+                        world.playSoundAtEntity((EntityPlayer) pObj, ModSounds.VELMORRA_RUMBLE, volume, pitch);
+                    }
+                }
+            }
 
             // Check staged warnings
             while (warningsSent < WARNINGS.length && deathTicks >= WARNINGS[warningsSent].tick) {

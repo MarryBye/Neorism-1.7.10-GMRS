@@ -1,5 +1,9 @@
 package com.marrybye.neorism;
 
+import com.marrybye.neorism.common.command.CommandFactions;
+import com.marrybye.neorism.common.command.CommandLevelShortcut;
+import com.marrybye.neorism.common.command.CommandLordShortcut;
+import com.marrybye.neorism.common.command.CommandVampirism;
 import com.marrybye.neorism.common.core.ModRegistries;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -31,6 +35,9 @@ public class CommonProxy {
     }
 
     public void serverStarting(FMLServerStartingEvent event) {
-        // Register server commands
+        event.registerServerCommand(new CommandFactions());
+        event.registerServerCommand(new CommandVampirism());
+        event.registerServerCommand(new CommandLevelShortcut());
+        event.registerServerCommand(new CommandLordShortcut());
     }
 }

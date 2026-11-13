@@ -238,6 +238,25 @@ public class ActionHandler implements IExtendedEntityProperties {
         }
     }
 
+    /**
+     * Canonical FactionAPI ActionHandler#resetTimers():
+     * Deactivates all active actions without starting cooldowns, clears all cooldowns and active timers, and syncs.
+     */
+    public void resetTimers() {
+        if (player.worldObj.isRemote) return;
+        for (String key : new java.util.ArrayList<String>(activeActions.keySet())) {
+            IAction action = ActionRegistry.getAction(key);
+            if (action != null) {
+                action.onDeactivated(player);
+            }
+        }
+        activeActions.clear();
+        cooldowns.clear();
+        dirty = false;
+        ModLogger.combat("Reset all action timers and cooldowns for %s", player.getCommandSenderName());
+        sync();
+    }
+
     public void setClientData(Map<String, Integer> cds, Map<String, Integer> actives) {
         this.cooldowns.clear();
         if (cds != null) this.cooldowns.putAll(cds);
