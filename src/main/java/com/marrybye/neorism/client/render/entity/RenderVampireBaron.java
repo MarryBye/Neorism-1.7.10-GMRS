@@ -2,9 +2,9 @@ package com.marrybye.neorism.client.render.entity;
 
 import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.client.model.ModelBaron;
+import com.marrybye.neorism.common.entity.vampire.EntityVampireBaron;
 import com.marrybye.neorism.common.entity.vampire.EntityVampireBaroness;
 
-import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,26 +14,29 @@ import org.lwjgl.opengl.GL11;
 /**
  * Angelica-compatible renderer for Vampire Baron and Baroness minibosses (64x64 with claws).
  */
-public class RenderVampireBaron extends RenderBiped {
+public class RenderVampireBaron extends RenderBiped64 {
 
     private static final ResourceLocation TEXTURE_BARON =
         new ResourceLocation(Neorism.MODID, "textures/entity/baron/baron.png");
+    private static final ResourceLocation TEXTURE_BARON_ENRAGED =
+        new ResourceLocation(Neorism.MODID, "textures/entity/baron/baron_enraged.png");
     private static final ResourceLocation TEXTURE_BARONESS =
         new ResourceLocation(Neorism.MODID, "textures/entity/baron/baroness.png");
-
-    private final ModelBaron baronModel = new ModelBaron(false);
-    private final ModelBaron baronessModel = new ModelBaron(true);
+    private static final ResourceLocation TEXTURE_BARONESS_ENRAGED =
+        new ResourceLocation(Neorism.MODID, "textures/entity/baron/baroness_enraged.png");
 
     public RenderVampireBaron() {
-        super(new ModelBaron(false), 0.6F);
+        super(new ModelBaron(false), new ModelBaron(true), 0.6F);
+    }
+
+    private boolean isLadyEntity(Entity entity) {
+        return (entity instanceof EntityVampireBaroness)
+            || (entity instanceof EntityVampireBaron && ((EntityVampireBaron) entity).isLady());
     }
 
     @Override
-    public void doRender(EntityLiving entity, double x, double y, double z, float yaw, float partialTicks) {
-        ModelBaron active = (entity instanceof EntityVampireBaroness) ? this.baronessModel : this.baronModel;
-        this.mainModel = active;
-        this.modelBipedMain = active;
-        super.doRender(entity, x, y, z, yaw, partialTicks);
+    protected boolean isSlim(EntityLiving entity) {
+        return isLadyEntity(entity);
     }
 
     @Override
@@ -45,9 +48,11 @@ public class RenderVampireBaron extends RenderBiped {
 
     @Override
     protected ResourceLocation getEntityTexture(Entity entity) {
-        if (entity instanceof EntityVampireBaroness) {
-            return TEXTURE_BARONESS;
+        boolean lady = isLadyEntity(entity);
+        boolean enraged = (entity instanceof EntityVampireBaron) && ((EntityVampireBaron) entity).isEnraged();
+        if (lady) {
+            return enraged ? TEXTURE_BARONESS_ENRAGED : TEXTURE_BARONESS;
         }
-        return TEXTURE_BARON;
+        return enraged ? TEXTURE_BARON_ENRAGED : TEXTURE_BARON;
     }
 }

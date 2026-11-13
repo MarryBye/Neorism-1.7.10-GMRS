@@ -4,14 +4,13 @@ import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.client.model.ModelBiped64;
 import com.marrybye.neorism.common.entity.minion.EntityVampireMinion;
 
-import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * Renderer for Vampire Minion entities with 64x64 skin variations.
  */
-public class RenderVampireMinion extends RenderBiped {
+public class RenderVampireMinion extends RenderBiped64 {
 
     private static final ResourceLocation[] SKINS = new ResourceLocation[] {
         new ResourceLocation(Neorism.MODID, "textures/entity/minion/vampire/vampire1_slim.png"),
@@ -23,7 +22,11 @@ public class RenderVampireMinion extends RenderBiped {
     };
 
     public RenderVampireMinion() {
-        super(new ModelBiped64(0.0F, true), 0.5F);
+        this(new ModelBiped64(0.0F, true));
+    }
+
+    private RenderVampireMinion(ModelBiped64 slimModel) {
+        super(slimModel, slimModel, 0.5F);
     }
 
     @Override

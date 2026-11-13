@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 public class EntityHunter extends EntityHunterBase {
 
     private static final int DATA_SKIN = 20;
+    /** Canonical {@code IBasicHunter.TYPES = 126} skin distribution count. */
+    public static final int SKIN_TYPES = 126;
 
     public EntityHunter(World world) {
         super(world);
@@ -24,15 +26,16 @@ public class EntityHunter extends EntityHunterBase {
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataWatcher.addObject(DATA_SKIN, (byte) (this.rand.nextInt(9) + 1));
+        this.dataWatcher.addObject(DATA_SKIN, (byte) this.rand.nextInt(SKIN_TYPES));
     }
 
     public int getSkinType() {
-        return this.dataWatcher.getWatchableObjectByte(DATA_SKIN);
+        return this.dataWatcher.getWatchableObjectByte(DATA_SKIN) & 0xFF;
     }
 
     public void setSkinType(int skin) {
-        this.dataWatcher.updateObject(DATA_SKIN, (byte) skin);
+        int clamped = (skin < 0 ? Math.abs(skin) : skin) % SKIN_TYPES;
+        this.dataWatcher.updateObject(DATA_SKIN, (byte) clamped);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class EntityHunter extends EntityHunterBase {
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
-        this.setSkinType(this.rand.nextInt(9) + 1);
+        this.setSkinType(this.rand.nextInt(SKIN_TYPES));
 
         // Canonical BasicHunterEntity.randomEquipments:
         // 0: Stake, 1: Hunter Axe, 2: Single Crossbow, 3: Stake
@@ -147,7 +150,7 @@ public class EntityHunter extends EntityHunterBase {
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
         if (tag.hasKey("SkinType")) {
-            this.setSkinType(tag.getByte("SkinType"));
+            this.setSkinType(tag.getByte("SkinType") & 0xFF);
         }
     }
 }

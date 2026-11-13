@@ -4,14 +4,13 @@ import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.client.model.ModelBiped64;
 import com.marrybye.neorism.common.entity.vampire.EntityVampire;
 
-import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * Angelica-compatible renderer for basic vampires with multi-skin selection in 64x64 format.
  */
-public class RenderVampire extends RenderBiped {
+public class RenderVampire extends RenderBiped64 {
 
     private static final ResourceLocation[] SKINS = new ResourceLocation[] {
         new ResourceLocation(Neorism.MODID, "textures/entity/vampire/vampire1.png"),
@@ -32,7 +31,7 @@ public class RenderVampire extends RenderBiped {
     };
 
     public RenderVampire() {
-        super(new ModelBiped64(0.0F), 0.5F);
+        super(new ModelBiped64(0.0F, false), new ModelBiped64(0.0F, true), 0.5F);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.marrybye.neorism.common.util.ModLogger;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 /**
@@ -14,10 +15,29 @@ import net.minecraft.world.World;
  */
 public class EntityAdvancedHunter extends EntityHunterBase {
 
+    private static final int DATA_SKIN = 20;
+    /** Canonical {@code IBasicHunter.TYPES = 126} skin distribution count. */
+    public static final int SKIN_TYPES = 126;
+
     public EntityAdvancedHunter(World world) {
         super(world);
         this.setSize(0.6F, 1.85F);
         this.experienceValue = 16;
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataWatcher.addObject(DATA_SKIN, (byte) this.rand.nextInt(SKIN_TYPES));
+    }
+
+    public int getSkinType() {
+        return this.dataWatcher.getWatchableObjectByte(DATA_SKIN) & 0xFF;
+    }
+
+    public void setSkinType(int skin) {
+        int clamped = (skin < 0 ? Math.abs(skin) : skin) % SKIN_TYPES;
+        this.dataWatcher.updateObject(DATA_SKIN, (byte) clamped);
     }
 
     @Override
@@ -37,15 +57,31 @@ public class EntityAdvancedHunter extends EntityHunterBase {
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
+        int skin = this.rand.nextInt(SKIN_TYPES);
+        this.setSkinType(skin);
         this.setCurrentItemOrArmor(0, new ItemStack(ModItems.crossbow, 1, 0));
         this.setCurrentItemOrArmor(4, new ItemStack(ModItems.hunterHat));
         this.setCurrentItemOrArmor(3, new ItemStack(ModItems.hunterCoatChest));
         this.setCurrentItemOrArmor(2, new ItemStack(ModItems.hunterCoatLegs));
         this.setCurrentItemOrArmor(1, new ItemStack(ModItems.hunterCoatFeet));
 
-        ModLogger.spawn("Spawned Advanced Hunter marksman %s at (%.1f, %.1f, %.1f)",
-            this.getCommandSenderName(), this.posX, this.posY, this.posZ);
+        ModLogger.spawn("Spawned Advanced Hunter marksman %s (skin=%d) at (%.1f, %.1f, %.1f)",
+            this.getCommandSenderName(), skin, this.posX, this.posY, this.posZ);
         return data;
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound tag) {
+        super.writeEntityToNBT(tag);
+        tag.setByte("SkinType", (byte) this.getSkinType());
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound tag) {
+        super.readEntityFromNBT(tag);
+        if (tag.hasKey("SkinType")) {
+            this.setSkinType(tag.getByte("SkinType") & 0xFF);
+        }
     }
 
     @Override

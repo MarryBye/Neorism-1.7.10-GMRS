@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 /**
@@ -14,12 +15,31 @@ import net.minecraft.world.World;
  */
 public class EntityAdvancedVampire extends EntityVampireBase {
 
+    private static final int DATA_SKIN = 20;
+    /** Canonical {@code IBasicVampire.TYPES = 126} skin distribution count. */
+    public static final int SKIN_TYPES = 126;
+
     private int teleportCooldown = 0;
 
     public EntityAdvancedVampire(World world) {
         super(world);
         this.setSize(0.6F, 1.85F);
         this.experienceValue = 15;
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataWatcher.addObject(DATA_SKIN, (byte) this.rand.nextInt(SKIN_TYPES));
+    }
+
+    public int getSkinType() {
+        return this.dataWatcher.getWatchableObjectByte(DATA_SKIN) & 0xFF;
+    }
+
+    public void setSkinType(int skin) {
+        int clamped = (skin < 0 ? Math.abs(skin) : skin) % SKIN_TYPES;
+        this.dataWatcher.updateObject(DATA_SKIN, (byte) clamped);
     }
 
     @Override
@@ -33,12 +53,28 @@ public class EntityAdvancedVampire extends EntityVampireBase {
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
+        int skin = this.rand.nextInt(SKIN_TYPES);
+        this.setSkinType(skin);
         if (this.rand.nextBoolean()) {
             this.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.resistance.id, 1000000, 0));
         }
-        ModLogger.spawn("Spawned Advanced Vampire %s at (%.1f, %.1f, %.1f)",
-            this.getCommandSenderName(), this.posX, this.posY, this.posZ);
+        ModLogger.spawn("Spawned Advanced Vampire %s (skin=%d) at (%.1f, %.1f, %.1f)",
+            this.getCommandSenderName(), skin, this.posX, this.posY, this.posZ);
         return data;
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound tag) {
+        super.writeEntityToNBT(tag);
+        tag.setByte("SkinType", (byte) this.getSkinType());
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound tag) {
+        super.readEntityFromNBT(tag);
+        if (tag.hasKey("SkinType")) {
+            this.setSkinType(tag.getByte("SkinType") & 0xFF);
+        }
     }
 
     @Override

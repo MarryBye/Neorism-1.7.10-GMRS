@@ -26,6 +26,8 @@ public class EntityVampire extends EntityVampireBase {
 
     private static final int DATA_SKIN = 20;
     private static final int DATA_LEVEL = 21;
+    /** Canonical {@code IBasicVampire.TYPES = 126} skin distribution count. */
+    public static final int SKIN_TYPES = 126;
     private int angryTimer = 0;
 
     public EntityVampire(World world) {
@@ -36,17 +38,17 @@ public class EntityVampire extends EntityVampireBase {
     @Override
     protected void entityInit() {
         super.entityInit();
-        // Random skin index between 1 and 12
-        this.dataWatcher.addObject(DATA_SKIN, (byte) (this.rand.nextInt(12) + 1));
+        this.dataWatcher.addObject(DATA_SKIN, (byte) this.rand.nextInt(SKIN_TYPES));
         this.dataWatcher.addObject(DATA_LEVEL, (byte) 0);
     }
 
     public int getSkinType() {
-        return this.dataWatcher.getWatchableObjectByte(DATA_SKIN);
+        return this.dataWatcher.getWatchableObjectByte(DATA_SKIN) & 0xFF;
     }
 
     public void setSkinType(int skin) {
-        this.dataWatcher.updateObject(DATA_SKIN, (byte) skin);
+        int clamped = (skin < 0 ? Math.abs(skin) : skin) % SKIN_TYPES;
+        this.dataWatcher.updateObject(DATA_SKIN, (byte) clamped);
     }
 
     public int getEntityLevel() {
@@ -98,7 +100,7 @@ public class EntityVampire extends EntityVampireBase {
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
-        this.setSkinType(this.rand.nextInt(12) + 1);
+        this.setSkinType(this.rand.nextInt(SKIN_TYPES));
         this.setEntityLevel(this.rand.nextInt(3));
         ModLogger.spawn("Spawned Vampire %s (skin=%d, level=%d) at (%.1f, %.1f, %.1f)",
             this.getCommandSenderName(), this.getSkinType(), this.getEntityLevel(), this.posX, this.posY, this.posZ);
@@ -210,7 +212,7 @@ public class EntityVampire extends EntityVampireBase {
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
         if (tag.hasKey("SkinType")) {
-            this.setSkinType(tag.getByte("SkinType"));
+            this.setSkinType(tag.getByte("SkinType") & 0xFF);
         }
     }
 

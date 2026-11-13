@@ -4,14 +4,13 @@ import com.marrybye.neorism.Neorism;
 import com.marrybye.neorism.client.model.ModelBiped64;
 import com.marrybye.neorism.common.entity.hunter.EntityHunter;
 
-import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * Angelica-compatible renderer for hunter patrols with 64x64 skin variants.
  */
-public class RenderHunter extends RenderBiped {
+public class RenderHunter extends RenderBiped64 {
 
     private static final ResourceLocation[] SKINS = new ResourceLocation[] {
         new ResourceLocation(Neorism.MODID, "textures/entity/hunter/hunter1.png"),
@@ -35,20 +34,8 @@ public class RenderHunter extends RenderBiped {
     private static final ResourceLocation TRAINER_SKIN =
         new ResourceLocation(Neorism.MODID, "textures/entity/hunter_trainer.png");
 
-    private final ModelBiped64 defaultModel = new ModelBiped64(0.0F, false);
-    private final ModelBiped64 slimModel = new ModelBiped64(0.0F, true);
-
     public RenderHunter() {
-        super(new ModelBiped64(0.0F, false), 0.5F);
-    }
-
-    @Override
-    public void doRender(net.minecraft.entity.EntityLiving entity, double x, double y, double z, float yaw, float partialTicks) {
-        ResourceLocation tex = getEntityTexture(entity);
-        ModelBiped64 active = (tex != null && tex.getResourcePath().endsWith("_slim.png")) ? this.slimModel : this.defaultModel;
-        this.mainModel = active;
-        this.modelBipedMain = active;
-        super.doRender(entity, x, y, z, yaw, partialTicks);
+        super(new ModelBiped64(0.0F, false), new ModelBiped64(0.0F, true), 0.5F);
     }
 
     @Override
